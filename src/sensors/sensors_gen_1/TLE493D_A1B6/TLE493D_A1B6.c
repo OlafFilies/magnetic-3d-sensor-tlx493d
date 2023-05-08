@@ -34,5 +34,6 @@ bool TLE493D_A1B6_deinit(TLE493D_A1B6_t *sensor) {
 
 bool TLE493D_A1B6_getFieldValues(TLE493D_A1B6_t *sensor, uint32_t *x, uint32_t *y, uint32_t *z) {
     printf("TLE493D_A1B6_getFieldValues\n");
+
     return true;
 }

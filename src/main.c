@@ -29,15 +29,22 @@ int main(int argc, char *argv[]) {
     printType(a1b6->sensorType);
     // readBytes normally not called at this level, but inside getter functions
     readBytes(a1b6->I2C, 0, 0, NULL);
- 
 
     printf("\n\n");
+
+    /*************************************************************************************/
 
     // Second sensor
     TLE493D_P2B6_t *p2b6 = createSensor(TLE493D_P2B6);
     b = init(p2b6);
-    // initCommInterface(p2b6);
+
+    initI2C(p2b6->I2C);
     setI2CAddress(p2b6->I2C, 55);
+    uint8_t regAddress = 0;
+    uint8_t numBytes   = 2;
+    uint8_t *bytes     = malloc(numBytes);
+
+    b = readBytes(p2b6->I2C, regAddress, numBytes, bytes);
 
     b = getFieldValues(p2b6,  &x,  &y, &z);
     temperature = getTemperature(p2b6);

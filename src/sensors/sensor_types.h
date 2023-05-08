@@ -8,6 +8,9 @@ typedef enum  { TLE493D_A1B6 = 0,
                 TLE493D_W2B6 = 3 } sensorTypes_t;
 
 
+typedef struct I2C_t I2C_t;
+
+
 void printType(sensorTypes_t sensorType);
 
 

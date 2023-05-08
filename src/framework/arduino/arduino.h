@@ -3,12 +3,12 @@
 #include <stdint.h>
 
 
-typedef struct I2C_t I2C_t;
+#include "sensor_types.h"
+
 
 struct I2C_t {
     uint8_t address;
-
     // Pin numbers ...
+    
+    // WIRE *wire;
 };
-
-// #include "i2c.h"

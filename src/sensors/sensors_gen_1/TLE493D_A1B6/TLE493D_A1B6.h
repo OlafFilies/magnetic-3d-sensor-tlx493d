@@ -19,8 +19,11 @@
 #include "sensors.h"
 
 
+#define TLE493D_A1B6_getTemperature  (gen_1_getTemperature)
+
+
 typedef struct TLE493D_A1B6_t TLE493D_A1B6_t;
-typedef struct I2C_t I2C_t;
+
 
 struct TLE493D_A1B6_t {
     sensorTypes_t  sensorType;

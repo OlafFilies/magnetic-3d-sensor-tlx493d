@@ -1,6 +1,8 @@
-// #ifndef SENSORS_H
-// #define SENSORS_H
-#pragma once
+#ifndef SENSORS_H
+#define SENSORS_H
+
+// no std feature
+// #pragma once
 
 
 #include <stdbool.h>
@@ -14,4 +16,7 @@
 void *createSensor(sensorTypes_t sensorType);
 
 
-// #endif // SENSORS_H
+sensorTypes_t getSensorType(void *sensor);
+
+
+#endif // SENSORS_H

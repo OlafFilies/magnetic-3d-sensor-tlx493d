@@ -20,7 +20,7 @@
 
 
 typedef struct TLE493D_W2B6_t TLE493D_W2B6_t;
-typedef struct I2C_t I2C_t;
+
 
 struct TLE493D_W2B6_t {
     sensorTypes_t  sensorType;

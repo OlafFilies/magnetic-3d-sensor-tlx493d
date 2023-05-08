@@ -17,8 +17,8 @@ CFLAGS = -Werror -Wpedantic -std=c11 -I. -Iinterfaces -Isensors -Isensors/sensor
 
 
 #ifdef (ARDUINO_FRAMEWORK)
-  SOURCES += arduino/arduino.c
-  CFLAGS += -Iarduino
+  SOURCES += framework/arduino/arduino.c
+  CFLAGS += -Iframework/arduino
 #else
 #endif
 
@@ -30,4 +30,4 @@ all:
 
 # makearduino:
 # 	cp ...
-#	zip ...
+# 	zip ...

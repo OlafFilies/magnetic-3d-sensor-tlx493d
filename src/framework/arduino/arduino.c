@@ -26,5 +26,3 @@ bool readWriteBytes(I2C_t *i2c, uint8_t regAddress, uint8_t numBytes, uint8_t *b
     printf("I2C->readWriteBytes\n");
     return true;
 }
-
-// bool readWriteMultipleBytes(uint8_t i2cAddress, struct data_t *data);
