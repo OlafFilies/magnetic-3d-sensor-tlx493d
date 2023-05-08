@@ -1,0 +1,39 @@
+@startuml
+scale 300 width
+
+caption \n<b>Figure: Sequence for write ops</b>
+
+note over target #Ivory : Tuner in state RUNNING
+note over host #Ivory : Host state waitingForUserRequest
+...
+target -> host:  cy_capsense_tuner struct
+...
+loop  until complete bit set
+  host -> target: ONE_SCAN command
+  ...
+  loop poll until complete bit set or timeout
+    target -> host:  cy_capsense_tuner struct
+  'note over host, target #Ivory : if timeout send ONE_SCAN command again
+  end
+end
+
+|||
+
+loop any number of times
+  target-> host: cy_capsense_tuner struct
+  host -> target: WRITE command
+end
+
+|||
+
+
+loop until complete bit set
+ host -> target: RESTART command
+ ...
+
+ loop poll until complete bit set or timeout
+    target-> host: cy_capsense_tuner struct
+  end
+end
+
+@enduml

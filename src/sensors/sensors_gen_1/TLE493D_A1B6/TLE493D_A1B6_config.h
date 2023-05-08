@@ -1,0 +1,9 @@
+#ifndef TLE493D_A1B6_CONFIG_H
+#define TLE493D_A1B6_CONFIG_H
+
+
+// example !
+#define TLE493D_A1B6_FIELD_X_REG_ADDR  (5)
+
+
+#endif // TLE493D_A1B6_CONFIG_H

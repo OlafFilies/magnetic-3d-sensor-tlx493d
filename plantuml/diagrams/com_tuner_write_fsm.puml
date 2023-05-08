@@ -1,0 +1,22 @@
+@startuml
+scale 250 width
+
+caption \n<b>Figure: Tuner states for write ops</b>
+
+RUNNING : send data to host
+ONE_SCAN : set complete bit\nsend data to host
+SUSPENDED : write operations\nsend data to host
+RESTART : set complete bit\nsend data to host
+
+[*] -> RUNNING : init
+RUNNING --> ONE_SCAN : receive ONE_SCAN\ncommand
+RUNNING --> RUNNING
+
+
+ONE_SCAN --> SUSPENDED : after 1 additional scan
+SUSPENDED --> RESTART : receive RESTART\ncommand
+RESTART --> RUNNING
+
+SUSPENDED --> SUSPENDED
+
+@enduml

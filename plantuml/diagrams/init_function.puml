@@ -1,0 +1,33 @@
+@startuml
+
+start
+
+:call init function;
+if(variant passed) then (yes)
+    :make plausibility check;
+    if(successful) then (yes)
+        : enable according functions;
+        : set return value to success;
+    else (no)
+        : set return value to failure;
+    endif
+else (no)
+    : check for third gen;
+    if(successful) then (yes)
+        : enable functions for third gen;
+        : set return value to success;
+    else (no)
+        : check for second gen;
+        if(successful) then (yes)
+        : enable functions for second gen;
+        : set return value to success;
+        else (no)
+        : sensor has to be thirst gen;
+        : enable functions for the first gen;
+        : set return value to success;
+        endif
+    endif
+endif
+: return value to indicate success/failure;
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+
+file file {
+}
+folder folder {
+    folder src
+}
+
+@enduml

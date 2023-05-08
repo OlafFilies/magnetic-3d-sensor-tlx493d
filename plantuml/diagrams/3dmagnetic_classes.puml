@@ -1,0 +1,34 @@
+@startuml
+
+class UserAPI {
+  .. Standard mode ..
+  enableWakeup()
+  disableWakeup()
+
+  enableInterrupt()
+  disableInterrupt()
+
+  enableTemperature()
+  disableTemperature()
+
+  setWakeupThresholds(x, y, z, temp)
+  setMode(mode)
+  setUpdateRate(value)
+
+  detectSensor()
+
+  .. Expert mode ..
+  setRegister(numBytes, byteArray)
+}
+
+UserAPI "1" -- "1..*" LibraryAPI
+
+class LibraryAPI {
+  drop()
+}
+
+class SensorAPI {
+  stdbool setRegister(address, value)
+}
+
+@enduml

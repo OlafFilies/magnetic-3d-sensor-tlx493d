@@ -1,0 +1,62 @@
+@startuml big_picture
+scale 400 width
+
+caption \n<b>Figure: Functional component dependencies</b>
+
+database "<u>raspberrypi-capsense-host (C/C++)</u>\n\ndefines the RPi interface to the tuner communication library as well as the API" as raspberrypiCapsenseHost  {
+  package "rpi" as rpiPack {
+    component "pal (C/C++)" as palComp
+    component "rpi I2C (C)" as rpiI2CComp
+    component "capsense_rpi (C++)" as capsenseRPiComp
+    component "user API (C++)" as userAPIComp
+  }
+
+  package "common to phys. prot. (C)" as interfacePack {
+    file "capsense reg map" as regMapFile
+    file "widget/tuner instance setup" as widgetSetup
+  }
+
+  component "bcm2835" as bcm2835Comp
+}
+
+database "<u>capsense-host (C)</u>\n\ndefines the tuner communication library" as capsenseHost  {
+  package "capsense" as capsensePack {
+    rectangle "capsense" as capsenseComp
+  }
+}
+
+database "<u>raspberrypi-capsense-hat (C)</u>\n\ndefines the tuner FW" as raspberrypiCapsenseHat  {
+  package "hat" as hatPack {
+    component "tuner" as tunerComp
+  }
+}
+
+database "<u>capsense-common (C)</u>\n\nholds files common to FW and RPi repos" as capsenseCommon  {
+  package "capsense-common" as capsenseCommonPack {
+    file "protocol package assembly" as protocolPackageAssembly
+    file "capsense.h MW header" as capsenseMWHeader
+    file "definition of gesture/widget types" as capsenseMWTypes
+  }
+}
+
+[palComp] <-- [bcm2835Comp] : uses
+[palComp] --> [rpiI2CComp] : uses
+
+[rpiI2CComp] --> [capsenseRPiComp] : uses
+[rpiI2CComp] <--> [capsenseComp] : provide
+[rpiI2CComp] <-- [widgetSetup] : uses
+[rpiI2CComp] <-- [regMapFile] : reads
+[rpiI2CComp] <-- [capsenseMWHeader] : reads
+[rpiI2CComp] <-- [capsenseMWTypes] : reads
+[rpiI2CComp] <-- [protocolPackageAssembly] : uses
+
+[capsenseRPiComp] --> [userAPIComp] : uses
+[capsenseRPiComp] <-- [capsenseComp] : uses
+
+
+[tunerComp] <-- [protocolPackageAssembly] : uses
+[tunerComp] <-- [capsenseMWHeader] : reads
+[tunerComp] <-- [capsenseMWTypes] : reads
+
+@enduml
+

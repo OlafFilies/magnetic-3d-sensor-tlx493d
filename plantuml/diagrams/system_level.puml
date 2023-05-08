@@ -1,0 +1,22 @@
+@startuml 3D-Mag-Library System Diagram
+!include <C4/C4_Container>
+
+LAYOUT_WITH_LEGEND()
+
+Person_Ext(extUser,"External User", "A user that wants to get started with the 3D-Sensor")
+System_Boundary(ard_lib, "Arduino 3D-Mag Library") {
+    Container(software_lib, "Software Library", "C, C++, Python", "Library for Infineon's 3D-Mag-Sensors")
+}
+System_Ext(git, "GitHub")
+System_Ext(bitbucket, "Bitbucket")
+System(mtb, "ModusToolbox")
+System_Ext(arduino, "Arduino IDE")
+
+Rel(extUser, software_lib, "downloads", "HTTPS, SSH, CLI, Zip")
+Rel(software_lib, git, "is hosted on")
+Rel(software_lib, mtb, "is available in")
+Rel_R(bitbucket, software_lib, "host and updates")
+Rel(software_lib, arduino, "is available in")
+
+@enduml
+

@@ -1,0 +1,27 @@
+@startuml
+!theme plain
+
+host -> target: ONE_SCAN_COMMAND
+loop  poll until complete bit set
+target -> host:  cy_capsense_tuner struct
+note over host, target: if timeout send ONE_SCAN again
+...
+end
+opt     Read
+hnote over host: process cy_capsense_tuner struct
+host -> target: RESUME_COMMAND
+loop poll until complete bit set
+target-> host: cy_capsense_tuner struct
+note over host, target: if timeout send RESUME again
+...
+end
+else    Write
+host -> target: CMD_WRITE_COMMAND
+host -> target: RESTART_COMMAND
+loop poll until complete bit set
+target-> host: cy_capsense_tuner struct
+note over host, target: if timeout send RESTART again
+...
+end
+end 
+@enduml

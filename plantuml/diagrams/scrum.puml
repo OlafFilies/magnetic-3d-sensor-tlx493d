@@ -1,0 +1,83 @@
+@startmindmap scrum
+
+<style>
+node {
+    Padding 15
+    Margin 10
+    HorizontalAlignment center
+    LineColor blue
+    LineThickness 2.0
+    BackgroundColor gold
+    RoundCorner 40
+    MaximumWidth 200
+}
+
+rootNode {
+    LineColor red
+    BackgroundColor white
+    LineThickness 1.0
+    RoundCorner 0
+    Shadowing 0.0
+}
+
+leafNode {
+    LineColor gold
+    RoundCorner 0
+    Padding 3
+}
+
+arrow {
+    LineStyle 4
+    LineThickness 1.5
+    LineColor green
+}
+</style>
+
+*[#crimson]: MPY project Scrum setup
+<code>
+
+Requires :
+- Definition of scope and DoD
+- Statement about pending decisions
+- Draft of "big picture"
+</code>
+;
+
+**[#lightblue] EPIC "Core functionality and tests"
+***[#Orange] Story "Implementation of Python GPIO module and tests"
+****[#lightgreen] Task "Implementation of Python GPIO module"
+****[#lightgreen] Task "Implementation of Python GPIO module tests"
+***[#Orange] Story "Implementation of Python I2C module and tests"
+****[#lightgreen] Task "Implementation of Python I2C module"
+****[#lightgreen] Task "Implementation of Python I2C module tests"
+***[#Orange] Story "Implementation of Python WIFI module and tests"
+****[#lightgreen] Task "Implementation of Python WIFI module"
+****[#lightgreen] Task "Implementation of Python WIFI module tests"
+
+**[#lightblue] EPIC "Project infrastructure"
+***[#Orange] Story Devops
+****[#lightgreen] Task "Setup Sonarcube config files"
+***[#Orange] Story CI/CD
+****[#lightgreen] Task "Setup Github project"
+****[#lightgreen] Task "Setup Github CI/CD base functionality"
+****[#lightgreen] Task "Setup HIL"
+***[#Orange] Story Tools
+****[#lightgreen] Task "Install black and uncrustify tools"
+
+**[#lightblue] EPIC "Documentation and release"
+***[#Orange] Story "Documentation"
+****[#lightgreen] Task "Document source code"
+****[#lightgreen] Task "Setup and document examples"
+****[#lightgreen] Task "Prepare tutorial"
+****[#lightgreen] Task "Prepare readthedocs documentation"
+***[#Orange] Story "Release"
+****[#lightgreen] Task "Install project"
+****[#lightgreen] Task "Hand-over project to customer"
+
+**[#DodgerBlue] EPIC "Maintenance"
+***[#Orange] Story "External change requests"
+****[#lightgreen] Task "Ticket 001"
+****[#lightgreen] Task "Ticket 002"
+***[#Orange] Story "Internal change requests"
+****[#lightgreen] Task "Update compiler due to end-of-life"
+@endmindmap
