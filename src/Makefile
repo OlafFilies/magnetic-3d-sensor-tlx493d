@@ -1,3 +1,6 @@
+PATH_THIS_MAKEFILE    := $(abspath $(lastword $(MAKEFILE_LIST)))
+DIR_OF_THIS_MAKEFILE  := $(dir $(MPY_PATH_TO_MTB_ADAPTER_MAKEFILE))
+
 
 SOURCES = sensors/sensors.c \
 		  sensors/sensors_common.c \
@@ -28,6 +31,11 @@ all:
 
 
 
-# makearduino:
-# 	cp ...
-# 	zip ...
+arduinoLib:
+	-rm -rf ../arduino3DMagneticSensors
+	cp -r ../config/arduinoLibraryTemplate ../arduino3DMagneticSensors
+	find . -name '*.[hC]' -print -exec cp {} ~/pull_requests/3d_magnetic/arduino3DMagneticSensors/src \;
+	rm -rf /mnt/c/Users/bargfred/Documents/Arduino/libraries/IFX3DMagneticSensors
+	mkdir /mnt/c/Users/bargfred/Documents/Arduino/libraries/IFX3DMagneticSensors
+	cp -r ~/pull_requests/3d_magnetic/arduino3DMagneticSensors/* /mnt/c/Users/bargfred/Documents/Arduino/libraries/IFX3DMagneticSensors
+
