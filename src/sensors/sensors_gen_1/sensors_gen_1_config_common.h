@@ -2,8 +2,4 @@
 #define SENSORS_GEN_1_CONFIG_COMMON_H
 
 
-// example !
-#define GEN_1_TEMPERATUE_REG_ADDR  (4)
-
-
 #endif // SENSORS_GEN_1_CONFIG_COMMON_H

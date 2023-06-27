@@ -1,110 +1,128 @@
+// std includes
+#include <assert.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-
+// project c includes
+// common to all sensors
 #include "sensor_types.h"
+#include "sensors_config_common.h"
 #include "sensors_common.h"
-#include "sensors.h"
 
-#include "TLE493D_A1B6/TLE493D_A1B6.h"
-#include "TLV493D_A1B6/TLV493D_A1B6.h"
-#include "TLE493D_P2B6/TLE493D_P2B6.h"
-#include "TLE493D_W2B6/TLE493D_W2B6.h"
+// sensor specicifc includes
+#include "TLE493D_A1B6.h"
+#include "TLV493D_A1B6.h"
+#include "TLE493D_A2B6.h"
+#include "TLE493D_P2B6.h"
+#include "TLE493D_W2B6.h"
 
 
-bool init(void *sensor) {
-    sensorTypes_t sensorType = getSensorType(sensor);
-    
+// static_assert(offsetof(struct TLE493D_A1B6_t, sensorType) == offsetof(struct TLE493D_W2B6_t, sensorType));
+
+
+// functions common to all sensors
+bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) {
     switch(sensorType) {
-        case TLE493D_A1B6 : return TLE493D_A1B6_init(sensor);
-                            break;
+        case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor, comLibIF);
+                              break;
 
-        case TLV493D_A1B6 : return TLV493D_A1B6_init(sensor);
-                            break;
-
-        case TLE493D_P2B6 : return TLE493D_P2B6_init(sensor);
-                            break;
-
-        case TLE493D_W2B6 : return TLE493D_W2B6_init(sensor);
-                            break;
-
-        default:            printf("ERROR : unknown sensor type %d !\n", sensorType);
+        default : return false;
     }
-
-    printf("init done.\n");
-    return true;
 }
 
 
-bool deinit(void *sensor) {
-    sensorTypes_t sensorType = getSensorType(sensor);
-    
-    switch(sensorType) {
-         case TLE493D_A1B6 : return TLE493D_A1B6_deinit(sensor);
-                            break;
-
-        case TLV493D_A1B6 : return TLV493D_A1B6_deinit(sensor);
-                            break;
-
-        case TLE493D_P2B6 : return TLE493D_P2B6_deinit(sensor);
-                            break;
-
-        case TLE493D_W2B6 : return TLE493D_W2B6_deinit(sensor);
-                            break;
-
-        default:            printf("ERROR : unknown sensor type %d !\n", sensorType);
-    }
-
-    printf("deinit\n");
-    return true;
+bool deinit(Sensor_ts *sensor) {
+   return sensor->functions->deinit(sensor);
 }
 
 
-uint32_t getTemperature(void *sensor) {
-    sensorTypes_t sensorType = getSensorType(sensor);
-    
-    switch(sensorType) {
-         case TLE493D_A1B6 : return TLE493D_A1B6_getTemperature(sensor);
-                            break;
-
-        case TLV493D_A1B6 : return TLV493D_A1B6_getTemperature(sensor);
-                            break;
-
-        case TLE493D_P2B6 : return TLE493D_P2B6_getTemperature(sensor);
-                            break;
-
-        case TLE493D_W2B6 : return TLE493D_W2B6_getTemperature(sensor);
-                            break;
-
-        default:            printf("ERROR : unknown sensor type %d !\n", sensorType);
-    }
-
-    printf("getTemperature\n");
-    return true;
+bool getTemperature(Sensor_ts *sensor, float *temp) {
+   return sensor->functions->getTemperature(sensor, temp);
 }
 
 
-bool getFieldValues(void *sensor, uint32_t *x, uint32_t *y, uint32_t *z) {
-    sensorTypes_t sensorType = getSensorType(sensor);
-    
+bool updateGetTemperature(Sensor_ts *sensor, float *temp) {
+   return sensor->functions->updateGetTemperature(sensor, temp);
+}
+
+
+bool getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+   return sensor->functions->getFieldValues(sensor, x, y, z);
+}
+
+
+bool updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+   return sensor->functions->updateGetFieldValues(sensor, x, y, z);
+ }
+
+
+bool reset(Sensor_ts *sensor) {
+   return sensor->functions->reset(sensor);
+}
+
+
+bool getDiagnosis(Sensor_ts *sensor) {
+   return sensor->functions->getDiagnosis(sensor);
+}
+
+
+bool calculateParity(Sensor_ts *sensor) {
+   return sensor->functions->calculateParity(sensor);
+}
+
+
+bool setDefaultConfig(Sensor_ts *sensor) {
+   return sensor->functions->setDefaultConfig(sensor);
+}
+
+
+bool updateRegisterMap(Sensor_ts *sensor) {
+   return sensor->functions->updateRegisterMap(sensor);
+}
+
+
+// functions available only to a subset of sensors
+void get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen) {
+     switch(sensor->sensorType) {
+        case TLE493D_A2B6_e : TLE493D_A2B6_get1ByteModeBuffer(buf, bufLen);
+                              break;
+
+        default : assert(0);
+   }
+}
+
+
+void getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *regMap, uint8_t *buf, uint8_t *bufLen) {
+     switch(sensor->sensorType) {
+        case TLE493D_A2B6_e : TLE493D_A2B6_getTemperatureMeasurementsBuffer(regMap, buf, bufLen);
+                              break;
+
+        default : assert(0);
+   }
+}
+
+
+const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
     switch(sensorType) {
-         case TLE493D_A1B6 : return TLE493D_A1B6_getFieldValues(sensor, x, y, z);
-                            break;
+        case TLE493D_A1B6_e : return "TLE493D_A1B6";
+                              break;
 
-        case TLV493D_A1B6 : return TLV493D_A1B6_getFieldValues(sensor, x, y, z);
-                            break;
+        case TLV493D_A1B6_e : return "TLV493D_A1B6";
+                              break;
 
-        case TLE493D_P2B6 : return TLE493D_P2B6_getFieldValues(sensor, x, y, z);
-                            break;
+        case TLE493D_A2B6_e : return "TLE493D_A2B6";
+                              break;
 
-        case TLE493D_W2B6 : return TLE493D_W2B6_getFieldValues(sensor, x, y, z);
-                            break;
+        case TLE493D_P2B6_e : return "TLE493D_P2B6";
+                              break;
 
-        default:            printf("ERROR : unknown sensor type %d !\n", sensorType);
+        case TLE493D_W2B6_e : return "TLE493D_W2B6";
+                              break;
+
+        default : return "ERROR : Unknown sensorType !";
+                  break;
     }
-
-    printf("getFieldValues\n");
-    return true;
 }

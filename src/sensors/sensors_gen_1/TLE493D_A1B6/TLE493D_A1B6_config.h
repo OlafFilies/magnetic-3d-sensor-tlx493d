@@ -2,10 +2,4 @@
 #define TLE493D_A1B6_CONFIG_H
 
 
-// examples !
-#define TLE493D_P2B6_REGISTER_MAP_SIZE  (16)
-
-#define TLE493D_A1B6_FIELD_X_REG_ADDR   (5)
-
-
 #endif // TLE493D_A1B6_CONFIG_H

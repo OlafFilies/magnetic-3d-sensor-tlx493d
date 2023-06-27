@@ -1,0 +1,5 @@
+#ifndef TLE493D_A2B6_CONFIG_H
+#define TLE493D_A2B6_CONFIG_H
+
+
+#endif /** TLE493D_A2B6_CONFIG_H */

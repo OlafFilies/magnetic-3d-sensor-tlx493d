@@ -1,0 +1,54 @@
+@startuml 3D-Mag-Library System Diagram
+
+    !include <C4/C4_Container>
+
+    System_Boundary(ecosystem, "3D magnetic sensor ecosystem") {
+
+        System_Boundary(com, "Communication component") {
+            Container(comLibCPP, "C++ library and interface", "Arduino, ...", "TwoWire, SPI, ...")
+            Container(comLibC, "C library and interface", "MTB, ...", "I2C, SPI, ...")
+        }
+
+        System_Boundary(C, "C part") {
+            Container(sensorCore, "C interface core library", "C", "Core library to access 3D sensors")
+            Container(sensorStruct, "Sensor object", "C", "Holds attributes to access sensors")
+
+            System_Boundary(access, "Access through defined interface") {
+                Container(libFuncPts, "Common interface function pointers", "C", "Access through function pointers")
+                Container(comFuncPtrs, "Communication library function pointers", "C/C++", "Communication through function pointers")
+
+                BiRel(comFuncPtrs, com, "acess")
+            }
+
+            Container(sensorDevice, "Sensor devices", "Registers", "Actual devices")
+
+            BiRel(sensorCore, sensorStruct, "uses as handle")
+
+            BiRel(sensorStruct, sensorDevice, "direct\
+                    access                  ")
+            BiRel(sensorStruct, libFuncPts, "uses")
+            BiRel(sensorStruct, comFuncPtrs, "uses")
+            BiRel(libFuncPts, sensorDevice, "access")
+           
+            BiRel(com, sensorDevice, "communicate\
+                    with             ")
+         }
+
+        System_Boundary(CPP, "C++ part") {
+            Container(directCIF, "Use C IF directly", "C++", "No additional wrapper used")
+            Container(sensorObject, "C++ sensor object", "C++", "C++ interface")
+            Container(sensorIF, "Sensor IF object", "C++", "C++ wrapper for C code")
+
+            BiRel(directCIF, sensorCore, "uses")
+            BiRel(sensorObject, sensorIF, "uses")
+            BiRel(sensorIF, sensorCore, "uses")
+            BiRel_D(sensorObject, com, "uses")
+
+            Container(boardSup, "Board handler object", "C++/C", "Board/environment settings")
+            BiRel(sensorObject, boardSup, "uses")
+            boardSup -[hidden]left- sensorCore
+        }
+    }
+
+@enduml
+

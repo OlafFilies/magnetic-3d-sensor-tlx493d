@@ -2,8 +2,8 @@
 #define SENSORS_GEN_2_COMMON_H
 
 
+// std includes
 #include <stdbool.h>
-#include <stdint.h>
 
 
 #endif // SENSORS_GEN_2_COMMON_H

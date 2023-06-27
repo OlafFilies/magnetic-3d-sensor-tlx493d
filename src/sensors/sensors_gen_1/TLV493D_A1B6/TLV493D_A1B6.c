@@ -1,34 +1,21 @@
+// std includes
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+// project c includes
+// common to all sensors
+#include "sensor_types.h"
+#include "sensors_config_common.h"
+#include "sensors_common.h"
 
+// common to same generation of sensors
+#include "sensors_gen_1_config_common.h"
+#include "sensors_gen_1_common.h"
+
+// sensor specicifc includes
+#include "TLV493D_A1B6_config.h"
 #include "TLV493D_A1B6.h"
 
-#include "i2c.h"
 
-
-void TLV493D_A1B6_initObject(TLV493D_A1B6_t *sensor) {
-    sensor->sensorType = TLV493D_A1B6;
-
-    printf("TLV493D_A1B6_initObject\n");
-}
-
-
-bool TLV493D_A1B6_init(TLV493D_A1B6_t *sensor) {
-    printf("TLV493D_A1B6_init\n");
-    return true;
-}
-
-
-bool TLV493D_A1B6_deinit(TLV493D_A1B6_t *sensor) {
-    printf("TLV493D_A1B6_deinit\n");
-    return true;
-}
-
-
-bool TLV493D_A1B6_getFieldValues(TLV493D_A1B6_t *sensor, uint32_t *x, uint32_t *y, uint32_t *z) {
-    printf("TLE493D_A1B6_getFieldValues\n");
-    return true;
-}
