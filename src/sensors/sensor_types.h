@@ -134,14 +134,15 @@ typedef struct Sensor_ts {
     Register_ts             *regDef;
     ComLibraryFunctions_ts  *comLibIF;
     ComLibraryParameters_ts  comLibIFParams;
-    
-    #include "defineCommunicationLibraryObject.h"
+    ComLibraryObject_ts     *comLibObj;
+
+    // #include "defineCommunicationLibraryObject.h"
 
     CommonFunctions_ts      *functions;
 
     uint8_t                               regMapSize;
     SupportedSensorTypes_te               sensorType;
-    SupportedComLibraryInterfaceTypes_te  commIFType;
+    SupportedComLibraryInterfaceTypes_te  comIFType;
 } Sensor_ts;
 
 

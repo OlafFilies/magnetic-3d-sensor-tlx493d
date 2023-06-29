@@ -1,4 +1,4 @@
-@startuml 3D-Mag-Library System Diagram
+@startuml 3D Magnetic Library Detailed System Diagram
 
     !include <C4/C4_Container>
 

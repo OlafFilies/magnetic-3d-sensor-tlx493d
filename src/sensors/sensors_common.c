@@ -84,27 +84,7 @@ bool updateRegisterMap(Sensor_ts *sensor) {
 }
 
 
-// functions available only to a subset of sensors
-void get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen) {
-     switch(sensor->sensorType) {
-        case TLE493D_A2B6_e : TLE493D_A2B6_get1ByteModeBuffer(buf, bufLen);
-                              break;
-
-        default : assert(0);
-   }
-}
-
-
-void getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *regMap, uint8_t *buf, uint8_t *bufLen) {
-     switch(sensor->sensorType) {
-        case TLE493D_A2B6_e : TLE493D_A2B6_getTemperatureMeasurementsBuffer(regMap, buf, bufLen);
-                              break;
-
-        default : assert(0);
-   }
-}
-
-
+// utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
     switch(sensorType) {
         case TLE493D_A1B6_e : return "TLE493D_A1B6";

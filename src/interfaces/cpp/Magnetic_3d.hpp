@@ -24,7 +24,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         typedef ComIF                           ComIFType;
 
  
-        Sensor3D(ComIF &comIF, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) : bsc(), comLIF(comIF), sensor(sensorType, comLibIF), iic({ .wire = &comIF }) {
+        Sensor3D(ComIF &comIF, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) : bsc(), comLIF(comIF), sensor(sensorType, comLibIF) {
         }
 
 
@@ -33,9 +33,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             sensor.init();
             comLIF.init(sensor.getSensorStruct());
 
-            sensor.getSensorStruct()->i2c = &iic;
-
-            sensor.setDefaultConfig(comLIF);
+            sensor.setDefaultConfig();
         }
 
 
@@ -56,20 +54,8 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool updateRegisters() {
-            return comLIF.transfer(NULL, 0, sensor.getRegisterMap(), sensor.getRegisterMapSize());
-        }
-
-
-        bool getTemperature(float *temperature) {          
-            bool b = updateRegisters();
-            return b && sensor.getTemperature(temperature);
-        }
-
-
-        bool getFieldValues(float *x, float *y, float *z) {
-            bool b = updateRegisters();
-            return b && sensor.getFieldValues(x, y, z);
+        bool updateGetTemperature(float *temperature) {
+            return sensor.updateGetTemperature(temperature);
         }
 
 
@@ -83,7 +69,6 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         BoardSupportClassType  bsc;
         ComLibraryIFType       comLIF;
         SensorClass            sensor;
-        struct I2C_t           iic;
 };
 
 

@@ -21,9 +21,9 @@
 
 
 extern struct ComLibraryFunctions_ts comLibIF_i2c;
+
 extern void setI2CParameters(ComLibraryParameters_ts *params);
 extern void frameworkDelayMicroseconds(uint16_t us);
-
 
 
 /*
@@ -97,15 +97,21 @@ CommonFunctions_ts TLE493D_A2B6_commonFunctions = {
 
 
 bool TLE493D_A2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
-    assert(comLibIF == I2C_e);
+    // This sensor only supports I2C.
+    if( comLibIF != I2C_e ) {
+        assert(0);
+        return false;
+    }
 
-    sensor->regMap     = malloc(sizeof(uint8_t) * TLE493D_A2B6_REGISTER_MAP_SIZE);
+    sensor->regMap     = (uint8_t *) malloc(sizeof(uint8_t) * TLE493D_A2B6_REGISTER_MAP_SIZE);
     sensor->regDef     = TLE493D_A2B6_regDef;
     sensor->functions  = &TLE493D_A2B6_commonFunctions;
     sensor->regMapSize = TLE493D_A2B6_REGISTER_MAP_SIZE;
     sensor->sensorType = TLE493D_A2B6_e;
-    sensor->commIFType = comLibIF;
+    sensor->comIFType  = comLibIF;
     sensor->comLibIF   = &comLibIF_i2c;
+    sensor->comLibObj  = NULL;
+
     setI2CParameters(&sensor->comLibIFParams);
 
     return true;
@@ -114,7 +120,11 @@ bool TLE493D_A2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
 
 bool TLE493D_A2B6_deinit(Sensor_ts *sensor) {
     free(sensor->regMap);
-    sensor->regMap = NULL;
+    free(sensor->comLibObj);
+
+    sensor->regMap    = NULL;
+    sensor->comLibObj = NULL;
+
     return true;
 }
 

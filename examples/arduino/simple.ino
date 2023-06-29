@@ -30,11 +30,11 @@ Sensor3D<S2GoTemplateArduino, TwoWire_Lib, TwoWire, TLx493D> sensor3d(Wire, TLE4
 
 void setup() {
     Serial.begin(115200);
-    delay(200);
+    delay(100);
 
     sensor3d.begin();
 
-    delay(1000);
+    delay(100);
     Serial.print("setup done.\n");
 }
 
@@ -42,15 +42,12 @@ void loop() {
     float temp = 0.0;
     float valX = 0, valY = 0, valZ = 0;
 
-    // sensor3d.getTemperature(&temp);
-    Serial.print(true == sensor3d.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
+    Serial.print(true == sensor3d.updateGetTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    // sensor3d.updateGetFieldValues(&valX, &valY, &valZ);
-    // sensor3d.getFieldValues(&valX, &valY, &valZ);
-    Serial.print(true == sensor3d.getFieldValues(&valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
+    Serial.print(true == sensor3d.updateGetFieldValues(&valX, &valY, &valZ) ? "updateGetFieldValues ok\n" : "updateGetFieldValues error\n");
     Serial.print("Value X is: ");
     Serial.print(valX);
     Serial.println(" mT");
@@ -60,5 +57,6 @@ void loop() {
     Serial.print("Value Z is: ");
     Serial.print(valZ);
     Serial.println(" mT");
-    delay(2000);
+
+    delay(1000);
 }

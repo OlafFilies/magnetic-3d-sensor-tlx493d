@@ -2,7 +2,7 @@
 #define PAL_H
 
 
-typedef struct I2C_t I2C_t;
+typedef struct ComLibraryObject_ts ComLibraryObject_ts;
 
 
 #endif // PAL_H
