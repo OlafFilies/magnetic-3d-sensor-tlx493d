@@ -76,7 +76,6 @@ template<> class S2GoTemplate<pinCtrl> {
         hookFunctionType preTransferHook;
         hookFunctionType postTransferHook;
 
-        // vector, list, ... do not work with current XMC compiler version and settings !!!
         pinCtrl constantPins[1];
         pinCtrl switchedPins[0];
 };

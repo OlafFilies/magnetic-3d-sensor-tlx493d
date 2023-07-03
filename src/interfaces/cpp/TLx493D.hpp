@@ -51,32 +51,13 @@ class TLx493D {
         }
 
 
-        template<typename ComIF, template<typename> typename ComLibrary> bool setDefaultConfig(ComLibrary<ComIF> &comLib) {
-            uint8_t bufLen     = 0;
-            uint8_t regMapSize = _sensor.regMapSize;
-            uint8_t transBuffer[regMapSize];
-
-            ::get1ByteModeBuffer(&_sensor, transBuffer, &bufLen);
-            bool b = comLib.transfer(transBuffer, bufLen, _sensor.regMap, regMapSize);
-
-            if( !b ) {
-                return false;
-            }
-
-            ::getTemperatureMeasurementsBuffer(&_sensor, _sensor.regMap, transBuffer, &bufLen);
-            b = comLib.transfer(transBuffer, bufLen, _sensor.regMap, regMapSize);
-
-            return b;
+        bool setDefaultConfig() {
+            return ::setDefaultConfig(&_sensor);
         }
 
 
-        bool getTemperature(float *temperature) {
-            return ::getTemperature(&_sensor, temperature);
-        }
-
-
-        bool getFieldValues(float *x, float *y, float *z) {
-            return ::getFieldValues(&_sensor, x, y, z);
+        bool updateGetTemperature(float *temperature) {
+            return ::updateGetTemperature(&_sensor, temperature);
         }
 
 
@@ -96,7 +77,7 @@ class TLx493D {
 
 
         SupportedComLibraryInterfaceTypes_te getComLibIFType() {
-            return _sensor.commIFType;
+            return _sensor.comIFType;
         }
 
 

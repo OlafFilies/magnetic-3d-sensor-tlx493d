@@ -12,6 +12,7 @@
 #include "cy_retarget_io.h"
 
 // XMC includes
+#include "xmc_gpio.h"
 #include "xmc_i2c.h"
 
 // project c includes
@@ -20,26 +21,26 @@
 #include "TLE493D_A2B6.h"
 
 
-extern void setup_i2c_relax_kit_4700_lite(void);
+extern void initComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
+                  const uint8_t sourceSDA, const uint8_t sourceSCL,
+                  XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
+                  XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL);
 
 
 int main(int argc, char *argv[]) {
-    cy_rslt_t result;
-
     /* Initialize the device and board peripherals */
-    result = cybsp_init();
+    cy_rslt_t result = cybsp_init();
 
-    if (result != CY_RSLT_SUCCESS)
-    {
+    if (result != CY_RSLT_SUCCESS) {
         CY_ASSERT(0);
     }
 
     cy_retarget_io_init(CYBSP_DEBUG_UART_HW);
 
-    setup_i2c_relax_kit_4700_lite();
-
     Sensor_ts a2b6;
+
     init(&a2b6, TLE493D_A2B6_e, I2C_e);
+    initComLibIF(&a2b6, XMC_I2C1_CH1, USIC1_C1_DX0_P3_15, USIC1_C1_DX1_P0_13, P3_15, P0_13);
     setDefaultConfig(&a2b6);
 
     while( true ) {
@@ -53,6 +54,7 @@ int main(int argc, char *argv[]) {
 
         printf("sensorType : %s\n", getTypeAsString(a2b6.sensorType));
         printf("\n\n");
+
         XMC_Delay(1000);
    }
 }

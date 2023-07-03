@@ -21,9 +21,6 @@ template<typename ComIF> class TwoWire_Lib {
 template<> class TwoWire_Lib<TwoWire> {
    public:
 
-        TwoWire_Lib() : i2c(Wire), i2cAddress() {
-        }
-
 
         TwoWire_Lib(TwoWire &comif) : i2c(comif), i2cAddress() {
         }
@@ -31,7 +28,9 @@ template<> class TwoWire_Lib<TwoWire> {
 
         void init(Sensor_ts *sensor) {
             i2cAddress = sensor->comLibIFParams.i2c_params.address;
-            // TODO: reset sensor first
+            initComLibIF(sensor, i2c);
+
+            //reset(sensor);
            i2c.begin();
         }
 
@@ -73,6 +72,11 @@ template<> class TwoWire_Lib<TwoWire> {
             }
 
             return true;
+        }
+
+
+        TwoWire &getComIF() {
+            return i2c;
         }
 
 

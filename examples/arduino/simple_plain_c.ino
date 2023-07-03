@@ -15,22 +15,18 @@ extern "C" {
 
 
 Sensor_ts a2b6;
-struct I2C_t iic = { .wire = &Wire };
 
 
 void setup() {
     Serial.begin(115200);
-    delay(1000);
+    delay(100);
 
     init(&a2b6, TLE493D_A2B6_e, I2C_e);
-    
-//    reset(&a2b6);
-    
-    initComLibIF(&a2b6, iic);
-    
+    //    reset(&a2b6);
+    initComLibIF(&a2b6, Wire);
     setDefaultConfig(&a2b6);
 
-    delay(1000);
+    delay(100);
     Serial.print("setup done.\n");
 }
 
@@ -39,12 +35,12 @@ void loop() {
     float temp = 0.0;
     float valX = 0, valY = 0, valZ = 0;
 
-    updateGetTemperature(&a2b6, &temp);
+    Serial.print(true == updateGetTemperature(&a2b6, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    updateGetFieldValues(&a2b6, &valX, &valY, &valZ);
+    Serial.print(true == updateGetFieldValues(&a2b6, &valX, &valY, &valZ) ? "updateGetFieldValues ok\n" : "updateGetFieldValues error\n");
     Serial.print("Value X is: ");
     Serial.print(valX);
     Serial.println(" mT");
@@ -54,5 +50,6 @@ void loop() {
     Serial.print("Value Z is: ");
     Serial.print(valZ);
     Serial.println(" mT");
-    delay(2000);
+
+    delay(1000);
 }

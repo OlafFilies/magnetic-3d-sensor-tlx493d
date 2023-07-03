@@ -15,13 +15,13 @@
 typedef struct Sensor_ts Sensor_ts;
 
 
-struct I2C_t {
+typedef struct ComLibraryObject_ts {
     TwoWire *wire;
-};
+} ComLibraryObject_ts;
 
 
 extern "C" {
-    void initComLibIF(Sensor_ts *sensor, struct I2C_t &iic);
+    void initComLibIF(Sensor_ts *sensor, TwoWire &iic);
 }
 
 

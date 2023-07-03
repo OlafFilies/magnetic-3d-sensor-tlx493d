@@ -26,8 +26,6 @@ bool updateRegisterMap(Sensor_ts *sensor);
 
 
 // functions available only to a subset of sensors
-void get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen);
-void getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *regMap, uint8_t *buf, uint8_t *bufLen);
 
 
 // utility

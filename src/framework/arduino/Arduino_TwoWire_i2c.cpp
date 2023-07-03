@@ -1,4 +1,5 @@
 // std includes
+#include <malloc.h>
 #include <stddef.h>
 
 // project c includes
@@ -25,21 +26,21 @@ extern "C" void frameworkDelayMicroseconds(uint32_t us) {
 
       
 extern "C" bool initIIC(Sensor_ts *sensor) {
-    sensor->i2c->wire->begin();
+    sensor->comLibObj->wire->begin();
     frameworkDelayMicroseconds(30);
     return true;
 }
 
 
 extern "C" bool deinitIIC(Sensor_ts *sensor) {
-    sensor->i2c->wire->end();
+    sensor->comLibObj->wire->end();
     return true;
 }
 
 
 extern "C" bool transfer(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
      uint8_t   i2cAddress = sensor->comLibIFParams.i2c_params.address;
-     TwoWire  *i2c        = sensor->i2c->wire;
+     TwoWire  *i2c        = sensor->comLibObj->wire;
 
 // log("addr :"); log(i2cAddress); log("\n");
 
@@ -91,8 +92,9 @@ extern "C" void setI2CParameters(ComLibraryParameters_ts *params) {
 }
 
 
-extern "C" void initComLibIF(Sensor_ts *sensor, struct I2C_t &iic) {
-    sensor->i2c = &iic;
-    sensor->comLibIF->init.i2c_init(sensor);
+extern "C" void initComLibIF(Sensor_ts *sensor, TwoWire &tw) {
+    sensor->comLibObj       = (ComLibraryObject_ts *) malloc(sizeof(ComLibraryObject_ts));
+    sensor->comLibObj->wire = &tw;
 
+    sensor->comLibIF->init.i2c_init(sensor);
 }

@@ -1,4 +1,4 @@
-@startuml 3D-Mag-Library System Diagram
+@startuml 3D Magnetic Library Detailed System Overall Diagram Simplified
 
     !include <C4/C4_Container>
 
@@ -36,17 +36,8 @@
 
         System_Boundary(CPP, "C++ part") {
             Container(directCIF, "Use C IF directly", "C++", "No additional wrapper used")
-            Container(sensorObject, "C++ sensor object", "C++", "C++ interface")
-            Container(sensorIF, "Sensor IF object", "C++", "C++ wrapper for C code")
 
             BiRel(directCIF, sensorCore, "uses")
-            BiRel(sensorObject, sensorIF, "uses")
-            BiRel(sensorIF, sensorCore, "uses")
-            BiRel_D(sensorObject, com, "uses")
-
-            Container(boardSup, "Board handler object", "C++/C", "Board/environment settings")
-            BiRel(sensorObject, boardSup, "uses")
-            boardSup -[hidden]left- sensorCore
         }
     }
 

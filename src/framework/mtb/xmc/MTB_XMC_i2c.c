@@ -1,7 +1,9 @@
 // std includes
+#include <malloc.h>
 #include <stddef.h>
 
 // XMC related includes
+#include "xmc_gpio.h"
 #include "xmc_i2c.h"
 
 // project c includes
@@ -21,9 +23,36 @@
 
 
 bool I2CInitFunc(Sensor_ts *sensor) {
+    XMC_GPIO_CONFIG_t i2c_scl = {
+        .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT2,
+        .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM
+    };
+
+
+    XMC_GPIO_CONFIG_t i2c_sda = {
+        .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT2,
+        .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM
+    };
+
+    XMC_I2C_CH_CONFIG_t i2c_cfg = {
+        .baudrate = 115200U,
+        .address = 0U
+    };
+
+
+    XMC_I2C_CH_Init(sensor->comLibObj->channel, &i2c_cfg);
+
+    XMC_I2C_CH_SetInputSource(sensor->comLibObj->channel, XMC_I2C_CH_INPUT_SCL, sensor->comLibObj->sourceSCL);
+    XMC_I2C_CH_SetInputSource(sensor->comLibObj->channel, XMC_I2C_CH_INPUT_SDA, sensor->comLibObj->sourceSDA);
+
+    XMC_I2C_CH_Start(sensor->comLibObj->channel);
+
+    XMC_GPIO_Init(sensor->comLibObj->portSCL, sensor->comLibObj->pinSCL, &i2c_scl);
+    XMC_GPIO_Init(sensor->comLibObj->portSDA, sensor->comLibObj->pinSDA, &i2c_sda);
+
     return true;
 }
-
+ 
 
 bool I2CDeinitFunc(Sensor_ts *sensor) {
     return true;
@@ -111,4 +140,23 @@ ComLibraryFunctions_ts  comLibIF_i2c = {
 
 void setI2CParameters(ComLibraryParameters_ts *params) {
     params->i2c_params.address = GEN_2_STD_IIC_ADDR_WRITE_A0;
+}
+
+
+void initComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
+                  const uint8_t sourceSDA, const uint8_t sourceSCL,
+                  XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
+                  XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL) {
+
+    sensor->comLibObj = (ComLibraryObject_ts *) malloc(sizeof(ComLibraryObject_ts));
+   
+    sensor->comLibObj->channel   = channel;
+    sensor->comLibObj->sourceSDA = sourceSDA;
+    sensor->comLibObj->sourceSCL = sourceSCL;
+    sensor->comLibObj->portSDA   = portSDA;
+    sensor->comLibObj->pinSDA    = pinSDA;
+    sensor->comLibObj->portSCL   = portSCL;
+    sensor->comLibObj->pinSCL    = pinSCL;
+
+    sensor->comLibIF->init.i2c_init(sensor);
 }
