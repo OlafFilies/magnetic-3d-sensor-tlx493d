@@ -48,7 +48,7 @@ typedef struct Register_ts {
     uint8_t            address;
     uint8_t            mask;
     uint8_t            offset;
-    // uint8_t           numBits;
+    uint8_t            numBits;
 } Register_ts;
 
 
@@ -88,6 +88,12 @@ typedef union ComLibraryParameters_ts {
     SPIParameters_ts  spi_params;
     I2CParameters_ts  i2c_params;
 } ComLibraryParameters_ts;
+
+
+typedef union ComLibraryObject_ts {
+    SPIObject_ts  *spi_obj;
+    I2CObject_ts  *i2c_obj;
+} ComLibraryObject_ts;
 
 
 // Functions common to all sensors
@@ -134,7 +140,7 @@ typedef struct Sensor_ts {
     Register_ts             *regDef;
     ComLibraryFunctions_ts  *comLibIF;
     ComLibraryParameters_ts  comLibIFParams;
-    ComLibraryObject_ts     *comLibObj;
+    ComLibraryObject_ts      comLibObj;
 
     // #include "defineCommunicationLibraryObject.h"
 

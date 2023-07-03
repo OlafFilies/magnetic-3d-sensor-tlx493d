@@ -20,27 +20,25 @@
 #include "arduino_defines.h"
 
 
-extern "C" void frameworkDelayMicroseconds(uint32_t us) {
-    delayMicroseconds(us);
-}
+extern "C" void frameworkDelayMicroseconds(uint32_t us);
 
       
 extern "C" bool initIIC(Sensor_ts *sensor) {
-    sensor->comLibObj->wire->begin();
+    sensor->comLibObj.i2c_obj->wire->begin();
     frameworkDelayMicroseconds(30);
     return true;
 }
 
 
 extern "C" bool deinitIIC(Sensor_ts *sensor) {
-    sensor->comLibObj->wire->end();
+    sensor->comLibObj.i2c_obj->wire->end();
     return true;
 }
 
 
 extern "C" bool transfer(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
      uint8_t   i2cAddress = sensor->comLibIFParams.i2c_params.address;
-     TwoWire  *i2c        = sensor->comLibObj->wire;
+     TwoWire  *i2c        = sensor->comLibObj.i2c_obj->wire;
 
 // log("addr :"); log(i2cAddress); log("\n");
 
@@ -87,14 +85,19 @@ ComLibraryFunctions_ts  comLibIF_i2c = {
                                        };
 
 
-extern "C" void setI2CParameters(ComLibraryParameters_ts *params) {
-    params->i2c_params.address = GEN_2_STD_IIC_ADDR;
+extern "C" void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
+    params->i2c_params.address = addr >> 1;
 }
 
 
-extern "C" void initComLibIF(Sensor_ts *sensor, TwoWire &tw) {
-    sensor->comLibObj       = (ComLibraryObject_ts *) malloc(sizeof(ComLibraryObject_ts));
-    sensor->comLibObj->wire = &tw;
+extern "C" void initI2CComLibIF(Sensor_ts *sensor, TwoWire &tw) {
+    sensor->comLibObj.i2c_obj       = (I2CObject_ts *) malloc(sizeof(I2CObject_ts));
+    sensor->comLibObj.i2c_obj->wire = &tw;
 
     sensor->comLibIF->init.i2c_init(sensor);
+}
+
+
+extern "C" void frameworkDelayMicroseconds(uint32_t us) {
+    delayMicroseconds(us);
 }

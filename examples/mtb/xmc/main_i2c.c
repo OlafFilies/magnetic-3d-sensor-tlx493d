@@ -13,18 +13,13 @@
 
 // XMC includes
 #include "xmc_gpio.h"
+#include "xmc_gpio.h"
 #include "xmc_i2c.h"
 
 // project c includes
-#include "pal.h"
+#include "sensor_types.h"
 #include "sensors_common.h"
 #include "TLE493D_A2B6.h"
-
-
-extern void initComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
-                  const uint8_t sourceSDA, const uint8_t sourceSCL,
-                  XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
-                  XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL);
 
 
 int main(int argc, char *argv[]) {
@@ -40,7 +35,7 @@ int main(int argc, char *argv[]) {
     Sensor_ts a2b6;
 
     init(&a2b6, TLE493D_A2B6_e, I2C_e);
-    initComLibIF(&a2b6, XMC_I2C1_CH1, USIC1_C1_DX0_P3_15, USIC1_C1_DX1_P0_13, P3_15, P0_13);
+    initI2CComLibIF(&a2b6, XMC_I2C1_CH1, USIC1_C1_DX0_P3_15, USIC1_C1_DX1_P0_13, P3_15, P0_13);
     setDefaultConfig(&a2b6);
 
     while( true ) {

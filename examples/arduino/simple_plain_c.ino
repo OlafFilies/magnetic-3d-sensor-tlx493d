@@ -21,9 +21,13 @@ void setup() {
     Serial.begin(115200);
     delay(100);
 
+    // required for S2Go
+    // pinMode(LED2, OUTPUT);
+    // digitalWrite(LED2, HIGH);
+
     init(&a2b6, TLE493D_A2B6_e, I2C_e);
-    //    reset(&a2b6);
-    initComLibIF(&a2b6, Wire);
+    initI2CComLibIF(&a2b6, Wire);
+    // reset(&a2b6);
     setDefaultConfig(&a2b6);
 
     delay(100);

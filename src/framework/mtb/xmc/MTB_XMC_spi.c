@@ -4,7 +4,7 @@
 // XMC related includes
 #include "xmc_i2c.h"
 
-// project cpp includes
+// project c includes
 #include "mtb_defines.h"
 
 // project c includes

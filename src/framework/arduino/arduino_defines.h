@@ -12,16 +12,16 @@
 #define log  (Serial.print)
 
 
+typedef struct I2CObject_ts {
+    TwoWire *wire;
+} I2CObject_ts;
+
+
 typedef struct Sensor_ts Sensor_ts;
 
 
-typedef struct ComLibraryObject_ts {
-    TwoWire *wire;
-} ComLibraryObject_ts;
-
-
 extern "C" {
-    void initComLibIF(Sensor_ts *sensor, TwoWire &iic);
+    void initI2CComLibIF(Sensor_ts *sensor, TwoWire &iic);
 }
 
 
