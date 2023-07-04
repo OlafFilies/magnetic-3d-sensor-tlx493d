@@ -39,16 +39,18 @@ bool I2CInitFunc(Sensor_ts *sensor) {
         .address = 0U
     };
 
+    I2CObject_ts  *i2c_obj = sensor->comLibObj.i2c_obj;
+    XMC_USIC_CH_t *channel = i2c_obj->channel;
 
-    XMC_I2C_CH_Init(sensor->comLibObj->channel, &i2c_cfg);
+    XMC_I2C_CH_Init(channel, &i2c_cfg);
 
-    XMC_I2C_CH_SetInputSource(sensor->comLibObj->channel, XMC_I2C_CH_INPUT_SCL, sensor->comLibObj->sourceSCL);
-    XMC_I2C_CH_SetInputSource(sensor->comLibObj->channel, XMC_I2C_CH_INPUT_SDA, sensor->comLibObj->sourceSDA);
+    XMC_I2C_CH_SetInputSource(channel, XMC_I2C_CH_INPUT_SCL, i2c_obj->sourceSCL);
+    XMC_I2C_CH_SetInputSource(channel, XMC_I2C_CH_INPUT_SDA, i2c_obj->sourceSDA);
 
-    XMC_I2C_CH_Start(sensor->comLibObj->channel);
+    XMC_I2C_CH_Start(channel);
 
-    XMC_GPIO_Init(sensor->comLibObj->portSCL, sensor->comLibObj->pinSCL, &i2c_scl);
-    XMC_GPIO_Init(sensor->comLibObj->portSDA, sensor->comLibObj->pinSDA, &i2c_sda);
+    XMC_GPIO_Init(i2c_obj->portSCL, i2c_obj->pinSCL, &i2c_scl);
+    XMC_GPIO_Init(i2c_obj->portSDA, i2c_obj->pinSDA, &i2c_sda);
 
     return true;
 }
@@ -60,32 +62,34 @@ bool I2CDeinitFunc(Sensor_ts *sensor) {
 
 
 bool I2CTransferFunc(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-    if( tx_buffer != NULL ) {
-        XMC_I2C_CH_MasterStart(XMC_I2C1_CH1, sensor->comLibIFParams.i2c_params.address, XMC_I2C_CH_CMD_WRITE);
+    XMC_USIC_CH_t *channel = sensor->comLibObj.i2c_obj->channel;
 
-        while((XMC_I2C_CH_GetStatusFlag(XMC_I2C1_CH1) & XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED) == 0U)
+    if( tx_buffer != NULL ) {
+        XMC_I2C_CH_MasterStart(channel, sensor->comLibIFParams.i2c_params.address, XMC_I2C_CH_CMD_WRITE);
+
+        while((XMC_I2C_CH_GetStatusFlag(channel) & XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED) == 0U)
         {
         }
 
-        XMC_I2C_CH_ClearStatusFlag(XMC_I2C1_CH1,(uint32_t) XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED);
+        XMC_I2C_CH_ClearStatusFlag(channel, XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED);
 
         for(size_t n = 0; n < tx_len; ++n) {
-            XMC_I2C_CH_MasterTransmit(XMC_I2C1_CH1, tx_buffer[n]);
+            XMC_I2C_CH_MasterTransmit(channel, tx_buffer[n]);
 
-            while((XMC_I2C_CH_GetStatusFlag(XMC_I2C1_CH1) & XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED) == 0U)
+            while((XMC_I2C_CH_GetStatusFlag(channel) & XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED) == 0U)
             {
             }
 
-            XMC_I2C_CH_ClearStatusFlag(XMC_I2C1_CH1,(uint32_t)XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED);
+            XMC_I2C_CH_ClearStatusFlag(channel, XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED);
         }
 
-        while (!XMC_USIC_CH_TXFIFO_IsEmpty(XMC_I2C1_CH1))
+        while (!XMC_USIC_CH_TXFIFO_IsEmpty(channel))
         {
         }
 
-        XMC_I2C_CH_MasterStop(XMC_I2C1_CH1);
+        XMC_I2C_CH_MasterStop(channel);
 
-        while ( XMC_USIC_CH_GetTransmitBufferStatus(XMC_I2C1_CH1) == XMC_USIC_CH_TBUF_STATUS_BUSY )
+        while ( XMC_USIC_CH_GetTransmitBufferStatus(channel) == XMC_USIC_CH_TBUF_STATUS_BUSY )
 		{
 		}
 
@@ -93,36 +97,36 @@ bool I2CTransferFunc(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint
 
 
     if( rx_buffer != NULL ) {
-       XMC_I2C_CH_MasterStart(XMC_I2C1_CH1, sensor->comLibIFParams.i2c_params.address, XMC_I2C_CH_CMD_READ);
+       XMC_I2C_CH_MasterStart(channel, sensor->comLibIFParams.i2c_params.address, XMC_I2C_CH_CMD_READ);
 
-         while((XMC_I2C_CH_GetStatusFlag(XMC_I2C1_CH1) & XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED) == 0U)
+         while((XMC_I2C_CH_GetStatusFlag(channel) & XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED) == 0U)
         {
         }
 
-        XMC_I2C_CH_ClearStatusFlag(XMC_I2C1_CH1,(uint32_t) XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED);
+        XMC_I2C_CH_ClearStatusFlag(channel, XMC_I2C_CH_STATUS_FLAG_ACK_RECEIVED);
 
         for(size_t n = 0; n < (rx_len - 1); ++n) {
-            XMC_I2C_CH_MasterReceiveAck(XMC_I2C1_CH1);
+            XMC_I2C_CH_MasterReceiveAck(channel);
 
-    		while((XMC_I2C_CH_GetStatusFlag(XMC_I2C1_CH1) & (XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION)) == 0U)
+    		while((XMC_I2C_CH_GetStatusFlag(channel) & (XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION)) == 0U)
     		{
     		}
 
-    		XMC_I2C_CH_ClearStatusFlag(XMC_I2C1_CH1, XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
-            rx_buffer[n] = XMC_I2C_CH_GetReceivedData(XMC_I2C1_CH1);
+    		XMC_I2C_CH_ClearStatusFlag(channel, XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
+            rx_buffer[n] = XMC_I2C_CH_GetReceivedData(channel);
         }
 
-		XMC_I2C_CH_MasterReceiveNack(XMC_I2C1_CH1);
+		XMC_I2C_CH_MasterReceiveNack(channel);
 
-		while((XMC_I2C_CH_GetStatusFlag(XMC_I2C1_CH1) & (XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION)) == 0U)
+		while((XMC_I2C_CH_GetStatusFlag(channel) & (XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION)) == 0U)
 		{
 		}
 
-		XMC_I2C_CH_ClearStatusFlag(XMC_I2C1_CH1, XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
-		rx_buffer[rx_len - 1] = XMC_I2C_CH_GetReceivedData(XMC_I2C1_CH1);
-        XMC_I2C_CH_MasterStop(XMC_I2C1_CH1);
+		XMC_I2C_CH_ClearStatusFlag(channel, XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION | XMC_I2C_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
+		rx_buffer[rx_len - 1] = XMC_I2C_CH_GetReceivedData(channel);
+        XMC_I2C_CH_MasterStop(channel);
 
-        while ( XMC_USIC_CH_GetTransmitBufferStatus(XMC_I2C1_CH1) == XMC_USIC_CH_TBUF_STATUS_BUSY )
+        while ( XMC_USIC_CH_GetTransmitBufferStatus(channel) == XMC_USIC_CH_TBUF_STATUS_BUSY )
 		{
 		}
     }
@@ -138,25 +142,30 @@ ComLibraryFunctions_ts  comLibIF_i2c = {
                                        };
 
 
-void setI2CParameters(ComLibraryParameters_ts *params) {
-    params->i2c_params.address = GEN_2_STD_IIC_ADDR_WRITE_A0;
+void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
+    params->i2c_params.address = addr;
 }
 
 
-void initComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
-                  const uint8_t sourceSDA, const uint8_t sourceSCL,
-                  XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
-                  XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL) {
+void initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
+                     const uint8_t sourceSDA, const uint8_t sourceSCL,
+                     XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
+                     XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL) {
 
-    sensor->comLibObj = (ComLibraryObject_ts *) malloc(sizeof(ComLibraryObject_ts));
-   
-    sensor->comLibObj->channel   = channel;
-    sensor->comLibObj->sourceSDA = sourceSDA;
-    sensor->comLibObj->sourceSCL = sourceSCL;
-    sensor->comLibObj->portSDA   = portSDA;
-    sensor->comLibObj->pinSDA    = pinSDA;
-    sensor->comLibObj->portSCL   = portSCL;
-    sensor->comLibObj->pinSCL    = pinSCL;
+    sensor->comLibObj.i2c_obj = (I2CObject_ts *) malloc(sizeof(I2CObject_ts));
+
+    sensor->comLibObj.i2c_obj->channel   = channel;
+    sensor->comLibObj.i2c_obj->sourceSDA = sourceSDA;
+    sensor->comLibObj.i2c_obj->sourceSCL = sourceSCL;
+    sensor->comLibObj.i2c_obj->portSDA   = portSDA;
+    sensor->comLibObj.i2c_obj->pinSDA    = pinSDA;
+    sensor->comLibObj.i2c_obj->portSCL   = portSCL;
+    sensor->comLibObj.i2c_obj->pinSCL    = pinSCL;
 
     sensor->comLibIF->init.i2c_init(sensor);
+}
+
+
+void frameworkDelayMicroseconds(uint32_t us) {
+    XMC_DelayUs(us);
 }

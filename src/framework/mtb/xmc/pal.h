@@ -6,7 +6,4 @@
 #include "mtb_defines.h"
 
 
-typedef struct ComLibraryObject_ts ComLibraryObject_ts;
-
-
 #endif // PAL_H

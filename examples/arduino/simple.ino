@@ -11,7 +11,6 @@
 #include "TwoWire_Lib.hpp"
 #include "Magnetic_3d.hpp"
 
-
 extern "C" {
   #include "sensor_types.h"
 }

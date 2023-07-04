@@ -28,10 +28,9 @@ template<> class TwoWire_Lib<TwoWire> {
 
         void init(Sensor_ts *sensor) {
             i2cAddress = sensor->comLibIFParams.i2c_params.address;
-            initComLibIF(sensor, i2c);
+            initI2CComLibIF(sensor, i2c);
 
             //reset(sensor);
-           i2c.begin();
         }
 
 

@@ -7,6 +7,9 @@
 #include "sensor_types.h"
 
 
+extern void frameworkDelayMicroseconds(uint32_t us);
+
+
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF);
 bool deinit(Sensor_ts *sensor);

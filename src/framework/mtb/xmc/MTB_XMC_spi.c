@@ -4,7 +4,7 @@
 // XMC related includes
 #include "xmc_i2c.h"
 
-// project cpp includes
+// project c includes
 #include "mtb_defines.h"
 
 // project c includes
@@ -41,7 +41,7 @@
 // }
 
 
-// ComLibraryFunctions_ts  comLibIF_spi = { 
+// ComLibraryFunctions_ts  comLibIF_spi = {
 //                                            .init.spi_init         = SPIInitFunc,
 //                                            .deinit.spi_deinit     = SPIDeinitFunc,
 //                                            .transfer.spi_transfer = SPITransferFunc,

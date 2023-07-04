@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 // std includes
 #include <assert.h>
+=======
+>>>>>>> develop
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>

@@ -12,16 +12,16 @@
 
 typedef struct Sensor_ts Sensor_ts;
 
-
 /*
   List of all supported sensor devices.
 */
 typedef enum {
-               TLE493D_A1B6_e = 0, 
+               TLE493D_A1B6_e = 0,
                TLV493D_A1B6_e = 1,
                TLE493D_A2B6_e = 2,
                TLE493D_P2B6_e = 3,
-               TLE493D_W2B6_e = 4 } SupportedSensorTypes_te;
+               TLE493D_W2B6_e = 4,
+               TLV493D_A2BW_e = 5 } SupportedSensorTypes_te;
 
 
 /*
@@ -35,7 +35,7 @@ typedef enum {
 /*
   List of supported register access modes.
 */
-typedef enum { READ_MODE_e = 0, 
+typedef enum { READ_MODE_e = 0,
                WRITE_MODE_e } REG_ACESS_MODE_te;
 
 
@@ -48,7 +48,7 @@ typedef struct Register_ts {
     uint8_t            address;
     uint8_t            mask;
     uint8_t            offset;
-    // uint8_t           numBits;
+    uint8_t            numBits;
 } Register_ts;
 
 
@@ -90,6 +90,12 @@ typedef union ComLibraryParameters_ts {
 } ComLibraryParameters_ts;
 
 
+typedef union ComLibraryObject_ts {
+    SPIObject_ts  *spi_obj;
+    I2CObject_ts  *i2c_obj;
+} ComLibraryObject_ts;
+
+
 // Functions common to all sensors
 typedef bool (*InitFuncPtr)(Sensor_ts *, SupportedComLibraryInterfaceTypes_te comLibIF);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
@@ -98,7 +104,6 @@ typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, float *temp);
 typedef bool (*UpdateGetTemperatureFuncPtr)(Sensor_ts *, float *temp);
 typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
 typedef bool (*UpdateGetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
-
 typedef bool (*ResetFuncPtr)(Sensor_ts *);
 typedef bool (*GetDiagnosisFuncPtr)(Sensor_ts *);
 typedef bool (*CalculateParityFuncPtr)(Sensor_ts *);
@@ -134,7 +139,7 @@ typedef struct Sensor_ts {
     Register_ts             *regDef;
     ComLibraryFunctions_ts  *comLibIF;
     ComLibraryParameters_ts  comLibIFParams;
-    ComLibraryObject_ts     *comLibObj;
+    ComLibraryObject_ts      comLibObj;
 
     // #include "defineCommunicationLibraryObject.h"
 

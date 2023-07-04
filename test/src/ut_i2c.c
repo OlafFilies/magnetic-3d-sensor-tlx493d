@@ -61,10 +61,10 @@ int main(int argc, char *argv[]) {
     printf("main ...\n");
 
     setup_i2c_relax_kit_4700_lite();
- 
+
     printf("testing ...\n");
     UNITY_BEGIN();
-    
+
     RUN_TEST(test_function_should_doBlahAndBlah);
     RUN_TEST(test_function_should_doAlsoDoBlah);
 

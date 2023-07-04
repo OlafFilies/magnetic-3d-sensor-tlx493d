@@ -20,7 +20,7 @@ extern "C" {
 
 class TLx493D {
    public:
-        
+
         TLx493D(SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) : _sensor() {
             ::init(&_sensor, sensorType, comLibIF);
         }
@@ -103,4 +103,3 @@ class TLx493D {
 
 
 #endif // TLx493D_HPP
-
