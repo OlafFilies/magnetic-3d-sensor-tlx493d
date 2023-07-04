@@ -19,6 +19,11 @@
 #include "TLE493D_P2B6.h"
 #include "TLE493D_W2B6.h"
 
+<<<<<<< HEAD
+// static_assert(offsetof(struct TLE493D_A1B6_t, sensorType) == offsetof(struct TLE493D_W2B6_t, sensorType));
+
+=======
+>>>>>>> 1746abda37c1f13d68754602bb3d39c192b594b6
 
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) {
