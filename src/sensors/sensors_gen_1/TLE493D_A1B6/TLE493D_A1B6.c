@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 // std includes
 #include <assert.h>
-=======
->>>>>>> develop
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -25,7 +22,7 @@
 // structures for holding communication params
 extern struct ComLibraryFunctions_ts comLibIF_i2c;
 
-extern void setI2CParameters(ComLibraryParameters_ts *params); //TODO: assign GEN1 addr 
+extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr); 
 extern void frameworkDelayMicroseconds(uint32_t us);
 
 /*
@@ -109,18 +106,16 @@ bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
         return false;
     }
 
-    sensor->regMap     = (uint8_t *) malloc(sizeof(uint8_t) * TLE493D_A1B6_REGISTER_MAP_SIZE);
-    sensor->regDef     = TLE493D_A1B6_regDef;
-    sensor->functions  = &TLE493D_A1B6_commonFunctions;
-    sensor->regMapSize = TLE493D_A1B6_REGISTER_MAP_SIZE;
-    sensor->sensorType = TLE493D_A1B6_e;
-    sensor->comIFType  = comLibIF;
-    sensor->comLibIF   = &comLibIF_i2c;
-    sensor->comLibObj  = NULL;
+    sensor->regMap            = (uint8_t *) malloc(sizeof(uint8_t) * TLE493D_A1B6_REGISTER_MAP_SIZE);
+    sensor->regDef            = TLE493D_A1B6_regDef;
+    sensor->functions         = &TLE493D_A1B6_commonFunctions;
+    sensor->regMapSize        = TLE493D_A1B6_REGISTER_MAP_SIZE;
+    sensor->sensorType        = TLE493D_A1B6_e;
+    sensor->comIFType         = comLibIF;
+    sensor->comLibIF          = &comLibIF_i2c;
+    sensor->comLibObj.i2c_obj = NULL;
 
-    setI2CParameters(&sensor->comLibIFParams); //remove: this sets GEN2 addr
-
-    sensor->comLibIFParams.i2c_params.address = GEN_1_STD_IIC_ADDR; //remove: ask about this override
+    setI2CParameters(&sensor->comLibIFParams, GEN_1_STD_IIC_ADDR);
 
     return true;
 }
