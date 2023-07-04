@@ -38,3 +38,4 @@ mtb_xmc_test: mtb_base
 	cp ../test/src/mtb/xmc/ut_TLE493D_A2B6.c ~/mtb3DMagneticSensors/src
 	cp -r ../test/Unity ~/mtb3DMagneticSensors/src
 	cp -r ~/mtb3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/mtw/XMC4700_Relax_I2C_Master_and_Slave/IFX3DMagneticSensors
+

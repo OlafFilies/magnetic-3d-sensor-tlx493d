@@ -67,7 +67,7 @@ typedef enum {
 Register_ts TLE493D_A2B6_regDef[TLE493D_A2B6_REGISTER_MAP_SIZE] = {
     { BX_MSB,   READ_MODE_e, 0x00, 0xFF, 0 },
     { BY_MSB,   READ_MODE_e, 0x01, 0xFF, 0 },
-    { BZ_MSB,   READ_MODE_e, 0x02, 0xFF, 0 }, 
+    { BZ_MSB,   READ_MODE_e, 0x02, 0xFF, 0 },
     { TEMP_MSB, READ_MODE_e, 0x03, 0xFF, 0 },
     { BX_LSB,   READ_MODE_e, 0x04, 0xF0, 4 },
     { BY_LSB,   READ_MODE_e, 0x04, 0x0F, 0 },
@@ -202,7 +202,7 @@ bool TLE493D_A2B6_reset(Sensor_ts *sensor) {
 //     sensor->comLibIFParams.i2c_params.address = 0x00;
 //     sensor->comLibIF->transfer.i2c_transfer(sensor, resetValues, 0, NULL, 0);
 //     sensor->comLibIF->transfer.i2c_transfer(sensor, resetValues, 0, NULL, 0);
- 
+
 //     sensor->comLibIF->deinit.i2c_deinit(sensor);
 //    sensor->comLibIF->init.i2c_init(sensor);
 

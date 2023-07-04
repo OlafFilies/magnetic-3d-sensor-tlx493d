@@ -1,4 +1,3 @@
-// std includes
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -17,5 +16,3 @@
 // sensor specicifc includes
 #include "TLE493D_A1B6_config.h"
 #include "TLE493D_A1B6.h"
-
-

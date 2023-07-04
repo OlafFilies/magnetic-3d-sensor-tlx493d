@@ -17,5 +17,3 @@
 // sensor specicifc includes
 #include "TLV493D_A1B6_config.h"
 #include "TLV493D_A1B6.h"
-
-
