@@ -11,8 +11,11 @@
 #define TLV493D_A2BW_H_
 
 /** std includes*/
+#include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /** Common to all sensors */
 #include "sensor_types.h"
@@ -39,7 +42,25 @@ typedef struct TLV493D_A2BW_functions_ts {
     UpdateRegistersFuncPtr              updateRegisterMap;
 } TLV493D_A2BW_functions_ts;
 
+/**
+ * @brief Initializes the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * It initializes the sensor structure and checks if the right communication protocol is provided
+ *
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @param[in] comLibIF Communication interface type of the sensor
+ * @return true - If the initialization was successful
+ * @return false - If the initialization failed
+ */
 bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
+
+/**
+ * @brief De-Initializes the TLV493D-A2BW magnetic 3D sensor
+ * It frees the corresponding pointers of the sensor structure and sets the pointers to NULL
+ *
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @return true - If the de-initialization was successful
+ * @return false - If the de-initialization failed
+ */
 bool TLV493D_A2BW_deinit(Sensor_ts *sensor);
 
 bool TLV493D_A2BW_getTemperature(Sensor_ts *sensor, float *temp);

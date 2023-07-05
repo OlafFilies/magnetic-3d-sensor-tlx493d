@@ -7,10 +7,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-/** Std includes */
-#include <stdio.h>
-#include <stdlib.h>
-
 /** Sensor specific includes */
 #include "TLV493D_A2BW.h"
 
@@ -86,14 +82,29 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
 };
 
 bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
+    assert(comLibIF == I2C_e);
+
     sensor->regMap                  = (uint8_t*)(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
     sensor->regDef                  = TLV493D_A2BW_regDef;
     sensor->functions               = &TLV493D_A2BW_commonFunctions;
     sensor->regMapSize              = GEN_2_REG_MAP_SIZE;
     sensor->sensorType              = TLV493D_A2BW_e;
-    sensor->commIFType              = comLibIF;
+    sensor->comIFType               = comLibIF;
     sensor->comLibIF                = &comLibIF_i2c;
     setI2CParameters(&sensor->comLibIFParams);
+
+    return true;
+}
+
+bool TLV493D_A2BW_deinit(Sensor_ts *sensor) {
+    free(sensor->regMap);
+    free(sensor->regDef);
+    free(sensor->comLibIF);
+    free(sensor->functions);
+    sensor->regMap = NULL;
+    sensor->regDef = NULL;
+    sensor->comLibIF = NULL;
+    sensor->functions = NULL;
 
     return true;
 }

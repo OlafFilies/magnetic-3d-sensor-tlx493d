@@ -19,7 +19,6 @@
 #include "TLE493D_P2B6.h"
 #include "TLE493D_W2B6.h"
 
-
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) {
     switch(sensorType) {
