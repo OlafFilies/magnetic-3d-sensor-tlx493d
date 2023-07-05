@@ -82,20 +82,20 @@ Register_ts TLE493D_A1B6_regDef[TLE493D_A1B6_REGISTER_MAP_SIZE] = {
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
-                                .deinit                = TLE493D_A1B6_deinit,
+                                // .deinit                = TLE493D_A1B6_deinit,
 
-                                .getTemperature        = TLE493D_A1B6_getTemperature,
-                                .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
+                                // .getTemperature        = TLE493D_A1B6_getTemperature,
+                                // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
 
-                                .getFieldValues        = TLE493D_A1B6_getFieldValues,
-                                .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
+                                // .getFieldValues        = TLE493D_A1B6_getFieldValues,
+                                // .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
 
-                                .reset                 = TLE493D_A1B6_reset,
-                                .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
-                                .calculateParity       = TLE493D_A1B6_calculateParity,
+                                // .reset                 = TLE493D_A1B6_reset,
+                                // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
+                                // .calculateParity       = TLE493D_A1B6_calculateParity,
 
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
-                                .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
+                                // .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
                               };
 
 
@@ -118,4 +118,9 @@ bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
     setI2CParameters(&sensor->comLibIFParams, GEN_1_STD_IIC_ADDR);
 
     return true;
+}
+
+
+bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
+    //return TLE493D_A2B6_enableTemperatureMeasurements(sensor); //remove: enable this when corresponding function added
 }
