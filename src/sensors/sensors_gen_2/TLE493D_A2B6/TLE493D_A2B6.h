@@ -20,13 +20,6 @@
 #include "TLE493D_A2B6_config.h"
 
 
-// use definition for generation 2 in sensors_gen_2_common.h
-// #define TLE493D_A2B6_getTemperature (gen_2_getTemperature)
-
-
-#define TLE493D_A2B6_REGISTER_MAP_SIZE  (23)
-
-
 // common functions
 bool TLE493D_A2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
 bool TLE493D_A2B6_deinit(Sensor_ts *sensor);

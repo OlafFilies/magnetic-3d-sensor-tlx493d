@@ -27,6 +27,7 @@ void setup() {
 
     init(&a2b6, TLE493D_A2B6_e, I2C_e);
     initI2CComLibIF(&a2b6, Wire);
+    
     // reset(&a2b6);
     setDefaultConfig(&a2b6);
 

@@ -36,7 +36,8 @@ typedef enum {
   List of supported register access modes.
 */
 typedef enum { READ_MODE_e = 0, 
-               WRITE_MODE_e } REG_ACESS_MODE_te;
+               WRITE_MODE_e,
+               READ_WRITE_MODE_e } REG_ACESS_MODE_te;
 
 
 /*
