@@ -24,7 +24,7 @@
 
 // common functions
 bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
-// bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
+bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
 
 // bool TLE493D_A1B6_getTemperature(Sensor_ts *sensor, float *temp);
 // bool TLE493D_A1B6_updateGetTemperature(Sensor_ts *sensor, float *temp);

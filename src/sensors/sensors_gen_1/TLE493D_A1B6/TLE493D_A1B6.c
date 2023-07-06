@@ -82,7 +82,7 @@ Register_ts TLE493D_A1B6_regDef[TLE493D_A1B6_REGISTER_MAP_SIZE] = {
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
-                                // .deinit                = TLE493D_A1B6_deinit,
+                                .deinit                = TLE493D_A1B6_deinit,
 
                                 // .getTemperature        = TLE493D_A1B6_getTemperature,
                                 // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
@@ -116,6 +116,16 @@ bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
     sensor->comLibObj.i2c_obj = NULL;
 
     setI2CParameters(&sensor->comLibIFParams, GEN_1_STD_IIC_ADDR);
+
+    return true;
+}
+
+bool TLE493D_A1B6_deinit(Sensor_ts *sensor) {
+    free(sensor->regMap);
+    free(sensor->comLibObj.i2c_obj);
+
+    sensor->regMap            = NULL;
+    sensor->comLibObj.i2c_obj = NULL; //remove: ask if this to be done for all members of Sensors struct
 
     return true;
 }
