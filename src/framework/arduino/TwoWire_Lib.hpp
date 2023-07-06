@@ -39,6 +39,7 @@ template<> class TwoWire_Lib<TwoWire> {
         }
 
 
+        // TODO: make this a template function with parameter Sensor_ts, such that the C functions can be called.
         bool transfer(uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
             if( tx_len > 0 ) {
                 i2c.beginTransmission(i2cAddress);
