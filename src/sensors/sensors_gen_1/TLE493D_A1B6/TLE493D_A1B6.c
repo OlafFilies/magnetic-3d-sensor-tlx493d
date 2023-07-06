@@ -52,32 +52,30 @@ typedef enum {
                LP,
                PT } TLE493D_A1B6_registerNames_te;
 
-
-Register_ts TLE493D_A1B6_regDef[TLE493D_A1B6_REGISTER_MAP_SIZE] = {
+Register_ts TLE493D_A1B6_regDef[] = {
     // Read registers
-    { BX_MSB, READ_MODE_e, 0x00, 0xFF, 0 },
-    { BY_MSB, READ_MODE_e, 0x01, 0xFF, 0 },
-    { BZ_MSB, READ_MODE_e, 0x02, 0xFF, 0 },
-    { TEMP_MSB, READ_MODE_e, 0x03, 0xF0, 4 },
-    { FRM, READ_MODE_e, 0x03, 0x0C, 2},
-    { CH, READ_MODE_e, 0x03, 0x03, 0 },
-    { BX_LSB, READ_MODE_e, 0x04, 0xF0, 4 },
-    { BY_LSB, READ_MODE_e, 0x04, 0x0F, 0 },
-    { BX_MSB, READ_MODE_e, 0x00, 0xFF, 0 },
-    { T_read, READ_MODE_e, 0x05, 0x40, 6 },
-    { FF, READ_MODE_e, 0x05, 0x20, 5 },
-    { PD, READ_MODE_e, 0x05, 0x10, 4 },
-    { BZ_LSB, READ_MODE_e, 0x05, 0x0F, 0 },
-    { TEMP_LSB, READ_MODE_e, 0x06, 0xFF, 0 },
+    {BX_MSB,    READ_MODE_e,    0x00, 0xFF, 0, 8},
+    {BY_MSB,    READ_MODE_e,    0x01, 0xFF, 0, 8},
+    {BZ_MSB,    READ_MODE_e,    0x02, 0xFF, 0, 8},
+    {TEMP_MSB,  READ_MODE_e,    0x03, 0xF0, 4, 4},
+    {FRM,       READ_MODE_e,    0x03, 0x0C, 2, 2},
+    {CH,        READ_MODE_e,    0x03, 0x03, 0, 2},
+    {BX_LSB,    READ_MODE_e,    0x04, 0xF0, 4, 4},
+    {BY_LSB,    READ_MODE_e,    0x04, 0x0F, 0, 4},
+    {T_read,    READ_MODE_e,    0x05, 0x40, 6, 1},
+    {FF,        READ_MODE_e,    0x05, 0x20, 5, 1},
+    {PD,        READ_MODE_e,    0x05, 0x10, 4, 1},
+    {BZ_LSB,    READ_MODE_e,    0x05, 0x0F, 0, 4},
+    {TEMP_LSB,  READ_MODE_e,    0x06, 0xFF, 0, 8},
     // Write Registers
-    { P, WRITE_MODE_e, 0x01, 0x80, 7 },
-    { IICaddr, WRITE_MODE_e, 0x01, 0x60, 5 },
-    { INT, WRITE_MODE_e, 0x01, 0x04, 2 },
-    { FAST, WRITE_MODE_e, 0x01, 0x02, 1 },
-    { LOW, WRITE_MODE_e, 0x01, 0x01, 0 },
-    { T_write, WRITE_MODE_e, 0x03, 0x80, 7 },
-    { LP, WRITE_MODE_e, 0x03, 0x40, 6 },
-    { PT, WRITE_MODE_e, 0x03, 0x20, 5 },
+    {P,         WRITE_MODE_e,   0x01, 0x80, 7, 1},
+    {IICaddr,   WRITE_MODE_e,   0x01, 0x60, 5, 2},
+    {INT,       WRITE_MODE_e,   0x01, 0x04, 2, 1},
+    {FAST,      WRITE_MODE_e,   0x01, 0x02, 1, 1},
+    {LOW,       WRITE_MODE_e,   0x01, 0x01, 0, 1},
+    {T_write,   WRITE_MODE_e,   0x03, 0x80, 7, 1},
+    {LP,        WRITE_MODE_e,   0x03, 0x40, 6, 1},
+    {PT,        WRITE_MODE_e,   0x03, 0x20, 5, 1},
 };
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
