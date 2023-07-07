@@ -128,6 +128,19 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor) {
     return true;
 }
 
+void TLE493D_A2B6_getTemperatureMeasurementsBuffer(uint8_t *regMap, uint8_t *buf, uint8_t *bufLen) {
+    buf[0] = ;
+    buf[1] = regMap[16] & 0x7C;
+    *bufLen = 2;
+}
+
+bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
+    uint8_t transBuffer[sensor->regMapSize];
+    uint8_t bufLen = 0;
+
+    TLE493D_A2B6_getTemperatureMeasurementsBuffer(sensor->regMap, transBuffer, &bufLen);
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
+}
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
     //return TLE493D_A2B6_enableTemperatureMeasurements(sensor); //remove: enable this when corresponding function added
