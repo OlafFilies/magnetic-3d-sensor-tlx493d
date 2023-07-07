@@ -15,7 +15,7 @@ extern "C" {
 }
 
 
-// keyword "export" not supported by current Arduino C++ compiler, therefore definitions must go here. Ubpdate C++ compiler to newer version ???
+// keyword "export" not supported by current Arduino C++ compiler, therefore definitions must go here. Update C++ compiler to newer version ???
 // export
 template<typename BoardSupportClass, template<typename> typename ComLibrary, typename ComIF, typename SensorClass> class Sensor3D {
     public:
