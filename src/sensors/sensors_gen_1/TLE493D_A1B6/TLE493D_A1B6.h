@@ -19,16 +19,14 @@
 // sensor specicifc includes
 #include "TLE493D_A1B6_config.h"
 
-
-#define TLE493D_A1B6_REGISTER_MAP_SIZE          22    //remove: fix at the end of development
+#define TLE493D_A1B6_WRITE_REGISTER_MAP_SIZE            13          //remove: fix at the end of development
+#define TLE493D_A1B6_READ_REGISTER_MAP_SIZE             8          //remove: fix at the end of development
+#define TLE493D_A1B6_REGISTER_MAP_SIZE                  (TLE493D_A1B6_WRITE_REGISTER_MAP_SIZE + TLE493D_A1B6_READ_REGISTER_MAP_SIZE)
+#define TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT          4
 
 // common functions
 bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
-<<<<<<< HEAD
 bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
-=======
-// bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
->>>>>>> develop
 
 // bool TLE493D_A1B6_getTemperature(Sensor_ts *sensor, float *temp);
 // bool TLE493D_A1B6_updateGetTemperature(Sensor_ts *sensor, float *temp);
@@ -42,7 +40,9 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor);
 // bool TLE493D_A1B6_updateRegisterMap(Sensor_ts *sensor);
-
+bool TLE493D_A1B6_setDefaultWriteRegisterValues(Sensor_ts *sensor);
+bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor);
+bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor);
 
 
 #endif // TLE493D_A1B6_H
