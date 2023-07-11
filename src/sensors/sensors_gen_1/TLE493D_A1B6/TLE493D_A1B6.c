@@ -130,43 +130,50 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor) {
     return true;
 }
 
-// void TLE493D_A1B6_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *regMap, uint8_t *buf, uint8_t *bufLen) {
-//     buf[0] = sensor->regDef[Temp_NEN].address;
-//     buf[1] = regMap[sensor->regDef[Temp_NEN].address] & ~(sensor->regDef[Temp_NEN].mask);
-//     *bufLen = 2;
-// }
-
-bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
-    uint8_t transBuffer[sensor->regMapSize];
-    uint8_t bufLen = 0;
-
-    //TLE493D_A2B6_getTemperatureMeasurementsBuffer(sensor->regMap, transBuffer, &bufLen);
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
-}
-
-bool TLE493D_A1B6_setWriteRegisterValues(Sensor_ts *sensor) {
+bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor) {
 
     WriteRegisterValues[0]      =       0x00; //reserved
-    WriteRegisterValues[1]      =       (TLE493_A1B6_ODD_PARITY << sensor->regDef[P].offset)                        | 
-                                        (TLE493_A1B6_INT_ENABLE_default << sensor->regDef[INT].offset)              | 
-                                        (TLE493_A1B6_FAST_MODE_DISABLE_default << sensor->regDef[FAST].offset)      | 
-                                        (TLE493_A1B6_LOW_POWER_MODE_DISABLE_default << sensor->regDef[LOW].offset);
+    WriteRegisterValues[1]      =       (TLE493D_A1B6_ODD_PARITY << sensor->regDef[P].offset)                        | 
+                                        (TLE493D_A1B6_INT_ENABLE_default << sensor->regDef[INT].offset)              | 
+                                        (TLE493D_A1B6_FAST_MODE_DISABLE_default << sensor->regDef[FAST].offset)      | 
+                                        (TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default << sensor->regDef[LOW].offset);
     WriteRegisterValues[2]      =       0x00; //reserved
-    WriteRegisterValues[3]      =       (TLE493_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset)        |
-                                        (TLE493_A1B6_LOW_POWER_PERIOD_100MS_default << sensor->regDef[LP].offset)   |
-                                        (TLE493_A1B6_PARITY_TEST_ENABLE_default << sensor->regDef[PT].offset);  //remove: todo: make the reserve fields track regmaps read values. 
+    WriteRegisterValues[3]      =       (TLE493D_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset)        |
+                                        (TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default << sensor->regDef[LP].offset)   |
+                                        (TLE493D_A1B6_PARITY_TEST_ENABLE_default << sensor->regDef[PT].offset);  //remove: todo: make the reserve fields track regmaps read values. 
 }
 
 
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
-    //return TLE493D_A2B6_enableTemperatureMeasurements(sensor); //remove: enable this when corresponding function added
-    return TLE493D_A1B6_setWriteRegisterValues(sensor);
+    return TLE493D_A1B6_setWriteRegisterDefaultValues(sensor);
 }
 
 bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
+    uint8_t transBuffer[2];
+    uint8_t bufLen = 2;
+
     WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
                                                             ~(sensor->regDef[Temp_NEN].mask)) | 
-                                                            (TLE493_A1B6_Temp_DISABLE << sensor->regDef->offset);
+                                                            (TLE493D_A1B6_Temp_DISABLE << sensor->regDef->offset);
+
+    transBuffer[0] = sensor->regDef[Temp_NEN].address;
+    transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
+
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, TLE493D_A1B6_READ_REGISTER_MAP_SIZE);                                                            
+}
+
+bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
+    uint8_t transBuffer[2];
+    uint8_t bufLen = 2;
+
+    WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
+                                                            ~(sensor->regDef[Temp_NEN].mask)) | 
+                                                            (TLE493D_A1B6_Temp_ENABLE_default << sensor->regDef->offset);
+
+    transBuffer[0] = sensor->regDef[Temp_NEN].address;
+    transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
+                                                                
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, TLE493D_A1B6_READ_REGISTER_MAP_SIZE);
 }

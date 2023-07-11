@@ -26,46 +26,46 @@
 
 //register enums
 typedef enum {
-    TLE493_A1B6_Temp_ENABLE_default,
-    TLE493_A1B6_Temp_DISABLE
-} TLE493_A1B6_Reg_Temp_NEN;
+    TLE493D_A1B6_Temp_ENABLE_default,
+    TLE493D_A1B6_Temp_DISABLE
+} TLE493D_A1B6_Reg_Temp_NEN;
 
 typedef enum {
-    TLE493_A1B6_ODD_PARITY,
-    TLE493_A1B6_EVEN_PARITY
-} TLE493_A1B6_Reg_PARITY;
+    TLE493D_A1B6_ODD_PARITY,
+    TLE493D_A1B6_EVEN_PARITY
+} TLE493D_A1B6_Reg_PARITY;
 
 typedef enum {
-    TLE493_A1B6_CONFIG_00_default,
-    TLE493_A1B6_CONFIG_01,
-    TLE493_A1B6_CONFIG_10,
-    TLE493_A1B6_CONFIG_11
-} TLE493_A1B6_Reg_IICADDR;
+    TLE493D_A1B6_CONFIG_00_default,
+    TLE493D_A1B6_CONFIG_01,
+    TLE493D_A1B6_CONFIG_10,
+    TLE493D_A1B6_CONFIG_11
+} TLE493D_A1B6_Reg_IICADDR;
 
 typedef enum {
-    TLE493_A1B6_INT_ENABLE_default,
-    TLE493_A1B6_INT_DISABLE
-} TLE493_A1B6_Reg_INT;
+    TLE493D_A1B6_INT_ENABLE_default,
+    TLE493D_A1B6_INT_DISABLE
+} TLE493D_A1B6_Reg_INT;
 
 typedef enum {
-    TLE493_A1B6_FAST_MODE_DISABLE_default,
-    TLE493_A1B6_FAST_MODE_ENABLE
-} TLE493_A1B6_Reg_FAST_MODE_NEN;
+    TLE493D_A1B6_FAST_MODE_DISABLE_default,
+    TLE493D_A1B6_FAST_MODE_ENABLE
+} TLE493D_A1B6_Reg_FAST_MODE_NEN;
 
 typedef enum {
-    TLE493_A1B6_LOW_POWER_MODE_DISABLE_default,
-    TLE493_A1B6_LOW_POWER_MODE_ENABLE
-} TLE493_A1B6_Reg_LOW_POWER_MODE_NEN;
+    TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default,
+    TLE493D_A1B6_LOW_POWER_MODE_ENABLE
+} TLE493D_A1B6_Reg_LOW_POWER_MODE_NEN;
 
 typedef enum {
-    TLE493_A1B6_LOW_POWER_PERIOD_100MS_default,
-    TLE493_A1B6_LOW_POWER_PERIOD_12MS
-} TLE493_A1B6_Reg_LOW_POWER_PERIOD;
+    TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default,
+    TLE493D_A1B6_LOW_POWER_PERIOD_12MS
+} TLE493D_A1B6_Reg_LOW_POWER_PERIOD;
 
 typedef enum {
-    TLE493_A1B6_PARITY_TEST_ENABLE_default,
-    TLE493_A1B6_PARITY_TEST_DISABLE
-} TLE493_A1B6_Reg_PARITY_TEST_NEN;
+    TLE493D_A1B6_PARITY_TEST_ENABLE_default,
+    TLE493D_A1B6_PARITY_TEST_DISABLE
+} TLE493D_A1B6_Reg_PARITY_TEST_NEN;
 
 // common functions
 bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
@@ -83,7 +83,8 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor);
 // bool TLE493D_A1B6_updateRegisterMap(Sensor_ts *sensor);
-bool TLE493D_A1B6_setDefaultWriteRegisterValues(Sensor_ts *sensor);
+bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor);
+
 bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor);
 bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor);
 
