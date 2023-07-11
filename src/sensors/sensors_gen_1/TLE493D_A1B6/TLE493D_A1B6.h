@@ -24,6 +24,50 @@
 #define TLE493D_A1B6_REGISTER_MAP_SIZE                  (TLE493D_A1B6_WRITE_REGISTER_MAP_SIZE + TLE493D_A1B6_READ_REGISTER_MAP_SIZE)
 #define TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT          4
 
+//register enums
+typedef enum {
+    Temp_ENABLE_default,
+    Temp_DISABLE
+} Reg_Temp_NEN;
+
+typedef enum {
+    ODD_PARITY,
+    EVEN_PARITY
+} Reg_PARITY;
+
+typedef enum {
+    CONFIG_00_default,
+    CONFIG_01,
+    CONFIG_10,
+    CONFIG_11
+} Reg_IICADDR;
+
+typedef enum {
+    INT_ENABLE_default,
+    INT_DISABLE
+} Reg_INT;
+
+typedef enum {
+    FAST_MODE_DISABLE_default,
+    FAST_MODE_ENABLE
+} Reg_FAST_MODE_NEN;
+
+typedef enum {
+    LOW_POWER_MODE_DISABLE_default,
+    LOW_POWER_MODE_ENABLE
+} Reg_LOW_POWER_MODE_NEN;
+
+typedef enum {
+    LOW_POWER_PERIOD_100MS_default,
+    LOW_POWER_PERIOD_12MS
+} Reg_LOW_POWER_PERIOD;
+
+typedef enum {
+    PARITY_TEST_ENABLE_default,
+    PARITY_TEST_DISABLE
+} Reg_PARITY_TEST_NEN;
+
+
 // common functions
 bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
 bool TLE493D_A1B6_deinit(Sensor_ts *sensor);

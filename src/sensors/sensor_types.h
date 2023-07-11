@@ -49,7 +49,6 @@ typedef struct Register_ts {
     uint8_t            mask;
     uint8_t            offset;
     uint8_t            numBits;
-    uint8_t            defaultValue; 
 } Register_ts;
 
 
