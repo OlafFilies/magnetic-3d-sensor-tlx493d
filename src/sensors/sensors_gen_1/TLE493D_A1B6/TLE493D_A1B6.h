@@ -26,47 +26,46 @@
 
 //register enums
 typedef enum {
-    Temp_ENABLE_default,
-    Temp_DISABLE
-} Reg_Temp_NEN;
+    TLE493_A1B6_Temp_ENABLE_default,
+    TLE493_A1B6_Temp_DISABLE
+} TLE493_A1B6_Reg_Temp_NEN;
 
 typedef enum {
-    ODD_PARITY,
-    EVEN_PARITY
-} Reg_PARITY;
+    TLE493_A1B6_ODD_PARITY,
+    TLE493_A1B6_EVEN_PARITY
+} TLE493_A1B6_Reg_PARITY;
 
 typedef enum {
-    CONFIG_00_default,
-    CONFIG_01,
-    CONFIG_10,
-    CONFIG_11
-} Reg_IICADDR;
+    TLE493_A1B6_CONFIG_00_default,
+    TLE493_A1B6_CONFIG_01,
+    TLE493_A1B6_CONFIG_10,
+    TLE493_A1B6_CONFIG_11
+} TLE493_A1B6_Reg_IICADDR;
 
 typedef enum {
-    INT_ENABLE_default,
-    INT_DISABLE
-} Reg_INT;
+    TLE493_A1B6_INT_ENABLE_default,
+    TLE493_A1B6_INT_DISABLE
+} TLE493_A1B6_Reg_INT;
 
 typedef enum {
-    FAST_MODE_DISABLE_default,
-    FAST_MODE_ENABLE
-} Reg_FAST_MODE_NEN;
+    TLE493_A1B6_FAST_MODE_DISABLE_default,
+    TLE493_A1B6_FAST_MODE_ENABLE
+} TLE493_A1B6_Reg_FAST_MODE_NEN;
 
 typedef enum {
-    LOW_POWER_MODE_DISABLE_default,
-    LOW_POWER_MODE_ENABLE
-} Reg_LOW_POWER_MODE_NEN;
+    TLE493_A1B6_LOW_POWER_MODE_DISABLE_default,
+    TLE493_A1B6_LOW_POWER_MODE_ENABLE
+} TLE493_A1B6_Reg_LOW_POWER_MODE_NEN;
 
 typedef enum {
-    LOW_POWER_PERIOD_100MS_default,
-    LOW_POWER_PERIOD_12MS
-} Reg_LOW_POWER_PERIOD;
+    TLE493_A1B6_LOW_POWER_PERIOD_100MS_default,
+    TLE493_A1B6_LOW_POWER_PERIOD_12MS
+} TLE493_A1B6_Reg_LOW_POWER_PERIOD;
 
 typedef enum {
-    PARITY_TEST_ENABLE_default,
-    PARITY_TEST_DISABLE
-} Reg_PARITY_TEST_NEN;
-
+    TLE493_A1B6_PARITY_TEST_ENABLE_default,
+    TLE493_A1B6_PARITY_TEST_DISABLE
+} TLE493_A1B6_Reg_PARITY_TEST_NEN;
 
 // common functions
 bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);

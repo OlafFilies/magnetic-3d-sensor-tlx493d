@@ -73,12 +73,12 @@ Register_ts TLE493D_A1B6_regDef[] = {
     {INT,               WRITE_MODE_e,   0x01, 0x04, 2, 1},
     {FAST,              WRITE_MODE_e,   0x01, 0x02, 1, 1},
     {LOW,               WRITE_MODE_e,   0x01, 0x01, 0, 1},
-    {Temp_NEN,           WRITE_MODE_e,  0x03, 0x80, 7, 1},
+    {Temp_NEN,          WRITE_MODE_e,   0x03, 0x80, 7, 1},
     {LP,                WRITE_MODE_e,   0x03, 0x40, 6, 1},
     {PT,                WRITE_MODE_e,   0x03, 0x20, 5, 1},
 };
 
-uint8_t WriteRegisterValues[TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT]; //malloc ?
+uint8_t WriteRegisterValues[TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT]; //malloc ? YES but link it to a struct such as Sensor_ts or put it inside init 
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
@@ -147,14 +147,14 @@ bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
 bool TLE493D_A1B6_setWriteRegisterValues(Sensor_ts *sensor) {
 
     WriteRegisterValues[0]      =       0x00; //reserved
-    WriteRegisterValues[1]      =       (ODD_PARITY << sensor->regDef[P].offset)                        | 
-                                        (INT_ENABLE_default << sensor->regDef[INT].offset)              | 
-                                        (FAST_MODE_DISABLE_default << sensor->regDef[FAST].offset)      | 
-                                        (LOW_POWER_MODE_DISABLE_default << sensor->regDef[LOW].offset);
+    WriteRegisterValues[1]      =       (TLE493_A1B6_ODD_PARITY << sensor->regDef[P].offset)                        | 
+                                        (TLE493_A1B6_INT_ENABLE_default << sensor->regDef[INT].offset)              | 
+                                        (TLE493_A1B6_FAST_MODE_DISABLE_default << sensor->regDef[FAST].offset)      | 
+                                        (TLE493_A1B6_LOW_POWER_MODE_DISABLE_default << sensor->regDef[LOW].offset);
     WriteRegisterValues[2]      =       0x00; //reserved
-    WriteRegisterValues[3]      =       (Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset)        |
-                                        (LOW_POWER_PERIOD_100MS_default << sensor->regDef[LP].offset)   |
-                                        (PARITY_TEST_ENABLE_default << sensor->regDef[PT].offset);  //remove: todo: make the reserve fields track regmaps read values 
+    WriteRegisterValues[3]      =       (TLE493_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset)        |
+                                        (TLE493_A1B6_LOW_POWER_PERIOD_100MS_default << sensor->regDef[LP].offset)   |
+                                        (TLE493_A1B6_PARITY_TEST_ENABLE_default << sensor->regDef[PT].offset);  //remove: todo: make the reserve fields track regmaps read values. 
 }
 
 
@@ -167,7 +167,6 @@ bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
 
 bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
     WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
-                                                                ~(sensor->regDef[Temp_NEN].mask)) | 
-                                                                (Temp_DISABLE << sensor->regDef->offset);
-
+                                                            ~(sensor->regDef[Temp_NEN].mask)) | 
+                                                            (TLE493_A1B6_Temp_DISABLE << sensor->regDef->offset);
 }
