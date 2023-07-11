@@ -48,7 +48,7 @@ typedef enum {
                INT,
                FAST,
                LOW,
-               T_en, // remove: ask about duplicates
+               Temp_NEN, // remove: ask about duplicates
                LP,
                PT } TLE493D_A1B6_registerNames_te;
 
@@ -73,12 +73,17 @@ Register_ts TLE493D_A1B6_regDef[] = {
     {INT,               WRITE_MODE_e,   0x01, 0x04, 2, 1, 0x01},
     {FAST,              WRITE_MODE_e,   0x01, 0x02, 1, 1, 0x00},
     {LOW,               WRITE_MODE_e,   0x01, 0x01, 0, 1, 0x00},
-    {T_en,              WRITE_MODE_e,   0x03, 0x80, 7, 1, 0x00},
+    {Temp_NEN,           WRITE_MODE_e,  0x03, 0x80, 7, 1, 0x00},
     {LP,                WRITE_MODE_e,   0x03, 0x40, 6, 1, 0x00},
     {PT,                WRITE_MODE_e,   0x03, 0x20, 5, 1, 0x01},
 };
 
-uint8_t DefaultWriteRegisterValues[TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT];
+typedef enum {
+    Temp_ENABLE,
+    Temp_DISABLE
+} Reg_Temp_NEN;
+
+uint8_t WriteRegisterValues[TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT];
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
@@ -144,25 +149,27 @@ bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
     return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
 }
 
-bool TLE493D_A1B6_setDefaultWriteRegisterValues(Sensor_ts *sensor) {
-    DefaultWriteRegisterValues[0] = 0x00; //reserved
-    DefaultWriteRegisterValues[1] = (sensor->regDef[P].defaultValue << sensor->regDef[P].offset)                | 
-                                    (sensor->regDef[IICaddr].defaultValue << sensor->regDef[IICaddr].offset)    | 
-                                    (sensor->regDef[INT].defaultValue << sensor->regDef[INT].offset)            | 
-                                    (sensor->regDef[FAST].defaultValue << sensor->regDef[FAST].offset)          | 
-                                    (sensor->regDef[LOW].defaultValue << sensor->regDef[LOW].offset);
-    DefaultWriteRegisterValues[2] = 0x00; //reserved
-    DefaultWriteRegisterValues[3] = (sensor->regDef[T_en].defaultValue << sensor->regDef[T_en].offset)          |
-                                    (sensor->regDef[LP].defaultValue << sensor->regDef[LP].offset)              |
-                                    (sensor->regDef[PT].defaultValue << sensor->regDef[PT].offset);
+bool TLE493D_A1B6_setWriteRegisterValues(Sensor_ts *sensor) {
+    
+    WriteRegisterValues[0]      =       0x00; //reserved
+    WriteRegisterValues[1]      =       (sensor->regDef[P].defaultValue << sensor->regDef[P].offset)                | 
+                                        (sensor->regDef[INT].defaultValue << sensor->regDef[INT].offset)            | 
+                                        (sensor->regDef[FAST].defaultValue << sensor->regDef[FAST].offset)          | 
+                                        (sensor->regDef[LOW].defaultValue << sensor->regDef[LOW].offset);
+    WriteRegisterValues[2]      =       0x00; //reserved
+    WriteRegisterValues[3]      =       (sensor->regDef[Temp_NEN].defaultValue << sensor->regDef[Temp_NEN].offset)  |
+                                        (sensor->regDef[LP].defaultValue << sensor->regDef[LP].offset)              |
+                                        (sensor->regDef[PT].defaultValue << sensor->regDef[PT].offset);
 }
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
     //return TLE493D_A2B6_enableTemperatureMeasurements(sensor); //remove: enable this when corresponding function added
-    return TLE493D_A1B6_setDefaultWriteRegisterValues(sensor);
+    return TLE493D_A1B6_setWriteRegisterValues(sensor);
 }
 
 bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
-    DefaultWriteRegisterValues[sensor->regDef[T_en].address] = DefaultWriteRegisterValues[sensor->regDef[T_en].address] & ~
+    WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
+                                                                ~(sensor->regDef[Temp_NEN].mask)) | 
+                                                                (Temp_DISABLE << sensor->regDef->offset);
 
 }
