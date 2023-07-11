@@ -80,7 +80,7 @@ Register_ts TLE493D_A1B6_regDef[] = {
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
-                                // .deinit                = TLE493D_A1B6_deinit,
+                                .deinit                = TLE493D_A1B6_deinit,
 
                                 // .getTemperature        = TLE493D_A1B6_getTemperature,
                                 // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
@@ -92,7 +92,7 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
                                 // .calculateParity       = TLE493D_A1B6_calculateParity,
 
-                                .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
+                                //.setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 // .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
                               };
 
@@ -118,7 +118,12 @@ bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
     return true;
 }
 
+bool TLE493D_A1B6_deinit(Sensor_ts *sensor) {
+    free(sensor->regMap);
+    free(sensor->comLibObj.i2c_obj);
 
-bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
-    //return TLE493D_A2B6_enableTemperatureMeasurements(sensor); //remove: enable this when corresponding function added
+    sensor->regMap            = NULL;
+    sensor->comLibObj.i2c_obj = NULL; //remove: ask if this to be done for all members of Sensors struct
+
+    return true;
 }
