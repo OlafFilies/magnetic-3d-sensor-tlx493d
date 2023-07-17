@@ -2,6 +2,7 @@
 #define MAGNETIC_3D_HPP
 
 // std includes
+#include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -24,14 +25,23 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         typedef ComIF                           ComIFType;
 
  
-        Sensor3D(ComIF &comIF, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) : bsc(), comLIF(comIF), sensor(sensorType, comLibIF) {
+        Sensor3D(ComIF &comIF, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIFType = I2C_e) : bsc(), comLIF(comIF), sensor(sensorType, comLibIFType) {
         }
 
 
         void init() {
             bsc.init();
             sensor.init();
-            comLIF.init(sensor.getSensorStruct());
+
+            if( sensor.getSensorStruct()->comIFType == I2C_e ) {
+                bool b = initI2CComLibIF(sensor.getSensorStruct(), comLIF);
+                assert(b);
+            }
+            else {
+                assert(0);
+            }
+
+            // comLIF.init();
 
             sensor.setDefaultConfig();
         }

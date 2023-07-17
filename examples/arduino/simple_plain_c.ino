@@ -25,7 +25,7 @@ void setup() {
     // pinMode(LED2, OUTPUT);
     // digitalWrite(LED2, HIGH);
 
-    init(&a2b6, TLE493D_A2B6_e, I2C_e);
+    init(&a2b6, TLE493D_A2B6_e);
     initI2CComLibIF(&a2b6, Wire);
     
     // reset(&a2b6);

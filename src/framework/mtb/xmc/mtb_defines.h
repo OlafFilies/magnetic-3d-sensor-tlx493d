@@ -30,7 +30,7 @@ typedef struct SPIObject_ts SPIObject_ts;
 typedef struct Sensor_ts    Sensor_ts;
 
 
-extern void initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
+extern bool initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
                             const uint8_t sourceSDA, const uint8_t sourceSCL,
                             XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
                             XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL);

@@ -21,7 +21,7 @@
 
 
 // common functions
-bool TLE493D_A2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
+bool TLE493D_A2B6_init(Sensor_ts *sensor);
 bool TLE493D_A2B6_deinit(Sensor_ts *sensor);
 
 bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp);
@@ -41,6 +41,10 @@ bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor);
 // individual functions
 void TLE493D_A2B6_get1ByteModeBuffer(uint8_t *buf, uint8_t *bufLen);
 void TLE493D_A2B6_getTemperatureMeasurementsBuffer(uint8_t *regMap, uint8_t *buf, uint8_t *bufLen);
+
+
+// utility functions
+void TLE493D_A2B6_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result);
 
 
 #endif /** TLE493D_A2B6_H */

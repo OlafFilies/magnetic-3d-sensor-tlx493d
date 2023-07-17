@@ -38,7 +38,7 @@ void initTests(void) {
 
     cy_retarget_io_init(CYBSP_DEBUG_UART_HW);
 
-    init(&a2b6, TLE493D_A2B6_e, I2C_e);
+    init(&a2b6, TLE493D_A2B6_e);
     initI2CComLibIF(&a2b6, XMC_I2C1_CH1, USIC1_C1_DX0_P3_15, USIC1_C1_DX1_P0_13, P3_15, P0_13);
     setDefaultConfig(&a2b6);
 }

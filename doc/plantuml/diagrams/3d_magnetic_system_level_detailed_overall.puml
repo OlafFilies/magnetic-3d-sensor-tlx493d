@@ -2,7 +2,7 @@
 
     !include <C4/C4_Container>
 
-    System_Boundary(ecosystem, "XSENSIV<sup><size:10>TM</size></sup> magnetic position sensor ecosystem") {
+    System_Boundary(ecosystem, "XENSIV<sup><size:10>TM</size></sup> magnetic position sensor ecosystem") {
 
         System_Boundary(com, "Communication component") {
             Container(comLibCPP, "C++ library and interface", "Arduino, ...", "TwoWire, SPI, ...")

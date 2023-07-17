@@ -21,9 +21,9 @@
 
 
 // functions common to all sensors
-bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) {
+bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
     switch(sensorType) {
-        case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor, comLibIF);
+        case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
                               break;
 
         default : return false;

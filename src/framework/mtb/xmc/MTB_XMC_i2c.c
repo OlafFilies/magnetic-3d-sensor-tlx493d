@@ -22,7 +22,7 @@
 // #include "TLE493D_A2B6.h"
 
 
-bool I2CInitFunc(Sensor_ts *sensor) {
+bool initIIC(Sensor_ts *sensor) {
     XMC_GPIO_CONFIG_t i2c_scl = {
         .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT2,
         .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM
@@ -76,7 +76,7 @@ bool I2CInitFunc(Sensor_ts *sensor) {
 }
  
 
-bool I2CDeinitFunc(Sensor_ts *sensor) {
+bool deinitIIC(Sensor_ts *sensor) {
     I2CObject_ts  *i2c_obj = sensor->comLibObj.i2c_obj;
     XMC_USIC_CH_t *channel = i2c_obj->channel;
 
@@ -115,7 +115,7 @@ bool I2CDeinitFunc(Sensor_ts *sensor) {
 }
 
 
-bool I2CTransferFunc(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+bool transferIIC(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
     XMC_USIC_CH_t *channel = sensor->comLibObj.i2c_obj->channel;
 
 
@@ -192,11 +192,11 @@ bool I2CTransferFunc(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint
 		{
 		}
 
-        printf("rx_buffer : "); 
-        for(int i = 0; i < 23; ++i) {
-            printf("%x   ", rx_buffer[i]);
-        }
-        printf("\n");
+        // printf("rx_buffer : "); 
+        // for(int i = 0; i < 23; ++i) {
+        //     printf("%x   ", rx_buffer[i]);
+        // }
+        // printf("\n");
     }
 
     return true;
@@ -204,9 +204,9 @@ bool I2CTransferFunc(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint
 
 
 ComLibraryFunctions_ts  comLibIF_i2c = {
-                                           .init.i2c_init         = I2CInitFunc,
-                                           .deinit.i2c_deinit     = I2CDeinitFunc,
-                                           .transfer.i2c_transfer = I2CTransferFunc,
+                                            .init     = { .i2c_init     = initIIC },
+                                            .deinit   = { .i2c_deinit   = deinitIIC },
+                                            .transfer = { .i2c_transfer = transferIIC },
                                        };
 
 
@@ -215,14 +215,16 @@ void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
 }
 
 
-void initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
+bool initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
                      const uint8_t sourceSDA, const uint8_t sourceSCL,
                      XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
                      XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL) {
+    if( sensor->comIFType != I2C_e ) {
+        return false;
+    }
 
-    // Need to dynamically allocate object, such that different sensor may use different channels and ports/pins
-    sensor->comLibObj.i2c_obj = (I2CObject_ts *) malloc(sizeof(I2CObject_ts));
-
+   // Need to dynamically allocate object, such that different sensor may use different channels and ports/pins
+    sensor->comLibObj.i2c_obj            = (I2CObject_ts *) malloc(sizeof(I2CObject_ts));
     sensor->comLibObj.i2c_obj->channel   = channel;
     sensor->comLibObj.i2c_obj->sourceSDA = sourceSDA;
     sensor->comLibObj.i2c_obj->sourceSCL = sourceSCL;
@@ -231,52 +233,55 @@ void initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
     sensor->comLibObj.i2c_obj->portSCL   = portSCL;
     sensor->comLibObj.i2c_obj->pinSCL    = pinSCL;
 
+    sensor->comLibIF                     = &comLibIF_i2c;
+
     sensor->comLibIF->init.i2c_init(sensor);
+    return true;
 }
 
 
-void frameworkDelayMicroseconds(uint32_t us) {
-    XMC_DelayUs(us);
-}
+// void frameworkDelayMicroseconds(uint32_t us) {
+//     XMC_DelayUs(us);
+// }
 
 
 void frameworkReset(Sensor_ts *sensor) {
-    XMC_USIC_CH_t *channel = sensor->comLibObj.i2c_obj->channel;
+    // XMC_USIC_CH_t *channel = sensor->comLibObj.i2c_obj->channel;
 
-    XMC_I2C_CH_MasterStart(channel, 0xFF, XMC_I2C_CH_CMD_READ);
-    // XMC_I2C_CH_MasterReceiveNack(channel);
-    // XMC_I2C_CH_MasterStop(channel);
-
-
-    I2CInitFunc(sensor);
-    XMC_I2C_CH_MasterStart(channel, 0xFF, XMC_I2C_CH_CMD_READ);
-	// XMC_I2C_CH_MasterReceiveNack(channel);
-    // XMC_I2C_CH_MasterStop(channel);
+    // XMC_I2C_CH_MasterStart(channel, 0xFF, XMC_I2C_CH_CMD_READ);
+    // // XMC_I2C_CH_MasterReceiveNack(channel);
+    // // XMC_I2C_CH_MasterStop(channel);
 
 
-    I2CInitFunc(sensor);
-    XMC_I2C_CH_MasterStart(channel, 0x00, XMC_I2C_CH_CMD_WRITE);
-    // XMC_I2C_CH_MasterStop(channel);
+    // initIIC(sensor);
+    // XMC_I2C_CH_MasterStart(channel, 0xFF, XMC_I2C_CH_CMD_READ);
+	// // XMC_I2C_CH_MasterReceiveNack(channel);
+    // // XMC_I2C_CH_MasterStop(channel);
 
 
-    I2CInitFunc(sensor);
-    XMC_I2C_CH_MasterStart(channel, 0x00, XMC_I2C_CH_CMD_WRITE);
-    // XMC_I2C_CH_MasterStop(channel);
+    // initIIC(sensor);
+    // XMC_I2C_CH_MasterStart(channel, 0x00, XMC_I2C_CH_CMD_WRITE);
+    // // XMC_I2C_CH_MasterStop(channel);
 
 
-    I2CDeinitFunc(sensor);
-    I2CInitFunc(sensor);
+    // initIIC(sensor);
+    // XMC_I2C_CH_MasterStart(channel, 0x00, XMC_I2C_CH_CMD_WRITE);
+    // // XMC_I2C_CH_MasterStop(channel);
 
-    // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
-    // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
-    // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    // sensor->comLibObj.i2c_obj->wire->endTransmission();
-    // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    // sensor->comLibObj.i2c_obj->wire->endTransmission();
 
-    // // //If the uC has problems with this sequence: reset TwoWire-module.
-    // sensor->comLibObj.i2c_obj->wire->end();
-    // sensor->comLibObj.i2c_obj->wire->begin();
+    // deinitIIC(sensor);
+    // initIIC(sensor);
+
+    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
+    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
+    // // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
+    // // sensor->comLibObj.i2c_obj->wire->endTransmission();
+    // // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
+    // // sensor->comLibObj.i2c_obj->wire->endTransmission();
+
+    // // // //If the uC has problems with this sequence: reset TwoWire-module.
+    // // sensor->comLibObj.i2c_obj->wire->end();
+    // // sensor->comLibObj.i2c_obj->wire->begin();
 
     XMC_DelayUs(30);
 }

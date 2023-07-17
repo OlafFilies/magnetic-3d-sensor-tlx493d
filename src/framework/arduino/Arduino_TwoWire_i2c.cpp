@@ -18,76 +18,33 @@
 
 // project cpp includes
 #include "arduino_defines.h"
+#include "TwoWire_Lib.hpp"
 
 
 extern "C" void frameworkDelayMicroseconds(uint32_t us);
 
       
 extern "C" bool initIIC(Sensor_ts *sensor) {
-    sensor->comLibObj.i2c_obj->wire->begin();
-    // frameworkDelayMicroseconds(30);
+    sensor->comLibObj.i2c_obj->wire->init();
     return true;
 }
 
 
 extern "C" bool deinitIIC(Sensor_ts *sensor) {
-    sensor->comLibObj.i2c_obj->wire->end();
+    sensor->comLibObj.i2c_obj->wire->deinit();
     return true;
 }
 
 
-extern "C" bool transfer(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-     uint8_t   i2cAddress = sensor->comLibIFParams.i2c_params.address;
-     TwoWire  *i2c        = sensor->comLibObj.i2c_obj->wire;
-
-// log("addr :"); log(i2cAddress); log("\n");
-
-    if( tx_len > 0 ) {
-        i2c->beginTransmission(i2cAddress);
-
-        uint8_t written = i2c->write(tx_buffer, tx_len);
-
-// log("i2c written : "); log(written); log("\n");
-// log("i2c tx_len : "); log(tx_len); log("\n");
-
-        i2c->endTransmission(true);
-        
-        if( written != tx_len ) {
-            return false;
-        }
-    }
-
-    if( rx_len > 0 ) {
-        uint8_t bytes_read = i2c->requestFrom(i2cAddress, rx_len);
-
-// log("i2c bytes_read : "); log(bytes_read); log("\n");
-// log("i2c rx_len : "); log(rx_len); log("\n");
-
-        for(uint16_t i = 0; (i < rx_len) && (i2c->available() > 0); ++i) {
-            rx_buffer[i] = i2c->read();
-        }
-
-        i2c->endTransmission(true);
-
-        // log("rx_buffer : "); 
-        // for(int i = 0; i < 23; ++i) {
-        //     log(rx_buffer[i]); log("   ");
-        // }
-        // log("\n");
-
-        if( bytes_read != rx_len ) {
-            return false;
-        }
-    }
-
-    return true;
+extern "C" bool transferIIC(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+    return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address, tx_buffer, tx_len, rx_buffer, rx_len);
 }
 
 
 ComLibraryFunctions_ts  comLibIF_i2c = {
                                             .init     = { .i2c_init     = initIIC },
                                             .deinit   = { .i2c_deinit   = deinitIIC },
-                                            .transfer = { .i2c_transfer = transfer },
+                                            .transfer = { .i2c_transfer = transferIIC },
                                        };
 
 
@@ -96,32 +53,55 @@ extern "C" void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) 
 }
 
 
-extern "C" void initI2CComLibIF(Sensor_ts *sensor, TwoWire &tw) {
+bool initI2CComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw) {
+    if( sensor->comIFType != I2C_e ) {
+        return false;
+    }
+
     // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
     sensor->comLibObj.i2c_obj       = (I2CObject_ts *) malloc(sizeof(I2CObject_ts));
     sensor->comLibObj.i2c_obj->wire = &tw;
+    sensor->comLibIF                = &comLibIF_i2c;
 
     sensor->comLibIF->init.i2c_init(sensor);
+
+    return true;
 }
 
 
-extern "C" void frameworkDelayMicroseconds(uint32_t us) {
-    delayMicroseconds(us);
+// TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
+extern "C" bool initI2CComLibIF(Sensor_ts *sensor, TwoWire &tw) {
+    if( sensor->comIFType != I2C_e ) {
+        return false;
+    }
+
+    // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
+    sensor->comLibObj.i2c_obj       = (I2CObject_ts *) malloc(sizeof(I2CObject_ts));
+    sensor->comLibObj.i2c_obj->wire = new TwoWire_Lib<TwoWire>(tw);
+    sensor->comLibIF                = &comLibIF_i2c;
+
+    sensor->comLibIF->init.i2c_init(sensor);
+    return true;
 }
+
+
+// extern "C" void frameworkDelayMicroseconds(uint32_t us) {
+//     delayMicroseconds(us);
+// }
 
 
 extern "C" void frameworkReset(Sensor_ts *sensor) {
-    // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
-    // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
+    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
+    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
 
-    sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    sensor->comLibObj.i2c_obj->wire->endTransmission();
-    sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    sensor->comLibObj.i2c_obj->wire->endTransmission();
+    // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
+    // sensor->comLibObj.i2c_obj->wire->endTransmission();
+    // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
+    // sensor->comLibObj.i2c_obj->wire->endTransmission();
 
-    // //If the uC has problems with this sequence: reset TwoWire-module.
-    sensor->comLibObj.i2c_obj->wire->end();
-    sensor->comLibObj.i2c_obj->wire->begin();
+    // // //If the uC has problems with this sequence: reset TwoWire-module.
+    // sensor->comLibObj.i2c_obj->wire->end();
+    // sensor->comLibObj.i2c_obj->wire->begin();
 
-    delayMicroseconds(30);
+    // delayMicroseconds(30);
 }

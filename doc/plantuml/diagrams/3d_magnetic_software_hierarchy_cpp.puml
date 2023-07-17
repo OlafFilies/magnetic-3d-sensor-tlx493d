@@ -1,0 +1,61 @@
+@startuml 3D Magnetic Software Hierarchy C++
+
+    !include <C4/C4_Container>
+
+    AddRelTag("async", $textColor=$ARROW_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+
+    System_Boundary(ecosystem, "XENSIV<sup><size:10>TM</size></sup> magnetic position sensor ecosystem software hierarchy") {
+
+        System_Boundary(cppIF, "C++ interface") {
+            Container(sensorTemp, "Sensor wrapper class", "C++ template container class")
+
+            System_Boundary(frameworkIF, "Interfaces") {
+               Container(bscIF, "Board support interface", "Interface for shield / interface specific settings", "[C++]")
+               Container(comLibIF, "Communication library interface", "Interface to set of communication functions", "[C++]")
+
+               bscIF -[hidden]down- comLibIF
+            }
+            
+
+            Container(sensorIF, "Sensor interface", "Core library interface", "[C++]")
+
+            Rel(sensorTemp, bscIF, "has")
+            Rel(sensorTemp, comLibIF, "has")
+            Rel(sensorTemp, sensorIF, "has")
+        }
+
+        System_Boundary(cIF, "C core library") {
+            Container(cIFFiles, "C interface", "sensors_common.[hc], sensor_types.h", "Forward declaration of framework specific types, function pointer definition, interface functions")
+
+            System_Boundary(sensorBlock, "Sensor specific implementations") {
+                Container(a1b6, "TLE493D_A1B6", "Sensor related function definitions, function pointer assignment")
+                Container(a2b6, "TLE493D_A2B6", "Sensor related function definitions, function pointer assignment")
+                Container(p2b6, "TLE493D_P2B6", "Sensor related function definitions, function pointer assignment")
+                Container(w2b6, "TLE493D_W2B6", "Sensor related function definitions, function pointer assignment")
+                Container(etc, "...", "Sensor related functions")
+
+                BiRel(cIFFiles, a1b6, "uses")
+                BiRel(cIFFiles, a2b6, "uses")
+                BiRel(cIFFiles, p2b6, "uses")
+                BiRel(cIFFiles, w2b6, "uses")
+                BiRel(cIFFiles, etc, "uses")
+            }
+        }
+
+        Rel(sensorIF, cIFFiles, "uses")
+
+        System_Boundary(framework, "Framework specific implementations\n[selected by build process]") {
+            Container(bsc, "Board support implementation", "Define forward declared types and functionality", "[C++]")
+            Container(comLib, "Communication library implementation", "Define forward declared types and functionality", "[C++]")
+            bsc -[hidden]down- comLib
+        }
+
+        Rel_R(bsc, bscIF, "implements")
+        Rel_R(comLib, comLibIF, "implements")
+
+        BiRel_R(bscIF, cIFFiles, "uses (tbd)", $tags="async")
+        BiRel_R(comLibIF, cIFFiles, "uses")
+    }
+
+@enduml
+

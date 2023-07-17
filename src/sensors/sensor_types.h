@@ -29,7 +29,8 @@ typedef enum {
 */
 typedef enum {
                I2C_e = 0,
-               SPI_e } SupportedComLibraryInterfaceTypes_te;
+               SPI_e,
+               I2C_OR_SPI_e } SupportedComLibraryInterfaceTypes_te;
 
 
 /*
@@ -98,7 +99,7 @@ typedef union ComLibraryObject_ts {
 
 
 // Functions common to all sensors
-typedef bool (*InitFuncPtr)(Sensor_ts *, SupportedComLibraryInterfaceTypes_te comLibIF);
+typedef bool (*InitFuncPtr)(Sensor_ts *);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
 
 typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, float *temp);

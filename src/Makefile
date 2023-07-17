@@ -30,7 +30,7 @@ mtb_base:
 
 
 mtb_xmc: mtb_base
-	cp ../examples/mtb/xmc/main_i2c.c ~/mtb3DMagneticSensors/src
+	cp ../examples/mtb/xmc/main_i2c_A2B6.c ~/mtb3DMagneticSensors/src
 	cp -r ~/mtb3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/mtw/XMC4700_Relax_I2C_Master_and_Slave/IFX3DMagneticSensors
 
 
