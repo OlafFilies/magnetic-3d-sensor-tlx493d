@@ -108,7 +108,7 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
                                 // .calculateParity       = TLE493D_A1B6_calculateParity,
 
-                                //.setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
+                                .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 // .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
                               };
 
@@ -157,7 +157,7 @@ bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor) {
                                         (TLE493D_A1B6_INT_ENABLE_default << sensor->regDef[INT].offset)                                                         | 
                                         (TLE493D_A1B6_FAST_MODE_DISABLE_default << sensor->regDef[FAST].offset)                                                 | 
                                         (TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default << sensor->regDef[LOW].offset);
-    WriteRegisterValues[2]      =       (((sensor->regMap[sensor->regDef[R_RES_2].address]) & sensor->regDef[W_RES_3].mask) << sensor->regDef[W_RES_3].offset)  |
+    WriteRegisterValues[2]      =       (((sensor->regMap[sensor->regDef[R_RES_2].address]) & sensor->regDef[W_RES_3].mask) << sensor->regDef[W_RES_3].offset);
     WriteRegisterValues[3]      =       (TLE493D_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset)                                                   |
                                         (TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default << sensor->regDef[LP].offset)                                              |
                                         (TLE493D_A1B6_PARITY_TEST_ENABLE_default << sensor->regDef[PT].offset)                                                  |
@@ -197,7 +197,7 @@ bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
 
     WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
                                                             ~(sensor->regDef[Temp_NEN].mask)) | 
-                                                            (TLE493D_A1B6_Temp_ENABLE_d-efault << sensor->regDef[Temp_NEN].offset);
+                                                            (TLE493D_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset);
 
     transBuffer[0] = sensor->regDef[Temp_NEN].address;
     transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
@@ -216,6 +216,6 @@ bool TLE493D_A1B6_loadWriteRegisters(Sensor_ts *sensor) {
 
         retn &= sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, NULL, 0);
     }
-    
+
     return retn;
 }

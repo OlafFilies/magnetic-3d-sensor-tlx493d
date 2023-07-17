@@ -81,14 +81,14 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
 // bool TLE493D_A1B6_getDiagnosis(Sensor_ts *sensor);
 // bool TLE493D_A1B6_calculateParity(Sensor_ts *sensor);
 
-//bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor);
+bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor);
 // bool TLE493D_A1B6_updateRegisterMap(Sensor_ts *sensor);
 bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor);
 
 bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor);
 bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor);
 
-bool TLE493D_A1B6_loadWriteRegisters(Sensor_ts *sensor)
+bool TLE493D_A1B6_loadWriteRegisters(Sensor_ts *sensor);
 
 
 #endif // TLE493D_A1B6_H
