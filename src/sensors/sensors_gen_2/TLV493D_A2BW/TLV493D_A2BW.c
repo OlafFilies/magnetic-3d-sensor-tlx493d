@@ -134,11 +134,30 @@ bool TLV493D_A2BW_updateGetTemperature(Sensor_ts *sensor, float *temp) {
 }
 
 bool TLV493D_A2BW_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-        return true;
+    int16_t valueX = 0, valueY = 0, valueZ = 0;
+
+    valueX = sensor->regMap[sensor->regDef[BX_MSB].address] << 8;
+    valueX |= (sensor->regMap[sensor->regDef[BX_LSB].address] & sensor->regDef[BX_LSB].mask);
+    valueX >>= 4;
+
+    valueY = sensor->regMap[sensor->regDef[BY_MSB].address] << 8;
+    valueY |= (sensor->regMap[sensor->regDef[BY_LSB].address] & sensor->regDef[BY_LSB].mask) << sensor->regDef[BY_LSB].offset;
+    valueY >>= 4;
+
+    valueZ = sensor->regMap[sensor->regDef[BZ_MSB].address] << 8;
+    valueZ |= (sensor->regMap[sensor->regDef[BZ_LSB].address] & sensor->regDef[BZ_LSB].mask) << sensor->regDef[BZ_LSB].offset;
+    valueZ >>= 4;
+
+    *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
+    *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
+    *z = ((float) valueZ) * GEN_2_MAG_FIELD_MULT;
+
+    return true;
 }
 
 bool TLV493D_A2BW_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-        return true;
+    bool b = TLV493D_A2BW_updateRegisterMap(sensor);
+    return b && TLV493D_A2BW_getFieldValues(sensor, x, y, z);
 }
 
 bool TLV493D_A2BW_reset(Sensor_ts *sensor) {

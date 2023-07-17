@@ -64,7 +64,7 @@ bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
 bool TLV493D_A2BW_deinit(Sensor_ts *sensor);
 
 /**
- * @brief Retrieve the temperature value of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * @brief Retrieves the temperature value of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
  * It reads out the required registers to calculate the temperature value.
  * 
  * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
@@ -83,10 +83,33 @@ bool TLV493D_A2BW_getTemperature(Sensor_ts *sensor, float *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLV493D_A2BW_updateGetTemperature(Sensor_ts *sensor, float *temp); // TODO: Do we need this function? Why should the user read out an old value? The register update should be included in the getTemp function
+bool TLV493D_A2BW_updateGetTemperature(Sensor_ts *sensor, float *temp);
 
+/**
+ * @brief Retrieves the magnetic field values of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * It reads out the required registers to calculate the magnetic field value for the X, Y, Z-Axis
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @param[in, out] x Retrieved magnetic value of the X-Axis
+ * @param[in, out] y Retrieved magnetic value of the Y-Axis
+ * @param[in, out] z Retrieved magnetic value of the Z-Axis
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
 bool TLV493D_A2BW_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
-bool TLV493D_A2BW_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z); // TODO: Same here?
+
+/**
+ * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * It updates the required registers and then calls the getFieldValues() function of the sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @param[in, out] x Retrieved magnetic value of the X-Axis
+ * @param[in, out] y Retrieved magnetic value of the Y-Axis
+ * @param[in, out] z Retrieved magnetic value of the Z-Axis
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLV493D_A2BW_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
 bool TLV493D_A2BW_reset(Sensor_ts *sensor);
 bool TLV493D_A2BW_getDiagnosis(Sensor_ts *sensor);
