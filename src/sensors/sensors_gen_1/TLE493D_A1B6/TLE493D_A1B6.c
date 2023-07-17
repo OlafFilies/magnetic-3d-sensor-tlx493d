@@ -106,7 +106,7 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
 
                                 // .reset                 = TLE493D_A1B6_reset,
                                 // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
-                                // .calculateParity       = TLE493D_A1B6_calculateParity,
+                                .calculateParity       = TLE493D_A1B6_calculateParity,
 
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
@@ -165,6 +165,7 @@ bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor) {
 
 
     // TODO: calculate parity here
+    TLE493D_A1B6_calculateParity(sensor);
 
     TLE493D_A1B6_loadWriteRegisters(sensor);
 
@@ -222,4 +223,29 @@ bool TLE493D_A1B6_loadWriteRegisters(Sensor_ts *sensor) {
     }
 
     return retn;
+}
+
+bool TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
+    uint8_t result = 0x00;
+    uint8_t parity = 0x00;
+
+    // first set parity as even, reason: this P bit is also considered in parity calculation.
+    WriteRegisterValues[sensor->regDef[P].address] = (WriteRegisterValues[sensor->regDef[P].address] & 
+                                                            ~(sensor->regDef[P].mask)) | 
+                                                            (TLE493D_A1B6_EVEN_PARITY << sensor->regDef[P].offset);
+
+    // calculate bitwise XOR for all WRITE registers
+    for (uint8_t addr = 0x00; addr<TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT; addr++) {
+        result ^= WriteRegisterValues[addr];
+    }
+
+    while(parity > 0) {
+        parity ^= (result & 0x01);
+        result >= 1;
+    }
+
+    // then set calculated parity
+    WriteRegisterValues[sensor->regDef[P].address] = (WriteRegisterValues[sensor->regDef[P].address] & 
+                                                            ~(sensor->regDef[P].mask)) | 
+                                                            (result << sensor->regDef[P].offset);
 }
