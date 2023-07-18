@@ -32,6 +32,9 @@ bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLib
       case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor, comLibIF);
                               break;
 
+      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor, comLibIF);
+                              break;
+
       default : return false;
    }
 }
