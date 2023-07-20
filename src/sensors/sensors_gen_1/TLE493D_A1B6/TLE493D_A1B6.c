@@ -111,7 +111,12 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
 
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 // .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
+
+                                // TODO: add enable/disable temp fn ptrs
+                                // take changes from Dominik to avoid merge conflicts 
                               };
+
+
 
 
 bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
@@ -222,9 +227,10 @@ bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
 // remove: note: all register writes must be atomic i.e. all 5 registers must be written to when anything is changed 
 // why? since all of the WRITE regs affect the parity. so whenever parity is recalculated, everything must be written to be sure. 
 bool TLE493D_A1B6_loadWriteRegisters(Sensor_ts *sensor) {
+    bool retn = true;
     uint8_t transBuffer[2];
     uint8_t bufLen = 2;
-    bool retn = true;
+    
 
     for (uint8_t addr = 0x00; addr<TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT; addr++) {
         transBuffer[0] = addr;
