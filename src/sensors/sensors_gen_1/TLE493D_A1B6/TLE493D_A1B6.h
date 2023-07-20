@@ -23,6 +23,7 @@
 #define TLE493D_A1B6_READ_REGISTER_MAP_SIZE             8          //remove: fix at the end of development
 #define TLE493D_A1B6_REGISTER_MAP_SIZE                  (TLE493D_A1B6_WRITE_REGISTER_MAP_SIZE + TLE493D_A1B6_READ_REGISTER_MAP_SIZE)
 #define TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT          4
+#define TLE493D_A1B6_READ_REGISTERS_MAX_COUNT          10
 
 //register enums
 typedef enum {
@@ -43,8 +44,8 @@ typedef enum {
 } TLE493D_A1B6_Reg_IICADDR;
 
 typedef enum {
-    TLE493D_A1B6_INT_ENABLE_default,
-    TLE493D_A1B6_INT_DISABLE
+    TLE493D_A1B6_INT_DISABLE,
+    TLE493D_A1B6_INT_ENABLE_default
 } TLE493D_A1B6_Reg_INT;
 
 typedef enum {
@@ -63,8 +64,8 @@ typedef enum {
 } TLE493D_A1B6_Reg_LOW_POWER_PERIOD;
 
 typedef enum {
-    TLE493D_A1B6_PARITY_TEST_ENABLE_default,
-    TLE493D_A1B6_PARITY_TEST_DISABLE
+    TLE493D_A1B6_PARITY_TEST_DISABLE,
+    TLE493D_A1B6_PARITY_TEST_ENABLE_default
 } TLE493D_A1B6_Reg_PARITY_TEST_NEN;
 
 // common functions
@@ -79,7 +80,7 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor);
 
 // bool TLE493D_A1B6_reset(Sensor_ts *sensor);
 // bool TLE493D_A1B6_getDiagnosis(Sensor_ts *sensor);
-bool TLE493D_A1B6_calculateParity(Sensor_ts *sensor);
+bool TLE493D_A1B6_calculateParity(Sensor_ts *sensor); //TODO: change to void after taking changes from Dominik. 
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor);
 bool TLE493D_A1B6_updateRegisterMap(Sensor_ts *sensor);
