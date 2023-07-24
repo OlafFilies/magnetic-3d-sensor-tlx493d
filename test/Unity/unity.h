@@ -18,6 +18,8 @@ extern "C"
 {
 #endif
 
+#include "ut_arduino_inc.h"
+
 #include "unity_internals.h"
 
 /*-------------------------------------------------------
