@@ -25,8 +25,9 @@ arduino_unity:
 	rm -rf ~/arduino3DMagneticSensors
 	cp -r ../config/arduinoLibraryTemplate ~/arduino3DMagneticSensors
 	find . -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} ~/arduino3DMagneticSensors/src \;
-	cp -r ../test/Unity/* ~/arduino3DMagneticSensors/src
-	cp ../test/src/arduino/*.h ~/arduino3DMagneticSensors/src
+	cp -r ../test/Unity/*.h ~/arduino3DMagneticSensors/src
+	cp -r ../test/Unity/unity.c ~/arduino3DMagneticSensors/src/unity.c.inc
+	cp ../test/src/arduino/*.[hc] ~/arduino3DMagneticSensors/src
 	rm -rf /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
 	mkdir /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
 	rm -rf /mnt/c/Users/$(WIN_USER)/Documents/Arduino/ut_TLE493D_A2B6
