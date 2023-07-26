@@ -1,0 +1,51 @@
+@startmindmap Sensor structure simple attributes
+
+<style>
+node {
+    Padding 15
+    Margin 10
+    HorizontalAlignment center
+    VerticalAlignment center
+    LineColor blue
+    LineThickness 2.0
+    BackgroundColor gold
+    RoundCorner 40
+    MaximumWidth 200
+}
+
+rootNode {
+    LineColor red
+    BackgroundColor white
+    LineThickness 1.0
+    RoundCorner 0
+    Shadowing 0.0
+    HorizontalAlignment center
+    VerticalAlignment center
+}
+
+leafNode {
+    LineColor gold
+    RoundCorner 0
+    Padding 3
+}
+
+arrow {
+    LineStyle 4
+    LineThickness 1.5
+    LineColor green
+}
+</style>
+
+
+*[#lightblue] Simple attributes
+**[#lightgreen]: 
+<code>
+uint8_t  *regMap
+uint8_t   regMapSize
+enum { TLE493D_A1B6, TLE493D_A2B6, ...} sensorType
+enum { I2C, SPI }                       comIFType
+
+</code>;
+
+
+@endmindmap

@@ -29,38 +29,38 @@ typedef enum {
 } TLV493D_A2BW_registerNames_te;
 
 Register_ts TLV493D_A2BW_regDef[] = {
-    {BX_MSB,    READ_MODE_e,    0x00,   0xFF,   0},
-    {BY_MSB,    READ_MODE_e,    0x01,   0xFF,   0},
-    {BZ_MSB,    READ_MODE_e,    0x02,   0xFF,   0},
-    {TEMP_MSB,  READ_MODE_e,    0x03,   0xFF,   0},
-    {BX_LSB,    READ_MODE_e,    0x04,   0xF0,   4},
-    {BY_LSB,    READ_MODE_e,    0x04,   0x0F,   0},
-    {TEMP_LSB,  READ_MODE_e,    0x05,   0xC0,   6},
-    {ID,        READ_MODE_e,    0x05,   0x30,   4},
-    {BZ_LSB,    READ_MODE_e,    0x05,   0x0F,   0},
-    {P,         READ_MODE_e,    0x06,   0x80,   7},
-    {FF,        READ_MODE_e,    0x06,   0x40,   6},
-    {CF,        READ_MODE_e,    0x06,   0x20,   5},
-    {T,         READ_MODE_e,    0x06,   0x10,   4},
-    {PD3,       READ_MODE_e,    0x06,   0x08,   3},
-    {PD0,       READ_MODE_e,    0x06,   0x04,   2},
-    {FRM,       READ_MODE_e,    0x06,   0x03,   0},
-    {DT,        WRITE_MODE_e,   0x10,   0x80,   7},
-    {AM,        WRITE_MODE_e,   0x10,   0x40,   6},
-    {TRIG,      WRITE_MODE_e,   0x10,   0x30,   4},
-    {X2,        WRITE_MODE_e,   0x10,   0x08,   3},
-    {TL_MAG,    WRITE_MODE_e,   0x10,   0x06,   1},
-    {CP,        WRITE_MODE_e,   0x10,   0x01,   0},
-    {FP,        WRITE_MODE_e,   0x11,   0x80,   7},
-    {IICADR,    WRITE_MODE_e,   0x11,   0x60,   5},
-    {PR,        WRITE_MODE_e,   0x11,   0x10,   4},
-    {CA,        WRITE_MODE_e,   0x11,   0x08,   3},
-    {INT,       WRITE_MODE_e,   0x11,   0x04,   2},
-    {MODE,      WRITE_MODE_e,   0x11,   0x03,   0},
-    {PRD,       WRITE_MODE_e,   0x13,   0x80,   7},
-    {X4,        WRITE_MODE_e,   0x14,   0x01,   0},
-    {TYPE,      WRITE_MODE_e,   0x16,   0x30,   4},
-    {HWV,       WRITE_MODE_e,   0x16,   0x0F,   0}
+    {BX_MSB,    READ_MODE_e,        0x00,   0xFF,   0,  8},
+    {BY_MSB,    READ_MODE_e,        0x01,   0xFF,   0,  8},
+    {BZ_MSB,    READ_MODE_e,        0x02,   0xFF,   0,  8},
+    {TEMP_MSB,  READ_MODE_e,        0x03,   0xFF,   0,  8},
+    {BX_LSB,    READ_MODE_e,        0x04,   0xF0,   4,  4},
+    {BY_LSB,    READ_MODE_e,        0x04,   0x0F,   0,  4},
+    {TEMP_LSB,  READ_MODE_e,        0x05,   0xC0,   6,  2},
+    {ID,        READ_MODE_e,        0x05,   0x30,   4,  2},
+    {BZ_LSB,    READ_MODE_e,        0x05,   0x0F,   0,  4},
+    {P,         READ_MODE_e,        0x06,   0x80,   7,  1},
+    {FF,        READ_MODE_e,        0x06,   0x40,   6,  1},
+    {CF,        READ_MODE_e,        0x06,   0x20,   5,  1},
+    {T,         READ_MODE_e,        0x06,   0x10,   4,  1},
+    {PD3,       READ_MODE_e,        0x06,   0x08,   3,  1},
+    {PD0,       READ_MODE_e,        0x06,   0x04,   2,  1},
+    {FRM,       READ_MODE_e,        0x06,   0x03,   0,  2},
+    {DT,        READ_WRITE_MODE_e,  0x10,   0x80,   7,  1},
+    {AM,        READ_WRITE_MODE_e,  0x10,   0x40,   6,  1},
+    {TRIG,      READ_WRITE_MODE_e,  0x10,   0x30,   4,  2},
+    {TL_MAG,    READ_WRITE_MODE_e,  0x10,   0x06,   1,  2},
+    {CP,        READ_WRITE_MODE_e,  0x10,   0x01,   0,  1},
+    {X2,        READ_WRITE_MODE_e,  0x10,   0x08,   3,  1},
+    {FP,        READ_WRITE_MODE_e,  0x11,   0x80,   7,  1},
+    {IICADR,    READ_WRITE_MODE_e,  0x11,   0x60,   5,  2},
+    {PR,        READ_WRITE_MODE_e,  0x11,   0x10,   4,  1},
+    {CA,        READ_WRITE_MODE_e,  0x11,   0x08,   3,  1},
+    {INT,       READ_WRITE_MODE_e,  0x11,   0x04,   2,  1},
+    {MODE,      READ_WRITE_MODE_e,  0x11,   0x03,   0,  2},
+    {PRD,       READ_WRITE_MODE_e,  0x13,   0x80,   7,  1},
+    {X4,        WRITE_MODE_e,       0x14,   0x01,   0,  1},
+    {TYPE,      READ_MODE_e,        0x16,   0x30,   4,  2},
+    {HWV,       READ_MODE_e,        0x16,   0x0F,   0,  4}
 };
 
 CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
@@ -79,6 +79,9 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
 
     .setDefaultConfig                   = TLV493D_A2BW_setDefaultConfig,
     .updateRegisterMap                  = TLV493D_A2BW_updateRegisterMap,
+
+    .enableTemperature                  = TLV493D_A2BW_enableTemperature,
+    .disableTemperature                 = TLV493D_A2BW_disableTemperature
 };
 
 bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
@@ -103,14 +106,9 @@ bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te c
 
 bool TLV493D_A2BW_deinit(Sensor_ts *sensor) {
     free(sensor->regMap);
-    free(sensor->regDef);
-    free(sensor->comLibIF);
-    free(sensor->functions);
-
+    free(sensor->comLibObj.i2c_obj);
+   
     sensor->regMap = NULL;
-    sensor->regDef = NULL;
-    sensor->comLibIF = NULL;
-    sensor->functions = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
     return true;
@@ -168,43 +166,75 @@ bool TLV493D_A2BW_getDiagnosis(Sensor_ts *sensor) {
         return true;
 }
 
-bool TLV493D_A2BW_calculateParity(Sensor_ts *sensor) {
-        return true;
+void TLV493D_A2BW_calculateParity(Sensor_ts *sensor) {
+    uint8_t regParity = 0;
+
+    regParity ^= sensor->regMap[sensor->regDef[CP].address];
+
+    regParity ^= (regParity >> 1);
+    regParity ^= (regParity >> 2);
+    regParity ^= (regParity >> 4);
+
+    setBitfield(sensor, CP, (regParity & 0x01));
+
+    regParity = 0;
+
+    regParity ^= sensor->regMap[sensor->regDef[FP].address];
+    regParity ^= (sensor->regMap[sensor->regDef[PRD].address] & sensor->regDef[PRD].mask);
+
+    regParity ^= (regParity >> 1);
+    regParity ^= (regParity >> 2);
+    regParity ^= (regParity >> 4);
+
+    setBitfield(sensor, FP, (regParity & 0x01));
 }
 
 bool TLV493D_A2BW_updateRegisterMap(Sensor_ts *sensor) {
     return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
-static void TLV493D_A2BW_get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen) {
-    buf[0] = sensor->regDef[MODE].address;
-    buf[1] = sensor->regDef[FP].mask | sensor->regDef[PR].mask | sensor->regDef[INT].mask;
-    *bufLen = 2;
-}
-
 static bool TLV493D_A2BW_enable1ByteMode(Sensor_ts *sensor) {
-    uint8_t transBuffer[sensor->regMapSize];
-    uint8_t bufLen = 0;
+    bool b = false;
 
-    TLV493D_A2BW_get1ByteModeBuffer(sensor, transBuffer, &bufLen);
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
-}
+    sensor->regMap[sensor->regDef[FP].address] = 0;
 
-static void TLV493D_A2BW_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen) {
-    buf[0] = sensor->regDef[DT].address;
-    buf[1] = sensor->regMap[sensor->regDef[DT].address] & ~(sensor->regDef[DT].mask);
-    *bufLen = 2;
+    setBitfield(sensor, FP, 1);
+    setBitfield(sensor, PR, 1);
+    setBitfield(sensor, INT, 1);
+
+    b = writeRegister(sensor, FP);
+
+    return b;
 }
 
 static bool TLV493D_A2BW_enableTemperatureMeasurements(Sensor_ts *sensor) {
-    uint8_t transBuffer[sensor->regMapSize];
-    uint8_t bufLen = 0;
+    bool b = updateRegisterMap(sensor);
 
-    TLV493D_A2BW_getTemperatureMeasurementsBuffer(sensor, transBuffer, &bufLen);
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
+    setBitfield(sensor, DT, 0);
+    b = writeRegister(sensor, DT);
+
+    return b;
 }
 
 bool TLV493D_A2BW_setDefaultConfig(Sensor_ts *sensor) {
     bool b = TLV493D_A2BW_enable1ByteMode(sensor);
     return b && TLV493D_A2BW_enableTemperatureMeasurements(sensor);
+}
+
+bool TLV493D_A2BW_enableTemperature(Sensor_ts *sensor) {
+    bool b = updateRegisterMap(sensor);
+
+    setBitfield(sensor, DT, 0);
+    calculateParity(sensor);
+
+    return b && writeRegister(sensor, DT);
+}
+
+bool TLV493D_A2BW_disableTemperature(Sensor_ts *sensor) {
+    bool b = updateRegisterMap(sensor);
+
+    setBitfield(sensor, DT, 1);
+    calculateParity(sensor);
+    
+    return b && writeRegister(sensor, DT);
 }

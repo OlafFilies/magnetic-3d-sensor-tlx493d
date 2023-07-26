@@ -25,6 +25,7 @@
 /** Common to the same generation of senors */
 #include "sensors_gen_2_config_common.h"
 #include "sensors_gen_2_common.h"
+#include "sensors_gen_2_utils.h"
 
 /** Sensor specific includes */
 #include "TLV493D_A2BW_config.h"
@@ -40,6 +41,8 @@ typedef struct TLV493D_A2BW_functions_ts {
     GetDiagnosisFuncPtr                 getDiagnosis;
     CalculateParityFuncPtr              calculateParity;
     UpdateRegistersFuncPtr              updateRegisterMap;
+    EnableTemperatureFuncPtr            enableTemperature;
+    DisableTemperatureFuncPtr           disableTemperature;
 } TLV493D_A2BW_functions_ts;
 
 /**
@@ -113,7 +116,15 @@ bool TLV493D_A2BW_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, fl
 
 bool TLV493D_A2BW_reset(Sensor_ts *sensor);
 bool TLV493D_A2BW_getDiagnosis(Sensor_ts *sensor);
-bool TLV493D_A2BW_calculateParity(Sensor_ts *sensor);
+
+/**
+ * @brief Calculates the parity and sets the corresponding parity flags for the necessary registers f the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+void TLV493D_A2BW_calculateParity(Sensor_ts *sensor);
 
 /**
  * @brief Sets the default configuration for the XENSIV™ TLV493D-A2BW magnetic 3D sensor
@@ -134,9 +145,22 @@ bool TLV493D_A2BW_setDefaultConfig(Sensor_ts *sensor);
  */
 bool TLV493D_A2BW_updateRegisterMap(Sensor_ts *sensor);
 
-// TODO: Does it make sense to make these two functions publicly available? I don't see the need
-// individual functions
-// void TLV493D_A2BW_get1ByteModeBuffer(uint8_t *buf, uint8_t *bufLen);
-// void TLV493D_A2BW_getTemperatureMeasurementsBuffer(uint8_t *regMap, uint8_t *buf, uint8_t *bufLen);
+/**
+ * @brief Enables the temperature measurement of the XENSIV™ TLV493D-A2BW magnetic 3D sensor 
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLV493D_A2BW_enableTemperature(Sensor_ts* sensor);
+
+/**
+ * @brief Disable the temperature measurement of the XENSIV™ TLV493D-A2BW magnetic 3D sensor 
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLV493D_A2BW_disableTemperature(Sensor_ts *sensor);
 
 #endif /** TLV493D_A2BW_H */

@@ -34,19 +34,19 @@ int main(int argc, char *argv[]) {
 
     Sensor_ts a2b6;
 
-    init(&a2b6, TLE493D_A2B6_e);
+    TLE493D_A2B6_init(&a2b6);
     initI2CComLibIF(&a2b6, XMC_I2C1_CH1, USIC1_C1_DX0_P3_15, USIC1_C1_DX1_P0_13, P3_15, P0_13);
 
     // reset(&a2b6);
-    setDefaultConfig(&a2b6);
+    TLE493D_A2B6_setDefaultConfig(&a2b6);
 
     while( true ) {
         float x = 0, y = 0, z = 0;
-        updateGetFieldValues(&a2b6, &x, &y, &z);
+        TLE493D_A2B6_updateGetFieldValues(&a2b6, &x, &y, &z);
         printf("x = %f   y = %f   z = %f\n", x, y, z);
 
         float temperature = 0;
-        updateGetTemperature(&a2b6, &temperature);
+        TLE493D_A2B6_updateGetTemperature(&a2b6, &temperature);
         printf("temperature = %f\n", temperature);
 
         // printf("sensorType : %s\n", getTypeAsString(a2b6.sensorType));

@@ -7,11 +7,8 @@
 #include "sensor_types.h"
 
 
-extern void frameworkDelayMicroseconds(uint32_t us);
-
-
 // functions common to all sensors
-bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF);
+bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType);
 bool deinit(Sensor_ts *sensor);
 
 bool getTemperature(Sensor_ts *sensor, float *temp);
@@ -22,11 +19,13 @@ bool updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
 bool reset(Sensor_ts *sensor);
 bool getDiagnosis(Sensor_ts *sensor);
-bool calculateParity(Sensor_ts *sensor);
+void calculateParity(Sensor_ts *sensor);
 
 bool setDefaultConfig(Sensor_ts *sensor);
 bool updateRegisterMap(Sensor_ts *sensor);
 
+bool enableTemperature(Sensor_ts *sensor);
+bool disableTemperature(Sensor_ts *sensor);
 
 // functions available only to a subset of sensors
 
