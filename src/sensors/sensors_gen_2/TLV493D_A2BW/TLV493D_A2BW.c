@@ -81,7 +81,10 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
     .updateRegisterMap                  = TLV493D_A2BW_updateRegisterMap,
 
     .enableTemperature                  = TLV493D_A2BW_enableTemperature,
-    .disableTemperature                 = TLV493D_A2BW_disableTemperature
+    .disableTemperature                 = TLV493D_A2BW_disableTemperature,
+
+    .enableInterrupt                    = TLV493D_A2BW_enableInterrupt,
+    .disableInterrupt                   = TLV493D_A2BW_disableInterrupt
 };
 
 bool TLV493D_A2BW_init(Sensor_ts *sensor) {
@@ -232,4 +235,19 @@ bool TLV493D_A2BW_disableTemperature(Sensor_ts *sensor) {
     calculateParity(sensor);
     
     return b && writeRegister(sensor, DT);
+}
+
+bool TLV493D_A2BW_enableInterrupt(Sensor_ts *sensor) {
+    bool b = updateRegisterMap(sensor);
+
+    setBitfield(sensor, INT, 0);
+    setBitfield(sensor, TRIG, 0);
+    calculateParity(sensor);
+
+    b = writeRegister(sensor, TRIG);
+    return b && writeRegister(sensor, INT); 
+}
+
+bool TLV493D_A2BW_disableInterrupt(Sensor_ts *sensor) {
+    return true;
 }
