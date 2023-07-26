@@ -39,7 +39,7 @@
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLE493D_W2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
+bool TLE493D_W2B6_init(Sensor_ts *sensor);
 
 /**
  * @brief De-Initializes the XENSIV™ TLE493D-W2B6 magnetic 3D sensor

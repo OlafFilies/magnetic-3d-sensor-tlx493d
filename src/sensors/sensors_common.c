@@ -26,13 +26,13 @@ bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
         case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
                               break;
 
-      case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor, comLibIF);
+      case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor);
                               break;                              
 
-      case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor, comLibIF);
+      case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
                               break;
 
-      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor, comLibIF);
+      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
                               break;
 
       default : return false;

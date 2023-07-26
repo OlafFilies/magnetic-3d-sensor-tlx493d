@@ -54,7 +54,7 @@ typedef struct TLV493D_A2BW_functions_ts {
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF);
+bool TLV493D_A2BW_init(Sensor_ts *sensor);
 
 /**
  * @brief De-Initializes the XENSIV™ TLV493D-A2BW magnetic 3D sensor

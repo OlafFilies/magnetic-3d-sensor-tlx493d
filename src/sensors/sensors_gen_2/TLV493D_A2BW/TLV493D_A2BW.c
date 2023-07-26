@@ -84,19 +84,14 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
     .disableTemperature                 = TLV493D_A2BW_disableTemperature
 };
 
-bool TLV493D_A2BW_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
-    if( comLibIF != I2C_e ) {
-        assert(0);
-        return false;
-    }
-
+bool TLV493D_A2BW_init(Sensor_ts *sensor) {
     sensor->regMap                  = (uint8_t*)malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
     sensor->regDef                  = TLV493D_A2BW_regDef;
     sensor->functions               = &TLV493D_A2BW_commonFunctions;
     sensor->regMapSize              = GEN_2_REG_MAP_SIZE;
     sensor->sensorType              = TLV493D_A2BW_e;
-    sensor->comIFType               = comLibIF;
-    sensor->comLibIF                = &comLibIF_i2c;
+    sensor->comIFType               = I2C_e;
+    sensor->comLibIF                = NULL;
     sensor->comLibObj.i2c_obj       = NULL;
 
     setI2CParameters(&sensor->comLibIFParams, GEN_2_STD_IIC_ADDR_WRITE_A0);
