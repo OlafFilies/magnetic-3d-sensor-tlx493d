@@ -23,9 +23,10 @@
 #include "sensors_config_common.h"
 #include "sensors_common.h"
 
-// common to same generation of sensors
+/** Common to the same generation of senors */
 #include "sensors_gen_2_config_common.h"
 #include "sensors_gen_2_common.h"
+#include "sensors_gen_2_utils.h"
 
 // sensor specicifc includes
 #include "TLE493D_W2B6_config.h"
@@ -50,6 +51,27 @@ bool TLE493D_W2B6_init(Sensor_ts *sensor);
  * @return false - If unsuccessful
  */
 bool TLE493D_W2B6_deinit(Sensor_ts *sensor);
+/**
+ * @brief Retrieves the temperature value of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
+ * It reads out the required registers to calculate the temperature value.
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
+ * @param[in, out] temp Retrieved temperature value of the sensor
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLE493D_W2B6_getTemperature(Sensor_ts *sensor, float *temp);
+
+/**
+ * @brief Updates the required registers to read the temperature value of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
+ * It updates the required registers and then calls the getTemperature() function of the sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
+ * @param[in, out] temp Retrieved temperature value of the sensor
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLE493D_W2B6_updateGetTemperature(Sensor_ts *sensor, float *temp);
 
 /**
  * @brief Sets the default configuration for the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
@@ -60,5 +82,14 @@ bool TLE493D_W2B6_deinit(Sensor_ts *sensor);
  * @return false - If unsuccessful 
  */
 bool TLE493D_W2B6_setDefaultConfig(Sensor_ts *sensor);
+
+/**
+ * @brief Updates all registers of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLE493D_W2B6_updateRegisterMap(Sensor_ts *sensor);
 
 #endif // TLE493D_W2B6_H
