@@ -112,8 +112,8 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 // .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
 
-                                // TODO: add enable/disable temp fn ptrs
-                                // take changes from Dominik to avoid merge conflicts 
+                                .enableTemperature     = TLE493D_A1B6_enableTemperatureMeasurements,
+                                .disableTemperature    = TLE493D_A1B6_disableTemperatureMeasurements,
                               };
 
 
