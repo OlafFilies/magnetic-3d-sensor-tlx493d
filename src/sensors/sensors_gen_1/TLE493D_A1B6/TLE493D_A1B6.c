@@ -19,6 +19,49 @@
 #include "TLE493D_A1B6_config.h"
 #include "TLE493D_A1B6.h"
 
+//register enums
+typedef enum {
+    TLE493D_A1B6_Temp_ENABLE_default,
+    TLE493D_A1B6_Temp_DISABLE
+} TLE493D_A1B6_Reg_Temp_NEN;
+
+typedef enum {
+    TLE493D_A1B6_ODD_PARITY,
+    TLE493D_A1B6_EVEN_PARITY
+} TLE493D_A1B6_Reg_PARITY;
+
+typedef enum {
+    TLE493D_A1B6_CONFIG_00_default,
+    TLE493D_A1B6_CONFIG_01,
+    TLE493D_A1B6_CONFIG_10,
+    TLE493D_A1B6_CONFIG_11
+} TLE493D_A1B6_Reg_IICADDR;
+
+typedef enum {
+    TLE493D_A1B6_INT_ENABLE_default,
+    TLE493D_A1B6_INT_DISABLE
+} TLE493D_A1B6_Reg_INT;
+
+typedef enum {
+    TLE493D_A1B6_FAST_MODE_DISABLE_default,
+    TLE493D_A1B6_FAST_MODE_ENABLE
+} TLE493D_A1B6_Reg_FAST_MODE_NEN;
+
+typedef enum {
+    TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default,
+    TLE493D_A1B6_LOW_POWER_MODE_ENABLE
+} TLE493D_A1B6_Reg_LOW_POWER_MODE_NEN;
+
+typedef enum {
+    TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default,
+    TLE493D_A1B6_LOW_POWER_PERIOD_12MS
+} TLE493D_A1B6_Reg_LOW_POWER_PERIOD;
+
+typedef enum {
+    TLE493D_A1B6_PARITY_TEST_ENABLE_default,
+    TLE493D_A1B6_PARITY_TEST_DISABLE
+} TLE493D_A1B6_Reg_PARITY_TEST_NEN;
+
 // structures for holding communication params
 extern struct ComLibraryFunctions_ts comLibIF_i2c;
 
