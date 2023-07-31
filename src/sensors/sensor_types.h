@@ -25,30 +25,32 @@ typedef enum {
 
 
 /*
-  List of all supported communictaion interfaces.
+  List of all supported communication interfaces.
 */
 typedef enum {
                I2C_e = 0,
-               SPI_e } SupportedComLibraryInterfaceTypes_te;
+               SPI_e,
+               I2C_OR_SPI_e } SupportedComLibraryInterfaceTypes_te;
 
 
 /*
   List of supported register access modes.
 */
 typedef enum { READ_MODE_e = 0,
-               WRITE_MODE_e } REG_ACESS_MODE_te;
+               WRITE_MODE_e,
+               READ_WRITE_MODE_e } REG_ACCESS_MODE_te;
 
 
 /*
   Structure to store name, access mode, address, mask and offset of registers.
 */
 typedef struct Register_ts {
-    uint8_t            name;
-    REG_ACESS_MODE_te  accessMode;
-    uint8_t            address;
-    uint8_t            mask;
-    uint8_t            offset;
-    uint8_t            numBits;
+    uint8_t             name;
+    REG_ACCESS_MODE_te  accessMode;
+    uint8_t             address;
+    uint8_t             mask;
+    uint8_t             offset;
+    uint8_t             numBits;
 } Register_ts;
 
 
@@ -97,7 +99,7 @@ typedef union ComLibraryObject_ts {
 
 
 // Functions common to all sensors
-typedef bool (*InitFuncPtr)(Sensor_ts *, SupportedComLibraryInterfaceTypes_te comLibIF);
+typedef bool (*InitFuncPtr)(Sensor_ts *);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
 
 typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, float *temp);
@@ -106,10 +108,13 @@ typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z)
 typedef bool (*UpdateGetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
 typedef bool (*ResetFuncPtr)(Sensor_ts *);
 typedef bool (*GetDiagnosisFuncPtr)(Sensor_ts *);
-typedef bool (*CalculateParityFuncPtr)(Sensor_ts *);
+typedef void (*CalculateParityFuncPtr)(Sensor_ts *);
 
 typedef bool (*SetDefaultConfigFuncPtr)(Sensor_ts *);
 typedef bool (*UpdateRegistersFuncPtr)(Sensor_ts *);
+
+typedef bool (*EnableTemperatureFuncPtr)(Sensor_ts *);
+typedef bool (*DisableTemperatureFuncPtr)(Sensor_ts *);
 
 
 typedef struct CommonFunctions_ts {
@@ -128,6 +133,9 @@ typedef struct CommonFunctions_ts {
 
     SetDefaultConfigFuncPtr      setDefaultConfig;
     UpdateRegistersFuncPtr       updateRegisterMap;
+
+    EnableTemperatureFuncPtr     enableTemperature;
+    DisableTemperatureFuncPtr    disableTemperature;
 } CommonFunctions_ts;
 
 

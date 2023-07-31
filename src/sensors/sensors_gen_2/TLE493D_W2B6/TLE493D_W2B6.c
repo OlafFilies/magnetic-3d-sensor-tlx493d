@@ -126,20 +126,14 @@ CommonFunctions_ts TLE493D_W2B6_commonFunctions = {
                                 .setDefaultConfig      = TLE493D_W2B6_setDefaultConfig,
 };
 
-bool TLE493D_W2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
-    // This sensor only supports I2C.
-    if( comLibIF != I2C_e ) {
-        assert(0);
-        return false;
-    }
-
+bool TLE493D_W2B6_init(Sensor_ts *sensor) {
     sensor->regMap            = (uint8_t*)malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
     sensor->regDef            = TLE493D_W2B6_regDef;
     sensor->functions         = &TLE493D_W2B6_commonFunctions;
     sensor->regMapSize        = GEN_2_REG_MAP_SIZE;
     sensor->sensorType        = TLE493D_W2B6_e;
-    sensor->comIFType         = comLibIF;
-    sensor->comLibIF          = &comLibIF_i2c;
+    sensor->comIFType         = I2C_e;
+    sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
     setI2CParameters(&sensor->comLibIFParams, GEN_2_STD_IIC_ADDR_WRITE_A0);

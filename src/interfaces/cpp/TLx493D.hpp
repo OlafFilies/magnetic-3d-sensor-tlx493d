@@ -4,7 +4,7 @@
 
 
 // std includes
-#include <cstdint>
+#include <stdint.h>
 
 // project cpp includes
 #include "arduino_defines.h"
@@ -20,9 +20,10 @@ extern "C" {
 
 class TLx493D {
    public:
-
-        TLx493D(SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) : _sensor() {
-            ::init(&_sensor, sensorType, comLibIF);
+        
+        TLx493D(SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) : sensor() {
+            ::init(&sensor, sensorType);
+            sensor.comIFType = comLibIF;
         }
 
 
@@ -41,7 +42,7 @@ class TLx493D {
 
 
         bool deinit() {
-            ::deinit(&_sensor);
+            ::deinit(&sensor);
             return true;
         }
 
@@ -52,53 +53,60 @@ class TLx493D {
 
 
         bool setDefaultConfig() {
-            return ::setDefaultConfig(&_sensor);
+            return ::setDefaultConfig(&sensor);
         }
 
 
         bool updateGetTemperature(float *temperature) {
-            return ::updateGetTemperature(&_sensor, temperature);
+            return ::updateGetTemperature(&sensor, temperature);
         }
 
 
         bool updateGetFieldValues(float *x, float *y, float *z) {
-            return ::updateGetFieldValues(&_sensor, x, y, z);
+            return ::updateGetFieldValues(&sensor, x, y, z);
         }
 
+        bool enableTemperature() {
+            return ::enableTemperature(&sensor);
+        }
+
+        bool disableTemperature() {
+            return ::disableTemperature(&sensor);
+        }
 
         Sensor_ts *getSensorStruct() {
-            return &_sensor;
+            return &sensor;
         }
 
 
         SupportedSensorTypes_te getSensorType() {
-            return _sensor.sensorType;
+            return sensor.sensorType;
         }
 
 
         SupportedComLibraryInterfaceTypes_te getComLibIFType() {
-            return _sensor.comIFType;
+            return sensor.comIFType;
         }
 
 
         uint8_t *getRegisterMap() {
-            return _sensor.regMap;
+            return sensor.regMap;
         }
 
 
         uint8_t getRegisterMapSize() {
-            return _sensor.regMapSize;
+            return sensor.regMapSize;
         }
 
 
         uint8_t getI2CAddress() {
-            return _sensor.comLibIFParams.i2c_params.address;
+            return sensor.comLibIFParams.i2c_params.address;
         }
 
 
     private:
 
-        Sensor_ts  _sensor;
+        Sensor_ts  sensor;
 };
 
 

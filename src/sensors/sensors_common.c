@@ -21,18 +21,18 @@
 #include "TLV493D_A2BW.h"
 
 // functions common to all sensors
-bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comLibIF) {
-   switch(sensorType) {
-      case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor, comLibIF);
+bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
+    switch(sensorType) {
+        case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
                               break;
 
-      case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor, comLibIF);
+      case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor);
                               break;                              
 
-      case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor, comLibIF);
+      case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
                               break;
 
-      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor, comLibIF);
+      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
                               break;
 
       default : return false;
@@ -74,7 +74,7 @@ bool getDiagnosis(Sensor_ts *sensor) {
 }
 
 
-bool calculateParity(Sensor_ts *sensor) {
+void calculateParity(Sensor_ts *sensor) {
    return sensor->functions->calculateParity(sensor);
 }
 
@@ -88,6 +88,13 @@ bool updateRegisterMap(Sensor_ts *sensor) {
    return sensor->functions->updateRegisterMap(sensor);
 }
 
+bool enableTemperature(Sensor_ts *sensor) {
+   return sensor->functions->enableTemperature(sensor);
+}
+
+bool disableTemperature(Sensor_ts *sensor) {
+   return sensor->functions->disableTemperature(sensor);
+}
 
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
