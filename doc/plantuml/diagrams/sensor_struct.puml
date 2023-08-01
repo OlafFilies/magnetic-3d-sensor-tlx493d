@@ -1,0 +1,95 @@
+@startmindmap Sensor structure
+
+<style>
+node {
+    Padding 15
+    Margin 10
+    HorizontalAlignment center
+    LineColor blue
+    LineThickness 2.0
+    BackgroundColor gold
+    RoundCorner 40
+    MaximumWidth 200
+}
+
+rootNode {
+    LineColor red
+    BackgroundColor white
+    LineThickness 1.0
+    RoundCorner 0
+    Shadowing 0.0
+    HorizontalAlignment center
+    VerticalAlignment center
+}
+
+leafNode {
+    LineColor gold
+    RoundCorner 0
+    Padding 3
+}
+
+arrow {
+    LineStyle 4
+    LineThickness 1.5
+    LineColor green
+}
+</style>
+
+*[#white] Sensor_ts
+
+**[#lightblue] Simple attributes
+' ***[#Orange] uint8_t  *regMap
+' ***[#Orange] uint8_t  regMapSize
+' ***[#Orange] SupportedSensorTypes_te  sensorType
+' ****[#lightgreen] enum : TLE493D_A1B6, TLE493D_A2B6, ...
+' ***[#Orange] SupportedComLibraryInterfaceTypes_te  comIFType
+' ****[#lightgreen] enum : I2C, SPI
+
+
+**[#lightblue] Compound attributes
+' ***[#Orange] Register_ts  *regDef
+' ****[#lightgreen] uint8_t  name
+' ****[#lightgreen] REG_ACESS_MODE_te  accessMode
+' *****[#lightgreen] enum : READ, WRITE
+' ****[#lightgreen] uint8_t  address
+' ****[#lightgreen] uint8_t  mask
+' ****[#lightgreen] uint8_t  offset
+' ****[#lightgreen] uint8_t  numBits
+
+
+**[#lightblue] Communication related attributes
+' ***[#Orange] ComLibraryFunctions_ts  *comLibIF
+' ****[#Pink] I2C, SPI
+' *****[#lightgreen] init
+' *****[#lightgreen] deinit
+' *****[#lightgreen] transfer
+' ***[#Orange] ComLibraryParameters_ts  comLibIFParams
+' ****[#Pink] I2C
+' *****[#lightgreen] address
+' ****[#Pink] SPI
+' *****[#lightgreen] unused
+' ***[#Orange] ComLibraryObject_ts  comLibObj
+' ****[#Pink] I2C
+' *****[#lightgreen] Arduino TwoWire object : Wire, Wire1, ...
+' *****[#lightgreen] MTB XMC objects : channel, pins, ports
+' ****[#Pink] SPI
+' *****[#lightgreen] Arduino SPI object : NOT YET AVAILABLE
+' *****[#lightgreen] MTB XMC objects : NOT YET AVAILABLE
+
+
+**[#lightblue] Common functionality related attributes
+' ***[#Orange] CommonFunctions_ts  *functions
+' ****[#lightgreen] init
+' ****[#lightgreen] deinit
+' ****[#lightgreen] getTemperature
+' ****[#lightgreen] updateGetTemperature
+' ****[#lightgreen] getFieldValues
+' ****[#lightgreen] updateGetFieldValues
+' ****[#lightgreen] reset
+' ****[#lightgreen] getDiagnosis
+' ****[#lightgreen] calculateParity
+' ****[#lightgreen] setDefaultConfig
+' ****[#lightgreen] updateRegisterMap
+
+
+@endmindmap

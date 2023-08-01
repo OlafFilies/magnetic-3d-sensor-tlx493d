@@ -19,6 +19,49 @@
 #include "TLE493D_A1B6_config.h"
 #include "TLE493D_A1B6.h"
 
+//register enums
+typedef enum {
+    TLE493D_A1B6_Temp_ENABLE_default,
+    TLE493D_A1B6_Temp_DISABLE
+} TLE493D_A1B6_Reg_Temp_NEN;
+
+typedef enum {
+    TLE493D_A1B6_ODD_PARITY,
+    TLE493D_A1B6_EVEN_PARITY
+} TLE493D_A1B6_Reg_PARITY;
+
+typedef enum {
+    TLE493D_A1B6_CONFIG_00_default,
+    TLE493D_A1B6_CONFIG_01,
+    TLE493D_A1B6_CONFIG_10,
+    TLE493D_A1B6_CONFIG_11
+} TLE493D_A1B6_Reg_IICADDR;
+
+typedef enum {
+    TLE493D_A1B6_INT_ENABLE_default,
+    TLE493D_A1B6_INT_DISABLE
+} TLE493D_A1B6_Reg_INT;
+
+typedef enum {
+    TLE493D_A1B6_FAST_MODE_DISABLE_default,
+    TLE493D_A1B6_FAST_MODE_ENABLE
+} TLE493D_A1B6_Reg_FAST_MODE_NEN;
+
+typedef enum {
+    TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default,
+    TLE493D_A1B6_LOW_POWER_MODE_ENABLE
+} TLE493D_A1B6_Reg_LOW_POWER_MODE_NEN;
+
+typedef enum {
+    TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default,
+    TLE493D_A1B6_LOW_POWER_PERIOD_12MS
+} TLE493D_A1B6_Reg_LOW_POWER_PERIOD;
+
+typedef enum {
+    TLE493D_A1B6_PARITY_TEST_ENABLE_default,
+    TLE493D_A1B6_PARITY_TEST_DISABLE
+} TLE493D_A1B6_Reg_PARITY_TEST_NEN;
+
 // structures for holding communication params
 extern struct ComLibraryFunctions_ts comLibIF_i2c;
 
@@ -112,27 +155,20 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
 
-                                // TODO: add enable/disable temp fn ptrs
-                                // take changes from Dominik to avoid merge conflicts 
+                                .enableTemperature     = TLE493D_A1B6_enableTemperatureMeasurements,
+                                .disableTemperature    = TLE493D_A1B6_disableTemperatureMeasurements,
                               };
 
 
-
-
-bool TLE493D_A1B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
-    // This sensor only supports I2C.
-    if( comLibIF != I2C_e ) {
-        assert(0);
-        return false;
-    }
-
+bool TLE493D_A1B6_init(Sensor_ts *sensor) {
+  
     sensor->regMap            = (uint8_t *) malloc(sizeof(uint8_t) * TLE493D_A1B6_REGISTER_MAP_SIZE);
     sensor->regDef            = TLE493D_A1B6_regDef;
     sensor->functions         = &TLE493D_A1B6_commonFunctions;
     sensor->regMapSize        = TLE493D_A1B6_REGISTER_MAP_SIZE;
     sensor->sensorType        = TLE493D_A1B6_e;
-    sensor->comIFType         = comLibIF;
-    sensor->comLibIF          = &comLibIF_i2c;
+    sensor->comIFType         = I2C_e;
+    sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
     setI2CParameters(&sensor->comLibIFParams, GEN_1_STD_IIC_ADDR);
@@ -172,7 +208,7 @@ bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor) {
                                         (((sensor->regMap[sensor->regDef[R_RES_3].address]) & sensor->regDef[W_RES_4].mask) << sensor->regDef[W_RES_4].offset); 
 
 
-    ret &= TLE493D_A1B6_calculateParity(sensor);
+    TLE493D_A1B6_calculateParity(sensor);
 
     ret &= TLE493D_A1B6_loadWriteRegisters(sensor);
 
@@ -198,7 +234,7 @@ bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
     transBuffer[0] = sensor->regDef[Temp_NEN].address;
     transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
 
-    ret &= TLE493D_A1B6_calculateParity(sensor);
+    TLE493D_A1B6_calculateParity(sensor);
 
     ret &= TLE493D_A1B6_loadWriteRegisters(sensor);
 
@@ -217,7 +253,7 @@ bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
     transBuffer[0] = sensor->regDef[Temp_NEN].address;
     transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
 
-    ret &= TLE493D_A1B6_calculateParity(sensor);
+    TLE493D_A1B6_calculateParity(sensor);
                                                                 
     ret &= TLE493D_A1B6_loadWriteRegisters(sensor);
 
@@ -247,7 +283,7 @@ bool TLE493D_A1B6_updateRegisterMap(Sensor_ts *sensor) {
 }
 
 // parity is calculated for all the WRITE register, including the parity bit
-bool TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
+void TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
     uint8_t result = 0x00;
     uint8_t parity = 0x00;
 
@@ -276,6 +312,4 @@ bool TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
     WriteRegisterValues[sensor->regDef[P].address] = (WriteRegisterValues[sensor->regDef[P].address] & 
                                                             ~(sensor->regDef[P].mask)) | 
                                                             (result << sensor->regDef[P].offset);
-
-    return true;
 }

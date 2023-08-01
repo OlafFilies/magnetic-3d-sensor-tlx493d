@@ -20,9 +20,8 @@
 #include "TLE493D_A2B6.h"
 
 
-extern struct ComLibraryFunctions_ts comLibIF_i2c;
-
-
+// framework functions
+// TODO: replace by function pointers in comLibIF structure
 extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
 
 
@@ -64,16 +63,38 @@ typedef enum {
                HWV } TLE493D_A2B6_registerNames_te;
 
 
-Register_ts TLE493D_A2B6_regDef[TLE493D_A2B6_REGISTER_MAP_SIZE] = {
-    { BX_MSB,   READ_MODE_e, 0x00, 0xFF, 0 },
-    { BY_MSB,   READ_MODE_e, 0x01, 0xFF, 0 },
-    { BZ_MSB,   READ_MODE_e, 0x02, 0xFF, 0 },
-    { TEMP_MSB, READ_MODE_e, 0x03, 0xFF, 0 },
-    { BX_LSB,   READ_MODE_e, 0x04, 0xF0, 4 },
-    { BY_LSB,   READ_MODE_e, 0x04, 0x0F, 0 },
-    { TEMP_LSB, READ_MODE_e, 0x05, 0xC0, 6 },
-    { ID,       READ_MODE_e, 0x05, 0x30, 4 },
-    { BZ_LSB,   READ_MODE_e, 0x05, 0x0F, 0 },
+Register_ts TLE493D_A2B6_regDef[] = {
+    { BX_MSB,   READ_MODE_e,       0x00, 0xFF, 0, 8 },
+    { BY_MSB,   READ_MODE_e,       0x01, 0xFF, 0, 8 },
+    { BZ_MSB,   READ_MODE_e,       0x02, 0xFF, 0, 8 }, 
+    { TEMP_MSB, READ_MODE_e,       0x03, 0xFF, 0, 8 },
+    { BX_LSB,   READ_MODE_e,       0x04, 0xF0, 4, 4 },
+    { BY_LSB,   READ_MODE_e,       0x04, 0x0F, 0, 4 },
+    { TEMP_LSB, READ_MODE_e,       0x05, 0xC0, 6, 2 },
+    { ID,       READ_MODE_e,       0x05, 0x30, 4, 2 },
+    { BZ_LSB,   READ_MODE_e,       0x05, 0x0F, 0, 4 },
+    { P,        READ_MODE_e,       0x06, 0x80, 7, 1 },
+    { FF,       READ_MODE_e,       0x06, 0x40, 6, 1 },
+    { CF,       READ_MODE_e,       0x06, 0x20, 5, 1 },
+    { T,        READ_MODE_e,       0x06, 0x10, 4, 1 },
+    { PD3,      READ_MODE_e,       0x06, 0x08, 3, 1 },
+    { PD0,      READ_MODE_e,       0x06, 0x04, 2, 1 },
+    { FRM,      READ_MODE_e,       0x06, 0x03, 0, 2 },
+    { DT,       READ_WRITE_MODE_e, 0x10, 0x80, 7, 1 },
+    { AM,       READ_WRITE_MODE_e, 0x10, 0x40, 6, 1 },
+    { TRIG,     READ_WRITE_MODE_e, 0x10, 0x30, 4, 2 },
+    { X2,       READ_WRITE_MODE_e, 0x10, 0x08, 3, 1 },
+    { TL_mag,   READ_WRITE_MODE_e, 0x10, 0x06, 1, 2 },
+    { CP,       READ_WRITE_MODE_e, 0x10, 0x01, 0, 1 },
+    { FP,       READ_WRITE_MODE_e, 0x11, 0x80, 7, 1 },
+    { IICaddr,  READ_WRITE_MODE_e, 0x11, 0x60, 5, 2 },
+    { PR,       READ_WRITE_MODE_e, 0x11, 0x10, 4, 1 },
+    { CA,       READ_WRITE_MODE_e, 0x11, 0x08, 3, 1 },
+    { INT,      READ_WRITE_MODE_e, 0x11, 0x04, 2, 1 },
+    { MODE,     READ_WRITE_MODE_e, 0x11, 0x03, 0, 2 },
+    { PRD,      READ_WRITE_MODE_e, 0x13, 0x80, 7, 1 },
+    { Type,     READ_MODE_e,       0x16, 0x30, 4, 2 },
+    { HWV,      READ_MODE_e,       0x16, 0x0F, 0, 4 }
 };
 
 
@@ -96,20 +117,16 @@ CommonFunctions_ts TLE493D_A2B6_commonFunctions = {
                               };
 
 
-bool TLE493D_A2B6_init(Sensor_ts *sensor, SupportedComLibraryInterfaceTypes_te comLibIF) {
-    // This sensor only supports I2C.
-    if( comLibIF != I2C_e ) {
-        assert(0);
-        return false;
-    }
-
-    sensor->regMap            = (uint8_t *) malloc(sizeof(uint8_t) * TLE493D_A2B6_REGISTER_MAP_SIZE);
+// TODO: add parameter IICAddress or ad function to set address.
+bool TLE493D_A2B6_init(Sensor_ts *sensor) {
+    // regMap must be sensor specific, not sensor type specific, therefore malloc.
+    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * TLE493D_A2B6_REGISTER_MAP_SIZE);
     sensor->regDef            = TLE493D_A2B6_regDef;
     sensor->functions         = &TLE493D_A2B6_commonFunctions;
     sensor->regMapSize        = TLE493D_A2B6_REGISTER_MAP_SIZE;
     sensor->sensorType        = TLE493D_A2B6_e;
-    sensor->comIFType         = comLibIF;
-    sensor->comLibIF          = &comLibIF_i2c;
+    sensor->comIFType         = I2C_e;
+    sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
     setI2CParameters(&sensor->comLibIFParams, GEN_2_STD_IIC_ADDR_WRITE_A0);
@@ -124,7 +141,6 @@ bool TLE493D_A2B6_deinit(Sensor_ts *sensor) {
 
     sensor->regMap            = NULL;
     sensor->comLibObj.i2c_obj = NULL;
-
     return true;
 }
 
@@ -135,14 +151,25 @@ bool TLE493D_A2B6_updateGetTemperature(Sensor_ts *sensor, float *temp) {
 }
 
 
+/**
+ * More generic version wrt size and offsets of MSB and LSB. Register values are in two's complement form.
+ * Assumptions :
+ *    - MSB is 8 bits wide
+*/
+void TLE493D_A2B6_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
+    *result   = ((sensor->regMap[msb->address] & msb->mask) << TLE493D_A2B6_REGISTER_SIZE_IN_BITS); // Set minus flag if highest bit is set
+    *result >>= (TLE493D_A2B6_REGISTER_SIZE_IN_BITS - lsb->numBits); // shift back and make space for LSB
+    *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // or with LSB
+}
+
+
 bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = 0;
 
-    value = ((uint16_t) sensor->regMap[sensor->regDef[TEMP_MSB].address]) << 8;
-    value |= (uint16_t) (sensor->regMap[sensor->regDef[TEMP_LSB].address] & sensor->regDef[TEMP_LSB].mask);
-    value >>= 4;
+    TLE493D_A2B6_concatBytes(sensor, &sensor->regDef[TEMP_MSB], &sensor->regDef[TEMP_LSB], &value);
 
-    *temp = (float) ((((float) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF);
+    value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
+    *temp = (((float) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
 
     return true;
 }
@@ -157,17 +184,9 @@ bool TLE493D_A2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, fl
 bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    valueX = sensor->regMap[sensor->regDef[BX_MSB].address] << 8;
-    valueX |= (sensor->regMap[sensor->regDef[BX_LSB].address] & sensor->regDef[BX_LSB].mask);
-    valueX >>= 4;
-
-    valueY = sensor->regMap[sensor->regDef[BY_MSB].address] << 8;
-    valueY |= (sensor->regMap[sensor->regDef[BY_LSB].address] & sensor->regDef[BY_LSB].mask) << sensor->regDef[BY_LSB].offset;
-    valueY >>= 4;
-
-    valueZ = sensor->regMap[sensor->regDef[BZ_MSB].address] << 8;
-    valueZ |= (sensor->regMap[sensor->regDef[BZ_LSB].address] & sensor->regDef[BZ_LSB].mask) << sensor->regDef[BZ_LSB].offset;
-    valueZ >>= 4;
+    TLE493D_A2B6_concatBytes(sensor, &sensor->regDef[BX_MSB], &sensor->regDef[BX_LSB], &valueX);
+    TLE493D_A2B6_concatBytes(sensor, &sensor->regDef[BY_MSB], &sensor->regDef[BY_LSB], &valueY);
+    TLE493D_A2B6_concatBytes(sensor, &sensor->regDef[BZ_MSB], &sensor->regDef[BZ_LSB], &valueZ);
 
     *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
     *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
@@ -179,6 +198,8 @@ bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z
 
 // TODO: not yet working !
 bool TLE493D_A2B6_reset(Sensor_ts *sensor) {
+//    assert(0);
+
     // sensor->i2c->wire->requestFrom(0xFF, 0);
     // sensor->i2c->wire->requestFrom(0xFF, 0);
     // sensor->i2c->wire->beginTransmission(0x00);
@@ -193,20 +214,37 @@ bool TLE493D_A2B6_reset(Sensor_ts *sensor) {
     // delayMicroseconds(30);
 
 
-//     uint8_t resetValues[] = { 0x00 };
+    // frameworkDelayMicroseconds(30);
 
-//     sensor->comLibIFParams.i2c_params.address = 0xFF;
-//     sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, resetValues, 0);
-//     sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, resetValues, 0);
+    // uint8_t savedI2CAddress = sensor->comLibIFParams.i2c_params.address;
+    // uint8_t resetValues[]   = { 0x00 };
 
-//     sensor->comLibIFParams.i2c_params.address = 0x00;
-//     sensor->comLibIF->transfer.i2c_transfer(sensor, resetValues, 0, NULL, 0);
-//     sensor->comLibIF->transfer.i2c_transfer(sensor, resetValues, 0, NULL, 0);
+    // // read 0 bytes from 0xFF
+    // sensor->comLibIFParams.i2c_params.address = 0xFF;
+    // sensor->comLibIF->init.i2c_init(sensor);
+    // sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, resetValues, 0);
+    // // sensor->comLibIF->init.i2c_init(sensor);
+    // // sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, resetValues, 0);
 
-//     sensor->comLibIF->deinit.i2c_deinit(sensor);
-//    sensor->comLibIF->init.i2c_init(sensor);
 
-//    frameworkDelayMicroseconds(30);
+    // // write 0 bytes to 0x00
+    // // sensor->comLibIFParams.i2c_params.address = 0x00;
+    // // sensor->comLibIF->init.i2c_init(sensor);
+    // // sensor->comLibIF->transfer.i2c_transfer(sensor, resetValues, 0, NULL, 0);
+    // // sensor->comLibIF->init.i2c_init(sensor);
+    // // sensor->comLibIF->transfer.i2c_transfer(sensor, resetValues, 0, NULL, 0);
+ 
+    // // stop  and restart to avoid hangups
+    // sensor->comLibIF->deinit.i2c_deinit(sensor);
+    // sensor->comLibIF->init.i2c_init(sensor);
+
+    // frameworkDelayMicroseconds(30);
+
+    // sensor->comLibIFParams.i2c_params.address = savedI2CAddress;
+
+
+
+    // frameworkReset(sensor);
 
     return true;
 }
@@ -217,20 +255,29 @@ bool TLE493D_A2B6_getDiagnosis(Sensor_ts *sensor) {
 }
 
 
-bool TLE493D_A2B6_calculateParity(Sensor_ts *sensor) {
-    return true;
+void TLE493D_A2B6_calculateParity(Sensor_ts *sensor) {
 }
 
 
+/**
+ * - set 1-byte mode
+ * - disable interrupts
+ * - set parity flag
+ * 
+*/
 void TLE493D_A2B6_get1ByteModeBuffer(uint8_t *buf, uint8_t *bufLen) {
-    buf[0] = 0x11;
-    buf[1] = 0x94;
+    // old :
+    // buf[0] = 0x11;
+    // buf[1] = 0x94;
+
+    buf[0]  = TLE493D_A2B6_regDef[PR].address;
+    buf[1]  = TLE493D_A2B6_regDef[PR].mask | TLE493D_A2B6_regDef[INT].mask | TLE493D_A2B6_regDef[FP].mask;
     *bufLen = 2;
 }
 
 
 bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
-    uint8_t transBuffer[sensor->regMapSize];
+    uint8_t transBuffer[2];
     uint8_t bufLen = 0;
 
     TLE493D_A2B6_get1ByteModeBuffer(transBuffer, &bufLen);
@@ -238,15 +285,24 @@ bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
 }
 
 
+/**
+ * - enable temeprature measurements
+ * - hardcoded version also 
+ *  - preserve all bits except parity and lower TL_mag bit
+*/
 void TLE493D_A2B6_getTemperatureMeasurementsBuffer(uint8_t *regMap, uint8_t *buf, uint8_t *bufLen) {
-    buf[0] = 0x10;
-    buf[1] = regMap[16] & 0x7C;
+    // old :
+    // buf[0] = 0x10;
+    // buf[1] = regMap[0x10] & 0x7C;
+
+    buf[0]  = TLE493D_A2B6_regDef[DT].address;
+    buf[1]  = regMap[TLE493D_A2B6_regDef[DT].address] & ~(TLE493D_A2B6_regDef[DT].mask);
     *bufLen = 2;
 }
 
 
 bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
-    uint8_t transBuffer[sensor->regMapSize];
+    uint8_t transBuffer[2];
     uint8_t bufLen = 0;
 
     TLE493D_A2B6_getTemperatureMeasurementsBuffer(sensor->regMap, transBuffer, &bufLen);
@@ -256,7 +312,9 @@ bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
     bool b = TLE493D_A2B6_enable1ByteMode(sensor);
-    return b && TLE493D_A2B6_enableTemperatureMeasurements(sensor);
+    b |= TLE493D_A2B6_enableTemperatureMeasurements(sensor);
+
+    return b;
 }
 
 

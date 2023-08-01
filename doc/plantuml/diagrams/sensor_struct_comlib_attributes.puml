@@ -1,0 +1,98 @@
+@startmindmap Sensor structure communication library related attributes
+
+<style>
+node {
+    Padding 15
+    Margin 10
+    HorizontalAlignment center
+    VerticalAlignment center
+    LineColor blue
+    LineThickness 2.0
+    BackgroundColor gold
+    RoundCorner 40
+    MaximumWidth 200
+}
+
+rootNode {
+    LineColor red
+    BackgroundColor white
+    LineThickness 1.0
+    RoundCorner 0
+    Shadowing 0.0
+    HorizontalAlignment center
+    VerticalAlignment center
+}
+
+leafNode {
+    LineColor gold
+    RoundCorner 0
+    Padding 3
+}
+
+arrow {
+    LineStyle 4
+    LineThickness 1.5
+    LineColor green
+}
+</style>
+
+
+*[#lightblue] Communication related attributes
+**[#Orange] ComLibraryFunctions_ts  *comLibIF
+***[#Pink] I2C, SPI
+****[#lightgreen]:
+<code>
+init
+deinit
+transfer
+
+</code>;
+**[#Orange] ComLibraryParameters_ts  comLibIFParams
+***[#Pink] I2C
+****[#lightgreen]:
+<code>
+uint8_t address
+
+</code>;
+***[#Pink] SPI
+****[#lightgreen]:
+<code>
+unused
+
+</code>;
+**[#Orange] ComLibraryObject_ts  comLibObj
+***[#Pink] I2C
+****[#lightgreen] Arduino
+*****[#lightgreen]:
+<code>
+TwoWire *wire
+
+</code>;
+****[#lightgreen] MTB XMC
+*****[#lightgreen]:
+<code>
+XMC_USIC_CH_t    *channel
+uint8_t           sourceSDA
+uint8_t           sourceSCL
+XMC_GPIO_PORT_t  *portSDA
+uint8_t           pinSDA
+XMC_GPIO_PORT_t  *portSCL
+uint8_t           pinSCL
+
+</code>;
+***[#Pink] SPI
+****[#lightgreen] Arduino
+*****[#lightgreen]:
+<code>
+NOT YET AVAILABLE
+
+</code>;
+****[#lightgreen] MTB XMC
+*****[#lightgreen]:
+<code>
+NOT YET AVAILABLE
+
+</code>;
+
+
+@endmindmap
