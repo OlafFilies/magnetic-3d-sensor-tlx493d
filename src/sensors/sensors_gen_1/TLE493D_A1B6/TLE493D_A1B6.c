@@ -311,5 +311,5 @@ void TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
     // then set calculated parity
     WriteRegisterValues[sensor->regDef[P].address] = (WriteRegisterValues[sensor->regDef[P].address] & 
                                                             ~(sensor->regDef[P].mask)) | 
-                                                            (result << sensor->regDef[P].offset);
+                                                            ((result & 0x01) << sensor->regDef[P].offset);
 }
