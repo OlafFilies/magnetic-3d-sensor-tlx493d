@@ -64,58 +64,58 @@ typedef enum {
                INT,
                MODE,
                PRD,
-               Type,
+               TYPE,
                HWV } TLE493D_W2B6_registerNames_te;
 
 
 Register_ts TLE493D_W2B6_regDef[] = {
-    {BX_MSB,    READ_MODE_e, 0x00, 0xFF, 0, 8},
-    {BY_MSB,    READ_MODE_e, 0x01, 0xFF, 0, 8},
-    {BZ_MSB,    READ_MODE_e, 0x02, 0xFF, 0, 8},
-    {TEMP_MSB,  READ_MODE_e, 0x03, 0xFF, 0, 8},
-    {BX_LSB,    READ_MODE_e, 0x04, 0xF0, 4, 4},
-    {BY_LSB,    READ_MODE_e, 0x04, 0x0F, 0, 4},
-    {TEMP_LSB,  READ_MODE_e, 0x05, 0xC0, 6, 2},
-    {ID,        READ_MODE_e, 0x05, 0x30, 4, 2},
-    {BZ_LSB,    READ_MODE_e, 0x05, 0x0F, 0, 4},
-    {P,         READ_MODE_e, 0x06, 0x80, 7, 1},
-    {FF,        READ_MODE_e, 0x06, 0x40, 6, 1},
-    {CF,        READ_MODE_e, 0x06, 0x20, 5, 1},
-    {T,         READ_MODE_e, 0x06, 0x10, 4, 1},
-    {PD3,       READ_MODE_e, 0x06, 0x08, 2, 1},
-    {PD0,       READ_MODE_e, 0x06, 0x04, 2, 1},
-    {FRM,       READ_MODE_e, 0x06, 0x03, 0, 2},
-    {XL,       WRITE_MODE_e, 0x07, 0xFF, 0, 8},
-    {XH,       WRITE_MODE_e, 0x08, 0xFF, 0, 8},
-    {YL,       WRITE_MODE_e, 0x09, 0xFF, 0, 8},
-    {YH,       WRITE_MODE_e, 0x0A, 0xFF, 0, 8},
-    {ZL,       WRITE_MODE_e, 0x0B, 0xFF, 0, 8},
-    {ZH,       WRITE_MODE_e, 0x0C, 0xFF, 0, 8},
-    {WA,       READ_MODE_e,  0x0D, 0x80, 7, 1},
-    {WU,       WRITE_MODE_e, 0x0D, 0x40, 6, 1},
-    {XH_LSB,   WRITE_MODE_e, 0x0D, 0x38, 3, 3},
-    {XL_LSB,   WRITE_MODE_e, 0x0D, 0x07, 0, 3},
-    {TST,      WRITE_MODE_e, 0x0E, 0xC0, 6, 2},
-    {YH_LSB,   WRITE_MODE_e, 0x0E, 0x38, 3, 3},  
-    {YL_LSB,   WRITE_MODE_e, 0x0E, 0x07, 0, 3},
-    {PH,       WRITE_MODE_e, 0x0F, 0xC0, 6, 2},
-    {ZH_LSB,   WRITE_MODE_e, 0x0F, 0x38, 3, 3},
-    {ZL_LSB,   WRITE_MODE_e, 0x0F, 0x07, 0, 3},
-    {DT,        WRITE_MODE_e, 0x10, 0x80, 7, 1},
-    {AM,        WRITE_MODE_e, 0x10, 0x40, 6, 1},
-    {TRIG,      WRITE_MODE_e, 0x10, 0x30, 4, 2},
-    {X2,        WRITE_MODE_e, 0x10, 0x08, 3, 1},
-    {TL_mag,    WRITE_MODE_e, 0x10, 0x06, 1, 2},
-    {CP,        WRITE_MODE_e, 0x10, 0x01, 0, 1},
-    {FP,        WRITE_MODE_e, 0x11, 0x80, 7, 1},
-    {IICaddr,   WRITE_MODE_e, 0x11, 0x60, 5, 2},
-    {PR,        WRITE_MODE_e, 0x11, 0x10, 4, 1},
-    {CA,        WRITE_MODE_e, 0x11, 0x08, 3, 1},
-    {INT,       WRITE_MODE_e, 0x11, 0x04, 2, 1},
-    {MODE,      WRITE_MODE_e, 0x11, 0x03, 0, 2},
-    {PRD,       WRITE_MODE_e, 0x13, 0x80, 7, 3},
-    {Type,      WRITE_MODE_e, 0x16, 0x30, 4, 2},
-    {HWV,       WRITE_MODE_e, 0x16, 0x0F, 0, 4}
+    {BX_MSB,    READ_MODE_e,       0x00, 0xFF, 0, 8},
+    {BY_MSB,    READ_MODE_e,       0x01, 0xFF, 0, 8},
+    {BZ_MSB,    READ_MODE_e,       0x02, 0xFF, 0, 8},
+    {TEMP_MSB,  READ_MODE_e,       0x03, 0xFF, 0, 8},
+    {BX_LSB,    READ_MODE_e,       0x04, 0xF0, 4, 4},
+    {BY_LSB,    READ_MODE_e,       0x04, 0x0F, 0, 4},
+    {TEMP_LSB,  READ_MODE_e,       0x05, 0xC0, 6, 2},
+    {ID,        READ_MODE_e,       0x05, 0x30, 4, 2},
+    {BZ_LSB,    READ_MODE_e,       0x05, 0x0F, 0, 4},
+    {P,         READ_MODE_e,       0x06, 0x80, 7, 1},
+    {FF,        READ_MODE_e,       0x06, 0x40, 6, 1},
+    {CF,        READ_MODE_e,       0x06, 0x20, 5, 1},
+    {T,         READ_MODE_e,       0x06, 0x10, 4, 1},
+    {PD3,       READ_MODE_e,       0x06, 0x08, 2, 1},
+    {PD0,       READ_MODE_e,       0x06, 0x04, 2, 1},
+    {FRM,       READ_MODE_e,       0x06, 0x03, 0, 2},
+    {XL,        READ_WRITE_MODE_e, 0x07, 0xFF, 0, 8},
+    {XH,        READ_WRITE_MODE_e, 0x08, 0xFF, 0, 8},
+    {YL,        READ_WRITE_MODE_e, 0x09, 0xFF, 0, 8},
+    {YH,        READ_WRITE_MODE_e, 0x0A, 0xFF, 0, 8},
+    {ZL,        READ_WRITE_MODE_e, 0x0B, 0xFF, 0, 8},
+    {ZH,        READ_WRITE_MODE_e, 0x0C, 0xFF, 0, 8},
+    {WA,        READ_MODE_e,       0x0D, 0x80, 7, 1},
+    {WU,        READ_WRITE_MODE_e, 0x0D, 0x40, 6, 1},
+    {XH_LSB,    READ_WRITE_MODE_e, 0x0D, 0x38, 3, 3},
+    {XL_LSB,    READ_WRITE_MODE_e, 0x0D, 0x07, 0, 3},
+    {TST,       READ_WRITE_MODE_e, 0x0E, 0xC0, 6, 2},
+    {YH_LSB,    READ_WRITE_MODE_e, 0x0E, 0x38, 3, 3},  
+    {YL_LSB,    READ_WRITE_MODE_e, 0x0E, 0x07, 0, 3},
+    {PH,        READ_WRITE_MODE_e, 0x0F, 0xC0, 6, 2},
+    {ZH_LSB,    READ_WRITE_MODE_e, 0x0F, 0x38, 3, 3},
+    {ZL_LSB,    READ_WRITE_MODE_e, 0x0F, 0x07, 0, 3},
+    {DT,        READ_WRITE_MODE_e, 0x10, 0x80, 7, 1},
+    {AM,        READ_WRITE_MODE_e, 0x10, 0x40, 6, 1},
+    {TRIG,      READ_WRITE_MODE_e, 0x10, 0x30, 4, 2},
+    {X2,        READ_WRITE_MODE_e, 0x10, 0x08, 3, 1},
+    {TL_mag,    READ_WRITE_MODE_e, 0x10, 0x06, 1, 2},
+    {CP,        READ_WRITE_MODE_e, 0x10, 0x01, 0, 1},
+    {FP,        READ_WRITE_MODE_e, 0x11, 0x80, 7, 1},
+    {IICaddr,   READ_WRITE_MODE_e, 0x11, 0x60, 5, 2},
+    {PR,        READ_WRITE_MODE_e, 0x11, 0x10, 4, 1},
+    {CA,        READ_WRITE_MODE_e, 0x11, 0x08, 3, 1},
+    {INT,       READ_WRITE_MODE_e, 0x11, 0x04, 2, 1},
+    {MODE,      READ_WRITE_MODE_e, 0x11, 0x03, 0, 2},
+    {PRD,       READ_WRITE_MODE_e, 0x13, 0x80, 7, 3},
+    {TYPE,      READ_MODE_e,       0x16, 0x30, 4, 2},
+    {HWV,       READ_MODE_e,       0x16, 0x0F, 0, 4}
 };
 
 
@@ -123,7 +123,11 @@ CommonFunctions_ts TLE493D_W2B6_commonFunctions = {
                                 .init                  = TLE493D_W2B6_init,
                                 .deinit                = TLE493D_W2B6_deinit,
 
+                                .getTemperature       = TLE493D_W2B6_getTemperature,
+                                .updateGetTemperature = TLE493D_W2B6_updateGetTemperature,
+
                                 .setDefaultConfig      = TLE493D_W2B6_setDefaultConfig,
+                                .updateRegisterMap     = TLE493D_W2B6_updateRegisterMap,
 };
 
 bool TLE493D_W2B6_init(Sensor_ts *sensor) {
@@ -151,21 +155,50 @@ bool TLE493D_W2B6_deinit(Sensor_ts *sensor) {
     return true;
 }
 
-static void TLE493D_W2B6_get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen) {
-    buf[0] = sensor->regDef[MODE].address;
-    buf[1] = sensor->regDef[FP].mask | sensor->regDef[PR].mask | sensor->regDef[INT].mask;
-    *bufLen = 2;
+bool TLE493D_W2B6_getTemperature(Sensor_ts *sensor, float *temp) {
+    int16_t value = 0;
+
+    value = ((uint16_t)sensor->regMap[sensor->regDef[TEMP_MSB].address]) << 8;
+    value |= (uint16_t)(sensor->regMap[sensor->regDef[TEMP_LSB].address] & sensor->regDef[TEMP_LSB].mask);
+    value >>= 4;
+
+    *temp = (float)((((float)value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF);
+    return true;
+}
+
+bool TLE493D_W2B6_updateGetTemperature(Sensor_ts *sensor, float *temp) {
+    bool b = updateRegisterMap(sensor);
+    return b && TLE493D_W2B6_getTemperature(sensor, temp);
+}
+
+bool TLE493D_W2B6_updateRegisterMap(Sensor_ts *sensor) {
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
 static bool TLE493D_W2B6_enable1ByteMode(Sensor_ts *sensor) {
-    uint8_t transBuffer[sensor->regMapSize];
-    uint8_t bufLen = 0;
+    bool b = false;
 
-    TLE493D_W2B6_get1ByteModeBuffer(sensor, transBuffer, &bufLen);
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
+    sensor->regMap[sensor->regDef[FP].address] = 0;
+
+    setBitfield(sensor, FP, 1);
+    setBitfield(sensor, PR, 1);
+    setBitfield(sensor, INT, 1);
+
+    b = writeRegister(sensor, FP);
+
+    return b;
+}
+
+static bool TLE493D_W2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
+    bool b = updateRegisterMap(sensor);
+
+    setBitfield(sensor, DT, 0);
+    b = writeRegister(sensor, DT);
+
+    return b;
 }
 
 bool TLE493D_W2B6_setDefaultConfig(Sensor_ts *sensor) {
     bool b = TLE493D_W2B6_enable1ByteMode(sensor);
-    return b;
+    return b && TLE493D_W2B6_enableTemperatureMeasurements(sensor);
 }
