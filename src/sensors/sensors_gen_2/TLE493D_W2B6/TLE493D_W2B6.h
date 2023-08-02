@@ -111,15 +111,6 @@ bool TLE493D_W2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, fl
 bool TLE493D_W2B6_setDefaultConfig(Sensor_ts *sensor);
 
 /**
- * @brief Calculates the parity and sets the corresponding parity flags for the necessary registers f the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
- * 
- * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
- * @return true - If successful
- * @return false - If unsuccessful
- */
-void TLE493D_W2B6_calculateParity(Sensor_ts *sensor);
-
-/**
  * @brief Updates all registers of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
  * 
  * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
@@ -127,23 +118,5 @@ void TLE493D_W2B6_calculateParity(Sensor_ts *sensor);
  * @return false - If unsuccessful
  */
 bool TLE493D_W2B6_updateRegisterMap(Sensor_ts *sensor);
-
-/**
- * @brief Enables the temperature measurement of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor 
- * 
- * @param[in] sensor Pointer to the XENSIV™ TEV493D-W2B6 magnetic 3D sensor structure
- * @return true - If successful
- * @return false - If unsuccessful
- */
-bool TLE493D_W2B6_enableTemperature(Sensor_ts* sensor);
-
-/**
- * @brief Disable the temperature measurement of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor 
- * 
- * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
- * @return true - If successful
- * @return false - If unsuccessful
- */
-bool TLE493D_W2B6_disableTemperature(Sensor_ts *sensor);
 
 #endif // TLE493D_W2B6_H

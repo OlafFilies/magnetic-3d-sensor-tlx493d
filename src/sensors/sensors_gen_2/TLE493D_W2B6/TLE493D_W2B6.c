@@ -129,13 +129,8 @@ CommonFunctions_ts TLE493D_W2B6_commonFunctions = {
                                 .getFieldValues       = TLE493D_W2B6_getFieldValues,
                                 .updateGetFieldValues = TLE493D_W2B6_updateGetFieldValues,
 
-                                .calculateParity      = TLE493D_W2B6_calculateParity,
-
                                 .setDefaultConfig      = TLE493D_W2B6_setDefaultConfig,
                                 .updateRegisterMap     = TLE493D_W2B6_updateRegisterMap,
-
-                                .enableTemperature     = TLE493D_W2B6_enableTemperature,
-                                .disableTemperature    = TLE493D_W2B6_disableTemperature,
 };
               
 bool TLE493D_W2B6_init(Sensor_ts *sensor) {
@@ -206,11 +201,6 @@ bool TLE493D_W2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, fl
     return b && TLE493D_W2B6_getFieldValues(sensor, x, y, z);
 }
 
-void TLE493D_W2B6_calculateParity(Sensor_ts *sensor) {
-
-}
-
-
 bool TLE493D_W2B6_updateRegisterMap(Sensor_ts *sensor) {
     return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
@@ -241,22 +231,4 @@ static bool TLE493D_W2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
 bool TLE493D_W2B6_setDefaultConfig(Sensor_ts *sensor) {
     bool b = TLE493D_W2B6_enable1ByteMode(sensor);
     return b && TLE493D_W2B6_enableTemperatureMeasurements(sensor);
-}
-
-bool TLE493D_W2B6_enableTemperature(Sensor_ts *sensor) {
-    bool b = updateRegisterMap(sensor);
-
-    setBitfield(sensor, DT, 0);
-    calculateParity(sensor);
-
-    return b && writeRegister(sensor, DT);
-}
-
-bool TLE493D_W2B6_disableTemperature(Sensor_ts *sensor) {
-    bool b = updateRegisterMap(sensor);
-
-    setBitfield(sensor, DT, 1);
-    calculateParity(sensor);
-    
-    return b && writeRegister(sensor, DT);
 }
