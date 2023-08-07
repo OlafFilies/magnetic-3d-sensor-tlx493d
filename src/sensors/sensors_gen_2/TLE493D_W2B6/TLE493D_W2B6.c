@@ -126,10 +126,13 @@ CommonFunctions_ts TLE493D_W2B6_commonFunctions = {
                                 .getTemperature       = TLE493D_W2B6_getTemperature,
                                 .updateGetTemperature = TLE493D_W2B6_updateGetTemperature,
 
+                                .getFieldValues       = TLE493D_W2B6_getFieldValues,
+                                .updateGetFieldValues = TLE493D_W2B6_updateGetFieldValues,
+
                                 .setDefaultConfig      = TLE493D_W2B6_setDefaultConfig,
                                 .updateRegisterMap     = TLE493D_W2B6_updateRegisterMap,
 };
-
+              
 bool TLE493D_W2B6_init(Sensor_ts *sensor) {
     sensor->regMap            = (uint8_t*)malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
     sensor->regDef            = TLE493D_W2B6_regDef;
@@ -169,6 +172,33 @@ bool TLE493D_W2B6_getTemperature(Sensor_ts *sensor, float *temp) {
 bool TLE493D_W2B6_updateGetTemperature(Sensor_ts *sensor, float *temp) {
     bool b = updateRegisterMap(sensor);
     return b && TLE493D_W2B6_getTemperature(sensor, temp);
+}
+
+bool TLE493D_W2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+    int16_t valueX = 0, valueY = 0, valueZ = 0;
+
+    valueX = sensor->regMap[sensor->regDef[BX_MSB].address] << 8;
+    valueX |= (sensor->regMap[sensor->regDef[BX_LSB].address] & sensor->regDef[BX_LSB].mask);
+    valueX >>= 4;
+
+    valueY = sensor->regMap[sensor->regDef[BY_MSB].address] << 8;
+    valueY |= (sensor->regMap[sensor->regDef[BY_LSB].address] & sensor->regDef[BY_LSB].mask) << sensor->regDef[BY_LSB].offset;
+    valueY >>= 4;
+
+    valueZ = sensor->regMap[sensor->regDef[BZ_MSB].address] << 8;
+    valueZ |= (sensor->regMap[sensor->regDef[BZ_LSB].address] & sensor->regDef[BZ_LSB].mask) << sensor->regDef[BZ_LSB].offset;
+    valueZ >>= 4;
+
+    *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
+    *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
+    *z = ((float) valueZ) * GEN_2_MAG_FIELD_MULT;
+
+    return true;
+}
+
+bool TLE493D_W2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+    bool b = updateRegisterMap(sensor);
+    return b && TLE493D_W2B6_getFieldValues(sensor, x, y, z);
 }
 
 bool TLE493D_W2B6_updateRegisterMap(Sensor_ts *sensor) {
