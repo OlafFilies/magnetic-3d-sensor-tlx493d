@@ -58,8 +58,8 @@ typedef enum {
 } TLE493D_A1B6_Reg_LOW_POWER_PERIOD;
 
 typedef enum {
-    TLE493D_A1B6_PARITY_TEST_ENABLE_default,
-    TLE493D_A1B6_PARITY_TEST_DISABLE
+    TLE493D_A1B6_PARITY_TEST_DISABLE,
+    TLE493D_A1B6_PARITY_TEST_ENABLE_default
 } TLE493D_A1B6_Reg_PARITY_TEST_NEN;
 
 // structures for holding communication params
@@ -89,18 +89,18 @@ typedef enum {
                R_RES_1,
                R_RES_2,
                R_RES_3,
-               W_RES_1,
+               W_RES_0,
                P,
                IICaddr,
-               W_RES_2,
+               W_RES_1,
                INT,
                FAST,
                LOW,
-               W_RES_3,
+               W_RES_2,
                Temp_NEN, // remove: ask about duplicates
                LP,
                PT,
-               W_RES_4 } TLE493D_A1B6_registerNames_te;
+               W_RES_3 } TLE493D_A1B6_registerNames_te;
 
 Register_ts TLE493D_A1B6_regDef[] = {
     // Read registers
@@ -117,33 +117,30 @@ Register_ts TLE493D_A1B6_regDef[] = {
     {PD,                READ_MODE_e,    0x05, 0x10, 4, 1},
     {BZ_LSB,            READ_MODE_e,    0x05, 0x0F, 0, 4},
     {TEMP_LSB,          READ_MODE_e,    0x06, 0xFF, 0, 8},
-    {R_RES_1,           READ_MODE_e,    0x07, 0xFF, 0, 8},
+    {R_RES_1,           READ_MODE_e,    0x07, 0x18, 3, 2},
     {R_RES_2,           READ_MODE_e,    0x08, 0xFF, 0, 8},
-    {R_RES_3,           READ_MODE_e,    0x09, 0xFF, 0, 8},
+    {R_RES_3,           READ_MODE_e,    0x09, 0x1F, 0, 5},
     // Write Registers
-    {W_RES_1,           WRITE_MODE_e,   0x00, 0xFF, 0, 8},
+    {W_RES_0,           WRITE_MODE_e,   0x00, 0xFF, 0, 8},
     {P,                 WRITE_MODE_e,   0x01, 0x80, 7, 1},
     {IICaddr,           WRITE_MODE_e,   0x01, 0x60, 5, 2},
-    {W_RES_2,           WRITE_MODE_e,   0x01, 0x18, 3, 2},
+    {W_RES_1,           WRITE_MODE_e,   0x01, 0x18, 3, 2},
     {INT,               WRITE_MODE_e,   0x01, 0x04, 2, 1},
     {FAST,              WRITE_MODE_e,   0x01, 0x02, 1, 1},
     {LOW,               WRITE_MODE_e,   0x01, 0x01, 0, 1},
-    {W_RES_3,           WRITE_MODE_e,   0x02, 0xFF, 0, 8},
+    {W_RES_2,           WRITE_MODE_e,   0x02, 0xFF, 0, 8},
     {Temp_NEN,          WRITE_MODE_e,   0x03, 0x80, 7, 1},
     {LP,                WRITE_MODE_e,   0x03, 0x40, 6, 1},
     {PT,                WRITE_MODE_e,   0x03, 0x20, 5, 1},
-    {W_RES_4,           WRITE_MODE_e,   0x03, 0x1F, 0, 5},
+    {W_RES_3,           WRITE_MODE_e,   0x03, 0x1F, 0, 5},
 };
-
-//remove: note: this array has to be put inside the sensor struct so that a unique array var is created for every instance of TLE_A1B6
-uint8_t WriteRegisterValues[TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT]; //malloc ? YES but link it to a struct such as Sensor_ts or put it inside init 
 
 CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
                                 .deinit                = TLE493D_A1B6_deinit,
 
-                                // .getTemperature        = TLE493D_A1B6_getTemperature,
-                                // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
+                                .getTemperature        = TLE493D_A1B6_getTemperature,
+                                .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
 
                                 // .getFieldValues        = TLE493D_A1B6_getFieldValues,
                                 // .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
@@ -186,95 +183,88 @@ bool TLE493D_A1B6_deinit(Sensor_ts *sensor) {
     return true;
 }
 
-bool TLE493D_A1B6_setWriteRegisterDefaultValues(Sensor_ts *sensor) {
+void TLE493D_A1B6_setReservedRegisterValues(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, W_RES_1, gen_1_returnBitfield(sensor, R_RES_1));
+    gen_1_setBitfield(sensor, W_RES_2, gen_1_returnBitfield(sensor, R_RES_2));
+    gen_1_setBitfield(sensor, W_RES_3, gen_1_returnBitfield(sensor, R_RES_3));
+}
 
-    bool ret = true;
+void TLE493D_A1B6_setPowerDownMode(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, FAST, TLE493D_A1B6_FAST_MODE_DISABLE_default);
+    gen_1_setBitfield(sensor, LOW, TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default);
+    gen_1_setBitfield(sensor, LP, TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default);
+}
 
-    // TODO: call update register map here to refresh READ register values
-    ret &= TLE493D_A1B6_updateRegisterMap(sensor);
-
-    // some WRITE register values are linked to READ register values. This is ensured using appropriate READ sensor->regMap[] values. 
-    WriteRegisterValues[0]      =       0x00; //reserved and not linked to READ registers
-    WriteRegisterValues[1]      =       (TLE493D_A1B6_ODD_PARITY << sensor->regDef[P].offset)                                                                   |
-                                        (TLE493D_A1B6_CONFIG_00_default << sensor->regDef[IICaddr].offset)                                                      |
-                                        (((sensor->regMap[sensor->regDef[R_RES_1].address]) & sensor->regDef[W_RES_2].mask) << sensor->regDef[W_RES_2].offset)  | 
-                                        (TLE493D_A1B6_INT_DISABLE << sensor->regDef[INT].offset)                                                         | 
-                                        (TLE493D_A1B6_FAST_MODE_DISABLE_default << sensor->regDef[FAST].offset)                                                 | 
-                                        (TLE493D_A1B6_LOW_POWER_MODE_DISABLE_default << sensor->regDef[LOW].offset);
-    WriteRegisterValues[2]      =       (((sensor->regMap[sensor->regDef[R_RES_2].address]) & sensor->regDef[W_RES_3].mask) << sensor->regDef[W_RES_3].offset);
-    WriteRegisterValues[3]      =       (TLE493D_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset)                                                   |
-                                        (TLE493D_A1B6_LOW_POWER_PERIOD_100MS_default << sensor->regDef[LP].offset)                                              |
-                                        (TLE493D_A1B6_PARITY_TEST_ENABLE_default << sensor->regDef[PT].offset)                                                  |
-                                        (((sensor->regMap[sensor->regDef[R_RES_3].address]) & sensor->regDef[W_RES_4].mask) << sensor->regDef[W_RES_4].offset); 
-
-
-    TLE493D_A1B6_calculateParity(sensor);
-
-    ret &= TLE493D_A1B6_loadWriteRegisters(sensor);
-
-    return ret;
-
+void TLE493D_A1B6_setMasterControlledMode(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, FAST, TLE493D_A1B6_FAST_MODE_ENABLE);
+    gen_1_setBitfield(sensor, LOW, TLE493D_A1B6_LOW_POWER_MODE_ENABLE);
+    gen_1_setBitfield(sensor, LP, TLE493D_A1B6_LOW_POWER_PERIOD_12MS);
 }
 
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
 
 bool TLE493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
-    return TLE493D_A1B6_setWriteRegisterDefaultValues(sensor);
+    
+    bool ret = true;
+    // read READ register values
+    ret = TLE493D_A1B6_updateRegisterMap(sensor);
+    
+    // set WRITE register values to 0x00
+    for (uint8_t addr=0; addr<TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT; addr++)
+        sensor->regMap[addr+TLE493D_A1B6_WRITE_REGISTERS_OFFSET] = 0x00;
+
+
+    // todo: reset sensor here
+
+    // set WRITE reserved register values to READ reserved register values
+    TLE493D_A1B6_setReservedRegisterValues(sensor);
+
+    //set to POWERDOWNMODE at boot
+    TLE493D_A1B6_setPowerDownMode(sensor);
+
+    // enable parity test and write to registers 
+    ret &= TLE493D_A1B6_enableParityTest(sensor);
+
+    // set to MASTERCONTROLLEDMODE to start measurement
+    TLE493D_A1B6_setMasterControlledMode(sensor);
+
+    // calculate parity
+    TLE493D_A1B6_calculateParity(sensor);
+
+    // write out register map to registers
+    ret &= TLE493D_A1B6_transferWriteRegisters(sensor);
+
+    // update register map
+    ret &= TLE493D_A1B6_updateRegisterMap(sensor);
+
+    return ret;  
 }
 
 bool TLE493D_A1B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
     bool ret = true;
-    uint8_t transBuffer[2];
-    uint8_t bufLen = 2;
-
-    WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
-                                                            ~(sensor->regDef[Temp_NEN].mask)) | 
-                                                            (TLE493D_A1B6_Temp_DISABLE << sensor->regDef[Temp_NEN].offset);
-
-    transBuffer[0] = sensor->regDef[Temp_NEN].address;
-    transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
-
+    
+    gen_1_setBitfield(sensor, Temp_NEN, TLE493D_A1B6_Temp_DISABLE);
     TLE493D_A1B6_calculateParity(sensor);
-
-    ret &= TLE493D_A1B6_loadWriteRegisters(sensor);
-
-    return ret;                                                            
+    ret = TLE493D_A1B6_transferWriteRegisters(sensor);
+    
+    return ret;                                                           
 }
 
 bool TLE493D_A1B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
     bool ret = true;
-    uint8_t transBuffer[2];
-    uint8_t bufLen = 2;
 
-    WriteRegisterValues[sensor->regDef[Temp_NEN].address] = (WriteRegisterValues[sensor->regDef[Temp_NEN].address] & 
-                                                            ~(sensor->regDef[Temp_NEN].mask)) | 
-                                                            (TLE493D_A1B6_Temp_ENABLE_default << sensor->regDef[Temp_NEN].offset);
-
-    transBuffer[0] = sensor->regDef[Temp_NEN].address;
-    transBuffer[1] = WriteRegisterValues[sensor->regDef[Temp_NEN].address];
-
+    gen_1_setBitfield(sensor, Temp_NEN, TLE493D_A1B6_Temp_ENABLE_default);
     TLE493D_A1B6_calculateParity(sensor);
-                                                                
-    ret &= TLE493D_A1B6_loadWriteRegisters(sensor);
+    ret = TLE493D_A1B6_transferWriteRegisters(sensor);
 
     return ret; 
 }
 
-// remove: note: all register writes must be atomic i.e. all 5 registers must be written to when anything is changed 
-// why? since all of the WRITE regs affect the parity. so whenever parity is recalculated, everything must be written to be sure. 
-bool TLE493D_A1B6_loadWriteRegisters(Sensor_ts *sensor) {
+bool TLE493D_A1B6_transferWriteRegisters(Sensor_ts *sensor) {
     bool retn = true;
-    uint8_t transBuffer[2];
-    uint8_t bufLen = 2;
     
-
-    for (uint8_t addr = 0x00; addr<TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT; addr++) {
-        transBuffer[0] = addr;
-        transBuffer[1] = WriteRegisterValues[addr];
-
-        retn &= sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, NULL, 0);
-    }
-
+    retn &= sensor->comLibIF->transfer.i2c_transfer(sensor, sensor->regMap+TLE493D_A1B6_WRITE_REGISTERS_OFFSET, TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT, NULL, 0);
+    
     return retn;
 }
 
@@ -285,31 +275,46 @@ bool TLE493D_A1B6_updateRegisterMap(Sensor_ts *sensor) {
 // parity is calculated for all the WRITE register, including the parity bit
 void TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
     uint8_t result = 0x00;
-    uint8_t parity = 0x00;
 
-    // first set parity as even, reason: this P bit is also considered in parity calculation.
-    WriteRegisterValues[sensor->regDef[P].address] = (WriteRegisterValues[sensor->regDef[P].address] & 
-                                                            ~(sensor->regDef[P].mask)) | 
-                                                            (TLE493D_A1B6_EVEN_PARITY << sensor->regDef[P].offset);
+    //set parity as EVEN first
+    gen_1_setBitfield(sensor, P, TLE493D_A1B6_EVEN_PARITY);
 
     // calculate bitwise XOR for all WRITE registers
     for (uint8_t addr = 0x00; addr<TLE493D_A1B6_WRITE_REGISTERS_MAX_COUNT; addr++) {
-        result ^= WriteRegisterValues[addr];
+        result ^= sensor->regMap[addr+TLE493D_A1B6_WRITE_REGISTERS_OFFSET];
     }
 
-    // uncomment and check
-    // while(result > 0) {
-    //     parity ^= (result & 0x01);
-    //     result >= 1;
-    // }
-
-    
+    // store the XOR result of all bits at the LSB
     result ^= (result >> 1);
     result ^= (result >> 2);
     result ^= (result >> 4);
 
     // then set calculated parity
-    WriteRegisterValues[sensor->regDef[P].address] = (WriteRegisterValues[sensor->regDef[P].address] & 
-                                                            ~(sensor->regDef[P].mask)) | 
-                                                            ((result & 0x01) << sensor->regDef[P].offset);
+    gen_1_setBitfield(sensor, P, result & 0x01);
+}
+
+bool TLE493D_A1B6_getTemperature(Sensor_ts *sensor, float *temp) {
+
+    int16_t value = gen_1_concat_values((sensor->regMap[sensor->regDef[TEMP_MSB].address] & sensor->regDef[TEMP_MSB].mask) >> sensor->regDef[TEMP_MSB].offset, sensor->regMap[sensor->regDef[TEMP_LSB].address], false);
+
+    *temp = (float)(((float)value - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT) ;
+
+    return true;
+}
+
+bool TLE493D_A1B6_updateGetTemperature(Sensor_ts *sensor, float *temp) {
+    bool b = TLE493D_A1B6_updateRegisterMap(sensor);
+    return b & TLE493D_A1B6_getTemperature(sensor, temp);
+}
+
+bool TLE493D_A1B6_enableParityTest(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, PT, TLE493D_A1B6_PARITY_TEST_ENABLE_default);
+    TLE493D_A1B6_calculateParity(sensor);
+    return TLE493D_A1B6_transferWriteRegisters(sensor);
+}
+
+bool TLE493D_A1B6_disableParityTest(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, PT, TLE493D_A1B6_PARITY_TEST_DISABLE);
+    TLE493D_A1B6_calculateParity(sensor);
+    return TLE493D_A1B6_transferWriteRegisters(sensor);
 }
