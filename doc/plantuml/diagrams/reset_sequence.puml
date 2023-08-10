@@ -11,25 +11,46 @@ concise "Command" as cmd
 @0
 cmd is {-}
 
-@5
+@1
+cmd is "Prep"
+
+@3
 cmd is "Reset part 1"
+
+@8
+cmd is "Unprep"
 
 @10
+cmd is "Prep"
+
+@12
 cmd is "Reset part 1"
 
-@15
+@17
+cmd is "Unprep"
+
+@19
+cmd is "Prep"
+
+@21
 cmd is "Reset part 2"
 
-@20
-cmd is "Reset part 2"
+@26
+cmd is "Unprep"
 
-@25
-cmd is "Wait 30 us"
+@28
+cmd is "Prep"
 
 @30
-cmd is {-}
+cmd is "Reset part 2"
 
-@34
+@35
+cmd is "Unprep"
+
+@37
+cmd is "Wait 30 us"
+
+@40
 cmd is {-}
 
 @enduml

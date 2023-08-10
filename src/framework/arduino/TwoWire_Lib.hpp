@@ -36,7 +36,22 @@ template<> class TwoWire_Lib<TwoWire> {
         }
 
 
+        // bool transfer(uint8_t i2cAddress, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+        //     if( tx_len > 0 ) {
+        //         I2C_write(i2cAddress, tx_buffer, tx_len);
+        //      }
+
+        //     if( rx_len > 0 ) {
+        //         I2C_read(i2cAddress, rx_buffer, rx_len);
+        //     }
+
+        //     return true;
+        // }
+
+
         bool transfer(uint8_t i2cAddress, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+           	XMC_I2C_CH_ClearStatusFlag(XMC_I2C0_CH1, 0xFFFFFFFF);
+
             if( tx_len > 0 ) {
                 i2c.beginTransmission(i2cAddress);
 
