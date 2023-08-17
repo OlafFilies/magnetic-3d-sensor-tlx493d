@@ -92,20 +92,22 @@ Register_ts TLE493D_A2B6_regDef[] = {
     { CA,       READ_WRITE_MODE_e, 0x11, 0x08, 3, 1 },
     { INT,      READ_WRITE_MODE_e, 0x11, 0x04, 2, 1 },
     { MODE,     READ_WRITE_MODE_e, 0x11, 0x03, 0, 2 },
-    // { PRD,      READ_WRITE_MODE_e, 0x13, 0xE0, 5, 3 },
-    { PRD,      READ_WRITE_MODE_e, 0x13, 0x80, 7, 1 },
+    // Does not match register overview in manual, but fits and default value
+    // textual description of register PRD ! Confirmed by Severin.
+    { PRD,      READ_WRITE_MODE_e, 0x13, 0xE0, 5, 3 },
+    // { PRD,      READ_WRITE_MODE_e, 0x13, 0x80, 7, 1 },
     { TYPE,     READ_MODE_e,       0x16, 0x30, 4, 2 },
     { HWV,      READ_MODE_e,       0x16, 0x0F, 0, 4 }
 };
 
 
 typedef enum { 
-               Temp2_BITFIELD  = 0x05,
-               Diag_BITFIELD   = 0x06,
-               Config_BITFIELD = 0x10,
+               TEMP2_BITFIELD  = 0x05,
+               DIAG_BITFIELD   = 0x06,
+               CONFIG_BITFIELD = 0x10,
                MOD1_BITFIELD   = 0x11,
                MOD2_BITFIELD   = 0x13,
-               Ver_BITFIELD    = 0x16 } TLE493D_A2B6_special_bitfields_te;
+               VER_BITFIELD    = 0x16 } TLE493D_A2B6_special_bitfields_te;
 
 
 typedef enum {
@@ -263,6 +265,7 @@ void TLE493D_A2B6_setBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t newBi
     }
 }
 
+
 bool TLE493D_A2B6_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
     Register_ts *bf = &sensor->regDef[bitField];
     bool err = false;
@@ -290,7 +293,7 @@ uint8_t getParity(uint8_t data) {
 
 
 uint8_t getOddParity(uint8_t parity) {
-    return (parity ^ 1) & 1U;
+    return (parity ^ 1U) & 1U;
 }
 
 
@@ -304,56 +307,51 @@ bool TLE493D_A2B6_calculateParity(Sensor_ts *sensor) {
 }
 
 
-uint8_t TLE493D_A2B6_calculateFPParityBit(Sensor_ts *sensor) {
-	// compute parity of MOD1 register
-	uint8_t parity = getParity(sensor->regMap[MOD1_BITFIELD] & ~TLE493D_A2B6_regDef[FP].mask);
-	// uint8_t parity = getParity(sensor->regMap[sensor->regDef[FP].address] & ~sensor->regDef[FP].mask);
-        // data->regmap.MOD1 & ~(TLE493D_AW2B6_MOD1_FP_MSK));
-	// add parity of MOD2:PRD register bits
-	parity ^= getParity(sensor->regMap[MOD2_BITFIELD] & TLE493D_A2B6_regDef[PRD].mask);
-        // data->regmap.MOD2 & (TLE493D_AW2B6_MOD2_PRD_MSK));
-	// compute ODD parity
-	parity ^= 1;
+// Bus (data) parity bit P
+uint8_t TLE493D_A2B6_calculateBusParityBit(Sensor_ts *sensor) {
+	// compute bus parity of data values in registers 0 to 5
+	uint8_t parity = sensor->regMap[0];
 
-	return (parity & 1) << TLE493D_A2B6_regDef[FP].offset;
+	for (uint8_t i = 1; i < 6; ++i) {
+		parity ^= sensor->regMap[i];
+	}
+
+	return getOddParity(getParity(parity)) << TLE493D_A2B6_regDef[P].offset;
 }
 
 
-// uint8_t TLE493D_AW2B6_get_CP_bit(TLE493D_data_t *data)
-// {
-// 	uint8_t *regs, parity, i;
+// Fuse/mode parity bit FP
+uint8_t TLE493D_A2B6_calculateFuseParityBit(Sensor_ts *sensor) {
+	// compute parity of MOD1 register
+	uint8_t parity = getParity(sensor->regMap[MOD1_BITFIELD] & ~TLE493D_A2B6_regDef[FP].mask);
+
+	// add parity of MOD2:PRD register bits
+	parity ^= getParity(sensor->regMap[MOD2_BITFIELD] & TLE493D_A2B6_regDef[PRD].mask);
+
+	return getOddParity(parity) << TLE493D_A2B6_regDef[FP].offset;
+}
 
 
-// 	regs = (uint8_t *)&(data->regmap);
-// 	parity = 0;
-// 	// even parity for registers XL to ZH
-// 	for (i = TLE493D_AW2B6_XL_REG; i <= TLE493D_AW2B6_ZH_REG; i++) {
-// 		parity ^= regs[i];
-// 	}
-// 	// include WU
-// 	parity ^= regs[TLE493D_AW2B6_WU_REG] & ~(TLE493D_AW2B6_WU_WA_MSK);
-// 	// include TMode
-// 	parity ^= regs[TLE493D_AW2B6_TMode_REG] & ~(TLE493D_AW2B6_TMode_TST_MSK);
-// 	// include TPhase
-// 	parity ^= regs[TLE493D_AW2B6_TPhase_REG] & ~(TLE493D_AW2B6_TPhase_PH_MSK);
-// 	// include Config
-// 	parity ^= regs[TLE493D_AW2B6_Config_REG] & ~(TLE493D_AW2B6_Config_CP_MSK);
-// 	// compute parity bit
-// 	parity = MISC_get_parity(parity);
-// 	// convert to ODD parity
-// 	parity ^= 1U;
+// Configuration parity bit CP
+uint8_t TLE493D_A2B6_calculateConfigurationParityBit(Sensor_ts *sensor) {
+	// compute parity of Config register
+	uint8_t parity = getParity(sensor->regMap[CONFIG_BITFIELD] & ~TLE493D_A2B6_regDef[CP].mask);
 
-// 	return parity & 1U;
-// }
+	return getEvenParity(getParity(parity)) << TLE493D_A2B6_regDef[CP].offset;
+}
 
 
 void TLE493D_A2B6_set1ByteMode(Sensor_ts *sensor) {
-    sensor->regMap[MOD1_BITFIELD]  = 0;                             
-    sensor->regMap[MOD2_BITFIELD]  = 0;                             
-    sensor->regMap[MOD1_BITFIELD]  = TLE493D_A2B6_regDef[PR].mask | TLE493D_A2B6_regDef[INT].mask
-                                   | (MASTER_CONTROLLED_MODE << TLE493D_A2B6_regDef[MODE].offset);
+    // TODO: the next 2 lines must go into init !
+    sensor->regMap[MOD1_BITFIELD]  = 0;
+    sensor->regMap[MOD2_BITFIELD]  = 0;
 
-    sensor->regMap[MOD1_BITFIELD] |= TLE493D_A2B6_calculateFPParityBit(sensor);
+    // this is already setDefaultConfig ! Should set only PR bit !
+    sensor->regMap[MOD1_BITFIELD]  = TLE493D_A2B6_regDef[PR].mask
+                                   | TLE493D_A2B6_regDef[INT].mask;
+                                //    | (MASTER_CONTROLLED_MODE << TLE493D_A2B6_regDef[MODE].offset);
+
+    sensor->regMap[MOD1_BITFIELD] |= TLE493D_A2B6_calculateFuseParityBit(sensor);
 }
 
 
@@ -375,7 +373,7 @@ void TLE493D_A2B6_get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *b
     // // buf[0]   = TLE493D_A2B6_regDef[PR].address;
     // // buf[1]  = TLE493D_A2B6_regDef[PR].mask | TLE493D_A2B6_regDef[INT].mask | TLE493D_A2B6_regDef[FP].mask;
     // buf[1]   = TLE493D_A2B6_regDef[PR].mask | TLE493D_A2B6_regDef[INT].mask | (MASTER_CONTROLLED_MODE << TLE493D_A2B6_regDef[MODE].offset);
-    // buf[1]  |= TLE493D_A2B6_calculateFPParityBit(sensor);
+    // buf[1]  |= TLE493D_A2B6_calculateFuseParityBit(sensor);
     *bufLen  = 2;
 }
 
@@ -395,13 +393,13 @@ bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
  * - hardcoded version also 
  *  - preserve all bits except parity and lower TL_MAG bit
 */
-void TLE493D_A2B6_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *regMap, uint8_t *buf, uint8_t *bufLen) {
+void TLE493D_A2B6_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen) {
     // old :
     // buf[0] = 0x10;
     // buf[1] = regMap[0x10] & 0x7C;
 
     buf[0]  = TLE493D_A2B6_regDef[DT].address;
-    buf[1]  = 0x00;
+    buf[1]  = 0x00 | TLE493D_A2B6_calculateConfigurationParityBit(sensor);
     // buf[1]  = regMap[TLE493D_A2B6_regDef[DT].address] & ~(TLE493D_A2B6_regDef[DT].mask);
     *bufLen = 2;
 }
@@ -411,13 +409,29 @@ bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
     uint8_t transBuffer[2];
     uint8_t bufLen = 0;
 
-    TLE493D_A2B6_getTemperatureMeasurementsBuffer(sensor, sensor->regMap, transBuffer, &bufLen);
+    TLE493D_A2B6_getTemperatureMeasurementsBuffer(sensor, transBuffer, &bufLen);
     // return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, NULL, 0);
     return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, sensor->regMap, sensor->regMapSize);
 }
 
 
+// TODO: Must be set in conjunction with MOD1 and MOD2 in order to set FP bit correctly
+// -> read regmap first to get value for register @ 0x12
+// -> then set PRD bit and recalc. FP bit in MOD2
+// -> then write regMap from MOD1 to MOD2
+bool TLE493D_A2B6_setSlowUpdates(Sensor_ts *sensor) {
+    sensor->regMap[TLE493D_A2B6_regDef[PRD].address]  = 0x80;
+
+    uint8_t buf[2];
+    buf[0]  = TLE493D_A2B6_regDef[PRD].address;
+    buf[1]  = 0x80;
+
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, buf, 2, sensor->regMap, sensor->regMapSize);
+}
+
+
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
+    // TLE493D_A2B6_setSlowUpdates(sensor);
     bool b = TLE493D_A2B6_enable1ByteMode(sensor);
     b |= TLE493D_A2B6_enableTemperatureMeasurements(sensor);
 

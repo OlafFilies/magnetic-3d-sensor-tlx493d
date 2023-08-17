@@ -13,6 +13,17 @@
 #include "S2GoTemplate.hpp"
 
 
+// #include "gpio.h"
+// #include "xmc_gpio.h"
+// #include "xmc1_gpio_map.h"
+// #include "xmc1_gpio.h"
+// #include "src/xmc1100/i2c/conf_i2c.h"
+// #include "src/xmc1100/i2c/i2c.h"
+// #include "src/xmc1100/time/time.h"
+
+
+
+
 typedef struct pinCtrl {
     uint8_t pinNumber;
     uint8_t direction;
@@ -31,6 +42,31 @@ template<> class S2GoTemplate<pinCtrl> {
             // using global function to demonstrate usage
             preTransferHook  = myPreTransferHook;
             postTransferHook = myPostTransferHook;
+
+
+	    // NVIC_DisableIRQ(ERU0_0_IRQn);
+
+        // XMC_GPIO_CONFIG_t cfg;
+   		// cfg.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+
+		// cfg.output_level = XMC_GPIO_OUTPUT_LEVEL_LOW;
+		// XMC_GPIO_Init(P1_0, &cfg);
+
+		// cfg.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH;
+		// XMC_GPIO_Init(P0_15, &cfg);
+
+		// // delay for 200us
+		// delayMicroseconds(5000 - 2);
+
+		// cfg.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL;
+		// cfg.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH;
+		// XMC_GPIO_Init(P1_0, &cfg);
+
+		// cfg.output_level = XMC_GPIO_OUTPUT_LEVEL_LOW;
+		// XMC_GPIO_Init(P0_15, &cfg);
+
+		// delayMicroseconds(2);
+
 
             for(auto &p : constantPins) {
                 pinMode(p.pinNumber, p.direction);

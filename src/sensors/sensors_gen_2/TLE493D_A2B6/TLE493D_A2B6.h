@@ -40,7 +40,7 @@ bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor);
 
 // individual functions
 void TLE493D_A2B6_get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen);
-void TLE493D_A2B6_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *regMap, uint8_t *buf, uint8_t *bufLen);
+void TLE493D_A2B6_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen);
 
 
 // utility functions
