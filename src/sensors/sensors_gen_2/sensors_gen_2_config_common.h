@@ -22,11 +22,7 @@
 #define GEN_2_REG_NUMBER            23
 
 
-// typedef enum {
-//     CP_F,
-//     FP_F,
-//     P_F
-// } parityFlags_t;
+// #define REGISTER_SIZE_IN_BITS       (8)
 
 
 #endif // SENSORS_GEN_2_CONFIG_COMMON_H

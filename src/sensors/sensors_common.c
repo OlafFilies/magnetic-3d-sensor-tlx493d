@@ -36,38 +36,43 @@ bool deinit(Sensor_ts *sensor) {
 }
 
 
+void calculateTemperature(Sensor_ts *sensor, float *temp) {
+   sensor->functions->calculateTemperature(sensor, temp);
+}
+
+
 bool getTemperature(Sensor_ts *sensor, float *temp) {
    return sensor->functions->getTemperature(sensor, temp);
 }
 
 
-bool updateGetTemperature(Sensor_ts *sensor, float *temp) {
-   return sensor->functions->updateGetTemperature(sensor, temp);
+void calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+   sensor->functions->calculateFieldValues(sensor, x, y, z);
 }
 
 
 bool getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
    return sensor->functions->getFieldValues(sensor, x, y, z);
-}
-
-
-bool updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-   return sensor->functions->updateGetFieldValues(sensor, x, y, z);
  }
 
 
-bool reset(Sensor_ts *sensor) {
-   return sensor->functions->reset(sensor);
+bool getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp) {
+   return sensor->functions->getSensorValues(sensor, x, y, z, temp);
+ }
+
+
+// bool reset(Sensor_ts *sensor) {
+//    return sensor->functions->reset(sensor);
+// }
+
+
+bool hasValidData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidData(sensor);
 }
 
 
-bool getDiagnosis(Sensor_ts *sensor) {
-   return sensor->functions->getDiagnosis(sensor);
-}
-
-
-bool calculateParity(Sensor_ts *sensor) {
-   return sensor->functions->calculateParity(sensor);
+bool isFunctional(Sensor_ts *sensor) {
+   return sensor->functions->isFunctional(sensor);
 }
 
 
@@ -102,4 +107,22 @@ const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
         default : return "ERROR : Unknown sensorType !";
                   break;
     }
+}
+
+
+uint8_t calculateParity(uint8_t data) {
+	data ^= data >> 4;
+	data ^= data >> 2;
+	data ^= data >> 1;
+	return data & 1U;
+}
+
+
+uint8_t getOddParity(uint8_t parity) {
+    return (parity ^ 1U) & 1U;
+}
+
+
+uint8_t getEvenParity(uint8_t parity) {
+    return parity & 1U;
 }

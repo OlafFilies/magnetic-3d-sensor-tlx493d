@@ -7,6 +7,10 @@
 
 // project c includes
 
+// extern "C" {
+// 	#include "interrupts.h"
+// }
+
 
 
 // void myPreTransferHook() {
@@ -17,10 +21,10 @@
 // }
 
 
-extern "C" void myDebug(char *msg) {
-	__enable_irq();
-    Serial.print("\nmsg : ");
-    Serial.println(msg);
-    Serial.flush();
-	__disable_irq();
-}
+// extern "C" void myDebug(char *msg) {
+// 	INT_int_ext_enable();
+//     Serial.print("\nmsg : ");
+//     Serial.println(msg);
+//     Serial.flush();
+// 	INT_int_ext_disable();
+// }

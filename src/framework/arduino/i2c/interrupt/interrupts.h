@@ -16,6 +16,11 @@
 ******************************************************************************
 */
 
+// #include "pal.h"
+
+// #ifdef USE_INT
+
+
 /*! \file interrupts.h
  * \brief ERU Module used for Interrupt Handling */
 
@@ -59,3 +64,5 @@ static inline void INT_int_ext_disable(void)
 bool INT_get_TLI_detected(void);
 
 #endif /* SRC_GENERAL_ERU_H_ */
+
+// #endif

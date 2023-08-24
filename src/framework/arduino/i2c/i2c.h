@@ -23,6 +23,7 @@
 #define SRC_PERIPHERALS_I2C_I2C_H_
 
 #include <stdint.h>
+void wait(uint32_t time_us);
 
 //! Status values returned by the I2C read/write commands
 typedef enum {

@@ -57,13 +57,13 @@ class TLx493D {
         }
 
 
-        bool updateGetTemperature(float *temperature) {
-            return ::updateGetTemperature(&sensor, temperature);
+        bool getTemperature(float *temperature) {
+            return ::getTemperature(&sensor, temperature);
         }
 
 
-        bool updateGetFieldValues(float *x, float *y, float *z) {
-            return ::updateGetFieldValues(&sensor, x, y, z);
+        bool getFieldValues(float *x, float *y, float *z) {
+            return ::getFieldValues(&sensor, x, y, z);
         }
 
 

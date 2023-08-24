@@ -68,12 +68,12 @@ void loop() {
     float valX = 0, valY = 0, valZ = 0;
     Serial.println("loop ...");
 
-    Serial.print(true == updateGetTemperature(&a2b6, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
+    Serial.print(true == getTemperature(&a2b6, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    Serial.print(true == updateGetFieldValues(&a2b6, &valX, &valY, &valZ) ? "updateGetFieldValues ok\n" : "updateGetFieldValues error\n");
+    Serial.print(true == getFieldValues(&a2b6, &valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
     Serial.print("Value X is: ");
     Serial.print(valX);
     Serial.println(" mT");

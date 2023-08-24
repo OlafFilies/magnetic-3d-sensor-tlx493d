@@ -12,10 +12,6 @@
 #define log  (Serial.print)
 
 
-
-#define USE_WIRE (1)
-
-
 template<typename TW> class TwoWire_Lib;
 
 
@@ -32,7 +28,7 @@ bool initI2CComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw);
 
 extern "C" {
     bool initI2CComLibIF(Sensor_ts *sensor, TwoWire &iic);
-    void myDebug(char *msg);
+    // void myDebug(char *msg);
 }
 
 

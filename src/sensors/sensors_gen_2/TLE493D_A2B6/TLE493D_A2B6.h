@@ -24,27 +24,25 @@
 bool TLE493D_A2B6_init(Sensor_ts *sensor);
 bool TLE493D_A2B6_deinit(Sensor_ts *sensor);
 
+void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, float *temp);
 bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp);
-bool TLE493D_A2B6_updateGetTemperature(Sensor_ts *sensor, float *temp);
 
+void TLE493D_A2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
-bool TLE493D_A2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
-bool TLE493D_A2B6_reset(Sensor_ts *sensor);
-bool TLE493D_A2B6_getDiagnosis(Sensor_ts *sensor);
-bool TLE493D_A2B6_calculateParity(Sensor_ts *sensor);
+void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
+bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
+
+// bool TLE493D_A2B6_reset(Sensor_ts *sensor);
+
+bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
+bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor);
 bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor);
 
 
-// individual functions
-void TLE493D_A2B6_get1ByteModeBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen);
-void TLE493D_A2B6_getTemperatureMeasurementsBuffer(Sensor_ts *sensor, uint8_t *buf, uint8_t *bufLen);
-
-
 // utility functions
-void TLE493D_A2B6_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result);
 
 
 #endif /** TLE493D_A2B6_H */

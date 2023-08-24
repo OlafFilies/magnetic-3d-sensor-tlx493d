@@ -42,11 +42,11 @@ int main(int argc, char *argv[]) {
 
     while( true ) {
         float x = 0, y = 0, z = 0;
-        TLE493D_A2B6_updateGetFieldValues(&a2b6, &x, &y, &z);
+        TLE493D_A2B6_getFieldValues(&a2b6, &x, &y, &z);
         printf("x = %f   y = %f   z = %f\n", x, y, z);
 
         float temperature = 0;
-        TLE493D_A2B6_updateGetTemperature(&a2b6, &temperature);
+        TLE493D_A2B6_getTemperature(&a2b6, &temperature);
         printf("temperature = %f\n", temperature);
 
         // printf("sensorType : %s\n", getTypeAsString(a2b6.sensorType));

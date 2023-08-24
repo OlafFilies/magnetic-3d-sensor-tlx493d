@@ -64,13 +64,13 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool updateGetTemperature(float *temperature) {
-            return sensor.updateGetTemperature(temperature);
+        bool getTemperature(float *temperature) {
+            return sensor.getTemperature(temperature);
         }
 
 
-        bool updateGetFieldValues(float *x, float *y, float *z) {
-            return sensor.updateGetFieldValues(x, y, z);
+        bool getFieldValues(float *x, float *y, float *z) {
+            return sensor.getFieldValues(x, y, z);
         }
 
 

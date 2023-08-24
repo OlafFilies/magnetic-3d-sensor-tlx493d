@@ -25,9 +25,15 @@
 #include <XMC1100.h>
 #include "core_cm0.h"
 
+
+#include "pal.h"
+
+
+#ifndef USE_WIRE
 extern "C" {
 	#include "i2c.h"
 }
+#endif
 
 
 extern "C" bool initIIC(Sensor_ts *sensor) {
@@ -57,13 +63,23 @@ extern "C" bool transferIIC(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_le
     #else
 
         if( tx_len > 0 ) {
-    Serial.print("writing : "); Serial.print(tx_buffer[0]); Serial.print(tx_buffer[1]); Serial.flush();
+    Serial.print("writing : "); Serial.print(tx_buffer[0]); Serial.print("   "); Serial.print(tx_buffer[1]); Serial.print("   "); Serial.flush();
         Serial.println(I2C_write(sensor->comLibIFParams.i2c_params.address, tx_buffer, tx_len)); Serial.flush();
         }
 
         if( rx_len > 0 ) {
     Serial.print("read : "); Serial.flush();
-            Serial.println(I2C_read(sensor->comLibIFParams.i2c_params.address, rx_buffer, rx_len)); Serial.flush();
+            Serial.println(I2C_read(sensor->comLibIFParams.i2c_params.address, rx_buffer, rx_len));
+ 
+    Serial.print("rx : ");
+
+            for(uint8_t i = 0; i < rx_len; ++i) {
+                Serial.print(rx_buffer[i]);
+                Serial.print("   ");
+            }
+
+            Serial.flush();
+            Serial.println("");
         }
 
         return true;
@@ -129,19 +145,26 @@ extern "C" void frameworkReset(Sensor_ts *sensor) {
 
     // Reset sequence
     // TLV, TLE, TLI
-//     Serial.println("frameworkReset ...");
-//     I2C_write_recover();
-// Serial.println("I2C_write_recover done.");
-//     I2C_write_recover();
-// Serial.println("I2C_write_recover done.");
+    Serial.println("frameworkReset ...");
+    Serial.flush();
+    // I2C_write_recover();
+    // Serial.println("I2C_write_recover done.");
+    // Serial.flush();
+    // I2C_write_recover();
+    // Serial.println("I2C_write_recover done.");
+    // Serial.flush();
 
-//     I2C_write_reset();
-//  Serial.println("I2C_write_reset done.");
-//     I2C_write_reset();
-// Serial.println("I2C_write_reset done.");
+    I2C_write_reset();
+    Serial.println("+I2C_write_reset done.");
+    Serial.flush();
 
-//     wait(30);
-// Serial.println("wait done.");
+    I2C_write_reset();
+    Serial.println("#I2C_write_reset done.");
+    Serial.flush();
+
+    wait(30);
+    Serial.println("wait done.");
+    Serial.flush();
 
 //    NVIC_SystemReset();
 // Serial.println("NVIC_SystemReset done.");

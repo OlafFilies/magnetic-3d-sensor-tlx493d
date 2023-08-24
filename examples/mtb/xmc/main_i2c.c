@@ -57,11 +57,11 @@ int main(int argc, char *argv[]) {
 
     while( true ) {
         float x = 0, y = 0, z = 0;
-        updateGetFieldValues(&a2b6, &x, &y, &z);
+        getFieldValues(&a2b6, &x, &y, &z);
         printf("x = %f   y = %f   z = %f\n", x, y, z);
 
         float temperature = 0;
-        updateGetTemperature(&a2b6, &temperature);
+        getTemperature(&a2b6, &temperature);
         printf("temperature = %f\n", temperature);
 
         // printf("sensorType : %s\n", getTypeAsString(a2b6.sensorType));

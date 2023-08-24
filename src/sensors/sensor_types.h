@@ -102,14 +102,18 @@ typedef union ComLibraryObject_ts {
 typedef bool (*InitFuncPtr)(Sensor_ts *);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
 
+typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, float *temp);
 typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, float *temp);
-typedef bool (*UpdateGetTemperatureFuncPtr)(Sensor_ts *, float *temp);
-typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
-typedef bool (*UpdateGetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
 
-typedef bool (*ResetFuncPtr)(Sensor_ts *);
-typedef bool (*GetDiagnosisFuncPtr)(Sensor_ts *);
-typedef bool (*CalculateParityFuncPtr)(Sensor_ts *);
+typedef void (*CalculateFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
+typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
+
+typedef bool (*GetSensorValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z, float *temp);
+
+// typedef bool (*ResetFuncPtr)(Sensor_ts *);
+
+typedef bool (*HasValidDataFuncPtr)(Sensor_ts *);
+typedef bool (*IsFunctionalFuncPtr)(Sensor_ts *);
 
 typedef bool (*SetDefaultConfigFuncPtr)(Sensor_ts *);
 typedef bool (*UpdateRegistersFuncPtr)(Sensor_ts *);
@@ -119,19 +123,53 @@ typedef struct CommonFunctions_ts {
     InitFuncPtr                  init;
     DeinitFuncPtr                deinit;
 
+    CalculateTemperatureFuncPtr  calculateTemperature;
     GetTemperatureFuncPtr        getTemperature;
-    UpdateGetTemperatureFuncPtr  updateGetTemperature;
 
+    CalculateFieldValuesFuncPtr  calculateFieldValues;
     GetFieldValuesFuncPtr        getFieldValues;
-    UpdateGetFieldValuesFuncPtr  updateGetFieldValues;
 
-    ResetFuncPtr                 reset;
-    GetDiagnosisFuncPtr          getDiagnosis;
-    CalculateParityFuncPtr       calculateParity;
+    GetSensorValuesFuncPtr       getSensorValues;
+
+    HasValidDataFuncPtr          hasValidData;
+    IsFunctionalFuncPtr          isFunctional;
+
+    // ResetFuncPtr                 reset;
 
     SetDefaultConfigFuncPtr      setDefaultConfig;
     UpdateRegistersFuncPtr       updateRegisterMap;
 } CommonFunctions_ts;
+
+
+typedef struct CommonBitfields_ts {
+    uint8_t ID;
+    uint8_t P;
+    uint8_t FF;
+    uint8_t CF;
+    uint8_t T;
+    uint8_t PD3;
+    uint8_t PD0;
+    uint8_t FRM;
+    uint8_t PRD;
+
+    uint8_t TYPE;
+    uint8_t HWV;
+
+    uint8_t BX_MSB;
+    uint8_t BY_MSB;
+    uint8_t BZ_MSB;
+    uint8_t TEMP_MSB;
+    uint8_t BX_LSB;
+    uint8_t BY_LSB;
+    uint8_t TEMP_LSB;
+    uint8_t BZ_LSB;
+    uint8_t TEMP2;
+    uint8_t DIAG;
+    uint8_t CONFIG;
+    uint8_t MOD1;
+    uint8_t MOD2;
+    uint8_t VER;
+} CommonBitfields_ts;
 
 
 /*
@@ -140,13 +178,13 @@ typedef struct CommonFunctions_ts {
 typedef struct Sensor_ts {
     uint8_t                 *regMap;
     Register_ts             *regDef;
+    CommonBitfields_ts       commonBitfields;
+
+    CommonFunctions_ts      *functions;
+
     ComLibraryFunctions_ts  *comLibIF;
     ComLibraryParameters_ts  comLibIFParams;
     ComLibraryObject_ts      comLibObj;
-
-    // #include "defineCommunicationLibraryObject.h"
-
-    CommonFunctions_ts      *functions;
 
     uint8_t                               regMapSize;
     SupportedSensorTypes_te               sensorType;

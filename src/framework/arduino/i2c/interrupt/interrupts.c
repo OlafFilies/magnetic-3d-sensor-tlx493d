@@ -16,10 +16,13 @@
 ******************************************************************************
 */
 
+#include "pal.h"
+
+#ifdef USE_INT
+
 
 #include "conf_interrupts.h"
 #include "interrupts.h"
-#include "i2c.h"
 
 #include <xmc_scu.h>
 #include <stdbool.h>
@@ -31,13 +34,14 @@
 #include <xmc_gpio.h>
 // #include "src/TLx493D/interface.h"
 
+#include "i2c.h"
 
 
-// static struct {
-// 	volatile bool ignore_next_int_CCU;
-// 	volatile bool ignore_next_int_ERU;
-// 	volatile bool TLI_detected;
-// } _local = {0};
+static struct {
+	volatile bool ignore_next_int_CCU;
+	volatile bool ignore_next_int_ERU;
+	volatile bool TLI_detected;
+} _local = {0};
 
 
 void INT_init_ext_interrupts(void)
@@ -134,7 +138,7 @@ void INT_init_ext_interrupts(void)
 
 bool INT_get_TLI_detected(void)
 {
-	// return _local.TLI_detected;
+	return _local.TLI_detected;
 }
 
 /* Interrupt service routine called when an INT
@@ -142,16 +146,16 @@ bool INT_get_TLI_detected(void)
  * */
 void ERU0_0_IRQHandler()
 {
-	// if (_local.ignore_next_int_ERU) {
-	// 	_local.ignore_next_int_ERU = false;
-	// } else {
-	// 	_local.ignore_next_int_CCU = true;
+	if (_local.ignore_next_int_ERU) {
+		_local.ignore_next_int_ERU = false;
+	} else {
+		_local.ignore_next_int_CCU = true;
 
-	// 	// notify GUI_sensor system that there is data available
-	// 	#ifdef _DATA_READY
-	// 	_DATA_READY();
-	// 	#endif
-	// }
+		// notify GUI_sensor system that there is data available
+		#ifdef _DATA_READY
+		_DATA_READY();
+		#endif
+	}
 
 	// Clear IRQ flags
 	XMC_ERU_ETL_ClearStatusFlag(ERU0_ETL2);
@@ -163,18 +167,20 @@ void ERU0_0_IRQHandler()
  * */
 void CCU40_0_IRQHandler()
 {
-	// // only handle interrupt if caused by negedge
-	// if ((CCU40_CC40->INTS >> CCU4_CC4_INTS_E0AS_Pos) & 1u) {
-	// 	_local.TLI_detected = true;
-	// 	if (_local.ignore_next_int_CCU) {
-	// 		_local.ignore_next_int_CCU = false;
-	// 	} else {
-	// 		_local.ignore_next_int_ERU = true;
+	// only handle interrupt if caused by negedge
+	if ((CCU40_CC40->INTS >> CCU4_CC4_INTS_E0AS_Pos) & 1u) {
+		_local.TLI_detected = true;
+		if (_local.ignore_next_int_CCU) {
+			_local.ignore_next_int_CCU = false;
+		} else {
+			_local.ignore_next_int_ERU = true;
 
-	// 		// notify GUI_sensor system that there is data available
-	// 		#ifdef _DATA_READY
-	// 		_DATA_READY();
-	// 		#endif
-	// 	}
-	// }
+			// notify GUI_sensor system that there is data available
+			#ifdef _DATA_READY
+			_DATA_READY();
+			#endif
+		}
+	}
 }
+
+#endif

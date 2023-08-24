@@ -68,8 +68,8 @@ void setup() {
     Serial.begin(115200);
 
     // required for S2Go
-    // pinMode(LED2, OUTPUT);
-    // digitalWrite(LED2, HIGH);
+    pinMode(LED2, OUTPUT);
+    digitalWrite(LED2, HIGH);
 
     init(&a2b6, TLE493D_A2B6_e);
     initI2CComLibIF(&a2b6, Wire);
@@ -77,6 +77,7 @@ void setup() {
 
     Serial.print("setup done.\n");
 }
+
 
 // Arduino main loop method
 void loop() {

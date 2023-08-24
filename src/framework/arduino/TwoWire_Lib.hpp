@@ -19,6 +19,9 @@ extern "C" {
 }
 
 
+#include "pal.h"
+
+
 template<typename ComIF> class TwoWire_Lib {
 };
 

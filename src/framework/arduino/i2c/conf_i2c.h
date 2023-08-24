@@ -84,7 +84,8 @@ static const XMC_GPIO_CONFIG_t CONF_I2C_SCL_PIN_OUTPUT = {
 
 /* USIC configuration */
 static const XMC_I2C_CH_CONFIG_t I2C_master_conf = {
-	.baudrate = 10000U,
+	.baudrate = 100000U,
+	// .baudrate = 400000U,
 };
 
 #endif /* SRC_PERIPHERALS_I2C_CONF_I2C_H_ */
