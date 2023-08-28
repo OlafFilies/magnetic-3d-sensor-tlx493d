@@ -139,15 +139,15 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
                                 .deinit                = TLE493D_A1B6_deinit,
 
-                                .getTemperature        = TLE493D_A1B6_getTemperature,
-                                .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
+                                // .getTemperature        = TLE493D_A1B6_getTemperature,
+                                // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
 
                                 // .getFieldValues        = TLE493D_A1B6_getFieldValues,
                                 // .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
 
                                 // .reset                 = TLE493D_A1B6_reset,
                                 // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
-                                .calculateParity       = TLE493D_A1B6_calculateParity,
+                                // .calculateParity       = TLE493D_A1B6_calculateParity,
 
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
                                 .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
@@ -158,7 +158,6 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
 
 
 bool TLE493D_A1B6_init(Sensor_ts *sensor) {
-  
     sensor->regMap            = (uint8_t *) malloc(sizeof(uint8_t) * TLE493D_A1B6_REGISTER_MAP_SIZE);
     sensor->regDef            = TLE493D_A1B6_regDef;
     sensor->functions         = &TLE493D_A1B6_commonFunctions;

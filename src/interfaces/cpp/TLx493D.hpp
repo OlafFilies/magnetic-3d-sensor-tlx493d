@@ -57,22 +57,35 @@ class TLx493D {
         }
 
 
-        bool updateGetTemperature(float *temperature) {
-            return ::updateGetTemperature(&sensor, temperature);
+        bool getTemperature(float *temperature) {
+            return ::getTemperature(&sensor, temperature);
         }
 
 
-        bool updateGetFieldValues(float *x, float *y, float *z) {
-            return ::updateGetFieldValues(&sensor, x, y, z);
+        bool getFieldValues(float *x, float *y, float *z) {
+            return ::getFieldValues(&sensor, x, y, z);
         }
+
 
         bool enableTemperature() {
             return ::enableTemperature(&sensor);
         }
 
+
         bool disableTemperature() {
             return ::disableTemperature(&sensor);
         }
+
+
+        bool enableInterrupt() {
+            return ::enableInterrupt(&sensor);
+        }
+
+
+        bool disableInterrupt() {
+            return ::disableInterrupt(&sensor);
+        }
+
 
         Sensor_ts *getSensorStruct() {
             return &sensor;
@@ -102,7 +115,6 @@ class TLx493D {
         uint8_t getI2CAddress() {
             return sensor.comLibIFParams.i2c_params.address;
         }
-
 
     private:
 

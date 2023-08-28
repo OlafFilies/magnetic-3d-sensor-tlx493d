@@ -25,32 +25,32 @@
 /** Common to the same generation of senors */
 #include "sensors_gen_2_config_common.h"
 #include "sensors_gen_2_common.h"
-#include "sensors_gen_2_utils.h"
 
 /** Sensor specific includes */
 #include "TLV493D_A2BW_config.h"
 
-typedef struct TLV493D_A2BW_functions_ts {
-    InitFuncPtr                         init;
-    DeinitFuncPtr                       deinit;
-    GetTemperatureFuncPtr               getTemperature;
-    UpdateGetTemperatureFuncPtr         updateGetTemperature;
-    GetFieldValuesFuncPtr               getFieldValues;
-    UpdateGetFieldValuesFuncPtr         updateGetFieldValues;
-    ResetFuncPtr                        reset;
-    GetDiagnosisFuncPtr                 getDiagnosis;
-    CalculateParityFuncPtr              calculateParity;
-    UpdateRegistersFuncPtr              updateRegisterMap;
-    EnableTemperatureFuncPtr            enableTemperature;
-    DisableTemperatureFuncPtr           disableTemperature;
-} TLV493D_A2BW_functions_ts;
+// typedef struct TLV493D_A2BW_functions_ts {
+//     InitFuncPtr                         init;
+//     DeinitFuncPtr                       deinit;
+//     GetTemperatureFuncPtr               getTemperature;
+//     UpdateGetTemperatureFuncPtr         updateGetTemperature;
+//     GetFieldValuesFuncPtr               getFieldValues;
+//     UpdateGetFieldValuesFuncPtr         updateGetFieldValues;
+//     ResetFuncPtr                        reset;
+//     GetDiagnosisFuncPtr                 getDiagnosis;
+//     CalculateParityFuncPtr              calculateParity;
+//     UpdateRegistersFuncPtr              updateRegisterMap;
+//     EnableTemperatureFuncPtr            enableTemperature;
+//     DisableTemperatureFuncPtr           disableTemperature;
+//     EnableInterruptFuncPtr              enableInterrupt;
+//     DisableInterruptFuncPtr             disableInterrupt;
+// } TLV493D_A2BW_functions_ts;
 
 /**
  * @brief Initializes the XENSIV™ TLV493D-A2BW magnetic 3D sensor
- * It initializes the sensor structure and checks if the right communication protocol is provided
- *
+ * It initializes the sensor structure and sets the I2C communication protocol
+ * 
  * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
- * @param[in] comLibIF Communication interface type of the sensor
  * @return true - If successful
  * @return false - If unsuccessful
  */
@@ -67,6 +67,17 @@ bool TLV493D_A2BW_init(Sensor_ts *sensor);
 bool TLV493D_A2BW_deinit(Sensor_ts *sensor);
 
 /**
+ * @brief Updates the required registers to read the temperature value of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * It updates the required registers and then calls the getTemperature() function of the sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @param[in, out] temp Retrieved temperature value of the sensor
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+void TLV493D_A2BW_calculateTemperature(Sensor_ts *sensor, float *temp);
+
+/**
  * @brief Retrieves the temperature value of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
  * It reads out the required registers to calculate the temperature value.
  * 
@@ -78,15 +89,17 @@ bool TLV493D_A2BW_deinit(Sensor_ts *sensor);
 bool TLV493D_A2BW_getTemperature(Sensor_ts *sensor, float *temp);
 
 /**
- * @brief Updates the required registers to read the temperature value of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
- * It updates the required registers and then calls the getTemperature() function of the sensor
+ * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * It updates the required registers and then calls the getFieldValues() function of the sensor
  * 
  * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
- * @param[in, out] temp Retrieved temperature value of the sensor
+ * @param[in, out] x Retrieved magnetic value of the X-Axis
+ * @param[in, out] y Retrieved magnetic value of the Y-Axis
+ * @param[in, out] z Retrieved magnetic value of the Z-Axis
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLV493D_A2BW_updateGetTemperature(Sensor_ts *sensor, float *temp);
+void TLV493D_A2BW_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
 /**
  * @brief Retrieves the magnetic field values of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
@@ -101,18 +114,7 @@ bool TLV493D_A2BW_updateGetTemperature(Sensor_ts *sensor, float *temp);
  */
 bool TLV493D_A2BW_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
-/**
- * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
- * It updates the required registers and then calls the getFieldValues() function of the sensor
- * 
- * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
- * @param[in, out] x Retrieved magnetic value of the X-Axis
- * @param[in, out] y Retrieved magnetic value of the Y-Axis
- * @param[in, out] z Retrieved magnetic value of the Z-Axis
- * @return true - If successful
- * @return false - If unsuccessful
- */
-bool TLV493D_A2BW_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
+bool TLV493D_A2BW_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 
 bool TLV493D_A2BW_reset(Sensor_ts *sensor);
 bool TLV493D_A2BW_getDiagnosis(Sensor_ts *sensor);
@@ -162,5 +164,23 @@ bool TLV493D_A2BW_enableTemperature(Sensor_ts* sensor);
  * @return false - If unsuccessful
  */
 bool TLV493D_A2BW_disableTemperature(Sensor_ts *sensor);
+
+/**
+ * @brief Enables the interrupt after measurement completion of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLV493D_A2BW_enableInterrupt(Sensor_ts *sensor);
+
+/**
+ * @brief Disables the interrupt after measurement completion of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @return true - If successful
+ * @return false - If unsuccessful
+ */
+bool TLV493D_A2BW_disableInterrupt(Sensor_ts* sensor);
 
 #endif /** TLV493D_A2BW_H */

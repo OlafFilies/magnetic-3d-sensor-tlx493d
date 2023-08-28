@@ -28,6 +28,7 @@ Sensor3D<S2GoTemplateArduino, TwoWire_Lib, TwoWire, TLx493D> sensor3d(Wire, TLE4
 
 
 void setup() {
+    delay(5000);
     Serial.begin(115200);
     delay(100);
 
@@ -41,12 +42,12 @@ void loop() {
     float temp = 0.0;
     float valX = 0, valY = 0, valZ = 0;
 
-    Serial.print(true == sensor3d.updateGetTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
+    Serial.print(true == sensor3d.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    Serial.print(true == sensor3d.updateGetFieldValues(&valX, &valY, &valZ) ? "updateGetFieldValues ok\n" : "updateGetFieldValues error\n");
+    Serial.print(true == sensor3d.getFieldValues(&valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
     Serial.print("Value X is: ");
     Serial.print(valX);
     Serial.println(" mT");

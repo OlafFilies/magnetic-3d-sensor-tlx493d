@@ -24,19 +24,21 @@
 
 bool initIIC(Sensor_ts *sensor) {
     XMC_GPIO_CONFIG_t i2c_scl = {
-        .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT2,
-        .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM
+        .mode            = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT6,
+        // .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM,
+        .output_level    = XMC_GPIO_OUTPUT_LEVEL_HIGH,
     };
 
 
     XMC_GPIO_CONFIG_t i2c_sda = {
-        .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT2,
-        .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM
+        .mode            = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT7,
+        // .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM,
+        .output_level    = XMC_GPIO_OUTPUT_LEVEL_HIGH,
     };
 
     XMC_I2C_CH_CONFIG_t i2c_cfg = {
         .baudrate = 115200U,
-        .address = 0U
+        .address  = 0U,
     };
 
     I2CObject_ts  *i2c_obj = sensor->comLibObj.i2c_obj;
@@ -46,17 +48,15 @@ bool initIIC(Sensor_ts *sensor) {
 
     XMC_I2C_CH_SetInputSource(channel, XMC_I2C_CH_INPUT_SCL, i2c_obj->sourceSCL);
     XMC_I2C_CH_SetInputSource(channel, XMC_I2C_CH_INPUT_SDA, i2c_obj->sourceSDA);
-//    XMC_USIC_CH_SetInputSource(channel, XMC_USIC_CH_INPUT_DX0, XMC_I2C_config->input_source_dx0);
-//    XMC_USIC_CH_SetInputSource(channel, XMC_USIC_CH_INPUT_DX1, XMC_I2C_config->input_source_dx1);
 
 
+    // // configure i2c tx fifo
+    // XMC_USIC_CH_TXFIFO_Configure(channel, 16, XMC_USIC_CH_FIFO_SIZE_16WORDS, (uint32_t) 15);
 
-    /* configure i2c tx fifo */
-    XMC_USIC_CH_TXFIFO_Configure(channel, 16, XMC_USIC_CH_FIFO_SIZE_16WORDS, (uint32_t) 15);
-
-    /* configure i2c rx fifo */
-    XMC_USIC_CH_RXFIFO_Configure(channel, 0, XMC_USIC_CH_FIFO_SIZE_16WORDS, (uint32_t) 15);
+    // // configure i2c rx fifo
+    // XMC_USIC_CH_RXFIFO_Configure(channel, 0, XMC_USIC_CH_FIFO_SIZE_16WORDS, (uint32_t) 15);
     
+
     // XMC_USIC_CH_SetInterruptNodePointer(channel, XMC_USIC_CH_INTERRUPT_NODE_POINTER_PROTOCOL, XMC_I2C_config->protocol_irq_service_request);
     // NVIC_SetPriority((IRQn_Type)XMC_I2C_config->protocol_irq_num, 3U);
     // NVIC_EnableIRQ((IRQn_Type)XMC_I2C_config->protocol_irq_num);
@@ -65,16 +65,15 @@ bool initIIC(Sensor_ts *sensor) {
 
 
 
+	XMC_I2C_CH_ClearStatusFlag(channel, 0xFFFFFFFF);
     XMC_I2C_CH_Start(channel);
 
     XMC_GPIO_Init(i2c_obj->portSCL, i2c_obj->pinSCL, &i2c_scl);
     XMC_GPIO_Init(i2c_obj->portSDA, i2c_obj->pinSDA, &i2c_sda);
 
-	XMC_I2C_CH_ClearStatusFlag(channel, 0xFFFFFFFF);
-
     return true;
 }
- 
+
 
 bool deinitIIC(Sensor_ts *sensor) {
     I2CObject_ts  *i2c_obj = sensor->comLibObj.i2c_obj;
@@ -95,18 +94,18 @@ bool deinitIIC(Sensor_ts *sensor) {
 		// XMC_I2C_CH_DisableEvent(channel, (uint32_t) (XMC_I2C_CH_EVENT_NACK | XMC_I2C_CH_EVENT_DATA_LOST | XMC_I2C_CH_EVENT_ARBITRATION_LOST | XMC_I2C_CH_EVENT_ERROR));
 		
 	    // Reset buffer and clear all Status Flags
-		XMC_USIC_CH_TXFIFO_Flush(channel);
-		XMC_USIC_CH_RXFIFO_Flush(channel);
-		XMC_USIC_CH_SetTransmitBufferStatus(channel, XMC_USIC_CH_TBUF_STATUS_SET_IDLE);
+		// XMC_USIC_CH_TXFIFO_Flush(channel);
+		// XMC_USIC_CH_RXFIFO_Flush(channel);
+		// XMC_USIC_CH_SetTransmitBufferStatus(channel, XMC_USIC_CH_TBUF_STATUS_SET_IDLE);
 
     	XMC_I2C_CH_ClearStatusFlag(channel, 0xFFFFFFFF);
 
 
-		/* Disable i2c tx fifo */
-		XMC_USIC_CH_TXFIFO_Configure(channel, 16, XMC_USIC_CH_FIFO_DISABLED, (uint32_t) 15);
+		// /* Disable i2c tx fifo */
+		// XMC_USIC_CH_TXFIFO_Configure(channel, 16, XMC_USIC_CH_FIFO_DISABLED, (uint32_t) 15);
 
-		/* Disable i2c rx fifo */
-		XMC_USIC_CH_RXFIFO_Configure(channel, 0, XMC_USIC_CH_FIFO_DISABLED, (uint32_t) 15);
+		// /* Disable i2c rx fifo */
+		// XMC_USIC_CH_RXFIFO_Configure(channel, 0, XMC_USIC_CH_FIFO_DISABLED, (uint32_t) 15);
 	// // }
 
 
@@ -193,7 +192,7 @@ bool transferIIC(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t 
 		}
 
         // printf("rx_buffer : "); 
-        // for(int i = 0; i < 23; ++i) {
+        // for(int i = 0; i < sensor->regMapSize; ++i) {
         //     printf("%x   ", rx_buffer[i]);
         // }
         // printf("\n");
@@ -236,52 +235,18 @@ bool initI2CComLibIF(Sensor_ts *sensor, XMC_USIC_CH_t *const channel,
     sensor->comLibIF                     = &comLibIF_i2c;
 
     sensor->comLibIF->init.i2c_init(sensor);
+
     return true;
 }
 
 
-// void frameworkDelayMicroseconds(uint32_t us) {
-//     XMC_DelayUs(us);
-// }
-
-
-void frameworkReset(Sensor_ts *sensor) {
-    // XMC_USIC_CH_t *channel = sensor->comLibObj.i2c_obj->channel;
-
-    // XMC_I2C_CH_MasterStart(channel, 0xFF, XMC_I2C_CH_CMD_READ);
-    // // XMC_I2C_CH_MasterReceiveNack(channel);
-    // // XMC_I2C_CH_MasterStop(channel);
-
-
-    // initIIC(sensor);
-    // XMC_I2C_CH_MasterStart(channel, 0xFF, XMC_I2C_CH_CMD_READ);
-	// // XMC_I2C_CH_MasterReceiveNack(channel);
-    // // XMC_I2C_CH_MasterStop(channel);
-
-
-    // initIIC(sensor);
-    // XMC_I2C_CH_MasterStart(channel, 0x00, XMC_I2C_CH_CMD_WRITE);
-    // // XMC_I2C_CH_MasterStop(channel);
-
-
-    // initIIC(sensor);
-    // XMC_I2C_CH_MasterStart(channel, 0x00, XMC_I2C_CH_CMD_WRITE);
-    // // XMC_I2C_CH_MasterStop(channel);
-
-
-    // deinitIIC(sensor);
-    // initIIC(sensor);
-
-    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
-    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
-    // // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    // // sensor->comLibObj.i2c_obj->wire->endTransmission();
-    // // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    // // sensor->comLibObj.i2c_obj->wire->endTransmission();
-
-    // // // //If the uC has problems with this sequence: reset TwoWire-module.
-    // // sensor->comLibObj.i2c_obj->wire->end();
-    // // sensor->comLibObj.i2c_obj->wire->begin();
-
-    XMC_DelayUs(30);
-}
+void printRegMap(Sensor_ts *sensor) {
+    printf("regMap : "); 
+ 
+    for(int i = 0; i < sensor->regMapSize; ++i) {
+        printf("%x   ", sensor->regMap[i]);
+    }
+ 
+    printf("\n");
+ }
+ 

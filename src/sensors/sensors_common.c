@@ -32,8 +32,8 @@ bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
       case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
                               break;
 
-      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
-                              break;
+      // case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
+      //                         break;
 
       default : return false;
    }
@@ -48,41 +48,33 @@ bool getTemperature(Sensor_ts *sensor, float *temp) {
    return sensor->functions->getTemperature(sensor, temp);
 }
 
-
-bool updateGetTemperature(Sensor_ts *sensor, float *temp) {
-   return sensor->functions->updateGetTemperature(sensor, temp);
+void calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+   sensor->functions->calculateFieldValues(sensor, x, y, z);
 }
-
 
 bool getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
    return sensor->functions->getFieldValues(sensor, x, y, z);
 }
 
 
-bool updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-   return sensor->functions->updateGetFieldValues(sensor, x, y, z);
+bool getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp) {
+   return sensor->functions->getSensorValues(sensor, x, y, z, temp);
  }
 
 
-bool reset(Sensor_ts *sensor) {
-   return sensor->functions->reset(sensor);
-}
+// bool reset(Sensor_ts *sensor) {
+//    return sensor->functions->reset(sensor);
+// }
 
 
-bool getDiagnosis(Sensor_ts *sensor) {
-   return sensor->functions->getDiagnosis(sensor);
-}
-
-
-void calculateParity(Sensor_ts *sensor) {
-   return sensor->functions->calculateParity(sensor);
+bool hasValidData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidData(sensor);
 }
 
 
 bool setDefaultConfig(Sensor_ts *sensor) {
    return sensor->functions->setDefaultConfig(sensor);
 }
-
 
 bool updateRegisterMap(Sensor_ts *sensor) {
    return sensor->functions->updateRegisterMap(sensor);
@@ -94,6 +86,14 @@ bool enableTemperature(Sensor_ts *sensor) {
 
 bool disableTemperature(Sensor_ts *sensor) {
    return sensor->functions->disableTemperature(sensor);
+}
+
+bool enableInterrupt(Sensor_ts *sensor) {
+   return sensor->functions->enableInterrupt(sensor);
+}
+
+bool disableInterrupt(Sensor_ts *sensor) {
+   return sensor->functions->disableInterrupt(sensor);
 }
 
 // utility function
@@ -111,8 +111,8 @@ const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
       case TLE493D_P2B6_e : return "TLE493D_P2B6";
                            break;
 
-      case TLE493D_W2B6_e : return "TLE493D_W2B6";
-                           break;
+      // case TLE493D_W2B6_e : return "TLE493D_W2B6";
+      //                      break;
 
       case TLV493D_A2BW_e : return "TLV493D_A2BW";
                            break;
@@ -120,4 +120,22 @@ const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
       default : return "ERROR : Unknown sensorType !";
                break;
    }
+}
+
+
+uint8_t calculateParity(uint8_t data) {
+	data ^= data >> 4;
+	data ^= data >> 2;
+	data ^= data >> 1;
+	return data & 1U;
+}
+
+
+uint8_t getOddParity(uint8_t parity) {
+    return (parity ^ 1U) & 1U;
+}
+
+
+uint8_t getEvenParity(uint8_t parity) {
+    return parity & 1U;
 }

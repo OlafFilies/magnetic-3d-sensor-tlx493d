@@ -64,13 +64,13 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool updateGetTemperature(float *temperature) {
-            return sensor.updateGetTemperature(temperature);
+        bool getTemperature(float *temperature) {
+            return sensor.getTemperature(temperature);
         }
 
 
-        bool updateGetFieldValues(float *x, float *y, float *z) {
-            return sensor.updateGetFieldValues(x, y, z);
+        bool getFieldValues(float *x, float *y, float *z) {
+            return sensor.getFieldValues(x, y, z);
         }
 
         bool enableTemperature() {
@@ -81,12 +81,20 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             return sensor.disableTemperature();
         }
 
+        bool enableInterrupt() {
+            return sensor.enableInterrupt();
+        }
+
+
+        bool disableInterrupt() {
+            return sensor.disableInterrupt();
+        }
+
     private:
 
         BoardSupportClassType  bsc;
         ComLibraryIFType       comLIF;
         SensorClass            sensor;
 };
-
 
 #endif // MAGNETIC_3D_HPP

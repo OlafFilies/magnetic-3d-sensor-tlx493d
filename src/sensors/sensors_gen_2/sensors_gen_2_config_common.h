@@ -13,8 +13,14 @@
 #define GEN_2_STD_IIC_ADDR              0x35
 
 // A0
-#define GEN_2_STD_IIC_ADDR_WRITE_A0     0x6A
-#define GEN_2_STD_IIC_ADDR_READ_A0      0x6B
+#define GEN_2_STD_IIC_ADDR_WRITE_A0    0x6A
+#define GEN_2_STD_IIC_ADDR_READ_A0     0x6B
+
+
+#define GEN_2_REG_NUMBER            23
+
+
+// #define REGISTER_SIZE_IN_BITS       (8)
 
 #define GEN_2_REG_MAP_SIZE              23
 

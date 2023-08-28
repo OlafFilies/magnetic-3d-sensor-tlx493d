@@ -1,0 +1,89 @@
+@startwbs
+
+title 3d magnetic test directory tree
+
+* 3d_magnetic (root folder)
+
+
+
+** test
+'*** unit "test on build platform"
+*** unit "unit testing using Unity"
+**** shared
+***** unity "Unity sources"
+**** interfaces
+***** c
+***** cpp
+**** frameworks
+***** arduino
+***** mtb
+****** xmc
+****** psoc6
+**** sensors
+***** common
+****** gen_1
+****** gen_2
+****** gen_3
+***** TLE493D_A2B6
+***** TLE493D_W2B6
+***** TLE493D_A2B6
+
+@endwbs
+@startwbs
+
+title 3d magnetic library directory tree
+
+* 3d_magnetic (root folder)
+
+
+** config
+*** cmake
+*** devops
+*** make
+
+** doc
+*** doxygen
+*** readTheDocs
+
+** src
+*** interface
+
+*** 3d_magnetic
+**** 3d_magnetic_config_common.h
+**** 3d_magnetic_common.h
+**** 3d_magnetic_common.c
+
+**** 3d_magnetic_gen_1
+***** 3d_magnetic_gen_1_config_common.h
+***** 3d_magnetic_gen_1_common.h
+***** 3d_magnetic_gen_1_common.c
+
+
+***** TLE493D_A1B6
+****** 3d_magnetic_TLE493D_A1B6_config.h "? -> 3d_magnetic_gen_1_config_common.h"
+****** 3d_magnetic_TLE493D_A1B6.h "? -> 3d_magnetic_gen_1_common.h"
+****** 3d_magnetic_TLE493D_A1B6.c "? -> 3d_magnetic_gen_1_common.c"
+
+***** TLV493D_A1B6
+****** 3d_magnetic_TLV493D_A1B6_config.h "? -> 3d_magnetic_gen_1_config_common.h"
+****** 3d_magnetic_TLV493D_A1B6.h "? -> 3d_magnetic_gen_1_common.h"
+****** 3d_magnetic_TLV493D_A1B6.c "? -> 3d_magnetic_gen_1_common.c"
+
+
+**** 3d_magnetic_gen_2
+***** 3d_magnetic_gen_2_config.h
+***** 3d_magnetic_gen_2.h
+***** 3d_magnetic_gen_2.c
+
+
+**** 3d_magnetic_gen_3
+***** 3d_magnetic_gen_3_config.h
+***** 3d_magnetic_gen_3.h
+***** 3d_magnetic_gen_3.c
+
+** test
+*** unit "test on build platform"
+*** mcuUnitTest "test on MCU"
+
+
+@endwbs

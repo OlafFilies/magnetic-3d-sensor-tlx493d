@@ -19,25 +19,71 @@
 // project cpp includes
 #include "arduino_defines.h"
 #include "TwoWire_Lib.hpp"
+#include "xmc_common.h"
+#include "xmc_gpio.h"
+#include "xmc_i2c.h"
+#include <XMC1100.h>
+#include "core_cm0.h"
 
 
-extern "C" void frameworkDelayMicroseconds(uint32_t us);
+#include "pal.h"
 
-      
+
+#ifndef USE_WIRE
+extern "C" {
+	#include "i2c.h"
+}
+#endif
+
+
 extern "C" bool initIIC(Sensor_ts *sensor) {
-    sensor->comLibObj.i2c_obj->wire->init();
+    #ifdef USE_WIRE
+        sensor->comLibObj.i2c_obj->wire->init();
+    #else
+	    I2C_init();
+    #endif
+
     return true;
+
 }
 
 
 extern "C" bool deinitIIC(Sensor_ts *sensor) {
-    sensor->comLibObj.i2c_obj->wire->deinit();
+    #ifdef USE_WIRE
+        sensor->comLibObj.i2c_obj->wire->deinit();
+    #endif
+
     return true;
 }
 
 
 extern "C" bool transferIIC(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-    return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address, tx_buffer, tx_len, rx_buffer, rx_len);
+    #ifdef USE_WIRE
+        return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address, tx_buffer, tx_len, rx_buffer, rx_len);
+    #else
+
+        if( tx_len > 0 ) {
+    Serial.print("writing : "); Serial.print(tx_buffer[0]); Serial.print("   "); Serial.print(tx_buffer[1]); Serial.print("   "); Serial.flush();
+        Serial.println(I2C_write(sensor->comLibIFParams.i2c_params.address, tx_buffer, tx_len)); Serial.flush();
+        }
+
+        if( rx_len > 0 ) {
+    Serial.print("read : "); Serial.flush();
+            Serial.println(I2C_read(sensor->comLibIFParams.i2c_params.address, rx_buffer, rx_len));
+ 
+    Serial.print("rx : ");
+
+            for(uint8_t i = 0; i < rx_len; ++i) {
+                Serial.print(rx_buffer[i]);
+                Serial.print("   ");
+            }
+
+            Serial.flush();
+            Serial.println("");
+        }
+
+        return true;
+    #endif
 }
 
 
@@ -48,8 +94,13 @@ ComLibraryFunctions_ts  comLibIF_i2c = {
                                        };
 
 
+// TODO: change to use sensor as parameter to simplify the user interface across routines
 extern "C" void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
-    params->i2c_params.address = addr >> 1;
+    #ifdef USE_WIRE
+        params->i2c_params.address = addr >> 1;
+    #else
+        params->i2c_params.address = addr;
+    #endif
 }
 
 
@@ -91,17 +142,38 @@ extern "C" bool initI2CComLibIF(Sensor_ts *sensor, TwoWire &tw) {
 
 
 extern "C" void frameworkReset(Sensor_ts *sensor) {
-    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
-    // // sensor->comLibObj.i2c_obj->wire->requestFrom(0xFF, 0);
 
-    // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    // sensor->comLibObj.i2c_obj->wire->endTransmission();
-    // sensor->comLibObj.i2c_obj->wire->beginTransmission(0x00);
-    // sensor->comLibObj.i2c_obj->wire->endTransmission();
+    // Reset sequence
+    // TLV, TLE, TLI
+    Serial.println("frameworkReset ...");
+    Serial.flush();
+    // I2C_write_recover();
+    // Serial.println("I2C_write_recover done.");
+    // Serial.flush();
+    // I2C_write_recover();
+    // Serial.println("I2C_write_recover done.");
+    // Serial.flush();
 
-    // // //If the uC has problems with this sequence: reset TwoWire-module.
-    // sensor->comLibObj.i2c_obj->wire->end();
-    // sensor->comLibObj.i2c_obj->wire->begin();
+    I2C_write_reset();
+    Serial.println("+I2C_write_reset done.");
+    Serial.flush();
 
-    // delayMicroseconds(30);
+    I2C_write_reset();
+    Serial.println("#I2C_write_reset done.");
+    Serial.flush();
+
+    wait(30);
+    Serial.println("wait done.");
+    Serial.flush();
+
+//    NVIC_SystemReset();
+// Serial.println("NVIC_SystemReset done.");
+
+    // sensor->comLibIF->deinit.i2c_deinit(sensor);
+    // sensor->comLibIF->deinit.i2c_deinit(sensor);
+    // sensor->comLibIF->init.i2c_init(sensor);
+    // sensor->comLibIF->init.i2c_init(sensor);
+    // wait(30);
+
+    Serial.println("frameworkReset done.");
 }
