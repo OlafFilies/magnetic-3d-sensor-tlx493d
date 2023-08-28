@@ -142,8 +142,8 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 // .getTemperature        = TLE493D_A1B6_getTemperature,
                                 // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
 
-                                // .getFieldValues        = TLE493D_A1B6_getFieldValues,
-                                // .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
+                                .getFieldValues        = TLE493D_A1B6_getFieldValues,
+                                .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
 
                                 // .reset                 = TLE493D_A1B6_reset,
                                 // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
@@ -316,4 +316,25 @@ bool TLE493D_A1B6_disableParityTest(Sensor_ts *sensor) {
     gen_1_setBitfield(sensor, PT, TLE493D_A1B6_PARITY_TEST_DISABLE);
     TLE493D_A1B6_calculateParity(sensor);
     return TLE493D_A1B6_transferWriteRegisters(sensor);
+}
+
+bool TLE493D_A1B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+    int16_t valueX = 0, valueY = 0, valueZ = 0;
+
+    valueX = gen_1_concat_values(sensor->regMap[sensor->regDef[BX_MSB].address], sensor->regMap[sensor->regDef[BX_LSB].address], true);
+
+    valueY = gen_1_concat_values(sensor->regMap[sensor->regDef[BY_MSB].address], sensor->regMap[sensor->regDef[BY_LSB].address], true);
+
+    valueZ = gen_1_concat_values(sensor->regMap[sensor->regDef[BZ_MSB].address], sensor->regMap[sensor->regDef[BZ_LSB].address], true);
+
+    *x = ((float) valueX) * GEN_1_MAG_FIELD_MULT;
+    *y = ((float) valueY) * GEN_1_MAG_FIELD_MULT;
+    *z = ((float) valueZ) * GEN_1_MAG_FIELD_MULT;
+
+    return true;
+}
+
+bool TLE493D_A1B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+    bool b = TLE493D_A1B6_updateRegisterMap(sensor);
+    return b && TLE493D_A1B6_getFieldValues(sensor, x, y, z);
 }
