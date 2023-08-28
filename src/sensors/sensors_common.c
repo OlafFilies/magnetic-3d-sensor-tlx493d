@@ -43,6 +43,9 @@ bool deinit(Sensor_ts *sensor) {
    return sensor->functions->deinit(sensor);
 }
 
+void calculateTemperature(Sensor_ts *sensor, float *temp) {
+   return sensor->functions->calculateTemperature(sensor, temp);
+}
 
 bool getTemperature(Sensor_ts *sensor, float *temp) {
    return sensor->functions->getTemperature(sensor, temp);
@@ -70,7 +73,6 @@ bool getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *tem
 bool hasValidData(Sensor_ts *sensor) {
    return sensor->functions->hasValidData(sensor);
 }
-
 
 bool setDefaultConfig(Sensor_ts *sensor) {
    return sensor->functions->setDefaultConfig(sensor);

@@ -87,7 +87,6 @@ void setup() {
     Serial.print("setup done.\n");
 }
 
-
 // Arduino main loop method
 void loop() {
     Serial.println("\n");
