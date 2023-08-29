@@ -12,20 +12,20 @@
 
 typedef struct Sensor_ts Sensor_ts;
 
-
 /*
   List of all supported sensor devices.
 */
 typedef enum {
-               TLE493D_A1B6_e = 0, 
+               TLE493D_A1B6_e = 0,
                TLV493D_A1B6_e = 1,
                TLE493D_A2B6_e = 2,
                TLE493D_P2B6_e = 3,
-               TLE493D_W2B6_e = 4 } SupportedSensorTypes_te;
+               TLE493D_W2B6_e = 4,
+               TLV493D_A2BW_e = 5 } SupportedSensorTypes_te;
 
 
 /*
-  List of all supported communictaion interfaces.
+  List of all supported communication interfaces.
 */
 typedef enum {
                I2C_e = 0,
@@ -38,19 +38,19 @@ typedef enum {
 */
 typedef enum { READ_MODE_e = 0, 
                WRITE_MODE_e,
-               READ_WRITE_MODE_e } REG_ACESS_MODE_te;
+               READ_WRITE_MODE_e } REG_ACCESS_MODE_te;
 
 
 /*
   Structure to store name, access mode, address, mask and offset of registers.
 */
 typedef struct Register_ts {
-    uint8_t            name;
-    REG_ACESS_MODE_te  accessMode;
-    uint8_t            address;
-    uint8_t            mask;
-    uint8_t            offset;
-    uint8_t            numBits;
+    uint8_t             name;
+    REG_ACCESS_MODE_te  accessMode;
+    uint8_t             address;
+    uint8_t             mask;
+    uint8_t             offset;
+    uint8_t             numBits;
 } Register_ts;
 
 
@@ -116,32 +116,47 @@ typedef bool (*HasValidDataFuncPtr)(Sensor_ts *);
 typedef bool (*IsFunctionalFuncPtr)(Sensor_ts *);
 
 typedef bool (*SetDefaultConfigFuncPtr)(Sensor_ts *);
-typedef bool (*UpdateRegistersFuncPtr)(Sensor_ts *);
+typedef bool (*ReadRegistersFuncPtr)(Sensor_ts *);
+
+typedef bool (*EnableTemperatureFuncPtr)(Sensor_ts *);
+typedef bool (*DisableTemperatureFuncPtr)(Sensor_ts *);
+
+typedef bool (*EnableInterruptFuncPtr)(Sensor_ts *);
+typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 
 
 typedef struct CommonFunctions_ts {
-    InitFuncPtr                  init;
-    DeinitFuncPtr                deinit;
+    InitFuncPtr                     init;
+    DeinitFuncPtr                   deinit;
 
-    CalculateTemperatureFuncPtr  calculateTemperature;
-    GetTemperatureFuncPtr        getTemperature;
+    CalculateTemperatureFuncPtr     calculateTemperature;
+    GetTemperatureFuncPtr           getTemperature;
 
-    CalculateFieldValuesFuncPtr  calculateFieldValues;
-    GetFieldValuesFuncPtr        getFieldValues;
-
-    GetSensorValuesFuncPtr       getSensorValues;
-
-    HasValidDataFuncPtr          hasValidData;
-    IsFunctionalFuncPtr          isFunctional;
+    CalculateFieldValuesFuncPtr     calculateFieldValues;
+    GetFieldValuesFuncPtr           getFieldValues;
+    
+    GetSensorValuesFuncPtr          getSensorValues;
+    
+    HasValidDataFuncPtr             hasValidData;
+    IsFunctionalFuncPtr             isFunctional;
 
     // ResetFuncPtr                 reset;
 
-    SetDefaultConfigFuncPtr      setDefaultConfig;
-    UpdateRegistersFuncPtr       updateRegisterMap;
+    SetDefaultConfigFuncPtr         setDefaultConfig;
+    ReadRegistersFuncPtr            readRegisters;
+
+    EnableTemperatureFuncPtr        enableTemperature;
+    DisableTemperatureFuncPtr       disableTemperature;
+
+    EnableInterruptFuncPtr          enableInterrupt;
+    DisableInterruptFuncPtr         disableInterrupt;
 } CommonFunctions_ts;
 
 
 typedef struct CommonBitfields_ts {
+    uint8_t CP;
+    uint8_t FP;
+
     uint8_t ID;
     uint8_t P;
     uint8_t FF;
@@ -164,12 +179,16 @@ typedef struct CommonBitfields_ts {
     uint8_t TEMP_LSB;
     uint8_t BZ_LSB;
     uint8_t TEMP2;
+} CommonBitfields_ts;
+
+
+typedef struct CommonRegisters_ts {
     uint8_t DIAG;
     uint8_t CONFIG;
     uint8_t MOD1;
     uint8_t MOD2;
     uint8_t VER;
-} CommonBitfields_ts;
+} CommonRegisters_ts;
 
 
 /*
@@ -179,7 +198,7 @@ typedef struct Sensor_ts {
     uint8_t                 *regMap;
     Register_ts             *regDef;
     CommonBitfields_ts       commonBitfields;
-
+    CommonRegisters_ts       commonRegisters;
     CommonFunctions_ts      *functions;
 
     ComLibraryFunctions_ts  *comLibIF;

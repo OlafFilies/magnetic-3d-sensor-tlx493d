@@ -41,7 +41,7 @@
 // }
 
 
-// ComLibraryFunctions_ts  comLibIF_spi = { 
+// ComLibraryFunctions_ts  comLibIF_spi = {
 //                                            .init.spi_init         = SPIInitFunc,
 //                                            .deinit.spi_deinit     = SPIDeinitFunc,
 //                                            .transfer.spi_transfer = SPITransferFunc,

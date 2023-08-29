@@ -1,58 +1,127 @@
+FQBN ?=
+PORT ?=
+TEST ?=
 
-ifeq ($(WIN_USER),)
-    $(error "Must set variable WIN_USER (Windows user account name) in order to be able to copy files to Arduino or MTB directories !")
-endif
-
-ifeq ($(BOARD),)
-    $(error "Must set variable BOARD (borad name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to Arduino or MTB directories !")
-endif
+$(info FQBN : $(FQBN))
+$(info PORT : $(PORT))
+$(info TEST : $(TEST))
 
 
+### Arduino targets
 arduino:
-	-rm -rf ~/arduino3DMagneticSensors
-	cp -r config/arduinoLibraryTemplate ~/arduino3DMagneticSensors
-	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} ~/arduino3DMagneticSensors/src \;
-	rm -rf /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
-	mkdir /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
-	cp -r ~/arduino3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
-	rm -f /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors/src/*.[ch]pp.*
+	-rm -rf build/*
+	cp -r config/arduinoLibraryTemplate build
+	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} build \;
 
 
 arduino_plain_c: arduino
-	cp examples/arduino/simple_plain_c.ino /mnt/c/Users/$(WIN_USER)/Documents/Arduino/3dmagnetic/3dmagnetic.ino
+	cp examples/arduino/simple_plain_c.ino build/build.ino
  
 
 arduino_cpp: arduino
-	cp examples/arduino/simple.ino /mnt/c/Users/$(WIN_USER)/Documents/Arduino/3dmagnetic/3dmagnetic.ino
+	cp examples/arduino/simple.ino build/build.ino
 
 
-arduino_unity:
-	rm -rf ~/arduino3DMagneticSensors
-	cp -r config/arduinoLibraryTemplate ~/arduino3DMagneticSensors
-	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} ~/arduino3DMagneticSensors/src \;
-	cp -r test/Unity/*.[hc] ~/arduino3DMagneticSensors/src
-	rm -rf /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
-	mkdir /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
-	rm -rf /mnt/c/Users/$(WIN_USER)/Documents/Arduino/ut_TLE493D_A2B6
-	mkdir /mnt/c/Users/$(WIN_USER)/Documents/Arduino/ut_TLE493D_A2B6
-	cp test/src/arduino/ut_TLE493D_A2B6.ino /mnt/c/Users/$(WIN_USER)/Documents/Arduino/ut_TLE493D_A2B6/ut_TLE493D_A2B6.ino
-	cp -r ~/arduino3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/Documents/Arduino/libraries/IFX3DMagneticSensors
+arduino_unity: arduino
+ifeq ($(TEST),)
+	$(error "Must set variable TEST in order to be able to compile and flash a specific Arduino unity tests !")
+else
+	cp -r test/Unity/*.[hc] build
+	cp test/src/arduino/ut_$(TEST).ino build/build.ino
+endif
 
 
+# For WSL and Windows :
+# download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
+arduino_prepare:
+	arduino-cli.exe core update-index
+	arduino-cli.exe core install Infineon:xmc
+	arduino-cli.exe core update-index
+	arduino-cli.exe core search Infineon
+	arduino-cli.exe core list
+	arduino-cli.exe board listall
+	arduino-cli.exe board listall Infineon
+
+
+arduino_compile:
+ifeq ($(FQBN),)
+	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
+else
+	arduino-cli.exe compile --fqbn $(FQBN) --log --build-property "compiler.c.extra_flags+=\"-DUNITY_INCLUDE_CONFIG_H=1\"" build
+endif
+
+
+arduino_upload:	
+ifeq ($(PORT),)
+	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
+endif
+ifeq ($(FQBN),)
+	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
+else
+	arduino-cli.exe upload -p $(PORT) --fqbn $(FQBN) build
+endif
+
+
+arduino_flash: arduino_compile arduino_upload
+
+
+arduino_monitor:
+ifeq ($(PORT),)
+	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
+endif
+ifeq ($(FQBN),)
+	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
+else
+	arduino-cli.exe monitor -c baudrate=115200 -p $(PORT) --fqbn $(FQBN)
+endif
+
+
+# TODO: improve !
+### MTB targets
+# ifeq ($(WIN_USER),)
+
+# 	$(error "Must set variable WIN_USER (Windows user account name) in order to be able to copy files to Arduino or MTB directories !")
+
+# elsifeq ($(BOARD),)
+
+# 	$(error "Must set variable BOARD (board name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to Arduino or MTB directories !")
+
+# endif
 mtb_base:
+ifeq ($(WIN_USER),)
+	$(error "Must set variable WIN_USER (Windows user account name) in order to be able to copy files to MTB directories !")
+endif
+ifeq ($(BOARD),)
+	$(error "Must set variable BOARD (board name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to Arduino or MTB directories !")
+else
 	-rm -rf ~/mtb3DMagneticSensors
 	mkdir -p ~/mtb3DMagneticSensors/src
 	find src -name '*.[hc]' -a \( \! -path '*arduino*' \) -print -exec cp {} ~/mtb3DMagneticSensors/src \;
 	rm -rf /mnt/c/Users/$(WIN_USER)/mtw/$(BOARD)_I2C_Master_and_Slave/IFX3DMagneticSensors
 	mkdir /mnt/c/Users/$(WIN_USER)/mtw/$(BOARD)_I2C_Master_and_Slave/IFX3DMagneticSensors
+endif
 
 
 mtb_xmc: mtb_base
+ifeq ($(WIN_USER),)
+	$(error "Must set variable WIN_USER (Windows user account name) in order to be able to copy files to MTB directories !")
+endif
+ifeq ($(BOARD),)
+	$(error "Must set variable BOARD (board name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to MTB directories !")
+else
 	cp examples/mtb/xmc/main_i2c.c ~/mtb3DMagneticSensors/src
 	cp -r ~/mtb3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/mtw/$(BOARD)_I2C_Master_and_Slave/IFX3DMagneticSensors
+endif
 
 
 mtb_xmc_test: mtb_base
+ifeq ($(WIN_USER),)
+	$(error "Must set variable WIN_USER (Windows user account name) in order to be able to copy files to MTB directories !")
+endif
+ifeq ($(BOARD),)
+	$(error "Must set variable BOARD (board name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to MTB directories !")
+else
 	cp test/src/mtb/xmc/ut_TLE493D_A2B6.c ~/mtb3DMagneticSensors/src
 	cp -r test/Unity ~/mtb3DMagneticSensors/src
 	cp -r ~/mtb3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/mtw/$(BOARD)_I2C_Master_and_Slave/IFX3DMagneticSensors
+endif

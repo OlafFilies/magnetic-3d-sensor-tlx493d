@@ -67,6 +67,26 @@ class TLx493D {
         }
 
 
+        bool enableTemperature() {
+            return ::enableTemperature(&sensor);
+        }
+
+
+        bool disableTemperature() {
+            return ::disableTemperature(&sensor);
+        }
+
+
+        bool enableInterrupt() {
+            return ::enableInterrupt(&sensor);
+        }
+
+
+        bool disableInterrupt() {
+            return ::disableInterrupt(&sensor);
+        }
+
+
         Sensor_ts *getSensorStruct() {
             return &sensor;
         }
@@ -96,7 +116,6 @@ class TLx493D {
             return sensor.comLibIFParams.i2c_params.address;
         }
 
-
     private:
 
         Sensor_ts  sensor;
@@ -104,4 +123,3 @@ class TLx493D {
 
 
 #endif // TLx493D_HPP
-

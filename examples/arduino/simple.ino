@@ -11,7 +11,6 @@
 #include "TwoWire_Lib.hpp"
 #include "Magnetic_3d.hpp"
 
-
 extern "C" {
   #include "sensor_types.h"
 }
@@ -25,7 +24,7 @@ void myPostTransferHook() {
 }
 
 
-Sensor3D<S2GoTemplateArduino, TwoWire_Lib, TwoWire, TLx493D> sensor3d(Wire, TLE493D_A2B6_e, I2C_e);
+Sensor3D<S2GoTemplateArduino, TwoWire_Lib, TwoWire, TLx493D> dut(Wire, TLE493D_A2B6_e, I2C_e);
 
 
 void setup() {
@@ -33,7 +32,7 @@ void setup() {
     Serial.begin(115200);
     delay(100);
 
-    sensor3d.begin();
+    dut.begin();
 
     delay(100);
     Serial.print("setup done.\n");
@@ -43,12 +42,12 @@ void loop() {
     float temp = 0.0;
     float valX = 0, valY = 0, valZ = 0;
 
-    Serial.print(true == sensor3d.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
+    Serial.print(true == dut.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    Serial.print(true == sensor3d.getFieldValues(&valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
+    Serial.print(true == dut.getFieldValues(&valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
     Serial.print("Value X is: ");
     Serial.print(valX);
     Serial.println(" mT");

@@ -60,12 +60,12 @@ updateGetTemperature
 </code>;
 ***[#lightgreen]:
 <code>
-getFieldValues
+calculateFieldValues
 
 </code>;
 ***[#lightgreen]:
 <code>
-updateGetFieldValues
+getFieldValues
 
 </code>;
 ***[#lightgreen]:

@@ -9,7 +9,7 @@
 // #include "sensors_common.h"
 
 // common to same generation of sensors
-#include "sensors_gen_2_config_common.h"
+#include "sensors_gen_2_common_defines.h"
 // #include "sensors_gen_2_common.h"
 
 // sensor specicifc includes

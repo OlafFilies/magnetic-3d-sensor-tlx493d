@@ -1,11 +1,9 @@
 #ifndef SENSORS_COMMON_H
 #define SENSORS_COMMON_H
 
-
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-
 
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType);
@@ -25,8 +23,13 @@ bool hasValidData(Sensor_ts *sensor);
 bool isFunctional(Sensor_ts *sensor);
 
 bool setDefaultConfig(Sensor_ts *sensor);
-bool updateRegisterMap(Sensor_ts *sensor);
+bool readRegisters(Sensor_ts *sensor);
 
+bool enableTemperature(Sensor_ts *sensor);
+bool disableTemperature(Sensor_ts *sensor);
+
+bool enableInterrupt(Sensor_ts* sensor);
+bool disableInterrupt(Sensor_ts* sensor);
 
 // utilities
 const char *getTypeAsString(SupportedSensorTypes_te sensorType);

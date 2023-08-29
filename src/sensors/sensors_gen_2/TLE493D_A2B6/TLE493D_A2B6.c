@@ -8,15 +8,15 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-#include "sensors_config_common.h"
+#include "sensors_common_defines.h"
 #include "sensors_common.h"
 
 // common to same generation of sensors
-#include "sensors_gen_2_config_common.h"
+#include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
 // sensor specicifc includes
-#include "TLE493D_A2B6_config.h"
+#include "TLE493D_A2B6_defines.h"
 #include "TLE493D_A2B6.h"
 
 
@@ -130,26 +130,27 @@ CommonFunctions_ts TLE493D_A2B6_commonFunctions = {
                                 .getSensorValues       = TLE493D_A2B6_getSensorValues,
 
                                 // .reset                 = TLE493D_A2B6_reset,
-                                .hasValidData          = TLE493D_A2B6_hasValidData,
-                                .isFunctional          = TLE493D_A2B6_isFunctional,
+                                .hasValidData          = gen_2_hasValidData,
+                                .isFunctional          = gen_2_isFunctional,
 
                                 .setDefaultConfig      = TLE493D_A2B6_setDefaultConfig,
-                                .updateRegisterMap     = TLE493D_A2B6_updateRegisterMap,
+                                .readRegisters         = gen_2_readRegisters,
                               };
 
 
 // TODO: add parameter IICAddress or ad function to set address.
 bool TLE493D_A2B6_init(Sensor_ts *sensor) {
     // regMap must be sensor specific, not sensor type specific, therefore malloc.
-    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * TLE493D_A2B6_REGISTER_MAP_SIZE);
+    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
     sensor->regDef            = TLE493D_A2B6_regDef;
-    sensor->commonBitfields   = (CommonBitfields_ts) { .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
+    sensor->commonBitfields   = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
                                                        .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
-                                                       .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB,
-                                                       .TEMP2 = TEMP2_REG, .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
+                                                       .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
+                                                     };
+    sensor->commonRegisters   = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
 
     sensor->functions         = &TLE493D_A2B6_commonFunctions;
-    sensor->regMapSize        = TLE493D_A2B6_REGISTER_MAP_SIZE;
+    sensor->regMapSize        = GEN_2_REG_MAP_SIZE;
     sensor->sensorType        = TLE493D_A2B6_e;
     sensor->comIFType         = I2C_e;
     sensor->comLibIF          = NULL;
@@ -174,8 +175,7 @@ bool TLE493D_A2B6_deinit(Sensor_ts *sensor) {
 void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = 0;
 
-    // concatBytes(sensor, &sensor->regDef[TEMP_MSB], &sensor->regDef[TEMP_LSB], &value);
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
+    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
 
     value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
     *temp = (((float) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
@@ -183,7 +183,7 @@ void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, float *temp) {
 
 
 bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp) {
-    if( TLE493D_A2B6_updateRegisterMap(sensor) ) {
+    if( gen_2_readRegisters(sensor) ) {
         TLE493D_A2B6_calculateTemperature(sensor, temp);
         return true;
     }
@@ -195,12 +195,9 @@ bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp) {
 void TLE493D_A2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    // concatBytes(sensor, &sensor->regDef[BX_MSB], &sensor->regDef[BX_LSB], &valueX);
-    // concatBytes(sensor, &sensor->regDef[BY_MSB], &sensor->regDef[BY_LSB], &valueY);
-    // concatBytes(sensor, &sensor->regDef[BZ_MSB], &sensor->regDef[BZ_LSB], &valueZ);
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
+    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
+    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
+    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
 
     *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
     *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
@@ -209,7 +206,7 @@ void TLE493D_A2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, fl
 
 
 bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-    if( TLE493D_A2B6_updateRegisterMap(sensor) ) {
+    if( gen_2_readRegisters(sensor) ) {
         TLE493D_A2B6_calculateFieldValues(sensor, x, y, z);
         return true;
     }
@@ -225,7 +222,7 @@ void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, f
 
 
 bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp) {
-    if( TLE493D_A2B6_updateRegisterMap(sensor) ) {
+    if( gen_2_readRegisters(sensor) ) {
         TLE493D_A2B6_calculateSensorValues(sensor, x, y, z, temp);
         return true;
     }
@@ -242,129 +239,12 @@ bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *
 // }
 
 
-// Calculate bus (data) parity bit P
-uint8_t TLE493D_A2B6_calculateBusParityBit(Sensor_ts *sensor) {
-	// compute bus parity of data values in registers 0 to 5
-	uint8_t parity = sensor->regMap[0];
-
-	for (uint8_t i = 1; i < 6; ++i) {
-		parity ^= sensor->regMap[i];
-	}
-
-	return getOddParity(calculateParity(parity)) << sensor->regDef[sensor->commonBitfields.P].offset;
-}
-
-
-// // TODO: define enum to differentiate the various diagnosis messages possible across sensors
-// bool TLE493D_A2B6_getDiagnosis(Sensor_ts *sensor) {
-//     return true;
-// }
-
-
-// TODO: implement !
-bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor) {
-    return true;
-}
-
-
-// TODO: implement !
-bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor) {
-    return true;
-}
-
-
-bool TLE493D_A2B6_hasValidBusParity(Sensor_ts *sensor) {
-    uint8_t p = sensor->commonBitfields.P;
-    return TLE493D_A2B6_calculateBusParityBit(sensor) == (sensor->regMap[sensor->regDef[p].address] && sensor->regDef[p].mask);
-}
-
-
-bool TLE493D_A2B6_hasValidFuseParity(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FF];
-    return sensor->regMap[bf->address] && bf->mask != 0;
-}
-
-
-bool TLE493D_A2B6_hasValidConfigurationParity(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.CF];
-    return sensor->regMap[bf->address] && bf->mask != 0;
-}
-
-
-bool TLE493D_A2B6_hasValidTBit(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.T];
-    return sensor->regMap[bf->address] && bf->mask == 0;
-}
-
-
-bool TLE493D_A2B6_hasValidPD3Bit(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.PD3];
-    return sensor->regMap[bf->address] && bf->mask != 0;
-}
-
-
-bool TLE493D_A2B6_hasValidPD0Bit(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.PD0];
-    return sensor->regMap[bf->address] && bf->mask != 0;
-}
-
-
-uint8_t TLE493D_A2B6_getID(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.ID];
-    return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
-}
-
-
-uint8_t TLE493D_A2B6_getFrameCounter(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FRM];
-    return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
-}
-
-
-uint8_t TLE493D_A2B6_getType(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.TYPE];
-    return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
-}
-
-
-uint8_t TLE493D_A2B6_getHWV(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.HWV];
-    return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
-}
-
-
-// Fuse/mode parity bit FP
-uint8_t TLE493D_A2B6_calculateFuseParityBit(Sensor_ts *sensor) {
-	// compute parity of MOD1 register
-	uint8_t parity = calculateParity(sensor->regMap[sensor->commonBitfields.MOD1] & ~sensor->regDef[FP].mask);
-
-	// add parity of MOD2:PRD register bits
-	parity ^= calculateParity(sensor->regMap[sensor->commonBitfields.MOD2] & sensor->regDef[PRD].mask);
-
-	return getOddParity(parity) << sensor->regDef[FP].offset;
-}
-
-
 // Configuration parity bit CP
 uint8_t TLE493D_A2B6_calculateConfigurationParityBit(Sensor_ts *sensor) {
 	// compute parity of Config register
-	uint8_t parity = calculateParity(sensor->regMap[sensor->commonBitfields.CONFIG] & ~sensor->regDef[CP].mask);
+	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
 
-	return getEvenParity(calculateParity(parity)) << sensor->regDef[CP].offset;
-}
-
-
-// TODO: test !
-bool TLE493D_A2B6_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
-    Register_ts *bf  = &sensor->regDef[bitField];
-
-    if((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
-        uint8_t buf[2] = { bf->address, sensor->regMap[bf->address] };
-
-        return sensor->comLibIF->transfer.i2c_transfer(sensor, buf, sizeof(buf), NULL, 0);
-    }
-
-    return false;
+	return getEvenParity(parity) << sensor->regDef[CP].offset;
 }
 
 
@@ -375,21 +255,21 @@ bool TLE493D_A2B6_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
  * 
 */
 bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
-    uint8_t mod1 = sensor->commonBitfields.MOD1;
+    uint8_t mod1 = sensor->commonRegisters.MOD1;
 
     // TODO: the next 2 lines must go into init !
     sensor->regMap[mod1]  = 0;
-    sensor->regMap[sensor->commonBitfields.MOD2]  = 0; // because of FP calculation !
+    sensor->regMap[sensor->commonRegisters.MOD2]  = 0; // because of FP calculation !
 
-    // setBitfield(sensor, MOD1_BITFIELD, 0);
-    // setBitfield(sensor, MOD2_BITFIELD, 0); // because of FP calculation !
+    // gen_2_setBitfield(sensor, MOD1_BITFIELD, 0);
+    // gen_2_setBitfield(sensor, MOD2_BITFIELD, 0); // because of FP calculation !
 
     // this is already setDefaultConfig ! Should set only PR bit !
-    sensor->regMap[mod1]  = sensor->regDef[PR].mask
-                                                  | sensor->regDef[INT].mask;
-//                                                  | (MASTER_CONTROLLED_MODE << sensor->regDef[MODE].offset);
+    sensor->regMap[mod1] = sensor->regDef[PR].mask
+                         | sensor->regDef[INT].mask;
+//                          | (MASTER_CONTROLLED_MODE << sensor->regDef[MODE].offset);
 
-    sensor->regMap[mod1] |= TLE493D_A2B6_calculateFuseParityBit(sensor);
+    sensor->regMap[mod1] |= gen_2_calculateFuseParityBit(sensor);
 
     uint8_t buf[2] = { mod1, sensor->regMap[mod1] };
 
@@ -427,16 +307,16 @@ bool TLE493D_A2B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
 // -> then set PRD bit and recalc. FP bit in MOD2
 // -> then write regMap from MOD1 to MOD2
 bool TLE493D_A2B6_setSlowUpdates(Sensor_ts *sensor) {
-    uint8_t mod1 = sensor->commonBitfields.MOD1;
+    uint8_t mod1 = sensor->commonRegisters.MOD1;
 
     sensor->regMap[sensor->regDef[PRD].address]  |= sensor->regDef[PRD].mask;
-    sensor->regMap[mod1]                          = (sensor->regMap[mod1] & ~sensor->regDef[FP].mask) | TLE493D_A2B6_calculateFuseParityBit(sensor);
+    sensor->regMap[mod1]                          = (sensor->regMap[mod1] & ~sensor->regDef[FP].mask) | gen_2_calculateFuseParityBit(sensor);
 
     // uint8_t buf[2] = { sensor->regDef[PRD].address, 0x80 };
     uint8_t buf[4] = { sensor->regDef[mod1].address,
                        sensor->regMap[mod1],
                        sensor->regMap[mod1 + 1],
-                       sensor->regMap[sensor->commonBitfields.MOD2] };
+                       sensor->regMap[sensor->commonRegisters.MOD2] };
 
     return sensor->comLibIF->transfer.i2c_transfer(sensor, buf, sizeof(buf), sensor->regMap, sensor->regMapSize);
 }
@@ -444,16 +324,9 @@ bool TLE493D_A2B6_setSlowUpdates(Sensor_ts *sensor) {
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
     // TLE493D_A2B6_setSlowUpdates(sensor);
-    bool b = TLE493D_A2B6_enable1ByteMode(sensor);
-    b |= TLE493D_A2B6_enableTemperatureMeasurements(sensor);
+    if( TLE493D_A2B6_enable1ByteMode(sensor) ) {
+        return TLE493D_A2B6_enableTemperatureMeasurements(sensor);
+    }
 
-    return b;
-}
-
-
-// TODO: rename to readRegisterMap ? And writeRegisterMap when changing sensor values ? For consistency.
-bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor) {
-    // Currently only 1 interface is supported per sensor, either I2C or SPI for some 3rd generation sensors.
-    // In case multiple interfaces are supported, switch according to IF type and call appropriate function.
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    return false;
 }

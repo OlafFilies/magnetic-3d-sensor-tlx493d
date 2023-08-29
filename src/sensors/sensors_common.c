@@ -9,16 +9,16 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-#include "sensors_config_common.h"
+#include "sensors_common_defines.h"
 #include "sensors_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 #include "TLE493D_A1B6.h"
 #include "TLV493D_A1B6.h"
 #include "TLE493D_A2B6.h"
 #include "TLE493D_P2B6.h"
 #include "TLE493D_W2B6.h"
-
+#include "TLV493D_A2BW.h"
 
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
@@ -26,30 +26,34 @@ bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
         case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
                               break;
 
-        default : return false;
-    }
-}
+      case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor);
+                              break;                              
 
+      case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
+                              break;
+
+      // case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
+      //                         break;
+
+      default : return false;
+   }
+}
 
 bool deinit(Sensor_ts *sensor) {
    return sensor->functions->deinit(sensor);
 }
 
-
 void calculateTemperature(Sensor_ts *sensor, float *temp) {
-   sensor->functions->calculateTemperature(sensor, temp);
+   return sensor->functions->calculateTemperature(sensor, temp);
 }
-
 
 bool getTemperature(Sensor_ts *sensor, float *temp) {
    return sensor->functions->getTemperature(sensor, temp);
 }
 
-
 void calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
    sensor->functions->calculateFieldValues(sensor, x, y, z);
 }
-
 
 bool getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
    return sensor->functions->getFieldValues(sensor, x, y, z);
@@ -80,33 +84,50 @@ bool setDefaultConfig(Sensor_ts *sensor) {
    return sensor->functions->setDefaultConfig(sensor);
 }
 
-
-bool updateRegisterMap(Sensor_ts *sensor) {
-   return sensor->functions->updateRegisterMap(sensor);
+bool readRegisters(Sensor_ts *sensor) {
+   return sensor->functions-readRegisters(sensor);
 }
 
+bool enableTemperature(Sensor_ts *sensor) {
+   return sensor->functions->enableTemperature(sensor);
+}
+
+bool disableTemperature(Sensor_ts *sensor) {
+   return sensor->functions->disableTemperature(sensor);
+}
+
+bool enableInterrupt(Sensor_ts *sensor) {
+   return sensor->functions->enableInterrupt(sensor);
+}
+
+bool disableInterrupt(Sensor_ts *sensor) {
+   return sensor->functions->disableInterrupt(sensor);
+}
 
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
-    switch(sensorType) {
-        case TLE493D_A1B6_e : return "TLE493D_A1B6";
-                              break;
+   switch(sensorType) {
+      case TLE493D_A1B6_e : return "TLE493D_A1B6";
+                           break;
 
-        case TLV493D_A1B6_e : return "TLV493D_A1B6";
-                              break;
+      case TLV493D_A1B6_e : return "TLV493D_A1B6";
+                           break;
 
-        case TLE493D_A2B6_e : return "TLE493D_A2B6";
-                              break;
+      case TLE493D_A2B6_e : return "TLE493D_A2B6";
+                           break;
 
-        case TLE493D_P2B6_e : return "TLE493D_P2B6";
-                              break;
+      case TLE493D_P2B6_e : return "TLE493D_P2B6";
+                           break;
 
-        case TLE493D_W2B6_e : return "TLE493D_W2B6";
-                              break;
+      // case TLE493D_W2B6_e : return "TLE493D_W2B6";
+      //                      break;
 
-        default : return "ERROR : Unknown sensorType !";
-                  break;
-    }
+      case TLV493D_A2BW_e : return "TLV493D_A2BW";
+                           break;
+
+      default : return "ERROR : Unknown sensorType !";
+               break;
+   }
 }
 
 
