@@ -5,7 +5,6 @@
 #include <SPI.h>
 #include <Arduino.h>
 #include "xmc_i2c.h"
-#include "XMC1100.h"
 
 // project cpp includes
 #include "arduino_defines.h"
