@@ -11,16 +11,6 @@
 // project cpp includes
 #include "arduino_defines.h"
 
-// project c includes
-
-
-extern "C" {
-	#include "i2c.h"
-}
-
-
-#include "pal.h"
-
 
 template<typename ComIF> class TwoWire_Lib {
 };
@@ -35,39 +25,20 @@ template<> class TwoWire_Lib<TwoWire> {
 
 
         void init() {
-            #ifdef USE_WIRE
-                i2c.begin();
-            #else
-                I2C_init();
-            #endif
+            i2c.begin();
         }
 
 
         void deinit() {
-            #ifdef USE_WIRE
-               i2c.end();
-            #endif
+            i2c.end();
         }
 
 
-        // bool transfer(uint8_t i2cAddress, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-        //     if( tx_len > 0 ) {
-        //         I2C_write(i2cAddress, tx_buffer, tx_len);
-        //      }
-
-        //     if( rx_len > 0 ) {
-        //         I2C_read(i2cAddress, rx_buffer, rx_len);
-        //     }
-
-        //     return true;
-        // }
-
-
         bool transfer(uint8_t i2cAddress, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-           	XMC_I2C_CH_ClearStatusFlag(XMC_I2C0_CH1, 0xFFFFFFFF);
+            // TODO: get channel from used Wire object !
+           	//  XMC_I2C_CH_ClearStatusFlag(XMC_I2C0_CH1, 0xFFFFFFFF);
 
             if( tx_len > 0 && tx_buffer != NULL ) {
-Serial.println("writing data ...");
                 i2c.beginTransmission(i2cAddress);
 
                 uint8_t written = i2c.write(tx_buffer, tx_len);

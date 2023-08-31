@@ -28,7 +28,6 @@ bool initI2CComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw);
 
 extern "C" {
     bool initI2CComLibIF(Sensor_ts *sensor, TwoWire &iic);
-    // void myDebug(char *msg);
 }
 
 

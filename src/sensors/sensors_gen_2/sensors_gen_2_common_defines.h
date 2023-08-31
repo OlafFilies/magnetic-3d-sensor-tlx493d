@@ -17,11 +17,6 @@
 #define GEN_2_STD_IIC_ADDR_READ_A0     0x6B
 
 
-// #define GEN_2_REG_NUMBER            23
-
-
-// #define REGISTER_SIZE_IN_BITS       (8)
-
 #define GEN_2_REG_MAP_SIZE              23
 
 #endif // SENSORS_GEN_2_COMMON_DEFINES_H

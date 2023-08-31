@@ -245,6 +245,6 @@
  *
  * TEST - PASS (10 ms)
  */
-/* #define UNITY_INCLUDE_EXEC_TIME */
+#define UNITY_INCLUDE_EXEC_TIME  (1)
 
 #endif /* UNITY_CONFIG_H */

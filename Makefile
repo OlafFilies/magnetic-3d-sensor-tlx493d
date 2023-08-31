@@ -8,9 +8,11 @@ $(info TEST : $(TEST))
 
 
 ### Arduino targets
-arduino:
+arduino_clean:
 	-rm -rf build/*
-	cp -r config/arduinoLibraryTemplate build
+
+arduino: arduino_clean
+	cp -r config/arduinoLibraryTemplate/* build
 	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} build \;
 
 
@@ -22,12 +24,16 @@ arduino_cpp: arduino
 	cp examples/arduino/simple.ino build/build.ino
 
 
+# example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 arduino_unity arduino_flash arduino_monitor
 arduino_unity: arduino
 ifeq ($(TEST),)
 	$(error "Must set variable TEST in order to be able to compile and flash a specific Arduino unity tests !")
 else
 	cp -r test/Unity/*.[hc] build
-	cp test/src/arduino/ut_$(TEST).ino build/build.ino
+	cp test/src/arduino/Test_$(TEST)*.c build
+	cp test/src/arduino/Test_*.c* build
+	cp test/src/arduino/Test_$(TEST)_main.ino build/build.ino
+#	cp test/src/arduino/ut_$(TEST).ino build/build.ino
 endif
 
 
@@ -47,7 +53,9 @@ arduino_compile:
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
-	arduino-cli.exe compile --fqbn $(FQBN) --log --build-property "compiler.c.extra_flags+=\"-DUNITY_INCLUDE_CONFIG_H=1\"" build
+# CAUTION : only use '=' when assigning values to vars, not '+='
+	arduino-cli.exe compile --fqbn $(FQBN) --log --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" build
+#	                                             --build-property "compiler.cpp.extra_flags=\"-D<TEST_CASE>=1\"" build
 endif
 
 
