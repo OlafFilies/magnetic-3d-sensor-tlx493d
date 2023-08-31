@@ -3,9 +3,8 @@
 
 #include "stddef.h"
 
-#include "sensors_config_common.h"
-#include "sensors_common.h"
 #include "sensor_types.h"
+#include "sensors_common.h"
 
 void gen_1_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue);
 uint8_t gen_1_returnBitfield(Sensor_ts *sensor, uint8_t bitField);

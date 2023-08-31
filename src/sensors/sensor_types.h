@@ -36,7 +36,7 @@ typedef enum {
 /*
   List of supported register access modes.
 */
-typedef enum { READ_MODE_e = 0,
+typedef enum { READ_MODE_e = 0, 
                WRITE_MODE_e,
                READ_WRITE_MODE_e } REG_ACCESS_MODE_te;
 
@@ -116,7 +116,7 @@ typedef bool (*HasValidDataFuncPtr)(Sensor_ts *);
 typedef bool (*IsFunctionalFuncPtr)(Sensor_ts *);
 
 typedef bool (*SetDefaultConfigFuncPtr)(Sensor_ts *);
-typedef bool (*UpdateRegistersFuncPtr)(Sensor_ts *);
+typedef bool (*ReadRegistersFuncPtr)(Sensor_ts *);
 
 typedef bool (*EnableTemperatureFuncPtr)(Sensor_ts *);
 typedef bool (*DisableTemperatureFuncPtr)(Sensor_ts *);
@@ -143,7 +143,7 @@ typedef struct CommonFunctions_ts {
     // ResetFuncPtr                 reset;
 
     SetDefaultConfigFuncPtr         setDefaultConfig;
-    UpdateRegistersFuncPtr          updateRegisterMap;
+    ReadRegistersFuncPtr            readRegisters;
 
     EnableTemperatureFuncPtr        enableTemperature;
     DisableTemperatureFuncPtr       disableTemperature;
@@ -154,6 +154,9 @@ typedef struct CommonFunctions_ts {
 
 
 typedef struct CommonBitfields_ts {
+    uint8_t CP;
+    uint8_t FP;
+
     uint8_t ID;
     uint8_t P;
     uint8_t FF;
@@ -176,12 +179,16 @@ typedef struct CommonBitfields_ts {
     uint8_t TEMP_LSB;
     uint8_t BZ_LSB;
     uint8_t TEMP2;
+} CommonBitfields_ts;
+
+
+typedef struct CommonRegisters_ts {
     uint8_t DIAG;
     uint8_t CONFIG;
     uint8_t MOD1;
     uint8_t MOD2;
     uint8_t VER;
-} CommonBitfields_ts;
+} CommonRegisters_ts;
 
 
 /*
@@ -191,7 +198,7 @@ typedef struct Sensor_ts {
     uint8_t                 *regMap;
     Register_ts             *regDef;
     CommonBitfields_ts       commonBitfields;
-
+    CommonRegisters_ts       commonRegisters;
     CommonFunctions_ts      *functions;
 
     ComLibraryFunctions_ts  *comLibIF;

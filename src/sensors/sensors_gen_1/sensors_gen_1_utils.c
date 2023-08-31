@@ -1,5 +1,5 @@
 #include "sensors_gen_1_utils.h"
-#include "sensors_gen_1_config_common.h"
+#include "sensors_gen_1_common_defines.h"
 
 //todo: remove if not used.
 void gen_1_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {

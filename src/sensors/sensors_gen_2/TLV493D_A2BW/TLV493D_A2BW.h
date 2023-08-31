@@ -19,23 +19,23 @@
 
 /** Common to all sensors */
 #include "sensor_types.h"
-#include "sensors_config_common.h"
+#include "sensors_common_defines.h"
 #include "sensors_common.h"
 
 /** Common to the same generation of senors */
-#include "sensors_gen_2_config_common.h"
+#include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
 /** Sensor specific includes */
-#include "TLV493D_A2BW_config.h"
+#include "TLV493D_A2BW_defines.h"
 
 // typedef struct TLV493D_A2BW_functions_ts {
 //     InitFuncPtr                         init;
 //     DeinitFuncPtr                       deinit;
 //     GetTemperatureFuncPtr               getTemperature;
 //     UpdateGetTemperatureFuncPtr         updateGetTemperature;
-//     GetFieldValuesFuncPtr               getFieldValues;
-//     UpdateGetFieldValuesFuncPtr         updateGetFieldValues;
+//     calculateFieldValuesFuncPtr               calculateFieldValues;
+//     calculateFieldValuesFuncPtr         calculateFieldValues;
 //     ResetFuncPtr                        reset;
 //     GetDiagnosisFuncPtr                 getDiagnosis;
 //     CalculateParityFuncPtr              calculateParity;
@@ -90,7 +90,7 @@ bool TLV493D_A2BW_getTemperature(Sensor_ts *sensor, float *temp);
 
 /**
  * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
- * It updates the required registers and then calls the getFieldValues() function of the sensor
+ * It updates the required registers and then calls the calculateFieldValues() function of the sensor
  * 
  * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
  * @param[in, out] x Retrieved magnetic value of the X-Axis
@@ -138,14 +138,14 @@ void TLV493D_A2BW_calculateParity(Sensor_ts *sensor);
  */
 bool TLV493D_A2BW_setDefaultConfig(Sensor_ts *sensor);
 
-/**
- * @brief Updates all registers of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
- * 
- * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
- * @return true - If successful
- * @return false - If unsuccessful
- */
-bool TLV493D_A2BW_updateRegisterMap(Sensor_ts *sensor);
+// /**
+//  * @brief Updates all registers of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+//  * 
+//  * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+//  * @return true - If successful
+//  * @return false - If unsuccessful
+//  */
+// bool TLV493D_A2BW_updateRegisterMap(Sensor_ts *sensor);
 
 /**
  * @brief Enables the temperature measurement of the XENSIV™ TLV493D-A2BW magnetic 3D sensor 

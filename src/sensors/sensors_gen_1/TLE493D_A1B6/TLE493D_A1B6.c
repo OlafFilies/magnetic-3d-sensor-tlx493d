@@ -8,15 +8,15 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-#include "sensors_config_common.h"
+#include "sensors_common_defines.h"
 #include "sensors_common.h"
 
 // common to same generation of sensors
-#include "sensors_gen_1_config_common.h"
+#include "sensors_gen_1_common_defines.h"
 #include "sensors_gen_1_common.h"
 
 // sensor specicifc includes
-#include "TLE493D_A1B6_config.h"
+#include "TLE493D_A1B6_defines.h"
 #include "TLE493D_A1B6.h"
 
 //register enums
@@ -139,18 +139,16 @@ CommonFunctions_ts TLE493D_A1B6_commonFunctions = {
                                 .init                  = TLE493D_A1B6_init,
                                 .deinit                = TLE493D_A1B6_deinit,
 
-                                // .getTemperature        = TLE493D_A1B6_getTemperature,
-                                // .updateGetTemperature  = TLE493D_A1B6_updateGetTemperature,
+                                .calculateTemperature  = TLE493D_A1B6_calculateTemperature,
+                                .getTemperature        = TLE493D_A1B6_getTemperature,
 
+                                .calculateFieldValues  = TLE493D_A1B6_calculateFieldValues,
                                 .getFieldValues        = TLE493D_A1B6_getFieldValues,
-                                .updateGetFieldValues  = TLE493D_A1B6_updateGetFieldValues,
 
                                 // .reset                 = TLE493D_A1B6_reset,
-                                // .getDiagnosis          = TLE493D_A1B6_getDiagnosis,
-                                // .calculateParity       = TLE493D_A1B6_calculateParity,
 
                                 .setDefaultConfig      = TLE493D_A1B6_setDefaultConfig,
-                                .updateRegisterMap     = TLE493D_A1B6_updateRegisterMap,
+                                .readRegisters          = TLE493D_A1B6_updateRegisterMap,
 
                                 .enableTemperature     = TLE493D_A1B6_enableTemperatureMeasurements,
                                 .disableTemperature    = TLE493D_A1B6_disableTemperatureMeasurements,
@@ -292,18 +290,18 @@ void TLE493D_A1B6_calculateParity(Sensor_ts *sensor) {
     gen_1_setBitfield(sensor, P, result & 0x01);
 }
 
-bool TLE493D_A1B6_getTemperature(Sensor_ts *sensor, float *temp) {
-
+void TLE493D_A1B6_calculateTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = gen_1_concat_values((sensor->regMap[sensor->regDef[TEMP_MSB].address] & sensor->regDef[TEMP_MSB].mask) >> sensor->regDef[TEMP_MSB].offset, sensor->regMap[sensor->regDef[TEMP_LSB].address], false);
-
     *temp = (float)(((float)value - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT) ;
-
-    return true;
 }
 
-bool TLE493D_A1B6_updateGetTemperature(Sensor_ts *sensor, float *temp) {
-    bool b = TLE493D_A1B6_updateRegisterMap(sensor);
-    return b & TLE493D_A1B6_getTemperature(sensor, temp);
+bool TLE493D_A1B6_getTemperature(Sensor_ts *sensor, float *temp) {
+    if( TLE493D_A1B6_updateRegisterMap(sensor) ) {
+        TLE493D_A1B6_calculateTemperature(sensor, temp);
+        return true;
+    }
+
+    return false;
 }
 
 bool TLE493D_A1B6_enableParityTest(Sensor_ts *sensor) {
@@ -318,7 +316,7 @@ bool TLE493D_A1B6_disableParityTest(Sensor_ts *sensor) {
     return TLE493D_A1B6_transferWriteRegisters(sensor);
 }
 
-bool TLE493D_A1B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+void TLE493D_A1B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
     valueX = gen_1_concat_values(sensor->regMap[sensor->regDef[BX_MSB].address], sensor->regMap[sensor->regDef[BX_LSB].address], true);
@@ -330,11 +328,13 @@ bool TLE493D_A1B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z
     *x = ((float) valueX) * GEN_1_MAG_FIELD_MULT;
     *y = ((float) valueY) * GEN_1_MAG_FIELD_MULT;
     *z = ((float) valueZ) * GEN_1_MAG_FIELD_MULT;
-
-    return true;
 }
 
-bool TLE493D_A1B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-    bool b = TLE493D_A1B6_updateRegisterMap(sensor);
-    return b && TLE493D_A1B6_getFieldValues(sensor, x, y, z);
+bool TLE493D_A1B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+    if( TLE493D_A1B6_updateRegisterMap(sensor) ) {
+        TLE493D_A1B6_calculateFieldValues(sensor, x, y, z);
+        return true;
+    }
+
+    return false;
 }

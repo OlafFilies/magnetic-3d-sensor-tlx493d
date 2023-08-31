@@ -9,15 +9,12 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-#include "sensors_config_common.h"
 #include "sensors_common.h"
 
 // common to same generation of sensors
-#include "sensors_gen_2_config_common.h"
 #include "sensors_gen_2_common.h"
 
 // sensor specicifc includes
-#include "TLE493D_A2B6_config.h"
 
 
 // common functions
@@ -35,11 +32,11 @@ bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *
 
 // bool TLE493D_A2B6_reset(Sensor_ts *sensor);
 
-bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
-bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);
+// bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
+// bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor);
-bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor);
+// bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor);
 
 
 // utility functions

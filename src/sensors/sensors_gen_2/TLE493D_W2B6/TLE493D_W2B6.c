@@ -7,8 +7,26 @@
  * SPDX-License-Identifier: MIT
  */
 
-/** Sensor specific includes */
+// std includes
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// project c includes
+// common to all sensors
+#include "sensor_types.h"
+#include "sensors_common_defines.h"
+#include "sensors_common.h"
+
+// common to same generation of sensors
+#include "sensors_gen_2_common_defines.h"
+#include "sensors_gen_2_common.h"
+
+// sensor specicifc includes
+#include "TLE493D_W2B6_defines.h"
 #include "TLE493D_W2B6.h"
+
 
 extern ComLibraryFunctions_ts comLibIF_i2c;
 extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
@@ -126,11 +144,11 @@ Register_ts TLE493D_W2B6_regDef[] = {
 //                                 .getTemperature       = TLE493D_W2B6_getTemperature,
 //                                 .updateGetTemperature = TLE493D_W2B6_updateGetTemperature,
 
-//                                 .getFieldValues       = TLE493D_W2B6_getFieldValues,
-//                                 .updateGetFieldValues = TLE493D_W2B6_updateGetFieldValues,
+//                                 .calculateFieldValues       = TLE493D_W2B6_calculateFieldValues,
+//                                 .getFieldValues = TLE493D_W2B6_getFieldValues,
 
 //                                 .setDefaultConfig      = TLE493D_W2B6_setDefaultConfig,
-//                                 .updateRegisterMap     = TLE493D_W2B6_updateRegisterMap,
+                                // .readRegisters         = gen_2_readRegisters,
 // };
 
 // bool TLE493D_W2B6_init(Sensor_ts *sensor) {
@@ -174,7 +192,7 @@ Register_ts TLE493D_W2B6_regDef[] = {
 //     return b && TLE493D_W2B6_getTemperature(sensor, temp);
 // }
 
-// bool TLE493D_W2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+// bool TLE493D_W2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
 //     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
 //     valueX = sensor->regMap[sensor->regDef[BX_MSB].address] << 8;
@@ -196,9 +214,9 @@ Register_ts TLE493D_W2B6_regDef[] = {
 //     return true;
 // }
 
-// bool TLE493D_W2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
+// bool TLE493D_W2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
 //     bool b = updateRegisterMap(sensor);
-//     return b && TLE493D_W2B6_getFieldValues(sensor, x, y, z);
+//     return b && TLE493D_W2B6_calculateFieldValues(sensor, x, y, z);
 // }
 
 // bool TLE493D_W2B6_updateRegisterMap(Sensor_ts *sensor) {
@@ -210,11 +228,11 @@ Register_ts TLE493D_W2B6_regDef[] = {
 
 //     sensor->regMap[sensor->regDef[FP].address] = 0;
 
-//     setBitfield(sensor, FP, 1);
-//     setBitfield(sensor, PR, 1);
-//     setBitfield(sensor, INT, 1);
+//     gen_2_setBitfield(sensor, FP, 1);
+//     gen_2_setBitfield(sensor, PR, 1);
+//     gen_2_setBitfield(sensor, INT, 1);
 
-//     b = writeRegister(sensor, FP);
+//     b = gen_2_writeRegister(sensor, FP);
 
 //     return b;
 // }
@@ -222,8 +240,8 @@ Register_ts TLE493D_W2B6_regDef[] = {
 // static bool TLE493D_W2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
 //     bool b = updateRegisterMap(sensor);
 
-//     setBitfield(sensor, DT, 0);
-//     b = writeRegister(sensor, DT);
+//     gen_2_setBitfield(sensor, DT, 0);
+//     b = gen_2_writeRegister(sensor, DT);
 
 //     return b;
 // }

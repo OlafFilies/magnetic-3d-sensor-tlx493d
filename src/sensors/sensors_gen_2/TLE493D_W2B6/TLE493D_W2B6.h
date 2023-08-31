@@ -20,15 +20,15 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-#include "sensors_config_common.h"
+// #include "sensors_common_defines.h"
 #include "sensors_common.h"
 
 /** Common to the same generation of senors */
-#include "sensors_gen_2_config_common.h"
+// #include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
 // sensor specicifc includes
-#include "TLE493D_W2B6_config.h"
+// #include "TLE493D_W2B6_defines.h"
 
 // /**
 //  * @brief Initializes the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
@@ -82,11 +82,11 @@
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-// bool TLE493D_W2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
+// bool TLE493D_W2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
 // /**
 //  * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLE493D-W2B6 magnetic 3D sensor
-//  * It updates the required registers and then calls the getFieldValues() function of the sensor
+//  * It updates the required registers and then calls the calculateFieldValues() function of the sensor
 //  * 
 //  * @param[in] sensor Pointer to the XENSIV™ TLE493D-W2B6 magnetic 3D sensor structure
 //  * @param[in, out] x Retrieved magnetic value of the X-Axis
@@ -95,7 +95,7 @@
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-// bool TLE493D_W2B6_updateGetFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
+// bool TLE493D_W2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
 
 // /**
 //  * @brief Sets the default configuration for the XENSIV™ TLE493D-W2B6 magnetic 3D sensor

@@ -9,7 +9,7 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-#include "sensors_config_common.h"
+#include "sensors_common_defines.h"
 #include "sensors_common.h"
 
 // sensor specific includes
@@ -57,7 +57,7 @@ void calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
 
 bool getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
    return sensor->functions->getFieldValues(sensor, x, y, z);
-}
+ }
 
 
 bool getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp) {
@@ -74,12 +74,18 @@ bool hasValidData(Sensor_ts *sensor) {
    return sensor->functions->hasValidData(sensor);
 }
 
+
+bool isFunctional(Sensor_ts *sensor) {
+   return sensor->functions->isFunctional(sensor);
+}
+
+
 bool setDefaultConfig(Sensor_ts *sensor) {
    return sensor->functions->setDefaultConfig(sensor);
 }
 
-bool updateRegisterMap(Sensor_ts *sensor) {
-   return sensor->functions->updateRegisterMap(sensor);
+bool readRegisters(Sensor_ts *sensor) {
+   return sensor->functions-readRegisters(sensor);
 }
 
 bool enableTemperature(Sensor_ts *sensor) {

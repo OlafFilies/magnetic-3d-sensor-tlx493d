@@ -23,7 +23,7 @@ bool hasValidData(Sensor_ts *sensor);
 bool isFunctional(Sensor_ts *sensor);
 
 bool setDefaultConfig(Sensor_ts *sensor);
-bool updateRegisterMap(Sensor_ts *sensor);
+bool readRegisters(Sensor_ts *sensor);
 
 bool enableTemperature(Sensor_ts *sensor);
 bool disableTemperature(Sensor_ts *sensor);
