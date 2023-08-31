@@ -5,26 +5,15 @@
 // project c includes
 // common to all sensors
 #include "sensor_types.h"
-// #include "sensors_config_common.h"
-// #include "sensors_common.h"
 
 // common to same generation of sensors
 #include "sensors_gen_2_common_defines.h"
-// #include "sensors_gen_2_common.h"
 
 // sensor specicifc includes
-// #include "TLE493D_A2B6_config.h"
-// #include "TLE493D_A2B6.h"
 
 // project cpp includes
 #include "arduino_defines.h"
 #include "TwoWire_Lib.hpp"
-
-// #include "xmc_common.h"
-// #include "xmc_gpio.h"
-// #include "xmc_i2c.h"
-// #include <XMC1100.h>
-// #include "core_cm0.h"
 
 
 extern "C" bool initIIC(Sensor_ts *sensor) {
