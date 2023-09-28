@@ -3,7 +3,7 @@
 
 // test includes
 #include "Test_includes.h"
-#include "Test_utils.h"
+// #include "Test_utils.h"
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
@@ -17,8 +17,8 @@ TEST_GROUP(TLE493D_A2B6);
 // Setup method called before every individual test defined for this test group
 TEST_SETUP(TLE493D_A2B6)
 {
-    for(auto c : "\nTEST_SETUP(TLE493D_A2B6) ...\n\n")
-        putCharacter(c);
+    // for(auto c : "\nTEST_SETUP(TLE493D_A2B6) ...\n\n")
+    //     putCharacter(c);
 
     // 'main' initializes at startup, so either init everything or nothing at all, otherwise communication will be lost !
     (void) TLE493D_A2B6_init(&dut);
@@ -30,8 +30,8 @@ TEST_SETUP(TLE493D_A2B6)
 // Tear down method called before every individual test defined for this test group
 TEST_TEAR_DOWN(TLE493D_A2B6)
 {
-    for(auto c : "TEST_TEAR_DOWN(TLE493D_A2B6) ...\n\n")
-        putCharacter(c);
+    // for(auto c : "TEST_TEAR_DOWN(TLE493D_A2B6) ...\n\n")
+    //     putCharacter(c);
 
     // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
     (void) TLE493D_A2B6_deinit(&dut);

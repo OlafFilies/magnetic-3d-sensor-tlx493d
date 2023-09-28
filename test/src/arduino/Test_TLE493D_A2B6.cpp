@@ -9,12 +9,12 @@ extern "C" {
 
     // Method invoked by Unity before a test suite is run
     void TLE493D_A2B6_suiteSetUp() {
-         Serial.print("\nTLE493D_A2B6_suiteSetUp ...\n");
+        //  Serial.print("\nTLE493D_A2B6_suiteSetUp ...\n");
     }
 
     
     // Method invoked by Unity after a test suite is run 
     void TLE493D_A2B6_suiteTearDown() {
-         Serial.print("TLE493D_A2B6_suiteTearDown ...\n");
+        //  Serial.print("TLE493D_A2B6_suiteTearDown ...\n");
     }
 }

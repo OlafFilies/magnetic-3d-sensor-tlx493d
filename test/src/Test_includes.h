@@ -18,6 +18,9 @@
 #include "sensors_gen_3_common.h"
 
 // sensor specicifc includes
+#include "TLV493D_A1B6_defines.h"
+#include "TLV493D_A1B6.h"
+
 #include "TLE493D_A2B6_defines.h"
 #include "TLE493D_A2B6.h"
 
