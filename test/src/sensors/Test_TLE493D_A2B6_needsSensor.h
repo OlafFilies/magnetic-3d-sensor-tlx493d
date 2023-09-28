@@ -48,7 +48,7 @@ TEST(TLE493D_A2B6_needsSensor, getTemperature)
 {
     float temperature = 0.0;
 
-    TEST_ASSERT_EQUAL( true, dut.functions->getTemperature(&dut, &temperature)); // TLE493D_A2B6_getTemperature(&dut, &temperature) );
+    TEST_ASSERT_EQUAL( true, dut.functions->getTemperature(&dut, &temperature));
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, temperature );
 }
 
