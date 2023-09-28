@@ -1,0 +1,7 @@
+@startuml
+main  -> suite : setup suite
+suite -> test  : setup test
+test  -> test  : run test
+test  -> suite : tear down test
+suite -> main  : tear down suite
+@enduml
