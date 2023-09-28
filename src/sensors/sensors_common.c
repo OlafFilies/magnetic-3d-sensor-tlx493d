@@ -85,7 +85,7 @@ bool setDefaultConfig(Sensor_ts *sensor) {
 }
 
 bool readRegisters(Sensor_ts *sensor) {
-   return sensor->functions-readRegisters(sensor);
+   return sensor->functions->readRegisters(sensor);
 }
 
 bool enableTemperature(Sensor_ts *sensor) {

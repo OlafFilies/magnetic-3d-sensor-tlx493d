@@ -45,7 +45,7 @@
         Rel_D(mtb_repo, mtbLibrary, "stores")
         Rel_D(rpi_repo, rpiLibrary, "stores")
 
-        Rel_L(coreLibrary, interfaces, "used as submodule")
+        Rel_L(coreLibrary, interfaces, "used as submodule by")
     }
 
 @enduml

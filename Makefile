@@ -1,10 +1,15 @@
 FQBN ?=
 PORT ?=
-TEST ?=
 
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
-$(info TEST : $(TEST))
+
+
+arduino_test_all: TESTS=-DTEST_TLE493D_A2B6 -DTEST_TLE493D_A2B6_NEEDS_SENSOR
+arduino_test_needsSensor: TESTS=-DTEST_TLE493D_A2B6_NEEDS_SENSOR
+arduino_test: TESTS=-DTEST_TLE493D_A2B6
+
+arduino_test_all arduino_test_needsSensor arduino_test: arduino_unity arduino_flash
 
 
 ### Arduino targets
@@ -26,15 +31,12 @@ arduino_cpp: arduino
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 arduino_unity arduino_flash arduino_monitor
 arduino_unity: arduino
-ifeq ($(TEST),)
-	$(error "Must set variable TEST in order to be able to compile and flash a specific Arduino unity tests !")
-else
 	cp -r test/Unity/*.[hc] build
-	cp test/src/arduino/Test_$(TEST)*.c build
+	cp test/src//Test_*.h build
+	cp test/src/sensors/Test_*.h build
 	cp test/src/arduino/Test_*.c* build
-	cp test/src/arduino/Test_$(TEST)_main.ino build/build.ino
-#	cp test/src/arduino/ut_$(TEST).ino build/build.ino
-endif
+	cp test/src/arduino/Test_*.h* build
+	cp test/src/arduino/Test_main.ino build/build.ino
 
 
 # For WSL and Windows :
@@ -54,8 +56,10 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile --fqbn $(FQBN) --log --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" build
-#	                                             --build-property "compiler.cpp.extra_flags=\"-D<TEST_CASE>=1\"" build
+	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
+                                    		             --build-property compiler.cpp.extra_flags="$(TESTS)" build
+#	                                        		      --build-property "compiler.cpp.extra_flags=\"$(TESTS)\"" build
+#	                                             		 --build-property "compiler.cpp.extra_flags=\"-DTEST_TLE493D_A2B6=1\"" build
 endif
 
 
