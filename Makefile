@@ -5,11 +5,48 @@ $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
 
 
-arduino_test_all: TESTS=-DTEST_TLE493D_A2B6 -DTEST_TLE493D_A2B6_NEEDS_SENSOR
-arduino_test_needsSensor: TESTS=-DTEST_TLE493D_A2B6_NEEDS_SENSOR
-arduino_test: TESTS=-DTEST_TLE493D_A2B6
+TESTS_NEEDS_SENSOR=-DTEST_TLE493D_A1B6_NEEDS_SENSOR \
+                   -DTEST_TLE493D_A2B6_NEEDS_SENSOR \
+	               -DTEST_TLV493D_A2BW_NEEDS_SENSOR \
+				   -DTEST_TLE493D_P2B6_NEEDS_SENSOR \
+				   -DTEST_TLE493D_W2B6_NEEDS_SENSOR
 
-arduino_test_all arduino_test_needsSensor arduino_test: arduino_unity arduino_flash
+TESTS_NO_SENSOR=-DTEST_TLE493D_A1B6 \
+                -DTEST_TLE493D_A2B6 \
+			 	-DTEST_TLV493D_A2BW \
+				-DTEST_TLE493D_P2B6 \
+				-DTEST_TLE493D_W2B6 
+
+
+arduino_A1B6_needsSensor: TESTS=-DTEST_TLE493D_A1B6 -DTEST_TLE493D_A1B6_NEEDS_SENSOR
+arduino_A1B6: TESTS=-DTEST_TLE493D_A1B6
+
+arduino_A2B6_needsSensor: TESTS=-DTEST_TLE493D_A2B6 -DTEST_TLE493D_A2B6_NEEDS_SENSOR
+arduino_A2B6: TESTS=-DTEST_TLE493D_A2B6
+
+arduino_A2BW_needsSensor: TESTS=-DTEST_TLV493D_A2BW -DTEST_TLV493D_A2BW_NEEDS_SENSOR
+arduino_A2BW: TESTS=-DTEST_TLV493D_A2BW
+
+arduino_P2B6_needsSensor: TESTS=-DTEST_TLE493D_P2B6 -DTEST_TLE493D_P2B6_NEEDS_SENSOR
+arduino_P2B6: TESTS=-DTEST_TLE493D_P2B6
+
+arduino_W2B6_needsSensor: TESTS=-DTEST_TLE493D_W2B6 -DTEST_TLE493D_W2B6_NEEDS_SENSOR
+arduino_W2B6: TESTS=-DTEST_TLE493D_W2B6
+
+arduino_A1B6_needsSensor arduino_A1B6 \
+arduino_A2B6_needsSensor arduino_A2B6 \
+arduino_A2BW_needsSensor arduino_A2BW \
+arduino_P2B6_needsSensor arduino_P2B6 \
+arduino_W2B6_needsSensor arduino_W2B6 : arduino_unity arduino_flash
+
+
+arduino_test_all: TESTS=$(TESTS_NEEDS_SENSOR) $(TESTS_NO_SENSOR)
+arduino_test_needsSensor: TESTS=$(TESTS_NEEDS_SENSOR)
+arduino_test: TESTS=$(TESTS_NO_SENSOR) 
+
+arduino_test_all \
+arduino_test_needsSensor \
+arduino_test: arduino_unity arduino_flash
 
 
 ### Arduino targets

@@ -2,8 +2,8 @@
 #include "Test_includes.h"
 
 
-void TLE493D_W2B6_needsSensor_suiteSetup(void);
-void TLE493D_W2B6_needsSensor_suiteTearDown(void);
+void TLV493D_A2BW_needsSensor_suiteSetup(void);
+void TLV493D_A2BW_needsSensor_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
@@ -14,35 +14,37 @@ static Sensor_ts dut;
 
 
 // define test group name
-TEST_GROUP(TLE493D_W2B6_needsSensor);
+TEST_GROUP(TLV493D_A2BW_needsSensor);
 
 
 // Setup method called before every individual test defined for this test group
-TEST_SETUP(TLE493D_W2B6_needsSensor)
+TEST_SETUP(TLV493D_A2BW_needsSensor)
 {
 }
 
 
 // Tear down method called before every individual test defined for this test group
-TEST_TEAR_DOWN(TLE493D_W2B6_needsSensor)
+TEST_TEAR_DOWN(TLV493D_A2BW_needsSensor)
 {
 }
 
 
 // Define all relevant tests for the sensor device
-
-TEST(TLE493D_W2B6_needsSensor, dummy)
+TEST(TLV493D_A2BW_needsSensor, dummy)
 {
     TEST_ASSERT( true == !false );
 }
 
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(TLE493D_W2B6_needsSensor)
+TEST_GROUP_RUNNER(TLV493D_A2BW_needsSensor)
 {
-    TLE493D_W2B6_needsSensor_suiteSetup();
+    TLV493D_A2BW_needsSensor_suiteSetup();
 
-    RUN_TEST_CASE(TLE493D_W2B6_needsSensor, dummy);
+    RUN_TEST_CASE(TLV493D_A2BW_needsSensor, dummy);
+    
+    // run common functions tests
+    RUN_TEST_GROUP(SensorsCommonFunctions);
 
-    TLE493D_W2B6_needsSensor_suiteTearDown();
+    TLV493D_A2BW_needsSensor_suiteTearDown();
 }

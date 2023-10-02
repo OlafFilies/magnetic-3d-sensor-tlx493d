@@ -6,6 +6,10 @@
 // #include "Test_utils.h"
 
 
+void TLE493D_A2B6_suiteSetUp(void);
+void TLE493D_A2B6_suiteTearDown(void);
+
+
 // variables used in the tests below that have to be accessed in the setup and tear down methods
 static Sensor_ts dut;
 
@@ -57,6 +61,10 @@ TEST(TLE493D_A2B6, dummy)
 // Bundle all tests to be executed for this test group
 TEST_GROUP_RUNNER(TLE493D_A2B6)
 {
+    TLE493D_A2B6_suiteSetUp();
+
     RUN_TEST_CASE(TLE493D_A2B6, calculateTemperature);
     RUN_TEST_CASE(TLE493D_A2B6, dummy);
+
+    TLE493D_A2B6_suiteTearDown();
 }

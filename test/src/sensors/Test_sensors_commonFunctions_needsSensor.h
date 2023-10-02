@@ -1,0 +1,46 @@
+#ifndef TEST_SENSORS_COMMON_FUNCTIONS_NEEDS_SENSOR
+#define TEST_SENSORS_COMMON_FUNCTIONS_NEEDS_SENSOR
+
+// test includes
+#include "Test_includes.h"
+
+
+#define TEST_IFX(group, name) static void TEST_##group##_##name##_(void); static void TEST_##group##_##name##_run(void); void TEST_##group##_##name##_run(void) { UnityTestRunner(TEST_##group##_SETUP, TEST_##group##_##name##_, TEST_##group##_TEAR_DOWN, "TEST(" #group ", " #name ")", TEST_GROUP_##group, #name, __FILE__, __LINE__); } void TEST_##group##_##name##_(void)
+
+
+// Variables used in the tests below that have to be accessed in the setup and tear down methods.
+// The "dut" variable is taken from the respective sensor that the common functions are applied to.
+
+
+// define test group name
+TEST_GROUP(SensorsCommonFunctions);
+
+
+// Setup method called before every individual test defined for this test group
+static TEST_SETUP(SensorsCommonFunctions)
+{
+}
+
+
+// Tear down method called before every individual test defined for this test group
+static TEST_TEAR_DOWN(SensorsCommonFunctions)
+{
+}
+
+
+TEST_IFX(SensorsCommonFunctions, getTemperature)
+{
+    float temperature = 0.0;
+
+    TEST_ASSERT_EQUAL( true, dut.functions->getTemperature(&dut, &temperature));
+    TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, temperature );
+}
+
+
+// Bundle all tests to be executed for this test group
+static TEST_GROUP_RUNNER(SensorsCommonFunctions)
+{
+    RUN_TEST_CASE(SensorsCommonFunctions, getTemperature);
+}
+
+#endif // TEST_SENSORS_COMMON_FUNCTIONS_NEEDS_SENSOR

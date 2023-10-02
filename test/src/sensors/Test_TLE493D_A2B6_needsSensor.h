@@ -3,8 +3,15 @@
 // #include "Test_utils.h"
 
 
+void TLE493D_A2B6_needsSensor_suiteSetup(void);
+void TLE493D_A2B6_needsSensor_suiteTearDown(void);
+
+
 // variables used in the tests below that have to be accessed in the setup and tear down methods
 static Sensor_ts dut;
+
+
+#include "Test_sensors_commonFunctions_needsSensor.h"
 
 
 // define test group name
@@ -69,8 +76,16 @@ TEST(TLE493D_A2B6_needsSensor, dummy)
 // Bundle all tests to be executed for this test group
 TEST_GROUP_RUNNER(TLE493D_A2B6_needsSensor)
 {
+    TLE493D_A2B6_needsSensor_suiteSetup();
+
     RUN_TEST_CASE(TLE493D_A2B6_needsSensor, readRegisters);
     RUN_TEST_CASE(TLE493D_A2B6_needsSensor, getTemperature);
     RUN_TEST_CASE(TLE493D_A2B6_needsSensor, defaultConfig);
     RUN_TEST_CASE(TLE493D_A2B6_needsSensor, dummy);
+    
+    // run common functions tests
+    RUN_TEST_GROUP(SensorsCommonFunctions);
+
+    TLE493D_A2B6_needsSensor_suiteTearDown();
 }
+

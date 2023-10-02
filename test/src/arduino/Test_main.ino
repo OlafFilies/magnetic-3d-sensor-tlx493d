@@ -6,12 +6,6 @@
 
 
 extern "C" {
-    void TLE493D_A2B6_suiteSetUp(void);
-    void TLE493D_A2B6_suiteTearDown(void);
-    void TLE493D_A2B6_needsSensor_suiteSetup(void);
-    void TLE493D_A2B6_needsSensor_suiteTearDown(void);
-
-
     void RunAllTests(void)
     {
         // TODO: Use flags / defines to determine which groups of tests should be added to the test. Use the '--build-property option for the 'arduino_compile' target
@@ -20,19 +14,73 @@ extern "C" {
         // makefile : --build-property "compiler.cpp.extra_flags=\"-D<TEST_SPECIFIER>=1\"" build
         // See also UnityMain options !
 
+
+// TLE493D_A1B6
+#ifdef TEST_TLE493D_A1B6
+
+    RUN_TEST_GROUP(TLE493D_A1B6);
+
+#endif
+
+#ifdef TEST_TLE493D_A1B6_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLE493D_A1B6_needsSensor);
+
+#endif
+
+
+// TLE493D_A2B6
 #ifdef TEST_TLE493D_A2B6
 
-    TLE493D_A2B6_suiteSetUp();
     RUN_TEST_GROUP(TLE493D_A2B6);
-    TLE493D_A2B6_suiteTearDown();
 
 #endif
 
 #ifdef TEST_TLE493D_A2B6_NEEDS_SENSOR
 
-    TLE493D_A2B6_needsSensor_suiteSetup();
     RUN_TEST_GROUP(TLE493D_A2B6_needsSensor);
-    TLE493D_A2B6_needsSensor_suiteTearDown();
+
+#endif
+
+
+// TLV493D_A2BW
+#ifdef TEST_TLV493D_A2BW
+
+    RUN_TEST_GROUP(TLV493D_A2BW);
+
+#endif
+
+#ifdef TEST_TLV493D_A2BW_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLV493D_A2BW_needsSensor);
+
+#endif
+
+
+// TLE493D_P2B6
+#ifdef TEST_TLE493D_P2B6
+
+    RUN_TEST_GROUP(TLE493D_P2B6);
+
+#endif
+
+#ifdef TEST_TLE493D_P2B6_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLE493D_P2B6_needsSensor);
+
+#endif
+
+
+// TLE493D_W2B6
+#ifdef TEST_TLE493D_W2B6
+
+    RUN_TEST_GROUP(TLE493D_W2B6);
+
+#endif
+
+#ifdef TEST_TLE493D_W2B6_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLE493D_W2B6_needsSensor);
 
 #endif
 
