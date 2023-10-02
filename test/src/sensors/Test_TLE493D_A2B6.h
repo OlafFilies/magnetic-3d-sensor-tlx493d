@@ -4,6 +4,8 @@
 // test includes
 #include "Test_includes.h"
 // #include "Test_utils.h"
+#include "Test_sensors_common.h"
+#include "Test_sensors_gen_2_common.h"
 
 
 void TLE493D_A2B6_suiteSetUp(void);
@@ -65,6 +67,10 @@ TEST_GROUP_RUNNER(TLE493D_A2B6)
 
     RUN_TEST_CASE(TLE493D_A2B6, calculateTemperature);
     RUN_TEST_CASE(TLE493D_A2B6, dummy);
+
+    // run gen 2 common functions tests
+    RUN_TEST_GROUP(SensorsCommon);
+    RUN_TEST_GROUP(SensorsGen2Common);
 
     TLE493D_A2B6_suiteTearDown();
 }

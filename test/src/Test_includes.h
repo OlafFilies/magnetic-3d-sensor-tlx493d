@@ -37,3 +37,6 @@
 // Unity c includes
 #include "unity.h"
 #include "unity_fixture.h"
+
+// IFX addons
+#include "unity_ifx.h"

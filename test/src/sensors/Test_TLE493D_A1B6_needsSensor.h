@@ -11,6 +11,10 @@ static Sensor_ts dut;
 
 
 #include "Test_sensors_commonFunctions_needsSensor.h"
+#include "Test_sensors_common_needsSensor.h"
+#include "Test_sensors_common.h"
+#include "Test_sensors_gen_1_common_needsSensor.h"
+#include "Test_sensors_gen_1_common.h"
 
 
 // define test group name
@@ -45,6 +49,12 @@ TEST_GROUP_RUNNER(TLE493D_A1B6_needsSensor)
     
     // run common functions tests
     RUN_TEST_GROUP(SensorsCommonFunctions);
+
+    // run gen 1 common functions tests
+    RUN_TEST_GROUP(SensorsCommon);
+    RUN_TEST_GROUP(SensorsCommon_needsSensor);
+    RUN_TEST_GROUP(SensorsGen1Common);
+    RUN_TEST_GROUP(SensorsGen1Common_needsSensor);
 
     TLE493D_A1B6_needsSensor_suiteTearDown();
 }

@@ -147,3 +147,15 @@ uint8_t getOddParity(uint8_t parity) {
 uint8_t getEvenParity(uint8_t parity) {
     return parity & 1U;
 }
+
+
+/**
+ * More generic version wrt size and offsets of MSB and LSB. Register values are in two's complement form.
+ * Assumptions :
+ *    - registers are 8 bits wide
+*/
+void concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
+    *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
+    *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
+    *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
+}

@@ -3,6 +3,8 @@
 
 // test includes
 #include "Test_includes.h"
+#include "Test_sensors_common.h"
+#include "Test_sensors_gen_2_common.h"
 
 
 void TLV493D_A2BW_suiteSetUp(void);
@@ -42,6 +44,10 @@ TEST_GROUP_RUNNER(TLV493D_A2BW)
     TLV493D_A2BW_suiteSetUp();
 
     RUN_TEST_CASE(TLV493D_A2BW, dummy);
+
+    // run gen 2 common functions tests
+    RUN_TEST_GROUP(SensorsCommon);
+    RUN_TEST_GROUP(SensorsGen2Common);
 
     TLV493D_A2BW_suiteTearDown();
 }

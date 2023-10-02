@@ -1,36 +1,41 @@
+#ifndef TEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
+#define TEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
+
 // test includes
 #include "Test_includes.h"
 
 
-// variables used in the tests below that have to be accessed in the setup and tear down methods
-// static Sensor_ts dut;
+// Variables used in the tests below that have to be accessed in the setup and tear down methods.
+// The "dut" variable is taken from the respective sensor that the common functions are applied to.
 
 
 // define test group name
-TEST_GROUP(Sensors_gen_3_common_needsSensor);
+TEST_GROUP(SensorsGen3Common_needsSensor);
 
 
 // Setup method called before every individual test defined for this test group
-TEST_SETUP(Sensors_gen_3_common_needsSensor)
+static TEST_SETUP(SensorsGen3Common_needsSensor)
 {
 }
 
 
 // Tear down method called before every individual test defined for this test group
-TEST_TEAR_DOWN(Sensors_gen_3_common_needsSensor)
+static TEST_TEAR_DOWN(SensorsGen3Common_needsSensor)
 {
 }
 
 
 // Define all relevant tests for the sensor device
-TEST(Sensors_gen_3_common_needsSensor, dummy)
+TEST_IFX(SensorsGen3Common_needsSensor, dummy)
 {
     TEST_ASSERT( true == !false );
 }
 
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(Sensors_gen_3_common_needsSensor)
+static TEST_GROUP_RUNNER(SensorsGen3Common_needsSensor)
 {
-    RUN_TEST_CASE(Sensors_gen_3_common_needsSensor, dummy);
+    RUN_TEST_CASE(SensorsGen3Common_needsSensor, dummy);
 }
+
+#endif // TEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR

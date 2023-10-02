@@ -3,6 +3,8 @@
 
 // test includes
 #include "Test_includes.h"
+#include "Test_sensors_common.h"
+#include "Test_sensors_gen_1_common.h"
 
 
 void TLE493D_A1B6_suiteSetUp(void);
@@ -43,6 +45,10 @@ TEST_GROUP_RUNNER(TLE493D_A1B6)
     TLE493D_A1B6_suiteSetUp();
 
     RUN_TEST_CASE(TLE493D_A1B6, dummy);
+
+    // run gen 1 common functions tests
+    RUN_TEST_GROUP(SensorsCommon);
+    RUN_TEST_GROUP(SensorsGen1Common);
 
     TLE493D_A1B6_suiteTearDown();
 }

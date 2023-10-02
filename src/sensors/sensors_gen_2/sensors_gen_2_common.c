@@ -20,10 +20,17 @@
  *    - registers are 8 bits wide
 */
 void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-    *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
-    *result >>= (8U - lsb->numBits); // shift back and make space for LSB
+    *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
+    *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
 }
+
+
+// void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
+//     *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
+//     *result >>= (8U - lsb->numBits); // shift back and make space for LSB
+//     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
+// }
 
 
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
