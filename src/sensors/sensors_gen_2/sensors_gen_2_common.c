@@ -142,6 +142,18 @@ bool gen_2_hasValidPD0Bit(Sensor_ts *sensor) {
     return sensor->regMap[bf->address] && bf->mask != 0;
 }
 
+bool gen_2_setPowerMode(Sensor_ts *sensor, uint8_t mode) {
+    bool b = gen_2_readRegisters(sensor);
+
+    if (mode != 0b10 && mode <= 0b11) {
+        gen_2_setBitfield(sensor, sensor->commonBitfields.MODE, mode);
+        sensor->regMap[sensor->commonRegisters.MOD1] = (sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[sensor->commonBitfields.FP].mask) | gen_2_calculateFuseParityBit(sensor);
+        return b && gen_2_writeRegister(sensor, sensor->commonBitfields.MODE);
+    }
+    else {
+        return false;
+    }
+}
 bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr) {
     bool b = gen_2_readRegisters(sensor);
     uint8_t bitfieldValue = 0;

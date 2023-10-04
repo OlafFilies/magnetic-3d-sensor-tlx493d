@@ -124,6 +124,7 @@ typedef bool (*DisableTemperatureFuncPtr)(Sensor_ts *);
 typedef bool (*EnableInterruptFuncPtr)(Sensor_ts *);
 typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 
+typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t mode);
 typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t addr);
 
 
@@ -153,6 +154,7 @@ typedef struct CommonFunctions_ts {
     EnableInterruptFuncPtr          enableInterrupt;
     DisableInterruptFuncPtr         disableInterrupt;
 
+    SetPowerModeFuncPtr             setPowerMode;
     SetIICAddressFuncPtr            setIICAddress;
 } CommonFunctions_ts;
 

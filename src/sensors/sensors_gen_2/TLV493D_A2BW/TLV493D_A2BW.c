@@ -98,7 +98,8 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
 
     .enableInterrupt                    = TLV493D_A2BW_enableInterrupt,
     .disableInterrupt                   = TLV493D_A2BW_disableInterrupt,
-    
+
+    .setPowerMode                       = gen_2_setPowerMode,
     .setIICAddress                      = gen_2_setIICAddress
 };
 

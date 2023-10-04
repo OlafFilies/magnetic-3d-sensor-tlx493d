@@ -31,6 +31,7 @@ bool disableTemperature(Sensor_ts *sensor);
 bool enableInterrupt(Sensor_ts *sensor);
 bool disableInterrupt(Sensor_ts *sensor);
 
+bool setPowerMode(Sensor_ts *sensor, uint8_t mode);
 bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
 
 // utilities

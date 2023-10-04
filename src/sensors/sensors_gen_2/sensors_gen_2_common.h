@@ -28,7 +28,6 @@ bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField);
 bool gen_2_readRegisters(Sensor_ts *sensor);
 
 uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor);
-uint8_t gen_2_calculateConfigurationParityBit(Sensor_ts *sensor);
 uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor);
 
 bool gen_2_hasValidData(Sensor_ts *sensor);
@@ -39,7 +38,10 @@ bool gen_2_hasValidConfigurationParity(Sensor_ts *sensor);
 bool gen_2_hasValidTBit(Sensor_ts *sensor) ;
 bool gen_2_hasValidPD3Bit(Sensor_ts *sensor);
 bool gen_2_hasValidPD0Bit(Sensor_ts *sensor);
+
+bool gen_2_setPowerMode(Sensor_ts *sensor, uint8_t mode);
 bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr);
+
 uint8_t gen_2_getID(Sensor_ts *sensor);
 uint8_t gen_2_getFrameCounter(Sensor_ts *sensor) ;
 uint8_t gen_2_getType(Sensor_ts *sensor);

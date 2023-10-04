@@ -87,6 +87,11 @@ class TLx493D {
         }
 
 
+        bool setPowerMode(uint8_t mode) {
+            return ::setPowerMode(&sensor, mode);
+        }
+
+        
         bool setIICAddress(uint8_t addr) {
             return ::setIICAddress(&sensor, addr);
         }

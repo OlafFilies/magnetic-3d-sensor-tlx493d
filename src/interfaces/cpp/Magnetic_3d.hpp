@@ -73,25 +73,36 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             return sensor.getFieldValues(x, y, z);
         }
 
+
         bool enableTemperature() {
             return sensor.enableTemperature();
         }
+
 
         bool disableTemperature() {
             return sensor.disableTemperature();
         }
 
+
         bool enableInterrupt() {
             return sensor.enableInterrupt();
         }
+
 
         bool disableInterrupt() {
             return sensor.disableInterrupt();
         }
 
+
+        bool setPowerMode(uint8_t mode) {
+            return sensor.setPowerMode(mode);
+        }
+
+
         bool setIICAddress(uint8_t addr) {
             return sensor.setIICAddress(addr);
         }
+        
 
     private:
 
