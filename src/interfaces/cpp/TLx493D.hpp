@@ -87,6 +87,11 @@ class TLx493D {
         }
 
 
+        bool setIICAddress(uint8_t addr) {
+            return ::setIICAddress(&sensor, addr);
+        }
+
+
         Sensor_ts *getSensorStruct() {
             return &sensor;
         }

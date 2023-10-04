@@ -9,6 +9,12 @@
 // common to all sensors
 #include "sensor_types.h"
 
+typedef enum {
+    GEN_2_STD_IIC_ADDR_A0 = 0,
+    GEN_2_STD_IIC_ADDR_A1 = 1,
+    GEN_2_STD_IIC_ADDR_A2 = 2,
+    GEN_2_STD_IIC_ADDR_A3 = 3
+} StandardIICAddresses_te;
 
 /**
  * Utility to concatenate MSB and LSB of field values
@@ -33,6 +39,7 @@ bool gen_2_hasValidConfigurationParity(Sensor_ts *sensor);
 bool gen_2_hasValidTBit(Sensor_ts *sensor) ;
 bool gen_2_hasValidPD3Bit(Sensor_ts *sensor);
 bool gen_2_hasValidPD0Bit(Sensor_ts *sensor);
+bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr);
 uint8_t gen_2_getID(Sensor_ts *sensor);
 uint8_t gen_2_getFrameCounter(Sensor_ts *sensor) ;
 uint8_t gen_2_getType(Sensor_ts *sensor);

@@ -85,9 +85,12 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             return sensor.enableInterrupt();
         }
 
-
         bool disableInterrupt() {
             return sensor.disableInterrupt();
+        }
+
+        bool setIICAddress(uint8_t addr) {
+            return sensor.setIICAddress(addr);
         }
 
     private:

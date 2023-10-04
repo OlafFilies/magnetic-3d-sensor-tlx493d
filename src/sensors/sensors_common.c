@@ -104,6 +104,10 @@ bool disableInterrupt(Sensor_ts *sensor) {
    return sensor->functions->disableInterrupt(sensor);
 }
 
+bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
+   return sensor->functions->setIICAddress(sensor, addr);
+}
+
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
    switch(sensorType) {

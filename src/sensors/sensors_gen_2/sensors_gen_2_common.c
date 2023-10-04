@@ -142,6 +142,45 @@ bool gen_2_hasValidPD0Bit(Sensor_ts *sensor) {
     return sensor->regMap[bf->address] && bf->mask != 0;
 }
 
+bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr) {
+    bool b = gen_2_readRegisters(sensor);
+    uint8_t bitfieldValue = 0;
+    uint8_t regAddress = 0;
+
+    switch (addr) {
+        case 0:
+            bitfieldValue = 0b00;
+            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A0;
+            break;
+
+        case 1:
+            bitfieldValue = 0b01;
+            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A1;
+            break;
+
+        case 2:
+            bitfieldValue = 0b10;
+            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A2;
+            break;
+
+        case 3:
+            bitfieldValue = 0b11;
+            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A3;
+            break;
+        
+        default:
+            b = false;
+            break;
+    }
+
+    gen_2_setBitfield(sensor, sensor->commonBitfields.IICADR, bitfieldValue);
+    sensor->regMap[sensor->commonRegisters.MOD1] = (sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[sensor->commonBitfields.FP].mask) | gen_2_calculateFuseParityBit(sensor);
+    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.IICADR);
+    setI2CParameters(&sensor->comLibIFParams, regAddress);
+   
+    return b;
+}
+
 
 uint8_t gen_2_getID(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.ID];

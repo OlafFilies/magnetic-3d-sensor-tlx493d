@@ -29,23 +29,6 @@
 /** Sensor specific includes */
 #include "TLV493D_A2BW_defines.h"
 
-// typedef struct TLV493D_A2BW_functions_ts {
-//     InitFuncPtr                         init;
-//     DeinitFuncPtr                       deinit;
-//     GetTemperatureFuncPtr               getTemperature;
-//     UpdateGetTemperatureFuncPtr         updateGetTemperature;
-//     calculateFieldValuesFuncPtr               calculateFieldValues;
-//     calculateFieldValuesFuncPtr         calculateFieldValues;
-//     ResetFuncPtr                        reset;
-//     GetDiagnosisFuncPtr                 getDiagnosis;
-//     CalculateParityFuncPtr              calculateParity;
-//     UpdateRegistersFuncPtr              updateRegisterMap;
-//     EnableTemperatureFuncPtr            enableTemperature;
-//     DisableTemperatureFuncPtr           disableTemperature;
-//     EnableInterruptFuncPtr              enableInterrupt;
-//     DisableInterruptFuncPtr             disableInterrupt;
-// } TLV493D_A2BW_functions_ts;
-
 /**
  * @brief Initializes the XENSIV™ TLV493D-A2BW magnetic 3D sensor
  * It initializes the sensor structure and sets the I2C communication protocol
@@ -138,15 +121,6 @@ void TLV493D_A2BW_calculateParity(Sensor_ts *sensor);
  */
 bool TLV493D_A2BW_setDefaultConfig(Sensor_ts *sensor);
 
-// /**
-//  * @brief Updates all registers of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
-//  * 
-//  * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
-//  * @return true - If successful
-//  * @return false - If unsuccessful
-//  */
-// bool TLV493D_A2BW_updateRegisterMap(Sensor_ts *sensor);
-
 /**
  * @brief Enables the temperature measurement of the XENSIV™ TLV493D-A2BW magnetic 3D sensor 
  * 
@@ -181,6 +155,6 @@ bool TLV493D_A2BW_enableInterrupt(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLV493D_A2BW_disableInterrupt(Sensor_ts* sensor);
+bool TLV493D_A2BW_disableInterrupt(Sensor_ts *sensor);
 
 #endif /** TLV493D_A2BW_H */
