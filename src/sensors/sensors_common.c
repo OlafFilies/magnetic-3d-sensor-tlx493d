@@ -84,24 +84,39 @@ bool setDefaultConfig(Sensor_ts *sensor) {
    return sensor->functions->setDefaultConfig(sensor);
 }
 
+
 bool readRegisters(Sensor_ts *sensor) {
    return sensor->functions->readRegisters(sensor);
 }
+
 
 bool enableTemperature(Sensor_ts *sensor) {
    return sensor->functions->enableTemperature(sensor);
 }
 
+
 bool disableTemperature(Sensor_ts *sensor) {
    return sensor->functions->disableTemperature(sensor);
 }
+
 
 bool enableInterrupt(Sensor_ts *sensor) {
    return sensor->functions->enableInterrupt(sensor);
 }
 
+
 bool disableInterrupt(Sensor_ts *sensor) {
    return sensor->functions->disableInterrupt(sensor);
+}
+
+
+bool setPowerMode(Sensor_ts *sensor, uint8_t mode) {
+   return sensor->functions->setPowerMode(sensor, mode);
+}
+
+
+bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
+   return sensor->functions->setIICAddress(sensor, addr);
 }
 
 // utility function

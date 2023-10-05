@@ -97,17 +97,21 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
     .disableTemperature                 = TLV493D_A2BW_disableTemperature,
 
     .enableInterrupt                    = TLV493D_A2BW_enableInterrupt,
-    .disableInterrupt                   = TLV493D_A2BW_disableInterrupt
+    .disableInterrupt                   = TLV493D_A2BW_disableInterrupt,
+
+    .setPowerMode                       = gen_2_setPowerMode,
+    .setIICAddress                      = gen_2_setIICAddress
 };
 
 bool TLV493D_A2BW_init(Sensor_ts *sensor) {
     sensor->regMap                  = (uint8_t*)malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
     sensor->regDef                  = TLV493D_A2BW_regDef;
-     sensor->commonBitfields   = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
-                                                       .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
-                                                       .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
-                                                     };
-    sensor->commonRegisters   = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
+    sensor->commonBitfields         = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
+                                                             .DT = DT, .AM = AM, .TRIG = TRIG, .X2 = X2, .TL_MAG = TL_MAG, .IICADR = IICADR, .PR = PR, .CA = CA, .INT = INT, .MODE = MODE,
+                                                             .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
+                                                             .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
+                                                            };
+    sensor->commonRegisters         = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
 
     sensor->functions               = &TLV493D_A2BW_commonFunctions;
     sensor->regMapSize              = GEN_2_REG_MAP_SIZE;
@@ -134,9 +138,6 @@ bool TLV493D_A2BW_deinit(Sensor_ts *sensor) {
 void TLV493D_A2BW_calculateTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = 0;
 
-    // value = ((uint16_t)sensor->regMap[sensor->regDef[TEMP_MSB].address]) << 8;
-    // value |= (uint16_t)(sensor->regMap[sensor->regDef[TEMP_LSB].address] & sensor->regDef[TEMP_LSB].mask);
-    // value >>= 4;
     gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
 
     value <<= 2;
@@ -158,18 +159,7 @@ void TLV493D_A2BW_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, fl
     gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
     gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
     gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
-    // valueX = sensor->regMap[sensor->regDef[BX_MSB].address] << 8;
-    // valueX |= (sensor->regMap[sensor->regDef[BX_LSB].address] & sensor->regDef[BX_LSB].mask);
-    // valueX >>= 4;
-
-    // valueY = sensor->regMap[sensor->regDef[BY_MSB].address] << 8;
-    // valueY |= (sensor->regMap[sensor->regDef[BY_LSB].address] & sensor->regDef[BY_LSB].mask) << sensor->regDef[BY_LSB].offset;
-    // valueY >>= 4;
-
-    // valueZ = sensor->regMap[sensor->regDef[BZ_MSB].address] << 8;
-    // valueZ |= (sensor->regMap[sensor->regDef[BZ_LSB].address] & sensor->regDef[BZ_LSB].mask) << sensor->regDef[BZ_LSB].offset;
-    // valueZ >>= 4;
-
+    
     *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
     *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
     *z = ((float) valueZ) * GEN_2_MAG_FIELD_MULT;
@@ -214,36 +204,6 @@ uint8_t TLV493D_A2BW_calculateConfigurationParityBit(Sensor_ts *sensor) {
 
 	return getEvenParity(parity) << sensor->regDef[CP].offset;
 }
-
-// void TLV493D_A2BW_calculateParity(Sensor_ts *sensor) {
-//     uint8_t regParity = 0;
-
-//     gen_2_setBitfield(sensor, CP, 1);
-//     gen_2_setBitfield(sensor, FP, 1);
-
-//     regParity ^= sensor->regMap[sensor->regDef[CP].address];
-
-//     regParity ^= (regParity >> 1);
-//     regParity ^= (regParity >> 2);
-//     regParity ^= (regParity >> 4);
-
-//     gen_2_setBitfield(sensor, CP, (regParity ^ 0x01));
-
-//     regParity = 0;
-
-//     regParity ^= sensor->regMap[sensor->regDef[FP].address];
-//     regParity ^= (sensor->regMap[sensor->regDef[PRD].address] & sensor->regDef[PRD].mask);
-
-//     regParity ^= (regParity >> 1);
-//     regParity ^= (regParity >> 2);
-//     regParity ^= (regParity >> 4);
-
-//     gen_2_setBitfield(sensor, FP, (regParity & 0x01));
-// }
-
-// bool TLV493D_A2BW_updateRegisterMap(Sensor_ts *sensor) {
-//     return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
-// }
 
 static bool TLV493D_A2BW_enable1ByteMode(Sensor_ts *sensor) {
     bool b = false;

@@ -28,8 +28,11 @@ bool readRegisters(Sensor_ts *sensor);
 bool enableTemperature(Sensor_ts *sensor);
 bool disableTemperature(Sensor_ts *sensor);
 
-bool enableInterrupt(Sensor_ts* sensor);
-bool disableInterrupt(Sensor_ts* sensor);
+bool enableInterrupt(Sensor_ts *sensor);
+bool disableInterrupt(Sensor_ts *sensor);
+
+bool setPowerMode(Sensor_ts *sensor, uint8_t mode);
+bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
 
 // utilities
 const char *getTypeAsString(SupportedSensorTypes_te sensorType);
