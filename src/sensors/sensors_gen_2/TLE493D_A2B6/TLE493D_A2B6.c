@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // project c includes
 // common to all sensors
@@ -118,24 +119,26 @@ typedef enum {
 
 
 CommonFunctions_ts TLE493D_A2B6_commonFunctions = {
-                                .init                  = TLE493D_A2B6_init,
-                                .deinit                = TLE493D_A2B6_deinit,
+    .init                  = TLE493D_A2B6_init,
+    .deinit                = TLE493D_A2B6_deinit,
 
-                                .calculateTemperature  = TLE493D_A2B6_calculateTemperature,
-                                .getTemperature        = TLE493D_A2B6_getTemperature,
+    // TODO: remove everywhere   .calculateTemperature  = TLE493D_A2B6_calculateTemperature,
+    .getTemperature        = TLE493D_A2B6_getTemperature,
 
-                                .calculateFieldValues  = TLE493D_A2B6_calculateFieldValues,
-                                .getFieldValues        = TLE493D_A2B6_getFieldValues,
+    // TODO: remove everywhere   .calculateFieldValues  = TLE493D_A2B6_calculateFieldValues,
+    .getFieldValues        = TLE493D_A2B6_getFieldValues,
 
-                                .getSensorValues       = TLE493D_A2B6_getSensorValues,
+    .getSensorValues       = TLE493D_A2B6_getSensorValues,
 
-                                // .reset                 = TLE493D_A2B6_reset,
-                                .hasValidData          = gen_2_hasValidData,
-                                .isFunctional          = gen_2_isFunctional,
+    .hasValidData          = gen_2_hasValidData,
+    .isFunctional          = gen_2_isFunctional,
 
-                                .setDefaultConfig      = TLE493D_A2B6_setDefaultConfig,
-                                .readRegisters         = gen_2_readRegisters,
-                              };
+    .setDefaultConfig      = TLE493D_A2B6_setDefaultConfig,
+    .readRegisters         = gen_2_readRegisters,
+
+    .setPowerMode          = gen_2_setPowerMode,
+    .setIICAddress         = gen_2_setIICAddress
+};
 
 
 // TODO: add parameter IICAddress or ad function to set address.
@@ -156,6 +159,8 @@ bool TLE493D_A2B6_init(Sensor_ts *sensor) {
     sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
+    memset(sensor->regMap, 0, sensor->regMapSize);
+
     setI2CParameters(&sensor->comLibIFParams, GEN_2_STD_IIC_ADDR_WRITE_A0);
 
     return true;
@@ -175,7 +180,7 @@ bool TLE493D_A2B6_deinit(Sensor_ts *sensor) {
 void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = 0;
 
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
 
     value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
     *temp = (((float) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
@@ -195,9 +200,9 @@ bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp) {
 void TLE493D_A2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
 
     *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
     *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
@@ -231,45 +236,33 @@ bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *
 }
 
 
-// // TODO: not yet working !
-// bool TLE493D_A2B6_reset(Sensor_ts *sensor) {
-//     // frameworkReset(sensor);
-
-//     return true;
-// }
-
-
 // Configuration parity bit CP
 uint8_t TLE493D_A2B6_calculateConfigurationParityBit(Sensor_ts *sensor) {
 	// compute parity of Config register
 	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
 
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
 	return getEvenParity(parity) << sensor->regDef[CP].offset;
 }
 
 
-/**
- * - set 1-byte mode
- * - disable interrupts
- * - set parity flag
- * 
-*/
-bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
+// Configuration parity bit CP
+uint8_t TLE493D_A2B6_calculateConfigurationParityBit2(Sensor_ts *sensor) {
+	// compute parity of Config register
+	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
+
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+	return getEvenParity(parity);
+}
+
+
+bool TLE493D_A2B6_set1ByteReadMode(Sensor_ts *sensor, uint8_t pr) {
     uint8_t mod1 = sensor->commonRegisters.MOD1;
 
-    // TODO: the next 2 lines must go into init !
-    sensor->regMap[mod1]  = 0;
-    sensor->regMap[sensor->commonRegisters.MOD2]  = 0; // because of FP calculation !
+    // sensor->regMap[sensor->commonRegisters.MOD2]  = 0; // because of FP calculation ! Rest in init or each time ?
 
-    // gen_2_setBitfield(sensor, MOD1_BITFIELD, 0);
-    // gen_2_setBitfield(sensor, MOD2_BITFIELD, 0); // because of FP calculation !
-
-    // this is already setDefaultConfig ! Should set only PR bit !
-    sensor->regMap[mod1] = sensor->regDef[PR].mask
-                         | sensor->regDef[INT].mask;
-//                          | (MASTER_CONTROLLED_MODE << sensor->regDef[MODE].offset);
-
-    sensor->regMap[mod1] |= gen_2_calculateFuseParityBit(sensor);
+    gen_2_setBitfield(sensor, PR, pr);
+    gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParityBit2(sensor)); // TODO: cleanup gen_2_calculateFuseParityBit2
 
     uint8_t buf[2] = { mod1, sensor->regMap[mod1] };
 
@@ -277,9 +270,26 @@ bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
 }
 
 
-// TODO: provide ?? implement !
+bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
+     return TLE493D_A2B6_set1ByteReadMode(sensor, 1);
+}
+
+
 bool TLE493D_A2B6_disable1ByteMode(Sensor_ts *sensor) {
-    return false;
+     return TLE493D_A2B6_set1ByteReadMode(sensor, 0);
+}
+
+
+bool TLE493D_A2B6_setDisableTemperatureMeasurements(Sensor_ts *sensor, uint8_t dt) {
+    uint8_t config = sensor->commonRegisters.CONFIG;
+
+    gen_2_setBitfield(sensor, DT, dt);
+    gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParityBit2(sensor));
+    uint8_t buf[2] = { config, sensor->regMap[config] };
+
+    // uint8_t buf[2] = { sensor->regDef[DT].address, 0x00 | TLE493D_A2B6_calculateConfigurationParityBit(sensor) };
+
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, buf, sizeof(buf), sensor->regMap, sensor->regMapSize);
 }
 
 
@@ -289,16 +299,12 @@ bool TLE493D_A2B6_disable1ByteMode(Sensor_ts *sensor) {
  *  - preserve all bits except parity and lower TL_MAG bit
 */
 bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
-    uint8_t buf[2] = { sensor->regDef[DT].address, 0x00 | TLE493D_A2B6_calculateConfigurationParityBit(sensor) };
-    // buf[1]  = regMap[sensor->regDef[DT].address] & ~(sensor->regDef[DT].mask);
-
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, buf, sizeof(buf), sensor->regMap, sensor->regMapSize);
+    return TLE493D_A2B6_setDisableTemperatureMeasurements(sensor, 0);
 }
 
 
-// TODO: implement !
 bool TLE493D_A2B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
-    return false;
+    return TLE493D_A2B6_setDisableTemperatureMeasurements(sensor, 1);
 }
 
 
@@ -307,6 +313,13 @@ bool TLE493D_A2B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
 // -> then set PRD bit and recalc. FP bit in MOD2
 // -> then write regMap from MOD1 to MOD2
 bool TLE493D_A2B6_setSlowUpdates(Sensor_ts *sensor) {
+
+//     // this is already setDefaultConfig ! Should set only PR bit !
+//     sensor->regMap[mod1] = sensor->regDef[PR].mask
+//                          | sensor->regDef[INT].mask;
+// //                          | (MASTER_CONTROLLED_MODE << sensor->regDef[MODE].offset);
+
+
     uint8_t mod1 = sensor->commonRegisters.MOD1;
 
     sensor->regMap[sensor->regDef[PRD].address]  |= sensor->regDef[PRD].mask;
@@ -323,6 +336,9 @@ bool TLE493D_A2B6_setSlowUpdates(Sensor_ts *sensor) {
 
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
+    gen_2_setBitfield(sensor, CA, 0);
+    gen_2_setBitfield(sensor, INT, 1);
+
     // TLE493D_A2B6_setSlowUpdates(sensor);
     if( TLE493D_A2B6_enable1ByteMode(sensor) ) {
         return TLE493D_A2B6_enableTemperatureMeasurements(sensor);

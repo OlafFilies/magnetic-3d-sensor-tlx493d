@@ -27,8 +27,11 @@ void gen_2_setBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t newBitFieldV
 bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField);
 bool gen_2_readRegisters(Sensor_ts *sensor);
 
+// TODO: cleanup
 uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor);
 uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor);
+uint8_t gen_2_calculateFuseParityBit2(Sensor_ts *sensor);
+uint8_t gen_2_calculateBusParityBit2(Sensor_ts *sensor);
 
 bool gen_2_hasValidData(Sensor_ts *sensor);
 bool gen_2_isFunctional(Sensor_ts *sensor);

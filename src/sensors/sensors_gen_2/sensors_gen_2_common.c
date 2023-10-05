@@ -14,23 +14,16 @@
 #include "sensors_gen_2_common.h"
 
 
-/**
- * More generic version wrt size and offsets of MSB and LSB. Register values are in two's complement form.
- * Assumptions :
- *    - registers are 8 bits wide
-*/
+// framework functions
+// TODO: replace by function pointers in comLibIF structure
+extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
+
+
 void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-    *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
-    *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
+    *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
+    *result >>= (8U - lsb->numBits); // shift back and make space for LSB
     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
 }
-
-
-// void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-//     *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
-//     *result >>= (8U - lsb->numBits); // shift back and make space for LSB
-//     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-// }
 
 
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
@@ -75,6 +68,8 @@ bool gen_2_readRegisters(Sensor_ts *sensor) {
 }
 
 
+
+
 // Fuse/mode parity bit FP
 uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FP];
@@ -85,6 +80,7 @@ uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor) {
 	// add parity of MOD2:PRD register bits
 	parity ^= calculateParity(sensor->regMap[sensor->commonRegisters.MOD2] & sensor->regDef[sensor->commonBitfields.PRD].mask);
 
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
 	return getOddParity(parity) << bf->offset;
 }
 
@@ -98,7 +94,35 @@ uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor) {
 		parity ^= sensor->regMap[i];
 	}
 
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
 	return getOddParity(calculateParity(parity)) << sensor->regDef[sensor->commonBitfields.P].offset;
+}
+
+
+// Fuse/mode parity bit FP
+uint8_t gen_2_calculateFuseParityBit2(Sensor_ts *sensor) {
+	// compute parity of MOD1 register
+	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[sensor->commonBitfields.FP].mask);
+
+	// add parity of MOD2:PRD register bits
+	parity ^= calculateParity(sensor->regMap[sensor->commonRegisters.MOD2] & sensor->regDef[sensor->commonBitfields.PRD].mask);
+
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+	return getOddParity(parity);
+}
+
+
+// Calculate bus (data) parity bit P
+uint8_t gen_2_calculateBusParityBit2(Sensor_ts *sensor) {
+	// compute bus parity of data values in registers 0 to 5
+	uint8_t parity = sensor->regMap[0];
+
+	for (uint8_t i = 1; i < 6; ++i) {
+		parity ^= sensor->regMap[i];
+	}
+
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+	return getOddParity(calculateParity(parity));
 }
 
 
@@ -188,8 +212,7 @@ bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr) {
             break;
         
         default:
-            b = false;
-            break;
+            return false;
     }
 
     gen_2_setBitfield(sensor, sensor->commonBitfields.IICADR, bitfieldValue);
