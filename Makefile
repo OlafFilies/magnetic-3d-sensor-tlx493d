@@ -55,10 +55,8 @@ arduino_W2B6_needsSensor arduino_W2B6 : arduino_unity arduino_flash
 
 
 arduino_test_all: TESTS=$(TESTS_NEEDS_SENSOR) $(TESTS_NO_SENSOR)
-# $(TEST_COMMON_NEEDS_SENSOR) $(TEST_COMMON)
 arduino_test_needsSensor: TESTS=$(TESTS_NEEDS_SENSOR) $(TEST_COMMON_NEEDS_SENSOR)
 arduino_test: TESTS=$(TESTS_NO_SENSOR)
-# $(TEST_COMMON)
 
 arduino_test_all \
 arduino_test_needsSensor \
@@ -111,8 +109,6 @@ else
 # CAUTION : only use '=' when assigning values to vars, not '+='
 	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
                                     		             --build-property compiler.cpp.extra_flags="$(TESTS)" build
-#	                                        		      --build-property "compiler.cpp.extra_flags=\"$(TESTS)\"" build
-#	                                             		 --build-property "compiler.cpp.extra_flags=\"-DTEST_TLE493D_A2B6=1\"" build
 endif
 
 
