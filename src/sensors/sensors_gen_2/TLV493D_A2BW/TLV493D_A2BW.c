@@ -138,7 +138,8 @@ bool TLV493D_A2BW_deinit(Sensor_ts *sensor) {
 void TLV493D_A2BW_calculateTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = 0;
 
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
+    //gen_2_
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
 
     value <<= 2;
     *temp = (float)((((float)value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF);
@@ -156,9 +157,12 @@ bool TLV493D_A2BW_getTemperature(Sensor_ts *sensor, float *temp) {
 void TLV493D_A2BW_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
-    gen_2_concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
+    // gen_2_
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
+    // gen_2_
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
+    // gen_2_
+    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
     
     *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
     *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;

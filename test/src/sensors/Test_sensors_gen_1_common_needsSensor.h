@@ -1,5 +1,5 @@
-#ifndef TEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR
-#define TEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR
+#ifndef TEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR_H
+#define TEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR_H
 
 // test includes
 #include "Test_includes.h"
@@ -38,4 +38,4 @@ static TEST_GROUP_RUNNER(SensorsGen1Common_needsSensor)
     RUN_TEST_CASE(SensorsGen1Common_needsSensor, dummy);
 }
 
-#endif // TEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR
+#endif // TEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR_H

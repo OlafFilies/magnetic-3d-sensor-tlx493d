@@ -1,5 +1,5 @@
-#ifndef TEST_SENSORS_GEN_1_COMMON
-#define TEST_SENSORS_GEN_1_COMMON
+#ifndef TEST_SENSORS_GEN_1_COMMON_H
+#define TEST_SENSORS_GEN_1_COMMON_H
 
 // std includes
 #include <string.h>
@@ -41,4 +41,4 @@ static TEST_GROUP_RUNNER(SensorsGen1Common)
     RUN_TEST_CASE(SensorsGen1Common, dummy);
 }
 
-#endif // TEST_SENSORS_GEN_1_COMMON
+#endif // TEST_SENSORS_GEN_1_COMMON_H

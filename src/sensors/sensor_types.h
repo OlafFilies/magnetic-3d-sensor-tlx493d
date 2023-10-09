@@ -129,6 +129,8 @@ typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t mode);
 typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t addr);
 
+typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
+
 
 typedef struct CommonFunctions_ts {
     InitFuncPtr                     init;
@@ -160,6 +162,9 @@ typedef struct CommonFunctions_ts {
 
     SetPowerModeFuncPtr             setPowerMode;
     SetIICAddressFuncPtr            setIICAddress;
+
+    // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
+    TransferRegistersFuncPtr        transfer;
 } CommonFunctions_ts;
 
 
