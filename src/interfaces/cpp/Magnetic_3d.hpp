@@ -102,7 +102,15 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         bool setIICAddress(uint8_t addr) {
             return sensor.setIICAddress(addr);
         }
+
         
+        bool enableAngularMeasurement() {
+            return sensor.enableAngularMeasurement();
+        }
+
+        bool disableAngularMeasurement() {
+            return sensor.disableAngularMeasurement();
+        }
 
     private:
 

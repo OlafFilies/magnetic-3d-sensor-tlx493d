@@ -101,7 +101,12 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
     .disableInterrupt                   = TLV493D_A2BW_disableInterrupt,
 
     .setPowerMode                       = gen_2_setPowerMode,
-    .setIICAddress                      = gen_2_setIICAddress
+    .setIICAddress                      = gen_2_setIICAddress,
+
+    .calcConfigParity                   = TLV493D_A2BW_calculateConfigurationParityBit,
+
+    .enableAngularMeasurement           = gen_2_enableAngularMeasurement,
+    .disableAngularMeasurement          = gen_2_disableAngularMeasurement
 };
 
 bool TLV493D_A2BW_init(Sensor_ts *sensor) {
@@ -139,7 +144,6 @@ bool TLV493D_A2BW_deinit(Sensor_ts *sensor) {
 void TLV493D_A2BW_calculateTemperature(Sensor_ts *sensor, float *temp) {
     int16_t value = 0;
 
-    //gen_2_
     concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
 
     value <<= 2;
@@ -158,11 +162,8 @@ bool TLV493D_A2BW_getTemperature(Sensor_ts *sensor, float *temp) {
 void TLV493D_A2BW_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    // gen_2_
     concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
-    // gen_2_
     concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
-    // gen_2_
     concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
     
     *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;

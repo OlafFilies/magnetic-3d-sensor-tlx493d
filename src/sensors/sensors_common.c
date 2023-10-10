@@ -119,6 +119,17 @@ bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
    return sensor->functions->setIICAddress(sensor, addr);
 }
 
+
+bool enableAngularMeasurement(Sensor_ts *sensor) {
+   return sensor->functions->enableAngularMeasurement(sensor);
+}
+
+
+bool disableAngularMeasurement(Sensor_ts *sensor) {
+   return sensor->functions->disableAngularMeasurement(sensor);
+}
+
+
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
    switch(sensorType) {

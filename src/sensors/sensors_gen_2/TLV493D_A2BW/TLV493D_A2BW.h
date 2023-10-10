@@ -99,6 +99,8 @@ bool TLV493D_A2BW_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z
 
 bool TLV493D_A2BW_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 
+uint8_t TLV493D_A2BW_calculateConfigurationParityBit(Sensor_ts *sensor);
+
 bool TLV493D_A2BW_reset(Sensor_ts *sensor);
 bool TLV493D_A2BW_getDiagnosis(Sensor_ts *sensor);
 

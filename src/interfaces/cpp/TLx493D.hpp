@@ -97,6 +97,16 @@ class TLx493D {
         }
 
 
+        bool enableAngularMeasurement() {
+            return ::enableAngularMeasurement(&sensor);
+        }
+
+
+        bool disableAngularMeasurement() {
+            return ::disableAngularMeasurement(&sensor);
+        }
+
+
         Sensor_ts *getSensorStruct() {
             return &sensor;
         }

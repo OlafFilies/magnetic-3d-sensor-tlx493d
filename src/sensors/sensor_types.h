@@ -112,8 +112,6 @@ typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z)
 
 typedef bool (*GetSensorValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z, float *temp);
 
-// typedef bool (*ResetFuncPtr)(Sensor_ts *);
-
 typedef bool (*HasValidDataFuncPtr)(Sensor_ts *);
 typedef bool (*IsFunctionalFuncPtr)(Sensor_ts *);
 
@@ -129,42 +127,49 @@ typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t mode);
 typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t addr);
 
+typedef uint8_t (*CalculateConfigParityFuncPtr)(Sensor_ts *);
+
+typedef bool (*EnableAngularMeasurementFuncPtr)(Sensor_ts *);
+typedef bool (*DisableAngularMeasurementFuncPtr)(Sensor_ts *);
 typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 
 typedef struct CommonFunctions_ts {
-    InitFuncPtr                     init;
-    DeinitFuncPtr                   deinit;
+    InitFuncPtr                         init;
+    DeinitFuncPtr                       deinit;
 
 // TODO: to be removed
-    CalculateTemperatureFuncPtr     calculateTemperature;
-    GetTemperatureFuncPtr           getTemperature;
+    CalculateTemperatureFuncPtr         calculateTemperature;
+    GetTemperatureFuncPtr               getTemperature;
 
-// TODO: to be removed
-    CalculateFieldValuesFuncPtr     calculateFieldValues;
-    GetFieldValuesFuncPtr           getFieldValues;
-    
-    GetSensorValuesFuncPtr          getSensorValues;
-    
-    HasValidDataFuncPtr             hasValidData;
-    IsFunctionalFuncPtr             isFunctional;
+// TODO: to be removed  
+    CalculateFieldValuesFuncPtr         calculateFieldValues;
+    GetFieldValuesFuncPtr               getFieldValues;
 
-    // ResetFuncPtr                 reset;
+    GetSensorValuesFuncPtr              getSensorValues;
 
-    SetDefaultConfigFuncPtr         setDefaultConfig;
-    ReadRegistersFuncPtr            readRegisters;
+    HasValidDataFuncPtr                 hasValidData;
+    IsFunctionalFuncPtr                 isFunctional;
 
-    EnableTemperatureFuncPtr        enableTemperature;
-    DisableTemperatureFuncPtr       disableTemperature;
+    SetDefaultConfigFuncPtr             setDefaultConfig;
+    ReadRegistersFuncPtr                readRegisters;
 
-    EnableInterruptFuncPtr          enableInterrupt;
-    DisableInterruptFuncPtr         disableInterrupt;
+    EnableTemperatureFuncPtr            enableTemperature;
+    DisableTemperatureFuncPtr           disableTemperature;
 
-    SetPowerModeFuncPtr             setPowerMode;
-    SetIICAddressFuncPtr            setIICAddress;
+    EnableInterruptFuncPtr              enableInterrupt;
+    DisableInterruptFuncPtr             disableInterrupt;
+
+    SetPowerModeFuncPtr                 setPowerMode;
+    SetIICAddressFuncPtr                setIICAddress;
+
+    CalculateConfigParityFuncPtr        calcConfigParity;
+
+    EnableAngularMeasurementFuncPtr     enableAngularMeasurement;
+    DisableAngularMeasurementFuncPtr    disableAngularMeasurement;
 
     // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
-    TransferRegistersFuncPtr        transfer;
+    TransferRegistersFuncPtr            transfer;
 } CommonFunctions_ts;
 
 

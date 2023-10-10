@@ -34,6 +34,9 @@ bool disableInterrupt(Sensor_ts *sensor);
 bool setPowerMode(Sensor_ts *sensor, uint8_t mode);
 bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
 
+bool enableAngularMeasurement(Sensor_ts *sensor);
+bool disableAngularMeasurement(Sensor_ts *sensor);
+
 // utilities
 const char *getTypeAsString(SupportedSensorTypes_te sensorType);
 

@@ -16,10 +16,6 @@ typedef enum {
     GEN_2_STD_IIC_ADDR_A3 = 3
 } StandardIICAddresses_te;
 
-// /**
-//  * Utility to concatenate MSB and LSB of field values
-//  */
-// void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result);
 
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue);
 void gen_2_setBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue);
@@ -48,6 +44,9 @@ bool gen_2_hasValidPD0Bit(Sensor_ts *sensor);
 
 bool gen_2_setPowerMode(Sensor_ts *sensor, uint8_t mode);
 bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr);
+
+bool gen_2_enableAngularMeasurement(Sensor_ts *sensor);
+bool gen_2_disableAngularMeasurement(Sensor_ts *sensor);
 
 uint8_t gen_2_getID(Sensor_ts *sensor);
 uint8_t gen_2_getFrameCounter(Sensor_ts *sensor) ;

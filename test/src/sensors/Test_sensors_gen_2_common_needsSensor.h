@@ -31,11 +31,27 @@ TEST_IFX(SensorsGen2Common_needsSensor, dummy)
     TEST_ASSERT( true == !false );
 }
 
+TEST_IFX(SensorsGen2Common_needsSensor, concatBytes)
+{
+    int16_t result = 0;
+
+    TEST_ASSERT(gen_2_readRegisters(&dut));
+
+    gen_2_concatBytes(&dut, &dut.regDef[dut.commonBitfields.DT], &dut.regDef[dut.commonBitfields.MODE], &result);
+
+    TEST_ASSERT_EQUAL_INT16(0, result);
+
+    gen_2_concatBytes(&dut, &dut.regDef[dut.commonBitfields.PR], &dut.regDef[dut.commonBitfields.DT], &result);
+
+    TEST_ASSERT_EQUAL_INT16(2, result);
+}
+
 
 // Bundle all tests to be executed for this test group
 static TEST_GROUP_RUNNER(SensorsGen2Common_needsSensor)
 {
     RUN_TEST_CASE(SensorsGen2Common_needsSensor, dummy);
+    RUN_TEST_CASE(SensorsGen2Common_needsSensor, concatBytes);
 }
 
 #endif // TEST_SENSORS_GEN_2_COMMON_NEEDS_SENSOR_H

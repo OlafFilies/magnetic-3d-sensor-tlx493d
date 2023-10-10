@@ -13,17 +13,11 @@
 #include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
+// extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
 
-// framework functions
-// TODO: replace by function pointers in comLibIF structure
+// // framework functions
+// // TODO: replace by function pointers in comLibIF structure
 extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
-
-
-// void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-//     *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
-//     *result >>= (8U - lsb->numBits); // shift back and make space for LSB
-//     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-// }
 
 
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
@@ -231,6 +225,32 @@ bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr) {
     bool b = gen_2_writeRegister(sensor, sensor->commonBitfields.IICADR);
     setI2CParameters(sensor, deviceAddress);
     // setI2CParameters(&sensor->comLibIFParams, deviceAddress);
+
+    return b;
+}
+
+
+bool gen_2_enableAngularMeasurement(Sensor_ts *sensor) {
+    bool b = gen_2_readRegisters(sensor);
+
+    gen_2_setBitfield(sensor, sensor->commonBitfields.DT, 1);
+    gen_2_setBitfield(sensor, sensor->commonBitfields.AM, 1);
+    sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[sensor->commonBitfields.CP].mask) | sensor->functions->calcConfigParity(sensor);
+
+    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.DT);
+
+    return b;
+}
+
+
+bool gen_2_disableAngularMeasurement(Sensor_ts *sensor) {
+    bool b = gen_2_readRegisters(sensor);
+
+    gen_2_setBitfield(sensor, sensor->commonBitfields.DT, 0);
+    gen_2_setBitfield(sensor, sensor->commonBitfields.AM, 0);
+    sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[sensor->commonBitfields.CP].mask) | sensor->functions->calcConfigParity(sensor);
+
+    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.DT);
 
     return b;
 }
