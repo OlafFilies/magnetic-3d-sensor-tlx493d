@@ -27,10 +27,10 @@
 #include "unity_fixture.h"
 
 
+static Sensor_ts dut;
+
+
 TEST_GROUP(TLE493D_A2B6_needsSensor);
-
-
-extern Sensor_ts dut;
 
 
 //This is run before EACH TEST
@@ -54,8 +54,17 @@ TEST_TEAR_DOWN(TLE493D_A2B6_needsSensor)
 TEST(TLE493D_A2B6_needsSensor, defaultConfig)
 {
     float temperature = 0.0;
+    // TEST_ASSERT_EQUAL( true, gen_2_readRegisters(&dut) );
+    // TEST_ASSERT_EQUAL( true, readRegisters(&dut) );
+
     TEST_ASSERT_EQUAL( true, TLE493D_A2B6_getTemperature(&dut, &temperature) );
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, temperature );
 
     TEST_ASSERT_EQUAL_HEX( 0x94, dut.regMap[0x11] );
+}
+
+
+TEST_GROUP_RUNNER(TLE493D_A2B6_needsSensor)
+{
+  RUN_TEST_CASE(TLE493D_A2B6_needsSensor, defaultConfig);
 }

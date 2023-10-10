@@ -30,16 +30,18 @@ bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z
 void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 
-// bool TLE493D_A2B6_reset(Sensor_ts *sensor);
-
 // bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
 // bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor);
-// bool TLE493D_A2B6_updateRegisterMap(Sensor_ts *sensor);
-
+bool TLE493D_A2B6_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 // utility functions
+bool TLE493D_A2B6_hasValidIICadr(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasWakeup(Sensor_ts *sensor);
 
+
+bool TLE493D_A2B6_enableCollisionAvoidance(Sensor_ts *sensor);
+bool TLE493D_A2B6_disableCollisionAvoidance(Sensor_ts *sensor);
 
 #endif /** TLE493D_A2B6_H */

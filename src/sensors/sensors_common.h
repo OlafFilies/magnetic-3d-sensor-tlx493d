@@ -41,6 +41,8 @@ uint8_t calculateParity(uint8_t data);
 uint8_t getOddParity(uint8_t parity);
 uint8_t getEvenParity(uint8_t parity);
 
+void concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result);
+
 
 // functions available only to a subset of sensors
 

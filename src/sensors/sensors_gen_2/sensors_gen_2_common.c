@@ -14,16 +14,16 @@
 #include "sensors_gen_2_common.h"
 
 
-/**
- * More generic version wrt size and offsets of MSB and LSB. Register values are in two's complement form.
- * Assumptions :
- *    - registers are 8 bits wide
-*/
-void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-    *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
-    *result >>= (8U - lsb->numBits); // shift back and make space for LSB
-    *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-}
+// framework functions
+// TODO: replace by function pointers in comLibIF structure
+extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
+
+
+// void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
+//     *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
+//     *result >>= (8U - lsb->numBits); // shift back and make space for LSB
+//     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
+// }
 
 
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
@@ -52,10 +52,12 @@ bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
     Register_ts *bf = &sensor->regDef[bitField];
 
     if((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
-        uint8_t transBuffer[2] = {bf->address, sensor->regMap[bf->address]};
+        uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
 
         return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
+
+    assert((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
 
     return false;
 }
@@ -68,22 +70,52 @@ bool gen_2_readRegisters(Sensor_ts *sensor) {
 }
 
 
-// Fuse/mode parity bit FP
-uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor) {
-    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FP];
 
+
+// // Fuse/mode parity bit FP
+// uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor) {
+//     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FP];
+
+// 	// compute parity of MOD1 register
+// 	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.MOD1] & ~bf->mask);
+
+// 	// add parity of MOD2:PRD register bits
+// 	parity ^= calculateParity(sensor->regMap[sensor->commonRegisters.MOD2] & sensor->regDef[sensor->commonBitfields.PRD].mask);
+
+// // TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+// 	return getOddParity(parity) << bf->offset;
+// }
+
+
+// // Calculate bus (data) parity bit P
+// uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor) {
+// 	// compute bus parity of data values in registers 0 to 5
+// 	uint8_t parity = sensor->regMap[0];
+
+// 	for (uint8_t i = 1; i < 6; ++i) {
+// 		parity ^= sensor->regMap[i];
+// 	}
+
+// // TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+// 	return getOddParity(calculateParity(parity)) << sensor->regDef[sensor->commonBitfields.P].offset;
+// }
+
+
+// Fuse/mode parity bit FP
+uint8_t gen_2_calculateFuseParity(Sensor_ts *sensor) {
 	// compute parity of MOD1 register
-	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.MOD1] & ~bf->mask);
+	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[sensor->commonBitfields.FP].mask);
 
 	// add parity of MOD2:PRD register bits
 	parity ^= calculateParity(sensor->regMap[sensor->commonRegisters.MOD2] & sensor->regDef[sensor->commonBitfields.PRD].mask);
 
-	return getOddParity(parity) << bf->offset;
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+	return getOddParity(parity);
 }
 
 
 // Calculate bus (data) parity bit P
-uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor) {
+uint8_t gen_2_calculateBusParity(Sensor_ts *sensor) {
 	// compute bus parity of data values in registers 0 to 5
 	uint8_t parity = sensor->regMap[0];
 
@@ -91,105 +123,115 @@ uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor) {
 		parity ^= sensor->regMap[i];
 	}
 
-	return getOddParity(calculateParity(parity)) << sensor->regDef[sensor->commonBitfields.P].offset;
+// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
+	return getOddParity(calculateParity(parity));
 }
 
 
-// TODO: implement !
 bool gen_2_hasValidData(Sensor_ts *sensor) {
-    return true;
+    return gen_2_hasValidBusParity(sensor) && gen_2_hasValidTBit(sensor);
 }
 
 
-// TODO: implement !
+bool gen_2_hasValidTemperatureData(Sensor_ts *sensor) {
+    return gen_2_hasValidData(sensor) && gen_2_hasValidPD3Bit(sensor);
+}
+
+
+bool gen_2_hasValidFieldData(Sensor_ts *sensor) {
+    return gen_2_hasValidData(sensor) && gen_2_hasValidPD0Bit(sensor);
+}
+
+
 bool gen_2_isFunctional(Sensor_ts *sensor) {
-    return true;
+    return gen_2_hasValidFuseParity(sensor) && gen_2_hasValidConfigurationParity(sensor);
 }
 
 
 bool gen_2_hasValidBusParity(Sensor_ts *sensor) {
-    uint8_t p = sensor->commonBitfields.P;
-    return gen_2_calculateBusParityBit(sensor) == (sensor->regMap[sensor->regDef[p].address] && sensor->regDef[p].mask);
+    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.P];
+    return gen_2_calculateBusParity(sensor) == ((sensor->regMap[bf->address] & bf->mask) >> bf->offset);
 }
 
 
 bool gen_2_hasValidFuseParity(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FF];
-    return sensor->regMap[bf->address] && bf->mask != 0;
+    return (sensor->regMap[bf->address] & bf->mask) != 0;
 }
 
 
 bool gen_2_hasValidConfigurationParity(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.CF];
-    return sensor->regMap[bf->address] && bf->mask != 0;
+    return (sensor->regMap[bf->address] & bf->mask) != 0;
 }
 
 
 bool gen_2_hasValidTBit(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.T];
-    return sensor->regMap[bf->address] && bf->mask == 0;
+    return (sensor->regMap[bf->address] & bf->mask) == 0;
 }
 
 
 bool gen_2_hasValidPD3Bit(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.PD3];
-    return sensor->regMap[bf->address] && bf->mask != 0;
+    return (sensor->regMap[bf->address] & bf->mask) != 0;
 }
 
 
 bool gen_2_hasValidPD0Bit(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.PD0];
-    return sensor->regMap[bf->address] && bf->mask != 0;
+    return (sensor->regMap[bf->address] & bf->mask) != 0;
 }
 
-bool gen_2_setPowerMode(Sensor_ts *sensor, uint8_t mode) {
-    bool b = gen_2_readRegisters(sensor);
 
-    if (mode != 0b10 && mode <= 0b11) {
+bool gen_2_setPowerMode(Sensor_ts *sensor, uint8_t mode) {
+    if( (mode != 0b10) && (mode <= 0b11) ){
         gen_2_setBitfield(sensor, sensor->commonBitfields.MODE, mode);
-        sensor->regMap[sensor->commonRegisters.MOD1] = (sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[sensor->commonBitfields.FP].mask) | gen_2_calculateFuseParityBit(sensor);
-        return b && gen_2_writeRegister(sensor, sensor->commonBitfields.MODE);
+        gen_2_setBitfield(sensor, sensor->commonBitfields.FP, gen_2_calculateFuseParity(sensor));
+        return gen_2_writeRegister(sensor, sensor->commonBitfields.MODE);
     }
     else {
         return false;
     }
 }
+
+
 bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr) {
-    bool b = gen_2_readRegisters(sensor);
     uint8_t bitfieldValue = 0;
-    uint8_t regAddress = 0;
+    uint8_t deviceAddress = 0;
 
     switch (addr) {
-        case 0:
+        case GEN_2_STD_IIC_ADDR_A0:
             bitfieldValue = 0b00;
-            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A0;
+            deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A0;
             break;
 
-        case 1:
+        case GEN_2_STD_IIC_ADDR_A1:
             bitfieldValue = 0b01;
-            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A1;
+            deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A1;
             break;
 
-        case 2:
+        case GEN_2_STD_IIC_ADDR_A2:
             bitfieldValue = 0b10;
-            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A2;
+            deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A2;
             break;
 
-        case 3:
+        case GEN_2_STD_IIC_ADDR_A3:
             bitfieldValue = 0b11;
-            regAddress = GEN_2_STD_IIC_ADDR_WRITE_A3;
+            deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A3;
             break;
         
         default:
-            b = false;
-            break;
+            return false;
     }
 
     gen_2_setBitfield(sensor, sensor->commonBitfields.IICADR, bitfieldValue);
-    sensor->regMap[sensor->commonRegisters.MOD1] = (sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[sensor->commonBitfields.FP].mask) | gen_2_calculateFuseParityBit(sensor);
-    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.IICADR);
-    setI2CParameters(&sensor->comLibIFParams, regAddress);
-   
+    gen_2_setBitfield(sensor, sensor->commonBitfields.FP, gen_2_calculateFuseParity(sensor));
+
+    bool b = gen_2_writeRegister(sensor, sensor->commonBitfields.IICADR);
+    setI2CParameters(sensor, deviceAddress);
+    // setI2CParameters(&sensor->comLibIFParams, deviceAddress);
+
     return b;
 }
 
@@ -215,4 +257,19 @@ uint8_t gen_2_getType(Sensor_ts *sensor) {
 uint8_t gen_2_getHWV(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.HWV];
     return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
+}
+
+
+
+
+bool gen_2_hasValidIICadr(Sensor_ts *sensor, uint8_t id, uint8_t iicAdr) {
+    Register_ts *idBf     = &sensor->regDef[id];
+    Register_ts *iicAdrBf = &sensor->regDef[id];
+    return ((sensor->regMap[idBf->address] & idBf->mask) >> idBf->offset) == ((sensor->regMap[iicAdrBf->address] & iicAdrBf->mask) >> iicAdrBf->offset);
+}
+
+
+bool gen_2_hasWakeup(Sensor_ts *sensor, uint8_t type) {
+    Register_ts *typeBf = &sensor->regDef[type];
+    return ((sensor->regMap[typeBf->address] & typeBf->mask) >> typeBf->offset) != 0b11;
 }

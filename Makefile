@@ -1,10 +1,66 @@
 FQBN ?=
 PORT ?=
-TEST ?=
 
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
-$(info TEST : $(TEST))
+
+
+# TEST_COMMON=-DTEST_SENSORS_COMMON \
+# 			-DTEST_SENSORS_GEN_1_COMMON \
+# 			-DTEST_SENSORS_GEN_2_COMMON \
+# 			-DTEST_SENSORS_GEN_3_COMMON
+
+# TEST_COMMON_NEEDS_SENSOR=-DTEST_SENSORS_COMMON_NEEDS_SENSOR \
+# 						 -DTEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR \
+# 						 -DTEST_SENSORS_GEN_2_COMMON_NEEDS_SENSOR \
+# 			 			 -DTEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
+
+TESTS_NEEDS_SENSOR=-DTEST_TLE493D_A1B6_NEEDS_SENSOR \
+                   -DTEST_TLE493D_A2B6_NEEDS_SENSOR \
+	               -DTEST_TLV493D_A2BW_NEEDS_SENSOR \
+				   -DTEST_TLE493D_P2B6_NEEDS_SENSOR \
+				   -DTEST_TLE493D_W2B6_NEEDS_SENSOR
+
+TESTS_NO_SENSOR=-DTEST_TLE493D_A1B6 \
+                -DTEST_TLE493D_A2B6 \
+			 	-DTEST_TLV493D_A2BW \
+				-DTEST_TLE493D_P2B6 \
+				-DTEST_TLE493D_W2B6
+				
+
+arduino_A1B6_needsSensor: TESTS=-DTEST_TLE493D_A1B6 -DTEST_TLE493D_A1B6_NEEDS_SENSOR
+arduino_A1B6: TESTS=-DTEST_TLE493D_A1B6
+
+arduino_A2B6_needsSensor: TESTS=-DTEST_TLE493D_A2B6 -DTEST_TLE493D_A2B6_NEEDS_SENSOR
+arduino_A2B6: TESTS=-DTEST_TLE493D_A2B6
+
+arduino_A2BW_needsSensor: TESTS=-DTEST_TLV493D_A2BW -DTEST_TLV493D_A2BW_NEEDS_SENSOR
+arduino_A2BW: TESTS=-DTEST_TLV493D_A2BW
+
+arduino_P2B6_needsSensor: TESTS=-DTEST_TLE493D_P2B6 -DTEST_TLE493D_P2B6_NEEDS_SENSOR
+arduino_P2B6: TESTS=-DTEST_TLE493D_P2B6
+
+arduino_W2B6_needsSensor: TESTS=-DTEST_TLE493D_W2B6 -DTEST_TLE493D_W2B6_NEEDS_SENSOR
+arduino_W2B6: TESTS=-DTEST_TLE493D_W2B6
+
+arduino_A1B6_needsSensor arduino_A1B6 \
+arduino_A2B6_needsSensor arduino_A2B6 \
+arduino_A2BW_needsSensor arduino_A2BW \
+arduino_P2B6_needsSensor arduino_P2B6 \
+arduino_W2B6_needsSensor arduino_W2B6 : arduino_unity arduino_flash
+
+
+# arduino_sensor_common_needsSensor: TESTS=$(TEST_COMMON_NEEDS_SENSOR)
+# arduino_sensor_common: TESTS=$(TEST_COMMON)
+
+
+arduino_test_all: TESTS=$(TESTS_NEEDS_SENSOR) $(TESTS_NO_SENSOR)
+arduino_test_needsSensor: TESTS=$(TESTS_NEEDS_SENSOR) $(TEST_COMMON_NEEDS_SENSOR)
+arduino_test: TESTS=$(TESTS_NO_SENSOR)
+
+arduino_test_all \
+arduino_test_needsSensor \
+arduino_test: arduino_unity arduino_flash
 
 
 ### Arduino targets
@@ -26,15 +82,12 @@ arduino_cpp: arduino
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 arduino_unity arduino_flash arduino_monitor
 arduino_unity: arduino
-ifeq ($(TEST),)
-	$(error "Must set variable TEST in order to be able to compile and flash a specific Arduino unity tests !")
-else
 	cp -r test/Unity/*.[hc] build
-	cp test/src/arduino/Test_$(TEST)*.c build
+	cp test/src//Test_*.h build
+	cp test/src/sensors/Test_*.h build
 	cp test/src/arduino/Test_*.c* build
-	cp test/src/arduino/Test_$(TEST)_main.ino build/build.ino
-#	cp test/src/arduino/ut_$(TEST).ino build/build.ino
-endif
+	cp test/src/arduino/Test_*.h* build
+	cp test/src/arduino/Test_main.ino build/build.ino
 
 
 # For WSL and Windows :
@@ -54,8 +107,8 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile --fqbn $(FQBN) --log --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" build
-#	                                             --build-property "compiler.cpp.extra_flags=\"-D<TEST_CASE>=1\"" build
+	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
+                                    		             --build-property compiler.cpp.extra_flags="$(TESTS)" build
 endif
 
 
@@ -84,7 +137,7 @@ else
 endif
 
 
-# TODO: improve !
+# TODO: rework as for Arduino !
 ### MTB targets
 # ifeq ($(WIN_USER),)
 

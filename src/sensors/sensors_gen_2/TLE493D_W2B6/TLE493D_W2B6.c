@@ -28,9 +28,7 @@
 #include "TLE493D_W2B6.h"
 
 
-extern ComLibraryFunctions_ts comLibIF_i2c;
-extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
-
+extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 /*
   Listing of all register names for this sensor.
@@ -161,7 +159,7 @@ Register_ts TLE493D_W2B6_regDef[] = {
 //     sensor->comLibIF          = NULL;
 //     sensor->comLibObj.i2c_obj = NULL;
 
-//     setI2CParameters(&sensor->comLibIFParams, GEN_2_STD_IIC_ADDR_WRITE_A0);
+//     setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
 
 //     return true;
 // }

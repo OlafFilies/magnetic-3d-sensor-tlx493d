@@ -102,9 +102,11 @@ typedef union ComLibraryObject_ts {
 typedef bool (*InitFuncPtr)(Sensor_ts *);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
 
+// TODO: to be removed
 typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, float *temp);
 typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, float *temp);
 
+// TODO: to be removed
 typedef void (*CalculateFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
 typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
 
@@ -127,14 +129,18 @@ typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t mode);
 typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t addr);
 
+typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
+
 
 typedef struct CommonFunctions_ts {
     InitFuncPtr                     init;
     DeinitFuncPtr                   deinit;
 
+// TODO: to be removed
     CalculateTemperatureFuncPtr     calculateTemperature;
     GetTemperatureFuncPtr           getTemperature;
 
+// TODO: to be removed
     CalculateFieldValuesFuncPtr     calculateFieldValues;
     GetFieldValuesFuncPtr           getFieldValues;
     
@@ -156,6 +162,9 @@ typedef struct CommonFunctions_ts {
 
     SetPowerModeFuncPtr             setPowerMode;
     SetIICAddressFuncPtr            setIICAddress;
+
+    // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
+    TransferRegistersFuncPtr        transfer;
 } CommonFunctions_ts;
 
 
