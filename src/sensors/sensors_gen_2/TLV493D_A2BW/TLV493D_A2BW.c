@@ -10,8 +10,9 @@
 /** Sensor specific includes */
 #include "TLV493D_A2BW.h"
 
-extern ComLibraryFunctions_ts comLibIF_i2c;
-extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
+
+extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
+
 
 typedef enum {
     BX_MSB = 0,
@@ -120,7 +121,7 @@ bool TLV493D_A2BW_init(Sensor_ts *sensor) {
     sensor->comLibIF                = NULL;
     sensor->comLibObj.i2c_obj       = NULL;
 
-    setI2CParameters(&sensor->comLibIFParams, GEN_2_STD_IIC_ADDR_WRITE_A0);
+    setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
 
     return true;
 }

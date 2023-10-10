@@ -62,11 +62,9 @@ typedef enum {
     TLE493D_A1B6_PARITY_TEST_ENABLE_default
 } TLE493D_A1B6_Reg_PARITY_TEST_NEN;
 
-// structures for holding communication params
-extern struct ComLibraryFunctions_ts comLibIF_i2c;
 
-extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr); 
-extern void frameworkDelayMicroseconds(uint32_t us);
+extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
+// extern void frameworkDelayMicroseconds(uint32_t us);
 
 /*
   Listing of all register names for this sensor.
@@ -165,7 +163,7 @@ bool TLE493D_A1B6_init(Sensor_ts *sensor) {
     sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
-    setI2CParameters(&sensor->comLibIFParams, GEN_1_STD_IIC_ADDR);
+    setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
 
     return true;
 }

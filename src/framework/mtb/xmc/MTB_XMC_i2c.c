@@ -209,8 +209,12 @@ ComLibraryFunctions_ts  comLibIF_i2c = {
                                        };
 
 
-void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
-    params->i2c_params.address = addr;
+// void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
+//     params->i2c_params.address = addr;
+// }
+
+void setI2CParameters(Sensor_ts *sensor, uint8_t addr) {
+    sensor->comLibIFParams.i2c_params.address = addr;
 }
 
 

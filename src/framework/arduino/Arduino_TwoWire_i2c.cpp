@@ -42,8 +42,9 @@ ComLibraryFunctions_ts  comLibIF_i2c = {
 
 
 // TODO: change to use sensor as parameter to simplify the user interface across routines
-extern "C" void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
-    params->i2c_params.address = addr >> 1;
+// extern "C" void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr) {
+extern "C" void setI2CParameters(Sensor_ts *sensor, uint8_t addr) {
+    sensor->comLibIFParams.i2c_params.address = addr >> 1;
 }
 
 

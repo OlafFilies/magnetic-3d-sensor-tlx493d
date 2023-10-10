@@ -16,7 +16,7 @@
 
 // framework functions
 // TODO: replace by function pointers in comLibIF structure
-extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr);
+extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 
 // void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
@@ -229,7 +229,8 @@ bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr) {
     gen_2_setBitfield(sensor, sensor->commonBitfields.FP, gen_2_calculateFuseParity(sensor));
 
     bool b = gen_2_writeRegister(sensor, sensor->commonBitfields.IICADR);
-    setI2CParameters(&sensor->comLibIFParams, deviceAddress);
+    setI2CParameters(sensor, deviceAddress);
+    // setI2CParameters(&sensor->comLibIFParams, deviceAddress);
 
     return b;
 }
@@ -256,4 +257,19 @@ uint8_t gen_2_getType(Sensor_ts *sensor) {
 uint8_t gen_2_getHWV(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.HWV];
     return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
+}
+
+
+
+
+bool gen_2_hasValidIICadr(Sensor_ts *sensor, uint8_t id, uint8_t iicAdr) {
+    Register_ts *idBf     = &sensor->regDef[id];
+    Register_ts *iicAdrBf = &sensor->regDef[id];
+    return ((sensor->regMap[idBf->address] & idBf->mask) >> idBf->offset) == ((sensor->regMap[iicAdrBf->address] & iicAdrBf->mask) >> iicAdrBf->offset);
+}
+
+
+bool gen_2_hasWakeup(Sensor_ts *sensor, uint8_t type) {
+    Register_ts *typeBf = &sensor->regDef[type];
+    return ((sensor->regMap[typeBf->address] & typeBf->mask) >> typeBf->offset) != 0b11;
 }

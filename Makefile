@@ -137,7 +137,7 @@ else
 endif
 
 
-# TODO: improve !
+# TODO: rework as for Arduino !
 ### MTB targets
 # ifeq ($(WIN_USER),)
 

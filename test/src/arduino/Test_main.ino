@@ -6,14 +6,13 @@
 
 
 extern "C" {
+    /***
+      * Uses flags / defines to determine which groups of tests should be added to this test such that multiple tests can be executed in a single run.
+      * Use the '--build-property option of the 'arduino_compile' target to add the flags by defining the respective targets in the makefile.
+      * makefile : --build-property "compiler.cpp.extra_flags=\"-D<TEST_SPECIFIER>=1\"" build
+    */
     void RunAllTests(void)
     {
-        // TODO: Use flags / defines to determine which groups of tests should be added to the test. Use the '--build-property option for the 'arduino_compile' target
-        // to add the flags by defining the respective targets in the makefile.
-        // Setup to run all test in a single run !
-        // makefile : --build-property "compiler.cpp.extra_flags=\"-D<TEST_SPECIFIER>=1\"" build
-        // See also UnityMain options !
-
 
 // TLE493D_A1B6
 #ifdef TEST_TLE493D_A1B6
@@ -88,7 +87,9 @@ extern "C" {
 }
 
 
-// Arduino setup method
+/***
+ * 
+*/
 void setup() {
     Serial.begin(115200);
     delay(3000);
@@ -102,11 +103,12 @@ void setup() {
 }
 
 
-// Arduino main loop method
+/***
+ *
+*/
 void loop() {
     Serial.println("\n");
 
-    // TODO: use other options in order to automate test runs !
     int         argc       = 2;
     const char *argv[argc] = { "", "-v" };
 
