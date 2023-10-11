@@ -16,8 +16,8 @@ typedef struct Sensor_ts Sensor_ts;
   List of all supported sensor devices.
 */
 typedef enum {
-               TLE493D_A1B6_e = 0,
-               TLV493D_A1B6_e = 1,
+               TLx493D_A1B6_e = 0,
+               //TLV493D_A1B6_e = 1, TODO: remove this from enum and change the rest
                TLE493D_A2B6_e = 2,
                TLE493D_P2B6_e = 3,
                TLE493D_W2B6_e = 4,
@@ -211,6 +211,21 @@ typedef struct CommonBitfields_ts {
     uint8_t TEMP_LSB;
     uint8_t BZ_LSB;
     uint8_t TEMP2;
+
+    uint8_t CH;
+    uint8_t PD;
+    uint8_t FAST;
+    uint8_t LOW_POWER;
+    uint8_t LP;
+    uint8_t Temp_NEN;
+    uint8_t PT;
+    uint8_t R_RES_1;
+    uint8_t R_RES_2;
+    uint8_t R_RES_3;
+    uint8_t W_RES_0;
+    uint8_t W_RES_1;
+    uint8_t W_RES_2;
+    uint8_t W_RES_3;
 } CommonBitfields_ts;
 
 

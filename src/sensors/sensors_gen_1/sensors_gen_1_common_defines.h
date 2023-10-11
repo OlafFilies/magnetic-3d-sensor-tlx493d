@@ -7,9 +7,10 @@
 
 #define GEN_1_MAG_FIELD_MULT                0.098
 
-#define GEN_1_STD_IIC_ADDR                  0xBC //remove: this is then >>1 while passing to seti2cparams, 
-                                            // there it becomes 0x1F, which then is <<1 and concat'd with R/W bit
+#define GEN_1_STD_IIC_ADDR                  0xBC 
 
 #define GEN_1_WRITE_REGISTERS_OFFSET        10
+
+#define GEN_1_REG_MAP_SIZE                  23
 
 #endif // SENSORS_GEN_1_CONFIG_COMMON_H
