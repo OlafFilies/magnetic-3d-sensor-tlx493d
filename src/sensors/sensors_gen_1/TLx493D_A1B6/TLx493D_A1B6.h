@@ -16,6 +16,14 @@
 
 // sensor specicifc includes
 
+//enums
+typedef enum {
+    GEN_2_STD_IIC_ADDR_00 = 0,
+    GEN_2_STD_IIC_ADDR_01 = 1,
+    GEN_2_STD_IIC_ADDR_10 = 2,
+    GEN_2_STD_IIC_ADDR_11 = 3
+} TLx493D_StandardIICAddresses_te;    
+
 
 // common functions
 bool TLx493D_A1B6_init(Sensor_ts *sensor);
@@ -48,5 +56,7 @@ bool TLx493D_A1B6_disableParityTest(Sensor_ts *sensor);
 
 void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
+
+bool TLx493D_A1B6_setIICAddress(Sensor_ts *sensor, TLx493D_StandardIICAddresses_te addr);
 
 #endif // TLx493D_A1B6_H

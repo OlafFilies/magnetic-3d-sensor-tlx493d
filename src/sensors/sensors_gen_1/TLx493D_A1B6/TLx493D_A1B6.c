@@ -70,7 +70,7 @@ extern struct ComLibraryFunctions_ts comLibIF_i2c;
 // framework functions
 // TODO: replace by function pointers in comLibIF structure
 // TODO: take guide from A2B6
-extern void setI2CParameters(ComLibraryParameters_ts *params, uint8_t addr); 
+extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr); 
 
 /*
   Listing of all register names for this sensor.
@@ -141,7 +141,7 @@ Register_ts TLx493D_A1B6_regDef[] = {
 
 typedef enum { 
                MOD1_REG   = 0x01,
-               MOD2_REG   = 0x03 } SpecialRegisters_te;
+               MOD2_REG   = 0x03 } SpecialRegisters_te;           
 
 CommonFunctions_ts TLx493D_A1B6_commonFunctions = {
                                 .init                  = TLx493D_A1B6_init,
@@ -164,7 +164,9 @@ CommonFunctions_ts TLx493D_A1B6_commonFunctions = {
                                 .readRegisters         = gen_1_readRegisters,
 
                                 .enableTemperature     = TLx493D_A1B6_enableTemperatureMeasurements,
-                                .disableTemperature    = TLx493D_A1B6_disableTemperatureMeasurements,
+                                .disableTemperature    = TLx493D_A1B6_disableTemperatureMeasurements, //TODO: rebase common functions as per new common functions struct 
+
+                                .setIICAddress         = TLx493D_A1B6_setIICAddress,
                               };
 
 
@@ -192,7 +194,7 @@ bool TLx493D_A1B6_init(Sensor_ts *sensor) {
     sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
 
-    setI2CParameters(&sensor->comLibIFParams, GEN_1_STD_IIC_ADDR);
+    setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
 
     return true;
 }
@@ -366,4 +368,42 @@ bool TLx493D_A1B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *
         return true;
     }
     return false;
+}
+
+bool TLx493D_A1B6_setIICAddress(Sensor_ts *sensor, TLx493D_StandardIICAddresses_te addr) {
+    uint8_t bitfieldValue = 0;
+    uint8_t deviceAddress = 0;
+
+    switch (addr) {
+        case GEN_2_STD_IIC_ADDR_00:
+            bitfieldValue = 0b00;
+            deviceAddress = 0xBC;
+            break;
+
+        case GEN_2_STD_IIC_ADDR_01:
+            bitfieldValue = 0b01;
+            deviceAddress = 0xB4;
+            break;
+
+        case GEN_2_STD_IIC_ADDR_10:
+            bitfieldValue = 0b10;
+            deviceAddress = 0x9C;
+            break;
+
+        case GEN_2_STD_IIC_ADDR_11:
+            bitfieldValue = 0b11;
+            deviceAddress = 0x94;
+            break;
+        
+        default:
+            return false;
+    }
+
+    gen_1_setBitfield(sensor, sensor->commonBitfields.IICADR, bitfieldValue);
+    TLx493D_A1B6_calculateParity(sensor);
+    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
+
+    setI2CParameters(sensor, deviceAddress);
+
+    return ret;
 }

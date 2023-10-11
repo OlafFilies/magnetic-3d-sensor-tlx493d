@@ -51,6 +51,7 @@ bool gen_1_writeRegister(Sensor_ts* sensor, uint8_t registerAddr) {
     return err;
 }
 
+//TODO: rename to transferreadregister to match common functions
 bool gen_1_readRegisters(Sensor_ts *sensor) {
     return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, TLx493D_A1B6_READ_REGISTERS_MAX_COUNT);
 }
