@@ -18,10 +18,10 @@
 
 //enums
 typedef enum {
-    GEN_2_STD_IIC_ADDR_00 = 0,
-    GEN_2_STD_IIC_ADDR_01 = 1,
-    GEN_2_STD_IIC_ADDR_10 = 2,
-    GEN_2_STD_IIC_ADDR_11 = 3
+    GEN_1_STD_IIC_ADDR_00 = 0,
+    GEN_1_STD_IIC_ADDR_01,
+    GEN_1_STD_IIC_ADDR_10,
+    GEN_1_STD_IIC_ADDR_11
 } TLx493D_StandardIICAddresses_te;    
 
 

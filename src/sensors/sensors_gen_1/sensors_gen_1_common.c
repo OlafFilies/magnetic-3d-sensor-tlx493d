@@ -14,41 +14,53 @@
 #include "sensors_gen_1_common.h"
 
 
-//todo: remove if not used.
+//todo: remove if not used. Note: So far not used 
 void gen_1_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
-    if(sensor->regDef[bitField].accessMode == READ_MODE_e) {
-        *bitFieldValue = (sensor->regMap[sensor->regDef[bitField].address] & sensor->regDef[bitField].mask) >> sensor->regDef[bitField].offset;
+    Register_ts *bf = &sensor->regDef[bitField];
+
+    if(bf->accessMode == READ_MODE_e) {
+        *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
     }
+
+    assert(bf->accessMode == READ_MODE_e);
 }
 
 uint8_t gen_1_returnBitfield(Sensor_ts *sensor, uint8_t bitField) {
+    Register_ts *bf = &sensor->regDef[bitField];
     uint8_t bitFieldValue;
-    if(sensor->regDef[bitField].accessMode == READ_MODE_e) {
-        bitFieldValue = (sensor->regMap[sensor->regDef[bitField].address] & sensor->regDef[bitField].mask) >> sensor->regDef[bitField].offset;
+
+    if(bf->accessMode == READ_MODE_e) {
+        bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
     }
+
+    assert(bf->accessMode == READ_MODE_e);
+
     return bitFieldValue;
 }
 
 void gen_1_setBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue) {
-    if(sensor->regDef[bitField].accessMode == WRITE_MODE_e) {
-        sensor->regMap[sensor->regDef[bitField].address + GEN_1_WRITE_REGISTERS_OFFSET] = (sensor->regMap[sensor->regDef[bitField].address + GEN_1_WRITE_REGISTERS_OFFSET] & ~sensor->regDef[bitField].mask) | (newBitFieldValue << sensor->regDef[bitField].offset);
+    Register_ts *bf = &sensor->regDef[bitField];
+    
+    if(bf->accessMode == WRITE_MODE_e) {
+        sensor->regMap[bf->address + GEN_1_WRITE_REGISTERS_OFFSET] = (sensor->regMap[bf->address + GEN_1_WRITE_REGISTERS_OFFSET] & ~bf->mask) | (newBitFieldValue << bf->offset);
     }
+
+    assert(bf->accessMode == WRITE_MODE_e);
 }
 
-bool gen_1_writeRegister(Sensor_ts* sensor, uint8_t registerAddr) {
-    bool err = false;
+bool gen_1_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
+    bool ret = false;
+    Register_ts *bf = &sensor->regDef[bitField];
 
-    if(sensor->regDef[registerAddr].accessMode == WRITE_MODE_e) {
-        uint8_t transBuffer[2];
-        uint8_t bufLen = 2;
+    if(bf->accessMode == WRITE_MODE_e){
+        uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
 
-        transBuffer[0] = sensor->regDef[registerAddr].address;
-        transBuffer[1] = sensor->regMap[sensor->regDef[registerAddr].address];
-
-        err = sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, bufLen, NULL, 0);
+        ret = sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
 
-    return err;
+    assert(bf->accessMode == WRITE_MODE_e);
+
+    return ret;
 }
 
 //TODO: rename to transferreadregister to match common functions
