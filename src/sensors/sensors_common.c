@@ -13,8 +13,7 @@
 #include "sensors_common.h"
 
 // sensor specific includes
-#include "TLE493D_A1B6.h"
-#include "TLV493D_A1B6.h"
+#include "TLx493D_A1B6.h"
 #include "TLE493D_A2B6.h"
 #include "TLE493D_P2B6.h"
 #include "TLE493D_W2B6.h"
@@ -26,7 +25,7 @@ bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
         case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
                               break;
 
-      case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor);
+      case TLx493D_A1B6_e : return TLx493D_A1B6_init(sensor);
                               break;                              
 
       case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
@@ -133,10 +132,7 @@ bool disableAngularMeasurement(Sensor_ts *sensor) {
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
    switch(sensorType) {
-      case TLE493D_A1B6_e : return "TLE493D_A1B6";
-                           break;
-
-      case TLV493D_A1B6_e : return "TLV493D_A1B6";
+      case TLx493D_A1B6_e : return "TLx493D_A1B6";
                            break;
 
       case TLE493D_A2B6_e : return "TLE493D_A2B6";
