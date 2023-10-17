@@ -54,11 +54,6 @@ typedef enum {
 } TLx493D_A1B6_Reg_LOW_POWER_MODE_NEN;
 
 typedef enum {
-    TLx493D_A1B6_LOW_POWER_PERIOD_100MS_default,
-    TLx493D_A1B6_LOW_POWER_PERIOD_12MS
-} TLx493D_A1B6_Reg_LOW_POWER_PERIOD;
-
-typedef enum {
     TLx493D_A1B6_PARITY_TEST_DISABLE,
     TLx493D_A1B6_PARITY_TEST_ENABLE_default
 } TLx493D_A1B6_Reg_PARITY_TEST_NEN;
@@ -212,13 +207,13 @@ void TLx493D_A1B6_setReservedRegisterValues(Sensor_ts *sensor) {
 void TLx493D_A1B6_setPowerDownMode(Sensor_ts *sensor) {
     gen_1_setBitfield(sensor, sensor->commonBitfields.FAST, TLx493D_A1B6_FAST_MODE_DISABLE_default);
     gen_1_setBitfield(sensor, sensor->commonBitfields.LOW_POWER, TLx493D_A1B6_LOW_POWER_MODE_DISABLE_default);
-    gen_1_setBitfield(sensor, sensor->commonBitfields.LP, TLx493D_A1B6_LOW_POWER_PERIOD_100MS_default);
+    TLx493D_setLowPowerPeriod(sensor, TLx493D_A1B6_LOW_POWER_PERIOD_100MS_default);
 }
 
 void TLx493D_A1B6_setMasterControlledMode(Sensor_ts *sensor) {
     gen_1_setBitfield(sensor, sensor->commonBitfields.FAST, TLx493D_A1B6_FAST_MODE_ENABLE);
     gen_1_setBitfield(sensor, sensor->commonBitfields.LOW_POWER, TLx493D_A1B6_LOW_POWER_MODE_ENABLE);
-    gen_1_setBitfield(sensor, sensor->commonBitfields.LP, TLx493D_A1B6_LOW_POWER_PERIOD_12MS);
+    TLx493D_setLowPowerPeriod(sensor, TLx493D_A1B6_LOW_POWER_PERIOD_12MS);
 }
 
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
@@ -395,4 +390,13 @@ bool TLx493D_A1B6_setIICAddress(Sensor_ts *sensor, TLx493D_StandardIICAddresses_
     setI2CParameters(sensor, deviceAddress);
 
     return ret;
+}
+
+bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD lp_period){
+
+    gen_1_setBitfield(sensor, sensor->commonBitfields.LP, lp_period);
+    TLx493D_A1B6_calculateParity(sensor);
+    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
+    
+    return ret;                                                 
 }

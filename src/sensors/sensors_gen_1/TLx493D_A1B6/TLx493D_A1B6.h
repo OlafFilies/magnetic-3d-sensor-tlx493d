@@ -22,7 +22,12 @@ typedef enum {
     GEN_1_STD_IIC_ADDR_01,
     GEN_1_STD_IIC_ADDR_10,
     GEN_1_STD_IIC_ADDR_11
-} TLx493D_StandardIICAddresses_te;    
+} TLx493D_StandardIICAddresses_te;
+
+typedef enum {
+    TLx493D_A1B6_LOW_POWER_PERIOD_100MS_default,
+    TLx493D_A1B6_LOW_POWER_PERIOD_12MS
+} TLx493D_A1B6_Reg_LOW_POWER_PERIOD;
 
 
 // common functions
@@ -58,5 +63,7 @@ void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, f
 bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 
 bool TLx493D_A1B6_setIICAddress(Sensor_ts *sensor, TLx493D_StandardIICAddresses_te addr);
+
+bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD lp_period);
 
 #endif // TLx493D_A1B6_H
