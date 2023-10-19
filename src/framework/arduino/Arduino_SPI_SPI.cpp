@@ -46,7 +46,7 @@ ComLibraryFunctions_ts  comLibIF_spi = {
 // }
 
 
-bool initSPIComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi) {
+bool initComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi) {
     if( sensor->comIFType != SPI_e ) {
         return false;
     }
@@ -63,7 +63,8 @@ bool initSPIComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi) {
 
 
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
-extern "C" bool initSPIComLibIF(Sensor_ts *sensor, SPIClass &spi) {
+// extern "C" 
+bool initComLibIF(Sensor_ts *sensor, SPIClass &spi) {
     if( sensor->comIFType != SPI_e ) {
         return false;
     }

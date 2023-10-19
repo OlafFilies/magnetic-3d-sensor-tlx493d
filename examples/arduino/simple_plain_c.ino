@@ -8,6 +8,7 @@
 
 // project cpp includes
 #include "arduino_defines.h"
+#include "Logger.h"
 
 
 // S2Go boards
@@ -39,28 +40,23 @@ extern "C" {
 Sensor_ts dut;
 
 
-void printRegMap2(Sensor_ts *sensor) {
-    Serial.print("regMap : "); 
+// void printRegMap2(Sensor_ts *sensor) {
+//     Serial.print("regMap : "); 
  
-    for(int i = 0; i < sensor->regMapSize; ++i) {
-        Serial.print("  0x");
-        Serial.print(sensor->regMap[i], HEX);
-        // Serial.print(sensor->regMap[i], BIN);
-    }
+//     for(int i = 0; i < sensor->regMapSize; ++i) {
+//         Serial.print("  0x");
+//         Serial.print(sensor->regMap[i], HEX);
+//         // Serial.print(sensor->regMap[i], BIN);
+//     }
  
-    Serial.println();
- }
+//     Serial.println();
+//  }
  
 
 void setup() {
-
-
-// required for S2Go
-pinMode(POWER_PIN_HIGH, OUTPUT);
-digitalWrite(POWER_PIN_HIGH, HIGH);
-
-    pinMode(POWER_PIN_LOW, OUTPUT);
-    digitalWrite(POWER_PIN_LOW, HIGH);
+    // // required for S2Go
+    // pinMode(POWER_PIN_HIGH, OUTPUT);
+    // digitalWrite(POWER_PIN_HIGH, HIGH);
 
     Serial.begin(115200);
     delay(3000);
@@ -82,9 +78,12 @@ digitalWrite(POWER_PIN_HIGH, HIGH);
     // init(&dut, TLE493D_W2B6_e);
     init(&dut, TLE493D_P3B6_e);
 
-    initI2CComLibIF(&dut, Wire);
+    initComLibIF(&dut, Wire);
 
 #else
+
+    pinMode(POWER_PIN_LOW, OUTPUT);
+    digitalWrite(POWER_PIN_LOW, HIGH);
 
     // SPI
     // required for S2Go
@@ -92,19 +91,14 @@ digitalWrite(POWER_PIN_HIGH, HIGH);
     // digitalWrite(POWER_PIN_LOW, LOW);
 
     init(&dut, TLE493D_P3I8_e);
-    initSPIComLibIF(&dut, SPI);
+    initComLibIF(&dut, SPI);
 
 #endif
 
     digitalWrite(POWER_PIN_LOW, LOW);
-    delay(500);
     setDefaultConfig(&dut);
-    delay(500);
-
     digitalWrite(POWER_PIN_LOW, HIGH);
     
-    delay(5000);
-
 
     // Serial.println("setDefaultConfig done.");
     // printRegMap(&dut);
@@ -122,28 +116,22 @@ digitalWrite(POWER_PIN_HIGH, HIGH);
 
 
 void loop() {
-    // setDefaultConfig(&dut);
-    // delay(100);
-
-
     float temp = 0.0;
     float valX = 0, valY = 0, valZ = 0;
     Serial.println("loop ...");
 
     digitalWrite(POWER_PIN_LOW, LOW);
-    delay(100);
     Serial.print(true == getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
-    delay(100);
     digitalWrite(POWER_PIN_LOW, HIGH);
+
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
     digitalWrite(POWER_PIN_LOW, LOW);
-    delay(100);
     Serial.print(true == getFieldValues(&dut, &valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
-    delay(100);
     digitalWrite(POWER_PIN_LOW, HIGH);
+
     Serial.print("Value X is: ");
     Serial.print(valX);
     Serial.println(" mT");
@@ -181,7 +169,8 @@ void loop() {
 //    delay(1000);
 // TLE493D_A2B6_enableCollisionAvoidance(&dut);
 
-    printRegMap2(&dut);
+    // printRegMap2(&dut);
+    printRegMap(dut.regMap, dut.regMapSize);
     Serial.print("\n");
 
     delay(1000);

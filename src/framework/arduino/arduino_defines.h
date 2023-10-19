@@ -30,14 +30,14 @@ typedef struct SPIObject_ts {
 typedef struct Sensor_ts Sensor_ts;
 
 
-bool initI2CComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw);
-bool initSPIComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi);
+bool initComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw);
+bool initComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi);
 
 
-extern "C" {
-    bool initI2CComLibIF(Sensor_ts *sensor, TwoWire &iic);
-    bool initSPIComLibIF(Sensor_ts *sensor, SPIClass &spi);
-}
+// extern "C" {
+    bool initComLibIF(Sensor_ts *sensor, TwoWire &iic);
+    bool initComLibIF(Sensor_ts *sensor, SPIClass &spi);
+// }
 
 
 #endif // ARDUINO_DEFINES_H

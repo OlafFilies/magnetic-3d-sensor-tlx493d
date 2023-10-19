@@ -11,7 +11,7 @@
 
 extern "C" {
     void printRegMap(uint8_t *rm, uint8_t rmSize) {
-        Serial.print("1 regMap : "); 
+        Serial.print("regMap :"); 
 
         for(uint8_t i = 0; i < rmSize; ++i) {
             Serial.print("  0x");

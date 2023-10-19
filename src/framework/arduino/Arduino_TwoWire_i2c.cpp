@@ -48,7 +48,7 @@ extern "C" void setI2CParameters(Sensor_ts *sensor, uint8_t addr) {
 }
 
 
-bool initI2CComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw) {
+bool initComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw) {
     if( sensor->comIFType != I2C_e ) {
         return false;
     }
@@ -65,7 +65,8 @@ bool initI2CComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw) {
 
 
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
-extern "C" bool initI2CComLibIF(Sensor_ts *sensor, TwoWire &tw) {
+// extern "C" 
+bool initComLibIF(Sensor_ts *sensor, TwoWire &tw) {
     if( sensor->comIFType != I2C_e ) {
         return false;
     }

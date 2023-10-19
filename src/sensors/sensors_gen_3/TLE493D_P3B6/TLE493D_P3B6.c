@@ -32,9 +32,6 @@
 #include "TLE493D_P3B6.h"
 
 
-#include "Logger.h"
-
-
 extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 /*
@@ -202,6 +199,7 @@ bool TLE493D_P3B6_init(Sensor_ts *sensor) {
 
     memset(sensor->regMap, 0, sensor->regMapSize);
     
+    // TODO: make address settable by user ! In intI2CComLibIF ?
     // setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A0);
     setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A1);
 
@@ -267,8 +265,6 @@ void TLE493D_P3B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, fl
     concatBytes(sensor, &sensor->regDef[BY_MSBS], &sensor->regDef[BY_LSBS], &valueY);
     concatBytes(sensor, &sensor->regDef[BZ_MSBS], &sensor->regDef[BZ_LSBS], &valueZ);
 
-// TODO: temp unten in LSB format; x,y,z dann auch in LSB format => mittels sensitivity umrechnen in mT !
-// TODO: TLE493D_P3B6_calculateTemperatureRaw hinzufügen um die LSB Werte für Temp zu bekommen !
 double r    = 1.0;
 // double temp = 0.0;
 float temp = 0.0;
@@ -329,25 +325,25 @@ bool TLE493D_P3B6_disable1ByteMode(Sensor_ts *sensor) {
 bool TLE493D_P3B6_setDefaultConfig(Sensor_ts *sensor) {
     // MOD1 register
      gen_2_setBitfield(sensor, MODE_SEL, 0);
-    gen_2_setBitfield(sensor, INT_DIS, 1);
-    gen_2_setBitfield(sensor, COLLISION_DIS, 0);
+     gen_2_setBitfield(sensor, INT_DIS, 1);
+     gen_2_setBitfield(sensor, COLLISION_DIS, 0);
      gen_2_setBitfield(sensor, WU_EN, 0);
      gen_2_setBitfield(sensor, CRC_WR_EN, 0);
 
     if( ! TLE493D_P3B6_enable1ByteMode(sensor) ) {
-    //     // if( TLE493D_P3B6_enableTemperatureMeasurements(sensor) ) {
-    //     //     // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
-    //     //     // accidentally changing a preset values to 0.
-    //     //     // if( gen_2_readRegisters(sensor) )
-    //     //     //     return TLE493D_P3B6_setLowUpdateRate(sensor);
-    //     // }
+        // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
+        // accidentally changing a preset values to 0.
+        // if( gen_2_readRegisters(sensor) )
+        //     return TLE493D_P3B6_setLowUpdateRate(sensor);
+        // }
 
         return false;
     }
 
     // gen_2_setBitfield(sensor, CHANNEL_SEL, 0);
 
-    printRegMap(sensor->regMap, sensor->regMapSize);
+    // #include "Logger.h"
+    // printRegMap(sensor->regMap, sensor->regMapSize);
 
     return true;
 }

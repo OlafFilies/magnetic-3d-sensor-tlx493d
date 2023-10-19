@@ -33,13 +33,15 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             bsc.init();
             sensor.init();
 
-            if( sensor.getSensorStruct()->comIFType == I2C_e ) {
-                bool b = initI2CComLibIF(sensor.getSensorStruct(), comLIF);
-                assert(b);
-            }
-            else {
-                assert(0);
-            }
+            initComLibIF(sensor.getSensorStruct(), comLIF);
+
+            // if( sensor.getSensorStruct()->comIFType == I2C_e ) {
+            //     bool b = initComLibIF(sensor.getSensorStruct(), comLIF);
+            //     assert(b);
+            // }
+            // else {
+            //     assert(0);
+            // }
 
             // comLIF.init();
 

@@ -32,9 +32,6 @@
 #include "TLE493D_P3I8.h"
 
 
-#include "Logger.h"
-
-
 /*
   Listing of all register names for this sensor.
   Used to index "TLE493D_P3I8_regDef" defined below, so index values must match !
@@ -300,7 +297,7 @@ bool TLE493D_P3I8_setDefaultConfig(Sensor_ts *sensor) {
     // sensor->regMap[MOD1_REG]   = 0x00;
     // sensor->regMap[MOD2_REG]   = 0x00;
 
-    sensor->regMap[0x0A] = 0x02;
+    sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
 
     // MOD1 register
     gen_3_setBitfield(sensor, MODE_SEL, 0);
@@ -316,8 +313,8 @@ bool TLE493D_P3I8_setDefaultConfig(Sensor_ts *sensor) {
     //     return TLE493D_P3I8_setLowUpdateRate(sensor);
  
     // gen_2_setBitfield(sensor, CHANNEL_SEL, 0);
-
-    printRegMap(sensor->regMap, sensor->regMapSize);
+    // #include "Logger.h"
+    // printRegMap(sensor->regMap, sensor->regMapSize);
 
 
     return true;
