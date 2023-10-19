@@ -67,3 +67,26 @@ bool gen_1_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
 bool gen_1_readRegisters(Sensor_ts *sensor) {
     return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, TLx493D_A1B6_READ_REGISTERS_MAX_COUNT);
 }
+
+bool gen_1_hasValidFuseParity(Sensor_ts *sensor){
+    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FF];
+    return ((sensor->regMap[bf->address] & bf->mask) != 0);
+}
+
+bool gen_1_isFunctional(Sensor_ts *sensor){
+    return gen_1_hasValidFuseParity(sensor);
+}
+
+bool gen_1_hasValidTBit(Sensor_ts *sensor) {
+    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.T];
+    return ((sensor->regMap[bf->address] & bf->mask) == 0);
+}
+
+bool gen_1_hasValidPDBit(Sensor_ts *sensor) {
+    Register_ts *bf = &sensor->regDef[sensor->commonBitfields.PD];
+    return ((sensor->regMap[bf->address] & bf->mask) != 0);
+}
+
+bool gen_1_hasValidData(Sensor_ts *sensor){
+    return gen_1_hasValidTBit(sensor) && gen_1_hasValidPDBit(sensor);
+}

@@ -64,6 +64,11 @@ bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *
 
 bool TLx493D_A1B6_setIICAddress(Sensor_ts *sensor, TLx493D_StandardIICAddresses_te addr);
 
+bool TLx493D_A1B6_enableInterrupt(Sensor_ts *sensor);
+bool TLx493D_A1B6_disableInterrupt(Sensor_ts *sensor);
+
+bool TLx493D_A1B6_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
+
 bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD lp_period);
 
 #endif // TLx493D_A1B6_H

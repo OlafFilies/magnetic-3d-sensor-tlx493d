@@ -74,7 +74,7 @@ typedef enum {
                CH,
                BX_LSB,
                BY_LSB,
-               TEST_Flag,
+               T,
                FF,
                PD,
                BZ_LSB,
@@ -105,7 +105,7 @@ Register_ts TLx493D_A1B6_regDef[] = {
     {CH,            READ_MODE_e,    0x03, 0x03, 0, 2},
     {BX_LSB,        READ_MODE_e,    0x04, 0xF0, 4, 4},
     {BY_LSB,        READ_MODE_e,    0x04, 0x0F, 0, 4},
-    {TEST_Flag,     READ_MODE_e,    0x05, 0x40, 6, 1},
+    {T,             READ_MODE_e,    0x05, 0x40, 6, 1},
     {FF,            READ_MODE_e,    0x05, 0x20, 5, 1},
     {PD,            READ_MODE_e,    0x05, 0x10, 4, 1},
     {BZ_LSB,        READ_MODE_e,    0x05, 0x0F, 0, 4},
@@ -146,8 +146,8 @@ CommonFunctions_ts TLx493D_A1B6_commonFunctions = {
 
                                 // .reset                 = TLx493D_A1B6_reset,
 
-                                //.hasValidData          = gen_2_hasValidData,
-                                //.isFunctional          = gen_2_isFunctional,
+                                .hasValidData          = gen_1_hasValidData,
+                                .isFunctional          = gen_1_isFunctional,
 
                                 .setDefaultConfig      = TLx493D_A1B6_setDefaultConfig,
                                 .readRegisters         = gen_1_readRegisters,
@@ -156,6 +156,8 @@ CommonFunctions_ts TLx493D_A1B6_commonFunctions = {
                                 .disableTemperature    = TLx493D_A1B6_disableTemperatureMeasurements, //TODO: rebase common functions as per new common functions struct 
 
                                 .setIICAddress         = TLx493D_A1B6_setIICAddress,
+
+                                .transfer              = TLx493D_A1B6_transferRegisterMap,
                               };
 
 
@@ -165,7 +167,7 @@ bool TLx493D_A1B6_init(Sensor_ts *sensor) {
     sensor->commonBitfields   = (CommonBitfields_ts) {  .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, 
                                                         .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
                                                         .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, 
-                                                        .T = TEST_Flag, .TEMP_LSB = TEMP_LSB, 
+                                                        .T = T, .TEMP_LSB = TEMP_LSB, 
                                                         .BZ_LSB = BZ_LSB, .P = P, .FRM = FRM, 
                                                         .FF = FF, .CH = CH, .PD = PD, .IICADR = IICaddr, 
                                                         .INT = INT, .FAST = FAST, .LOW_POWER = LOW_POWER, 
@@ -182,6 +184,8 @@ bool TLx493D_A1B6_init(Sensor_ts *sensor) {
     sensor->comIFType         = I2C_e;
     sensor->comLibIF          = NULL;
     sensor->comLibObj.i2c_obj = NULL;
+
+    memset(sensor->regMap, 0, sensor->regMapSize);
 
     setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
 
@@ -392,6 +396,21 @@ bool TLx493D_A1B6_setIICAddress(Sensor_ts *sensor, TLx493D_StandardIICAddresses_
     return ret;
 }
 
+bool TLx493D_A1B6_enableInterrupt(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, INT, TLx493D_A1B6_INT_ENABLE_default);
+    TLx493D_A1B6_calculateParity(sensor);
+
+    return TLx493D_A1B6_transferWriteRegisters(sensor);
+}
+
+
+bool TLx493D_A1B6_disableInterrupt(Sensor_ts *sensor) {
+    gen_1_setBitfield(sensor, INT, TLx493D_A1B6_INT_DISABLE);
+    TLx493D_A1B6_calculateParity(sensor);
+
+    return TLx493D_A1B6_transferWriteRegisters(sensor);
+}
+
 bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD lp_period){
 
     gen_1_setBitfield(sensor, sensor->commonBitfields.LP, lp_period);
@@ -399,4 +418,9 @@ bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PER
     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
     
     return ret;                                                 
+}
+
+bool TLx493D_A1B6_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+    
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, tx_buffer, tx_len, rx_buffer, rx_len);
 }

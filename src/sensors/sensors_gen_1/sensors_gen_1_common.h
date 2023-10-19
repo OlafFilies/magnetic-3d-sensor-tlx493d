@@ -16,4 +16,10 @@ bool gen_1_writeRegister(Sensor_ts* sensor, uint8_t bitField);
 
 bool gen_1_readRegisters(Sensor_ts *sensor);
 
+bool gen_1_hasValidFuseParity(Sensor_ts *sensor);
+bool gen_1_isFunctional(Sensor_ts *sensor);
+bool gen_1_hasValidTBit(Sensor_ts *sensor);
+bool gen_1_hasValidPDBit(Sensor_ts *sensor);
+bool gen_1_hasValidData(Sensor_ts *sensor);
+
 #endif // SENSORS_GEN_1_COMMON_H
