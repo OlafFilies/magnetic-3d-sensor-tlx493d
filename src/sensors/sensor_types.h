@@ -17,11 +17,13 @@ typedef struct Sensor_ts Sensor_ts;
 */
 typedef enum {
                TLE493D_A1B6_e = 0,
-               TLV493D_A1B6_e = 1,
-               TLE493D_A2B6_e = 2,
-               TLE493D_P2B6_e = 3,
-               TLE493D_W2B6_e = 4,
-               TLV493D_A2BW_e = 5 } SupportedSensorTypes_te;
+               TLE493D_A2B6_e,
+               TLV493D_A2BW_e,
+               TLE493D_P2B6_e,
+               TLE493D_W2B6_e,
+               TLV493D_W2BW_e,
+               TLE493D_P3B6_e,
+               TLE493D_P3I8_e } SupportedSensorTypes_te;
 
 
 /*

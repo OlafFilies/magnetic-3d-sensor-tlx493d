@@ -19,36 +19,31 @@
 extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 
-// void gen_2_concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-//     *result   = ((sensor->regMap[msb->address] & msb->mask) << 8U); // Set minus flag if highest bit is set
-//     *result >>= (8U - lsb->numBits); // shift back and make space for LSB
-//     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-// }
-
-
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
+    // assert((bf->accessMode == READ_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
+
     Register_ts *bf = &sensor->regDef[bitField];
 
     if((bf->accessMode == READ_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
         *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
     }
-
-    assert((bf->accessMode == READ_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
 }
 
 
 void gen_2_setBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue) {
+    // assert((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
+
     Register_ts *bf = &sensor->regDef[bitField];
 
     if((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
         sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask);
     }
-
-    assert((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
 }
 
 
 bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
+    // assert((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
+
     Register_ts *bf = &sensor->regDef[bitField];
 
     if((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
@@ -56,8 +51,6 @@ bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
 
         return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
-
-    assert((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e));
 
     return false;
 }

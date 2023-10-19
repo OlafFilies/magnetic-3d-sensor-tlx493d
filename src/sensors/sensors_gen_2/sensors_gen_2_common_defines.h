@@ -6,6 +6,7 @@
 
 // General defines
 #define GEN_2_MAG_FIELD_MULT            0.13
+
 #define GEN_2_TEMP_MULT                 0.24
 #define GEN_2_TEMP_OFFSET               1180.0
 #define GEN_2_TEMP_REF                  25.0

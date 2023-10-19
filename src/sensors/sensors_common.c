@@ -14,26 +14,41 @@
 
 // sensor specific includes
 #include "TLE493D_A1B6.h"
-#include "TLV493D_A1B6.h"
 #include "TLE493D_A2B6.h"
 #include "TLE493D_P2B6.h"
 #include "TLE493D_W2B6.h"
 #include "TLV493D_A2BW.h"
+// #include "TLV493D_W2BW.h"
+#include "TLE493D_P3B6.h"
+#include "TLE493D_P3I8.h"
+
 
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
     switch(sensorType) {
-        case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
-                              break;
-
       case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor);
-                              break;                              
+                            break;                              
+
+      case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
+                            break;
 
       case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
-                              break;
+                            break;
 
-      // case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
-      //                         break;
+      case TLE493D_P2B6_e : return TLE493D_P2B6_init(sensor);
+                            break;
+
+      case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
+                            break;
+
+      // case TLV493D_W2BW_e : return TLV493D_W2BW_init(sensor);
+      //                       break;
+
+      case TLE493D_P3B6_e : return TLE493D_P3B6_init(sensor);
+                            break;
+
+      case TLE493D_P3I8_e : return TLE493D_P3I8_init(sensor);
+                            break;
 
       default : return false;
    }
@@ -123,22 +138,28 @@ bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
    switch(sensorType) {
       case TLE493D_A1B6_e : return "TLE493D_A1B6";
-                           break;
-
-      case TLV493D_A1B6_e : return "TLV493D_A1B6";
-                           break;
+                            break;
 
       case TLE493D_A2B6_e : return "TLE493D_A2B6";
-                           break;
-
-      case TLE493D_P2B6_e : return "TLE493D_P2B6";
-                           break;
-
-      // case TLE493D_W2B6_e : return "TLE493D_W2B6";
-      //                      break;
+                            break;
 
       case TLV493D_A2BW_e : return "TLV493D_A2BW";
-                           break;
+                            break;
+
+      case TLE493D_P2B6_e : return "TLE493D_P2B6";
+                            break;
+
+      case TLE493D_W2B6_e : return "TLE493D_W2B6";
+                            break;
+
+      // case TLV493D_W2BW_e : return "TLV493D_W2BW";
+      //                      break;
+
+      case TLE493D_P3B6_e : return "TLE493D_P3B6";
+                            break;
+
+      case TLE493D_P3I8_e : return "TLE493D_P3I8";
+                            break;
 
       default : return "ERROR : Unknown sensorType !";
                break;

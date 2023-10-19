@@ -536,6 +536,8 @@ bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
             // accidentally changing a preset values to 0.
             if( gen_2_readRegisters(sensor) )
                 return TLE493D_A2B6_setLowUpdateRate(sensor);
+
+            // return true;
         }
     }
 
