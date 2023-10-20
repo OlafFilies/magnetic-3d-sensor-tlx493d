@@ -128,6 +128,14 @@ Register_ts TLx493D_A1B6_regDef[] = {
     {W_RES_3,       WRITE_MODE_e,   0x03, 0x1F, 0, 5},
 };
 
+TLx493D_A1B6_PowerModeCombinations_t TLx493D_A1B6_PowerModeCombinations[] = {
+    { 0, 0, 0, 1000 },		    // POWERDOWNMODE
+	{ 1, 0, 0, 0    },			// FASTMODE
+	{ 0, 1, 1, 10   },		    // LOWPOWERMODE
+	{ 0, 1, 0, 100  },		    // ULTRALOWPOWERMODE
+	{ 1, 1, 1, 10   }			// MASTERCONTROLLEDMODE
+};
+
 typedef enum { 
                MOD1_REG   = 0x01,
                MOD2_REG   = 0x03 } SpecialRegisters_te;           
@@ -208,18 +216,6 @@ void TLx493D_A1B6_setReservedRegisterValues(Sensor_ts *sensor) {
     gen_1_setBitfield(sensor, sensor->commonBitfields.W_RES_3, gen_1_returnBitfield(sensor, sensor->commonBitfields.R_RES_3));
 }
 
-void TLx493D_A1B6_setPowerDownMode(Sensor_ts *sensor) {
-    gen_1_setBitfield(sensor, sensor->commonBitfields.FAST, TLx493D_A1B6_FAST_MODE_DISABLE_default);
-    gen_1_setBitfield(sensor, sensor->commonBitfields.LOW_POWER, TLx493D_A1B6_LOW_POWER_MODE_DISABLE_default);
-    TLx493D_setLowPowerPeriod(sensor, TLx493D_A1B6_LOW_POWER_PERIOD_100MS_default);
-}
-
-void TLx493D_A1B6_setMasterControlledMode(Sensor_ts *sensor) {
-    gen_1_setBitfield(sensor, sensor->commonBitfields.FAST, TLx493D_A1B6_FAST_MODE_ENABLE);
-    gen_1_setBitfield(sensor, sensor->commonBitfields.LOW_POWER, TLx493D_A1B6_LOW_POWER_MODE_ENABLE);
-    TLx493D_setLowPowerPeriod(sensor, TLx493D_A1B6_LOW_POWER_PERIOD_12MS);
-}
-
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
 
 bool TLx493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
@@ -236,14 +232,11 @@ bool TLx493D_A1B6_setDefaultConfig(Sensor_ts *sensor) {
     // set WRITE reserved register values to READ reserved register values
     TLx493D_A1B6_setReservedRegisterValues(sensor);
 
-    //set to POWERDOWNMODE at boot
-    TLx493D_A1B6_setPowerDownMode(sensor);
-
     // enable parity test and write to registers 
     ret &= TLx493D_A1B6_enableParityTest(sensor);
 
     // set to MASTERCONTROLLEDMODE to start measurement
-    TLx493D_A1B6_setMasterControlledMode(sensor);
+    TLx493D_A1B6_setPowerMode(sensor, MASTERCONTROLLEDMODE);
 
     // calculate parity
     TLx493D_A1B6_calculateParity(sensor);
@@ -411,13 +404,24 @@ bool TLx493D_A1B6_disableInterrupt(Sensor_ts *sensor) {
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
 
-bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD lp_period){
+bool TLx493D_setLowPowerPeriod(Sensor_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t lp_period){
 
     gen_1_setBitfield(sensor, sensor->commonBitfields.LP, lp_period);
     TLx493D_A1B6_calculateParity(sensor);
     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
     
     return ret;                                                 
+}
+
+bool TLx493D_A1B6_setPowerMode(Sensor_ts *sensor, TLx493D_A1B6_PowerMode_t mode){
+    
+    gen_1_setBitfield(sensor, sensor->commonBitfields.FAST, TLx493D_A1B6_PowerModeCombinations[mode].FAST);
+    gen_1_setBitfield(sensor, sensor->commonBitfields.LOW_POWER, TLx493D_A1B6_PowerModeCombinations[mode].LOW_POWER);
+    gen_1_setBitfield(sensor, sensor->commonBitfields.LP, TLx493D_A1B6_PowerModeCombinations[mode].LP);
+    TLx493D_A1B6_calculateParity(sensor);
+    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
+
+    return ret;
 }
 
 bool TLx493D_A1B6_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
