@@ -114,6 +114,11 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
+        bool setTriggerBits(uint8_t bits) {
+            return sensor.setTriggerBits();
+        }
+
+        
         bool setUpdateRate(uint8_t bit) {
             return sensor.setUpdateRate(bit);
         }

@@ -107,6 +107,11 @@ class TLx493D {
         }
 
 
+        bool setTriggerBits(uint8_t bits) {
+            return ::setTriggerBits(&sensor, bits);
+        }
+
+        
         bool setUpdateRate(uint8_t bit) {
             return ::setUpdateRate(&sensor, bit);
         }

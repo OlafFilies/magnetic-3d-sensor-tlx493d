@@ -225,6 +225,19 @@ bool gen_2_disableAngularMeasurement(Sensor_ts *sensor) {
 }
 
 
+bool gen_2_setTriggerBits(Sensor_ts *sensor, uint8_t bits) {
+    bool b = gen_2_readRegisters(sensor);
+
+    if (bits >= 0 && bits <= 3) 
+        gen_2_setBitfield(sensor, sensor->commonBitfields.TRIG, bits);
+    else
+        return false;
+    
+    sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[sensor->commonBitfields.CP].mask) | sensor->functions->calcConfigParity(sensor);
+    
+    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.TRIG);
+}
+
 uint8_t gen_2_getID(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.ID];
     return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;

@@ -131,6 +131,7 @@ typedef uint8_t (*CalculateConfigParityFuncPtr)(Sensor_ts *);
 typedef bool (*EnableAngularMeasurementFuncPtr)(Sensor_ts *);
 typedef bool (*DisableAngularMeasurementFuncPtr)(Sensor_ts *);
 
+typedef bool (*SetTriggerBitsFuncPtr)(Sensor_ts *, uint8_t bits);
 typedef bool (*SetUpdateRateFuncPtr)(Sensor_ts *, uint8_t bit);
 
 typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
@@ -170,6 +171,7 @@ typedef struct CommonFunctions_ts {
     EnableAngularMeasurementFuncPtr     enableAngularMeasurement;
     DisableAngularMeasurementFuncPtr    disableAngularMeasurement;
 
+    SetTriggerBitsFuncPtr               setTriggerBits;
     SetUpdateRateFuncPtr                setUpdateRate;
 
     // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.

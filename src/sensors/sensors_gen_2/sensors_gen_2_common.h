@@ -48,6 +48,8 @@ bool gen_2_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te addr);
 bool gen_2_enableAngularMeasurement(Sensor_ts *sensor);
 bool gen_2_disableAngularMeasurement(Sensor_ts *sensor);
 
+bool gen_2_setTriggerBits(Sensor_ts *sensor, uint8_t bits);
+
 uint8_t gen_2_getID(Sensor_ts *sensor);
 uint8_t gen_2_getFrameCounter(Sensor_ts *sensor) ;
 uint8_t gen_2_getType(Sensor_ts *sensor);

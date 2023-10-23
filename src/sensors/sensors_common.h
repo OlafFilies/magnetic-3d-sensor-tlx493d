@@ -37,6 +37,7 @@ bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
 bool enableAngularMeasurement(Sensor_ts *sensor);
 bool disableAngularMeasurement(Sensor_ts *sensor);
 
+bool setTriggerBits(Sensor_ts* sensor, uint8_t bits);
 bool setUpdateRate(Sensor_ts* sensor, uint8_t bit);
 
 // utilities

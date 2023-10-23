@@ -128,6 +128,9 @@ bool disableAngularMeasurement(Sensor_ts *sensor) {
    return sensor->functions->disableAngularMeasurement(sensor);
 }
 
+bool setTriggerBits(Sensor_ts *sensor, uint8_t bits) {
+   return sensor->functions->setTriggerBits(sensor, bits);
+}
 
 bool setUpdateRate(Sensor_ts *sensor, uint8_t bit) {
    return sensor->functions->setUpdateRate(sensor, bit);
