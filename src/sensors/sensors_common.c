@@ -129,6 +129,10 @@ bool disableAngularMeasurement(Sensor_ts *sensor) {
 }
 
 
+bool setUpdateRate(Sensor_ts *sensor, uint8_t bit) {
+   return sensor->functions->setUpdateRate(sensor, bit);
+}
+
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
    switch(sensorType) {

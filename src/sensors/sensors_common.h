@@ -37,6 +37,8 @@ bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
 bool enableAngularMeasurement(Sensor_ts *sensor);
 bool disableAngularMeasurement(Sensor_ts *sensor);
 
+bool setUpdateRate(Sensor_ts* sensor, uint8_t bit);
+
 // utilities
 const char *getTypeAsString(SupportedSensorTypes_te sensorType);
 

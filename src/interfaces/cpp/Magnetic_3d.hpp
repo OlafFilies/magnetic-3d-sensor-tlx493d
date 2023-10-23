@@ -108,8 +108,14 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             return sensor.enableAngularMeasurement();
         }
 
+
         bool disableAngularMeasurement() {
             return sensor.disableAngularMeasurement();
+        }
+
+
+        bool setUpdateRate(uint8_t bit) {
+            return sensor.setUpdateRate(bit);
         }
 
     private:

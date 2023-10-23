@@ -64,37 +64,6 @@ bool gen_2_readRegisters(Sensor_ts *sensor) {
 }
 
 
-
-
-// // Fuse/mode parity bit FP
-// uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor) {
-//     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.FP];
-
-// 	// compute parity of MOD1 register
-// 	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.MOD1] & ~bf->mask);
-
-// 	// add parity of MOD2:PRD register bits
-// 	parity ^= calculateParity(sensor->regMap[sensor->commonRegisters.MOD2] & sensor->regDef[sensor->commonBitfields.PRD].mask);
-
-// // TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
-// 	return getOddParity(parity) << bf->offset;
-// }
-
-
-// // Calculate bus (data) parity bit P
-// uint8_t gen_2_calculateBusParityBit(Sensor_ts *sensor) {
-// 	// compute bus parity of data values in registers 0 to 5
-// 	uint8_t parity = sensor->regMap[0];
-
-// 	for (uint8_t i = 1; i < 6; ++i) {
-// 		parity ^= sensor->regMap[i];
-// 	}
-
-// // TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
-// 	return getOddParity(calculateParity(parity)) << sensor->regDef[sensor->commonBitfields.P].offset;
-// }
-
-
 // Fuse/mode parity bit FP
 uint8_t gen_2_calculateFuseParity(Sensor_ts *sensor) {
 	// compute parity of MOD1 register
@@ -278,8 +247,6 @@ uint8_t gen_2_getHWV(Sensor_ts *sensor) {
     Register_ts *bf = &sensor->regDef[sensor->commonBitfields.HWV];
     return (sensor->regMap[bf->address] && bf->mask) >> bf->offset;
 }
-
-
 
 
 bool gen_2_hasValidIICadr(Sensor_ts *sensor, uint8_t id, uint8_t iicAdr) {

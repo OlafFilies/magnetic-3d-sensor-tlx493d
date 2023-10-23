@@ -53,9 +53,7 @@ uint8_t gen_2_getFrameCounter(Sensor_ts *sensor) ;
 uint8_t gen_2_getType(Sensor_ts *sensor);
 uint8_t gen_2_getHWV(Sensor_ts *sensor);
 
-
 bool gen_2_hasValidIICadr(Sensor_ts *sensor, uint8_t id, uint8_t iicAdr);
 bool gen_2_hasWakeup(Sensor_ts *sensor, uint8_t type);
-
 
 #endif // SENSORS_GEN_2_COMMON_H

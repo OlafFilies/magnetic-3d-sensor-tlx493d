@@ -93,6 +93,7 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
 
     .setDefaultConfig                   = TLV493D_A2BW_setDefaultConfig,
     .readRegisters                      = gen_2_readRegisters,
+    .transfer                           = TLV493D_A2BW_transferRegisterMap,
 
     .enableTemperature                  = TLV493D_A2BW_enableTemperature,
     .disableTemperature                 = TLV493D_A2BW_disableTemperature,
@@ -106,7 +107,9 @@ CommonFunctions_ts TLV493D_A2BW_commonFunctions = {
     .calcConfigParity                   = TLV493D_A2BW_calculateConfigurationParityBit,
 
     .enableAngularMeasurement           = gen_2_enableAngularMeasurement,
-    .disableAngularMeasurement          = gen_2_disableAngularMeasurement
+    .disableAngularMeasurement          = gen_2_disableAngularMeasurement,
+
+    .setUpdateRate                      = TLV493D_A2BW_setUpdateRate
 };
 
 bool TLV493D_A2BW_init(Sensor_ts *sensor) {
@@ -125,6 +128,8 @@ bool TLV493D_A2BW_init(Sensor_ts *sensor) {
     sensor->comIFType               = I2C_e;
     sensor->comLibIF                = NULL;
     sensor->comLibObj.i2c_obj       = NULL;
+
+    memset(sensor->regMap, 0, sensor->regMapSize);
 
     setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
 
@@ -205,10 +210,8 @@ uint8_t TLV493D_A2BW_calculateFuseParityBit(Sensor_ts *sensor) {
 
 // Configuration parity bit CP
 uint8_t TLV493D_A2BW_calculateConfigurationParityBit(Sensor_ts *sensor) {
-	// compute parity of Config register
 	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
-
-	return getEvenParity(parity) << sensor->regDef[CP].offset;
+	return getEvenParity(parity);
 }
 
 static bool TLV493D_A2BW_enable1ByteMode(Sensor_ts *sensor) {
@@ -242,6 +245,10 @@ static bool TLV493D_A2BW_enableTemperatureMeasurements(Sensor_ts *sensor) {
 bool TLV493D_A2BW_setDefaultConfig(Sensor_ts *sensor) {
     bool b = TLV493D_A2BW_enable1ByteMode(sensor);
     return b && TLV493D_A2BW_enableTemperature(sensor);
+}
+
+bool TLV493D_A2BW_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+    return sensor->comLibIF->transfer.i2c_transfer(sensor, tx_buffer, tx_len, rx_buffer, rx_len);
 }
 
 bool TLV493D_A2BW_enableTemperature(Sensor_ts *sensor) {
@@ -280,4 +287,20 @@ bool TLV493D_A2BW_disableInterrupt(Sensor_ts *sensor) {
     sensor->regMap[sensor->commonRegisters.MOD1] = (sensor->regMap[sensor->commonRegisters.MOD1] & ~sensor->regDef[FP].mask) | TLV493D_A2BW_calculateFuseParityBit(sensor);
 
     return b && gen_2_writeRegister(sensor, INT);
+}
+
+
+bool TLV493D_A2BW_setUpdateRate(Sensor_ts *sensor, uint8_t bit) {
+    bool b = gen_2_readRegisters(sensor);
+
+    gen_2_setBitfield(sensor, sensor->commonBitfields.PRD, bit);
+    gen_2_setBitfield(sensor, sensor->commonBitfields.FP, gen_2_calculateFuseParity(sensor));
+
+    uint8_t tx_buffer[4] = { sensor->commonRegisters.MOD1,
+                                sensor->regMap[sensor->commonRegisters.MOD1],
+                                sensor->regMap[sensor->commonRegisters.MOD1 + 1],
+                                sensor->regMap[sensor->commonRegisters.MOD1 + 2] 
+                            };
+
+    return b && TLV493D_A2BW_transferRegisterMap(sensor, tx_buffer, sizeof(tx_buffer), NULL, 0);
 }

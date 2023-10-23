@@ -107,6 +107,11 @@ class TLx493D {
         }
 
 
+        bool setUpdateRate(uint8_t bit) {
+            return ::setUpdateRate(&sensor, bit);
+        }
+
+
         Sensor_ts *getSensorStruct() {
             return &sensor;
         }
