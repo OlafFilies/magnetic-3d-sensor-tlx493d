@@ -9,6 +9,7 @@
 // common to all sensors
 #include "sensor_types.h"
 
+
 typedef enum {
     GEN_2_STD_IIC_ADDR_A0 = 0,
     GEN_2_STD_IIC_ADDR_A1 = 1,
@@ -61,14 +62,12 @@ bool gen_2_setDefaultConfig(Sensor_ts *sensor, uint8_t configREG, uint8_t mod1RE
 
 bool gen_2_hasValidData(Sensor_ts *sensor);
 
-bool gen_2_hasValidTemperatureData(Sensor_ts *sensor);
-bool gen_2_hasValidMagneticFieldData(Sensor_ts *sensor);
-
-bool gen_2_isFunctional(Sensor_ts *sensor);
-
 bool gen_2_hasValidFuseParity(Sensor_ts *sensor, uint8_t ffBF);
 bool gen_2_hasValidBusParity(Sensor_ts *sensor, uint8_t pBF);
 bool gen_2_hasValidConfigurationParity(Sensor_ts *sensor, uint8_t cpBF);
+
+bool gen_2_hasValidTemperatureData(Sensor_ts *sensor);
+bool gen_2_hasValidMagneticFieldData(Sensor_ts *sensor);
 
 bool gen_2_hasValidTBit(Sensor_ts *sensor, uint8_t tBF) ;
 bool gen_2_hasValidPD3Bit(Sensor_ts *sensor, uint8_t pd3BF);
@@ -81,5 +80,8 @@ uint8_t gen_2_getID(Sensor_ts *sensor, uint8_t idBF);
 uint8_t gen_2_getFrameCounter(Sensor_ts *sensor, uint8_t frmBF) ;
 uint8_t gen_2_getType(Sensor_ts *sensor, uint8_t typeBF);
 uint8_t gen_2_getHWV(Sensor_ts *sensor, uint8_t hwvBF);
+
+bool gen_2_isFunctional(Sensor_ts *sensor);
+
 
 #endif // SENSORS_GEN_2_COMMON_H

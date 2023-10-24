@@ -51,9 +51,9 @@ bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
 }
 
 
-bool gen_2_readRegisters(Sensor_ts *sensor) {
-    return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
-}
+// bool gen_2_readRegisters(Sensor_ts *sensor) {
+//     return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+// }
 
 
 /***
@@ -117,27 +117,21 @@ uint8_t gen_2_calculateFuseParity(Sensor_ts *sensor, uint8_t fpBF, uint8_t prdBF
     Register_ts *fp  = &sensor->regDef[fpBF];
     Register_ts *prd = &sensor->regDef[prdBF];
 
-	// compute parity of MOD1 register
 	uint8_t parity = calculateParity(sensor->regMap[fp->address] & ~fp->mask);
-
-	// add parity of MOD2:PRD register bits
 	parity ^= calculateParity(sensor->regMap[prd->address] & prd->mask);
 
-// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
 	return getOddParity(parity);
 }
 
 
 // Calculate bus (data) parity bit P
 uint8_t gen_2_calculateBusParity(Sensor_ts *sensor, uint8_t to) {
-	// compute bus parity of data values in registers 0 to 5
 	uint8_t parity = sensor->regMap[0];
 
 	for (uint8_t i = 1; i < to; ++i) {
 		parity ^= sensor->regMap[i];
 	}
 
-// TODO: remove shift left below and use setBitfield method instead of directly oring bit to byte !
 	return getOddParity(calculateParity(parity));
 }
 
@@ -302,6 +296,20 @@ bool gen_2_setTrigger(Sensor_ts *sensor, uint8_t trigBF, uint8_t cpBF, uint8_t t
 }
 
 
+bool gen_2_setTriggerBits(Sensor_ts *sensor, uint8_t bits) {
+    bool b = readRegisters(sensor);
+
+    if (bits >= 0 && bits <= 3) 
+        gen_2_setBitfield(sensor, sensor->commonBitfields.TRIG, bits);
+    else
+        return false;
+    
+    sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[sensor->commonBitfields.CP].mask) | sensor->functions->calculateConfigurationParity(sensor);
+    
+    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.TRIG);
+}
+
+
 /***
  * 
 */
@@ -389,29 +397,15 @@ bool gen_2_setUpdateRate(Sensor_ts *sensor, uint8_t fpBF, uint8_t prdBF, uint8_t
 }
 
 
-bool gen_2_setTriggerBits(Sensor_ts *sensor, uint8_t bits) {
-    bool b = readRegisters(sensor);
-
-    if (bits >= 0 && bits <= 3) 
-        gen_2_setBitfield(sensor, sensor->commonBitfields.TRIG, bits);
-    else
-        return false;
-    
-    sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[sensor->commonBitfields.CP].mask) | sensor->functions->calculateConfigurationParity(sensor);
-    
-    b &= gen_2_writeRegister(sensor, sensor->commonBitfields.TRIG);
-}
-
-
 /***
  * TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
 */
 bool gen_2_setDefaultConfig(Sensor_ts *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t caBF, uint8_t intBF) {
-    sensor->regMap[configREG] = 0x00; // | sensor->functions->calculateConfigurationParity(sensor);
+    sensor->regMap[configREG] = 0x00;
     sensor->regMap[mod1REG]   = 0x00;
     sensor->regMap[mod2REG]   = 0x00;;
 
-    gen_2_writeRegister(sensor, configREG);
+    gen_2_writeRegister(sensor, configREG); // seems to be required for A2B6 after reset !
 
     gen_2_setBitfield(sensor, caBF, 0);
     gen_2_setBitfield(sensor, intBF, 1);
@@ -425,30 +419,6 @@ bool gen_2_setDefaultConfig(Sensor_ts *sensor, uint8_t configREG, uint8_t mod1RE
     }
 
     return false;
-}
-
-
-bool gen_2_hasValidData(Sensor_ts *sensor) {
-    return sensor->functions->hasValidBusParity(sensor) && sensor->functions->hasValidTBit(sensor);
-    // return gen_2_hasValidBusParity(sensor) && gen_2_hasValidTBit(sensor);
-}
-
-
-bool gen_2_hasValidTemperatureData(Sensor_ts *sensor) {
-    return sensor->functions->hasValidData(sensor) && sensor->functions->hasValidPD3Bit(sensor);
-    // return gen_2_hasValidData(sensor) && gen_2_hasValidPD3Bit(sensor);
-}
-
-
-bool gen_2_hasValidMagneticFieldData(Sensor_ts *sensor) {
-    return sensor->functions->hasValidData(sensor) && sensor->functions->hasValidPD0Bit(sensor);
-    // return gen_2_hasValidData(sensor) && gen_2_hasValidPD0Bit(sensor);
-}
-
-
-bool gen_2_isFunctional(Sensor_ts *sensor) {
-    return sensor->functions->hasValidFuseParity(sensor) && sensor->functions->hasValidConfigurationParity(sensor);
-    // return gen_2_hasValidFuseParity(sensor) && gen_2_hasValidConfigurationParity(sensor);
 }
 
 
@@ -469,6 +439,24 @@ bool gen_2_hasValidConfigurationParity(Sensor_ts *sensor, uint8_t cfBF) {
     Register_ts *cf = &sensor->regDef[cfBF];
 
     return (sensor->regMap[cf->address] & cf->mask) != 0;
+}
+
+
+bool gen_2_hasValidData(Sensor_ts *sensor) {
+    return sensor->functions->hasValidBusParity(sensor) && sensor->functions->hasValidTBit(sensor);
+    // return gen_2_hasValidBusParity(sensor) && gen_2_hasValidTBit(sensor);
+}
+
+
+bool gen_2_hasValidTemperatureData(Sensor_ts *sensor) {
+    return sensor->functions->hasValidData(sensor) && sensor->functions->hasValidPD3Bit(sensor);
+    // return gen_2_hasValidData(sensor) && gen_2_hasValidPD3Bit(sensor);
+}
+
+
+bool gen_2_hasValidMagneticFieldData(Sensor_ts *sensor) {
+    return sensor->functions->hasValidData(sensor) && sensor->functions->hasValidPD0Bit(sensor);
+    // return gen_2_hasValidData(sensor) && gen_2_hasValidPD0Bit(sensor);
 }
 
 
@@ -524,4 +512,10 @@ uint8_t gen_2_getType(Sensor_ts *sensor, uint8_t typeBF) {
 uint8_t gen_2_getHWV(Sensor_ts *sensor, uint8_t hwvBF) {
     Register_ts *hwv = &sensor->regDef[hwvBF];
     return (sensor->regMap[hwv->address] && hwv->mask) >> hwv->offset;
+}
+
+
+bool gen_2_isFunctional(Sensor_ts *sensor) {
+    return sensor->functions->hasValidFuseParity(sensor) && sensor->functions->hasValidConfigurationParity(sensor);
+    // return gen_2_hasValidFuseParity(sensor) && gen_2_hasValidConfigurationParity(sensor);
 }
