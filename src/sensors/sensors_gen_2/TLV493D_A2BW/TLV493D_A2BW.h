@@ -16,6 +16,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /** Common to all sensors */
 #include "sensor_types.h"
@@ -99,6 +100,8 @@ bool TLV493D_A2BW_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z
 
 bool TLV493D_A2BW_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
 
+uint8_t TLV493D_A2BW_calculateConfigurationParityBit(Sensor_ts *sensor);
+
 bool TLV493D_A2BW_reset(Sensor_ts *sensor);
 bool TLV493D_A2BW_getDiagnosis(Sensor_ts *sensor);
 
@@ -120,6 +123,19 @@ void TLV493D_A2BW_calculateParity(Sensor_ts *sensor);
  * @return false - If unsuccessful 
  */
 bool TLV493D_A2BW_setDefaultConfig(Sensor_ts *sensor);
+
+/**
+ * @brief 
+ * 
+ * @param sensor 
+ * @param tx_buffer 
+ * @param tx_len 
+ * @param rx_buffer 
+ * @param rx_len 
+ * @return true 
+ * @return false 
+ */
+bool TLV493D_A2BW_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 /**
  * @brief Enables the temperature measurement of the XENSIV™ TLV493D-A2BW magnetic 3D sensor 
@@ -156,5 +172,16 @@ bool TLV493D_A2BW_enableInterrupt(Sensor_ts *sensor);
  * @return false - If unsuccessful
  */
 bool TLV493D_A2BW_disableInterrupt(Sensor_ts *sensor);
+
+
+/**
+ * @brief Sets the update rate for the measurements of the XENSIV™ TLV493D-A2BW magnetic 3D sensor
+ * 
+ * @param[in] sensor Pointer to the XENSIV™ TLV493D-A2BW magnetic 3D sensor structure
+ * @param[in] bit Value which is set to the PRD-Bitfield
+ * @return true - If successful
+ * @return false - If unsuccessful 
+ */
+bool TLV493D_A2BW_setUpdateRate(Sensor_ts *sensor, uint8_t bit);
 
 #endif /** TLV493D_A2BW_H */

@@ -20,7 +20,7 @@ extern "C" bool initSPI(Sensor_ts *sensor) {
     sensor->comLibObj.spi_obj->spi->init();
 
     sensor->comLibObj.spi_obj->spi->getComIF().setDataMode(SPI_MODE2);
-    sensor->comLibObj.spi_obj->spi->getComIF().setClockDivider(SPI_CLOCK_DIV2);
+    sensor->comLibObj.spi_obj->spi->getComIF().setClockDivider(SPI_CLOCK_DIV8);
     sensor->comLibObj.spi_obj->spi->getComIF().setBitOrder(MSBFIRST);
 
     return true;

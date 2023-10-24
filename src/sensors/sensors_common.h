@@ -27,8 +27,8 @@ bool getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, dou
 
 bool hasValidData(Sensor_ts *sensor);
 
-bool hasValidDataTemperatureData(Sensor_ts *sensor);
-bool hasValidDataFieldValueData(Sensor_ts *sensor);
+bool hasValidTemperatureData(Sensor_ts *sensor);
+bool hasValidMagneticFieldData(Sensor_ts *sensor);
 
 bool isFunctional(Sensor_ts *sensor);
 
@@ -38,8 +38,8 @@ bool readRegisters(Sensor_ts *sensor);
 
 // bool enableTemperatureMeasurements(Sensor_ts *sensor);
 // bool disableTemperatureMeasurements(Sensor_ts *sensor);
-bool enableTemperature(Sensor_ts *sensor);
-bool disableTemperature(Sensor_ts *sensor);
+bool enableTemperatureMeasurement(Sensor_ts *sensor);
+bool disableTemperatureMeasurement(Sensor_ts *sensor);
 
 bool enableInterrupt(Sensor_ts *sensor);
 bool disableInterrupt(Sensor_ts *sensor);
@@ -48,8 +48,11 @@ bool setPowerMode(Sensor_ts *sensor, uint8_t mode);
 
 bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
 
-// void setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits);
+bool enableAngularMeasurement(Sensor_ts *sensor);
+bool disableAngularMeasurement(Sensor_ts *sensor);
 
+bool setTriggerBits(Sensor_ts* sensor, uint8_t bits);
+bool setUpdateRate(Sensor_ts* sensor, uint8_t bit);
 
 // utilities
 const char *getTypeAsString(SupportedSensorTypes_te sensorType);

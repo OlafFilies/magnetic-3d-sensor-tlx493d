@@ -28,7 +28,7 @@
 #define SRC_GENERAL_ERU_H_
 
 #include <stdbool.h>
-#include <XMC1100.h>
+//#include <XMC1100.h>
 
 /*! \brief Enable falling edge interrupt on P2.11 and P0.0 (TLI support)
  * Using ERU and CCU4 slice CC40 (0)

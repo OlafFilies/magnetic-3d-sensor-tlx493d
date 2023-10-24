@@ -97,6 +97,26 @@ class TLx493D {
         }
 
 
+        bool enableAngularMeasurement() {
+            return ::enableAngularMeasurement(&sensor);
+        }
+
+
+        bool disableAngularMeasurement() {
+            return ::disableAngularMeasurement(&sensor);
+        }
+
+
+        bool setTriggerBits(uint8_t bits) {
+            return ::setTriggerBits(&sensor, bits);
+        }
+
+        
+        bool setUpdateRate(uint8_t bit) {
+            return ::setUpdateRate(&sensor, bit);
+        }
+
+
         Sensor_ts *getSensorStruct() {
             return &sensor;
         }

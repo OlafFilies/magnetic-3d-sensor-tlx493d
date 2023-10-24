@@ -19,6 +19,9 @@
 #include "TLE493D_A2B6.h"
 
 
+// #include "Logger.h"
+
+
 /***
  * Listing of all register names for this sensor.
  * Used to index "TLE493D_A2B6_regDef" defined below, so index values must match !
@@ -128,24 +131,46 @@ CommonFunctions_ts TLE493D_A2B6_commonFunctions = {
     .deinit                 = TLE493D_A2B6_deinit,
 
     .calculateTemperature   = TLE493D_A2B6_calculateTemperature,
-    .getTemperature         = TLE493D_A2B6_getTemperature,
+    // .getTemperature         = TLE493D_A2B6_getTemperature,
 
     .calculateMagneticField = TLE493D_A2B6_calculateMagneticField,
-    .getMagneticField       = TLE493D_A2B6_getMagneticField,
+    // .getMagneticField       = TLE493D_A2B6_getMagneticField,
 
     .calculateMagneticFieldAndTemperature = TLE493D_A2B6_calculateMagneticFieldAndTemperature,
-    .getMagneticFieldAndTemperature       = TLE493D_A2B6_getMagneticFieldAndTemperature,
+    // .getMagneticFieldAndTemperature       = TLE493D_A2B6_getMagneticFieldAndTemperature,
 
-    .hasValidData          = gen_2_hasValidData,
-    .isFunctional          = gen_2_isFunctional,
+    .enableAngularMeasurement  = TLE493D_A2B6_enableAngularMeasurement,
+    .disableAngularMeasurement = TLE493D_A2B6_disableAngularMeasurement,
+
+    .enableTemperatureMeasurement  = TLE493D_A2B6_enableTemperatureMeasurement,
+    .disableTemperatureMeasurement = TLE493D_A2B6_disableTemperatureMeasurement,
+
+    .enable1ByteReadMode           = TLE493D_A2B6_enable1ByteReadMode,
+    .disable1ByteReadMode          = TLE493D_A2B6_disable1ByteReadMode,
 
     .setDefaultConfig      = TLE493D_A2B6_setDefaultConfig,
     .readRegisters         = readRegisters,
 
+    .calculateFuseParity   = TLE493D_A2B6_calculateFuseParity,
+    .calculateBusParity    = TLE493D_A2B6_calculateBusParity,
+    .calculateConfigurationParity = TLE493D_A2B6_calculateConfigurationParity,
+
     .setPowerMode          = gen_2_setPowerMode,
     .setIICAddress         = gen_2_setIICAddress,
 
-    // .transfer              = transfer,
+    .hasValidFuseParity    = TLE493D_A2B6_hasValidFuseParity,
+    .hasValidBusParity     = TLE493D_A2B6_hasValidBusParity,
+    .hasValidConfigurationParity = TLE493D_A2B6_hasValidConfigurationParity,
+
+    .hasValidData              = gen_2_hasValidData,
+    .hasValidTemperatureData   = gen_2_hasValidTemperatureData,
+    .hasValidMagneticFieldData = gen_2_hasValidMagneticFieldData,
+
+    .hasValidTBit   = TLE493D_A2B6_hasValidTBit,
+    .hasValidPD0Bit = TLE493D_A2B6_hasValidPD0Bit,
+    .hasValidPD3Bit = TLE493D_A2B6_hasValidPD3Bit,
+
+    .isFunctional          = gen_2_isFunctional,
 };
 
 
@@ -276,279 +301,331 @@ bool TLE493D_A2B6_getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, d
 }
 
 
+/***
+ * 
+*/
+uint8_t TLE493D_A2B6_calculateFuseParity(Sensor_ts *sensor) {
+    return gen_2_calculateFuseParity(sensor, FP, PRD);
+	// uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
+	// return getEvenParity(parity);
+}
 
 
+/***
+ * 
+*/
+uint8_t TLE493D_A2B6_calculateBusParity(Sensor_ts *sensor) {
+    return gen_2_calculateBusParity(sensor, 5);
+	// uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
+	// return getEvenParity(parity);
+}
 
 
 /***
  * 
 */
 uint8_t TLE493D_A2B6_calculateConfigurationParity(Sensor_ts *sensor) {
-	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
-	return getEvenParity(parity);
+    return gen_2_calculateConfigurationParity(sensor, CP);
+	// uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);
+	// return getEvenParity(parity);
 }
 
 
-/***
- * 
-*/
-bool TLE493D_A2B6_setDisableTemperatureMeasurements(Sensor_ts *sensor, uint8_t dt) {
-    uint8_t config = sensor->commonRegisters.CONFIG;
-
-    // CONFIG register
-    gen_2_setBitfield(sensor, DT, dt);
-    gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
-
-    gen_2_writeRegister(sensor, DT);
+bool TLE493D_A2B6_enableTemperatureMeasurement(Sensor_ts *sensor) {
+    return gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 0);
 }
 
 
-bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
-    return TLE493D_A2B6_setDisableTemperatureMeasurements(sensor, 0);
+bool TLE493D_A2B6_disableTemperatureMeasurement(Sensor_ts *sensor) {
+    return gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 1);
 }
 
 
-bool TLE493D_A2B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
-    return TLE493D_A2B6_setDisableTemperatureMeasurements(sensor, 1);
+// /***
+//  * 
+// */
+// bool TLE493D_A2B6_setDisableTemperatureMeasurements(Sensor_ts *sensor, uint8_t dt) {
+// //     uint8_t config = sensor->commonRegisters.CONFIG;
+
+//     // CONFIG register
+//     gen_2_setBitfield(sensor, DT, dt);
+//     gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
+
+//     gen_2_writeRegister(sensor, DT);
+// }
+
+
+// bool TLE493D_A2B6_enableTemperatureMeasurements(Sensor_ts *sensor) {
+//     return TLE493D_A2B6_setDisableTemperatureMeasurements(sensor, 0);
+// }
+
+
+// bool TLE493D_A2B6_disableTemperatureMeasurements(Sensor_ts *sensor) {
+//     return TLE493D_A2B6_setDisableTemperatureMeasurements(sensor, 1);
+// }
+
+
+// /***
+//  * This option depends on value of DT page 7.
+// */
+// bool TLE493D_A2B6_setAngularMesurements(Sensor_ts *sensor, uint8_t am) {
+//     gen_2_setBitfield(sensor, AM, am);
+//     gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
+
+//     return gen_2_writeRegister(sensor, AM);
+// }
+
+
+bool TLE493D_A2B6_enableAngularMeasurement(Sensor_ts *sensor) {
+    return gen_2_setAngularMeasurement(sensor, AM, DT, CP, 1, 1);
 }
 
 
-/***
- * This option depends on value of DT page 7.
-*/
-bool TLE493D_A2B6_setAngularMesurements(Sensor_ts *sensor, uint8_t am) {
-    gen_2_setBitfield(sensor, AM, am);
-    gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
-
-    return gen_2_writeRegister(sensor, AM);
+bool TLE493D_A2B6_disableAngularMeasurement(Sensor_ts *sensor) {
+    return gen_2_setAngularMeasurement(sensor, AM, DT, CP, 0, 0);
 }
 
 
-bool TLE493D_A2B6_enableAngularMesurements(Sensor_ts *sensor) {
-    TLE493D_A2B6_setAngularMesurements(sensor, 1);
-}
+// /***
+//  * This option depends on PR and MODE.
+// */
+// bool TLE493D_A2B6_setTriggerOptions(Sensor_ts *sensor, uint8_t trig) {
+//     gen_2_setBitfield(sensor, TRIG, trig);
+//     gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
 
-
-bool TLE493D_A2B6_disableAngularMesurements(Sensor_ts *sensor) {
-    TLE493D_A2B6_setAngularMesurements(sensor, 0);
-}
-
-
-/***
- * This option depends on PR and MODE.
-*/
-bool TLE493D_A2B6_setTriggerOptions(Sensor_ts *sensor, uint8_t trig) {
-    gen_2_setBitfield(sensor, TRIG, trig);
-    gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
-
-    return gen_2_writeRegister(sensor, TRIG);
-}
+//     return gen_2_writeRegister(sensor, TRIG);
+// }
 
 
 bool TLE493D_A2B6_setNoTriggerOnReadTriggerOption(Sensor_ts *sensor) {
-    TLE493D_A2B6_setTriggerOptions(sensor, 0b00);
+    return gen_2_setTrigger(sensor, TRIG, CP, 0b00);
 }
 
 
 bool TLE493D_A2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(Sensor_ts *sensor) {
-    TLE493D_A2B6_setTriggerOptions(sensor, 0b01);
+    return gen_2_setTrigger(sensor, TRIG, CP, 0b01);
 }
 
 
 bool TLE493D_A2B6_setTriggerOnReadAfterRegister05TriggerOption(Sensor_ts *sensor) {
-    TLE493D_A2B6_setTriggerOptions(sensor, 0b10);
+    return gen_2_setTrigger(sensor, TRIG, CP, 0b10);
 }
 
 
-/***
- * 
-*/
-bool TLE493D_A2B6_setShortRangeSensitivity(Sensor_ts *sensor, uint8_t srs) {
-    gen_2_setBitfield(sensor, X2, srs);
-    gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
+// /***
+//  * 
+// */
+// bool TLE493D_A2B6_setShortRangeSensitivity(Sensor_ts *sensor, uint8_t srs) {
+//     gen_2_setBitfield(sensor, X2, srs);
+//     gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
 
-    return gen_2_writeRegister(sensor, X2);
-}
+//     return gen_2_writeRegister(sensor, X2);
+// }
 
 
 bool TLE493D_A2B6_enableShortRangeSensitivity(Sensor_ts *sensor) {
-    TLE493D_A2B6_setShortRangeSensitivity(sensor, 1);
+    return gen_2_setShortRangeSensitivity(sensor, X2, CP, 1);
 }
 
 
 bool TLE493D_A2B6_disableShortRangeSensitivity(Sensor_ts *sensor) {
-    TLE493D_A2B6_setShortRangeSensitivity(sensor, 0);
+    return gen_2_setShortRangeSensitivity(sensor, X2, CP, 0);
 }
 
 
-/***
- * 
-*/
-bool TLE493D_A2B6_setMagneticTemperatureCompensation(Sensor_ts *sensor, uint8_t mtc) {
-    gen_2_setBitfield(sensor, TL_MAG, mtc);
-    gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
+// /***
+//  * 
+// */
+// bool TLE493D_A2B6_setMagneticTemperatureCompensation(Sensor_ts *sensor, uint8_t mtc) {
+//     gen_2_setBitfield(sensor, TL_MAG, mtc);
+//     gen_2_setBitfield(sensor, CP, TLE493D_A2B6_calculateConfigurationParity(sensor));
 
-    return gen_2_writeRegister(sensor, TL_MAG);
-}
+//     return gen_2_writeRegister(sensor, TL_MAG);
+// }
 
 
 bool TLE493D_A2B6_setTC0MagneticTemperatureCompensation(Sensor_ts *sensor) {
-    TLE493D_A2B6_setMagneticTemperatureCompensation(sensor, 0b00);
+    return gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b00);
 }
 
 
 bool TLE493D_A2B6_setTC1MagneticTemperatureCompensation(Sensor_ts *sensor) {
-    TLE493D_A2B6_setMagneticTemperatureCompensation(sensor, 0b01);
+    return gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b01);
 }
 
 
 bool TLE493D_A2B6_setTC2MagneticTemperatureCompensation(Sensor_ts *sensor) {
-    TLE493D_A2B6_setMagneticTemperatureCompensation(sensor, 0b10);
+    return gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b10);
 }
 
 
 bool TLE493D_A2B6_setTC3MagneticTemperatureCompensation(Sensor_ts *sensor) {
-    TLE493D_A2B6_setMagneticTemperatureCompensation(sensor, 0b11);
+    return gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b11);
 }
 
 
-/***
- * 
-*/
-bool TLE493D_A2B6_set1ByteReadMode(Sensor_ts *sensor, uint8_t pr) {
-    uint8_t mod1 = sensor->commonRegisters.MOD1;
+// /***
+//  * 
+// */
+// bool TLE493D_A2B6_set1ByteReadMode(Sensor_ts *sensor, uint8_t pr) {
+//     // uint8_t mod1 = sensor->commonRegisters.MOD1;
 
-    gen_2_setBitfield(sensor, PR, pr);
-    gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor));
+//     gen_2_setBitfield(sensor, PR, pr);
+//     gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor, FP, PRD));
 
-    gen_2_writeRegister(sensor, PR);
+//     gen_2_writeRegister(sensor, PR);
+// }
+
+
+bool TLE493D_A2B6_enable1ByteReadMode(Sensor_ts *sensor) {
+    return gen_2_set1ByteReadMode(sensor, PR, FP, PRD, 1);
+
+// return TLE493D_A2B6_set1ByteReadMode(sensor, 1);
 }
 
 
-bool TLE493D_A2B6_enable1ByteMode(Sensor_ts *sensor) {
-     return TLE493D_A2B6_set1ByteReadMode(sensor, 1);
+bool TLE493D_A2B6_disable1ByteReadMode(Sensor_ts *sensor) {
+    return gen_2_set1ByteReadMode(sensor, PR, FP, PRD, 0);
 }
 
 
-bool TLE493D_A2B6_disable1ByteMode(Sensor_ts *sensor) {
-     return TLE493D_A2B6_set1ByteReadMode(sensor, 0);
-}
-
-
-/***
- * 
-*/
-bool  TLE493D_A2B6_setInterruptAndCollisionAvoidance(Sensor_ts *sensor, bool intIsOn, bool caIsOn) {
-    gen_2_setBitfield(sensor, INT, intIsOn ? 0 : 1);
-    gen_2_setBitfield(sensor, CA, caIsOn ? 1 : 0);
+// /***
+//  * 
+// */
+// bool  TLE493D_A2B6_setInterruptAndCollisionAvoidance(Sensor_ts *sensor, bool intIsOn, bool caIsOn) {
+//     gen_2_setBitfield(sensor, INT, intIsOn ? 0 : 1);
+//     gen_2_setBitfield(sensor, CA, caIsOn ? 1 : 0);
  
-    gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor));
+//     gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor, FP, PRD));
     
-    return gen_2_writeRegister(sensor, INT); 
-}
+//     return gen_2_writeRegister(sensor, INT); 
+// }
 
 
-/***
- * CA only in Low Power and MCM mode, not in Fast Mode !
- * MODE depends on PR and TRIG !
-*/
-bool TLE493D_A2B6_setCollisionAvoidance(Sensor_ts *sensor, uint8_t ca) {
-// gen_2_setBitfield(sensor, sensor->commonBitfields.MODE, 0b11);
+// /***
+//  * CA only in Low Power and MCM mode, not in Fast Mode !
+//  * MODE depends on PR and TRIG !
+// */
+// bool TLE493D_A2B6_setCollisionAvoidance(Sensor_ts *sensor, uint8_t ca) {
+// // gen_2_setBitfield(sensor, sensor->commonBitfields.MODE, 0b11);
 
-    gen_2_setBitfield(sensor, CA, ca);
-    gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor));
+//     gen_2_setBitfield(sensor, CA, ca);
+//     gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor, FP, PRD));
 
-    return gen_2_writeRegister(sensor, CA);
-}
-
-
-bool TLE493D_A2B6_enableCollisionAvoidance(Sensor_ts *sensor) {
-    TLE493D_A2B6_setCollisionAvoidance(sensor, 0);
-}
+//     return gen_2_writeRegister(sensor, CA);
+// }
 
 
-bool TLE493D_A2B6_disableCollisionAvoidance(Sensor_ts *sensor) {
-    TLE493D_A2B6_setCollisionAvoidance(sensor, 1);
-}
+// bool TLE493D_A2B6_enableCollisionAvoidance(Sensor_ts *sensor) {
+//     TLE493D_A2B6_setCollisionAvoidance(sensor, 0);
+// }
 
 
-/***
- * 
-*/
-bool TLE493D_A2B6_setInterrupt(Sensor_ts *sensor, uint8_t irq) {
-    gen_2_setBitfield(sensor, INT, irq);
-    gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor));
-
-    return gen_2_writeRegister(sensor, INT);
-}
+// bool TLE493D_A2B6_disableCollisionAvoidance(Sensor_ts *sensor) {
+//     TLE493D_A2B6_setCollisionAvoidance(sensor, 1);
+// }
 
 
-bool TLE493D_A2B6_enableInterrupt(Sensor_ts *sensor) {
-    TLE493D_A2B6_setInterrupt(sensor, 0);
-}
+// /***
+//  * 
+// */
+// bool TLE493D_A2B6_setInterrupt(Sensor_ts *sensor, uint8_t irq) {
+//     gen_2_setBitfield(sensor, INT, irq);
+//     gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor, FP, PRD));
+
+//     return gen_2_writeRegister(sensor, INT);
+// }
 
 
-bool TLE493D_A2B6_disableInterrupt(Sensor_ts *sensor) {
-    TLE493D_A2B6_setInterrupt(sensor, 1);
-}
+// bool TLE493D_A2B6_enableInterrupt(Sensor_ts *sensor) {
+//     TLE493D_A2B6_setInterrupt(sensor, 0);
+// }
 
 
-/***
- * 
-*/
-bool TLE493D_A2B6_setUpdateRate(Sensor_ts *sensor, uint8_t ur) {
-    uint8_t mod1 = sensor->commonRegisters.MOD1;
+// bool TLE493D_A2B6_disableInterrupt(Sensor_ts *sensor) {
+//     TLE493D_A2B6_setInterrupt(sensor, 1);
+// }
 
-    // MOD2 register
-    gen_2_setBitfield(sensor, PRD, ur);
 
-    // MOD1 register : FP includes PRD bit !
-    gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor));
+// /***
+//  * 
+// */
+// bool TLE493D_A2B6_setUpdateRate(Sensor_ts *sensor, uint8_t ur) {
+//     uint8_t mod1 = sensor->commonRegisters.MOD1;
 
-    uint8_t buf[4] = { mod1,
-                       sensor->regMap[mod1],     // MOD1 register
-                       sensor->regMap[mod1 + 1], // reserved register must have been read once in setDefaultConfig to get factory settings !
-                       sensor->regMap[mod1 + 2]  // MOD2 register
-                     };
+//     // MOD2 register
+//     gen_2_setBitfield(sensor, PRD, ur);
 
-    return transfer(sensor, buf, sizeof(buf), NULL, 0);
-}
+//     // MOD1 register : FP includes PRD bit !
+//     gen_2_setBitfield(sensor, FP, gen_2_calculateFuseParity(sensor, FP, PRD));
+
+//     uint8_t buf[4] = { mod1,
+//                        sensor->regMap[mod1],     // MOD1 register
+//                        sensor->regMap[mod1 + 1], // reserved register must have been read once in setDefaultConfig to get factory settings !
+//                        sensor->regMap[mod1 + 2]  // MOD2 register
+//                      };
+
+//     return transfer(sensor, buf, sizeof(buf), NULL, 0);
+// }
 
 
 bool TLE493D_A2B6_setHighUpdateRate(Sensor_ts *sensor) {
-    TLE493D_A2B6_setUpdateRate(sensor, 0);
+    return gen_2_setUpdateRate(sensor, FP, PRD, 0);
 }
 
 
 bool TLE493D_A2B6_setLowUpdateRate(Sensor_ts *sensor) {
-    TLE493D_A2B6_setUpdateRate(sensor, 1);
+    return gen_2_setUpdateRate(sensor, FP, PRD, 1);
+}
+
+
+bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
+    return gen_2_setDefaultConfig(sensor, CONFIG_REG, MOD1_REG, MOD2_REG, CA, INT);
 }
 
 
 /***
  * TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
 */
-bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
-    sensor->regMap[CONFIG_REG] = 0x00;
-    sensor->regMap[MOD1_REG]   = 0x00;
-    sensor->regMap[MOD2_REG]   = 0x00;;
+// bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
+//     sensor->regMap[CONFIG_REG] = 0x00;
+//     sensor->regMap[MOD1_REG]   = 0x00;
+//     sensor->regMap[MOD2_REG]   = 0x00;;
 
-    // MOD1 register
-    gen_2_setBitfield(sensor, CA, 0);
-    gen_2_setBitfield(sensor, INT, 1);
+//     // MOD1 register
+//     gen_2_setBitfield(sensor, CA, 0);
+//     gen_2_setBitfield(sensor, INT, 1);
 
-    if( TLE493D_A2B6_enable1ByteMode(sensor) ) {
-        if( TLE493D_A2B6_enableTemperatureMeasurements(sensor) ) {
-            // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
-            // accidentally changing a preset values to 0.
-            if( readRegisters(sensor) )
-                return TLE493D_A2B6_setLowUpdateRate(sensor);
+//     if( TLE493D_A2B6_enable1ByteReadMode(sensor) ) {
+//         // return readRegisters(sensor);
 
-            // return true;
-        }
-    }
+//         if( TLE493D_A2B6_enableTemperatureMeasurement(sensor) ) {
+//         //     // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
+//         //     // accidentally changing a preset values to 0.
+//             if( readRegisters(sensor) ) {
+//         //      return TLE493D_A2B6_setLowUpdateRate(sensor);
 
-    return false;
+//                 return true;
+//             }
+//         }
+//     }
+
+//     return false;
+// }
+
+
+bool TLE493D_A2B6_hasValidFuseParity(Sensor_ts *sensor) {
+    return gen_2_hasValidFuseParity(sensor, FF);
+}
+
+
+bool TLE493D_A2B6_hasValidBusParity(Sensor_ts *sensor) {
+    return gen_2_hasValidBusParity(sensor, P);
+}
+
+
+bool TLE493D_A2B6_hasValidConfigurationParity(Sensor_ts *sensor) {
+    return gen_2_hasValidConfigurationParity(sensor, CF);
 }
 
 
@@ -559,4 +636,39 @@ bool TLE493D_A2B6_hasValidIICadr(Sensor_ts *sensor) {
 
 bool TLE493D_A2B6_hasWakeup(Sensor_ts *sensor) {
     return gen_2_hasWakeup(sensor, TYPE);
+}
+
+
+bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor) {
+    return gen_2_hasValidData(sensor);
+}
+
+
+bool TLE493D_A2B6_hasValidTemperatureData(Sensor_ts *sensor) {
+    return gen_2_hasValidTemperatureData(sensor);
+}
+
+
+bool TLE493D_A2B6_hasValidMagneticFieldData(Sensor_ts *sensor) {
+    return gen_2_hasValidMagneticFieldData(sensor);
+}
+
+
+bool TLE493D_A2B6_hasValidTBit(Sensor_ts *sensor) {
+    return gen_2_hasValidTBit(sensor, T);
+}
+
+
+bool TLE493D_A2B6_hasValidPD0Bit(Sensor_ts *sensor) {
+    return gen_2_hasValidPD0Bit(sensor, PD0);
+}
+
+
+bool TLE493D_A2B6_hasValidPD3Bit(Sensor_ts *sensor) {
+    return gen_2_hasValidPD3Bit(sensor, PD3);
+}
+
+
+bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor) {
+    return gen_2_isFunctional(sensor);
 }

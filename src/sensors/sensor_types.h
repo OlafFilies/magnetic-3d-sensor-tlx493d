@@ -17,7 +17,7 @@ typedef struct Sensor_ts Sensor_ts;
   List of all supported sensor devices.
 */
 typedef enum {
-               TLE493D_A1B6_e = 0,
+               TLx493D_A1B6_e = 0,
                TLE493D_A2B6_e,
                TLV493D_A2BW_e,
                TLE493D_P2B6_e,
@@ -106,68 +106,110 @@ typedef bool (*InitFuncPtr)(Sensor_ts *);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
 
 // TODO: to be removed
-typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, double *temp);
-typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, double *temp);
+typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, double *);
+// typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, double *);
 
 // TODO: to be removed
-typedef void (*CalculateMagneticFieldFuncPtr)(Sensor_ts *, double *x, double *y, double *z);
-typedef bool (*GetMagneticFieldFuncPtr)(Sensor_ts *, double *x, double *y, double *z);
+typedef void (*CalculateMagneticFieldFuncPtr)(Sensor_ts *, double *, double *, double *);
+// typedef bool (*GetMagneticFieldFuncPtr)(Sensor_ts *, double *, double *, double *);
 
-typedef void (*CalculateMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *x, double *y, double *z, double *temp);
-typedef bool (*GetMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *x, double *y, double *z, double *temp);
-
-// typedef bool (*ResetFuncPtr)(Sensor_ts *);
+typedef void (*CalculateMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *, double *, double *, double *);
+// typedef bool (*GetMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *, double *, double *, double *);
 
 typedef bool (*HasValidDataFuncPtr)(Sensor_ts *);
+typedef bool (*HasValidTemperatureDataFuncPtr)(Sensor_ts *);
+typedef bool (*HasValidMagneticFieldDataFuncPtr)(Sensor_ts *);
+
+typedef bool (*HasValidTBitFuncPtr)(Sensor_ts *);
+typedef bool (*HasValidPD0BitFuncPtr)(Sensor_ts *);
+typedef bool (*HasValidPD3BitFuncPtr)(Sensor_ts *);
+
 typedef bool (*IsFunctionalFuncPtr)(Sensor_ts *);
 
 typedef bool (*SetDefaultConfigFuncPtr)(Sensor_ts *);
 typedef bool (*ReadRegistersFuncPtr)(Sensor_ts *);
 
-typedef bool (*EnableTemperatureFuncPtr)(Sensor_ts *);
-typedef bool (*DisableTemperatureFuncPtr)(Sensor_ts *);
+typedef bool (*EnableTemperatureMeasurementFuncPtr)(Sensor_ts *);
+typedef bool (*DisableTemperatureMeasurementFuncPtr)(Sensor_ts *);
 
 typedef bool (*EnableInterruptFuncPtr)(Sensor_ts *);
 typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 
-typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t mode);
-typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t addr);
+typedef bool (*Enable1ByteReadModeFuncPtr)(Sensor_ts *);
+typedef bool (*Disable1ByteReadModeFuncPtr)(Sensor_ts *);
+
+typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t);
+typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t);
+
+typedef uint8_t (*CalculateFuseParityFuncPtr)(Sensor_ts *);
+typedef uint8_t (*CalculateBusParityFuncPtr)(Sensor_ts *);
+typedef uint8_t (*CalculateConfigParityFuncPtr)(Sensor_ts *);
+
+typedef bool (*HasValidFuseParityFuncPtr)(Sensor_ts *);
+typedef bool (*HasValidBusParityFuncPtr)(Sensor_ts *);
+typedef bool (*HasValidConfigParityFuncPtr)(Sensor_ts *);
+
+typedef bool (*EnableAngularMeasurementFuncPtr)(Sensor_ts *);
+typedef bool (*DisableAngularMeasurementFuncPtr)(Sensor_ts *);
+
+typedef bool (*SetTriggerBitsFuncPtr)(Sensor_ts *, uint8_t);
+typedef bool (*SetUpdateRateFuncPtr)(Sensor_ts *, uint8_t);
 
 // typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
 typedef struct CommonFunctions_ts {
-    InitFuncPtr                     init;
-    DeinitFuncPtr                   deinit;
+    InitFuncPtr                         init;
+    DeinitFuncPtr                       deinit;
 
-// TODO: to be removed
-    CalculateTemperatureFuncPtr     calculateTemperature;
-    GetTemperatureFuncPtr           getTemperature;
+    CalculateTemperatureFuncPtr         calculateTemperature;
+    // GetTemperatureFuncPtr               getTemperature;
 
-// TODO: to be removed
-    CalculateMagneticFieldFuncPtr   calculateMagneticField;
-    GetMagneticFieldFuncPtr         getMagneticField;
+    CalculateMagneticFieldFuncPtr       calculateMagneticField;
+    // GetMagneticFieldFuncPtr             getMagneticField;
     
-    CalculateMagneticFieldAndTemperatureFuncPtr   calculateMagneticFieldAndTemperature;
-    GetMagneticFieldAndTemperatureFuncPtr         getMagneticFieldAndTemperature;
+    CalculateMagneticFieldAndTemperatureFuncPtr  calculateMagneticFieldAndTemperature;
+    // GetMagneticFieldAndTemperatureFuncPtr        getMagneticFieldAndTemperature;
+
+    HasValidDataFuncPtr                 hasValidData;
+    HasValidTemperatureDataFuncPtr      hasValidTemperatureData;
+    HasValidMagneticFieldDataFuncPtr    hasValidMagneticFieldData;
+
+    HasValidTBitFuncPtr                 hasValidTBit;
+    HasValidPD0BitFuncPtr               hasValidPD0Bit;
+    HasValidPD3BitFuncPtr               hasValidPD3Bit;
     
-    HasValidDataFuncPtr             hasValidData;
-    IsFunctionalFuncPtr             isFunctional;
+    IsFunctionalFuncPtr                 isFunctional;
 
-    // ResetFuncPtr                 reset;
+    SetDefaultConfigFuncPtr             setDefaultConfig;
+    ReadRegistersFuncPtr                readRegisters;
 
-    SetDefaultConfigFuncPtr         setDefaultConfig;
-    ReadRegistersFuncPtr            readRegisters;
+    EnableTemperatureMeasurementFuncPtr            enableTemperatureMeasurement;
+    DisableTemperatureMeasurementFuncPtr           disableTemperatureMeasurement;
 
-    EnableTemperatureFuncPtr        enableTemperature;
-    DisableTemperatureFuncPtr       disableTemperature;
+    EnableInterruptFuncPtr              enableInterrupt;
+    DisableInterruptFuncPtr             disableInterrupt;
 
-    EnableInterruptFuncPtr          enableInterrupt;
-    DisableInterruptFuncPtr         disableInterrupt;
+    Enable1ByteReadModeFuncPtr          enable1ByteReadMode;
+    Disable1ByteReadModeFuncPtr         disable1ByteReadMode;
 
-    SetPowerModeFuncPtr             setPowerMode;
-    SetIICAddressFuncPtr            setIICAddress;
+    SetPowerModeFuncPtr                 setPowerMode;
+    SetIICAddressFuncPtr                setIICAddress;
+
+    CalculateFuseParityFuncPtr          calculateFuseParity;
+    CalculateBusParityFuncPtr           calculateBusParity;
+    CalculateConfigParityFuncPtr        calculateConfigurationParity;
+    
+    HasValidFuseParityFuncPtr           hasValidFuseParity;
+    HasValidBusParityFuncPtr            hasValidBusParity;
+    HasValidConfigParityFuncPtr         hasValidConfigurationParity;
+
+    EnableAngularMeasurementFuncPtr     enableAngularMeasurement;
+    DisableAngularMeasurementFuncPtr    disableAngularMeasurement;
+
+    SetTriggerBitsFuncPtr               setTriggerBits;
+    SetUpdateRateFuncPtr                setUpdateRate;
 
     // TransferRegistersFuncPtr        transfer;
 } CommonFunctions_ts;
@@ -211,6 +253,21 @@ typedef struct CommonBitfields_ts {
     uint8_t TEMP_LSB;
     uint8_t BZ_LSB;
     uint8_t TEMP2;
+
+    uint8_t CH;
+    uint8_t PD;
+    uint8_t FAST;
+    uint8_t LOW_POWER;
+    uint8_t LP;
+    uint8_t Temp_NEN;
+    uint8_t PT;
+    uint8_t R_RES_1;
+    uint8_t R_RES_2;
+    uint8_t R_RES_3;
+    uint8_t W_RES_0;
+    uint8_t W_RES_1;
+    uint8_t W_RES_2;
+    uint8_t W_RES_3;
 } CommonBitfields_ts;
 
 

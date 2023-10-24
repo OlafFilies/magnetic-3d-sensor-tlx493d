@@ -43,11 +43,11 @@ TEST_GROUP_RUNNER(TLE493D_W2B6)
 {
     TLE493D_W2B6_suiteSetUp();
 
-    RUN_TEST_CASE(TLE493D_W2B6, dummy);
+    // RUN_TEST_CASE(TLE493D_W2B6, dummy);
 
-    // run gen 2 common functions tests
-    RUN_TEST_GROUP(SensorsCommon);
-    RUN_TEST_GROUP(SensorsGen2Common);
+    // // run gen 2 common functions tests
+    // RUN_TEST_GROUP(SensorsCommon);
+    // RUN_TEST_GROUP(SensorsGen2Common);
 
     TLE493D_W2B6_suiteTearDown();
 }

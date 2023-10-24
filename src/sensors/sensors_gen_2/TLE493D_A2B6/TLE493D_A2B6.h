@@ -31,18 +31,40 @@ bool TLE493D_A2B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, doub
 void TLE493D_A2B6_calculateMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
 bool TLE493D_A2B6_getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
 
-// bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
-// bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);
+uint8_t TLE493D_A2B6_calculateFuseParity(Sensor_ts *sensor);
+uint8_t TLE493D_A2B6_calculateBusParity(Sensor_ts *sensor);
+uint8_t TLE493D_A2B6_calculateConfigurationParity(Sensor_ts *sensor);
+
+bool TLE493D_A2B6_enableAngularMeasurement(Sensor_ts *sensor);
+bool TLE493D_A2B6_disableAngularMeasurement(Sensor_ts *sensor);
+
+bool TLE493D_A2B6_enableTemperatureMeasurement(Sensor_ts *sensor);
+bool TLE493D_A2B6_disableTemperatureMeasurement(Sensor_ts *sensor);
+
+bool TLE493D_A2B6_enable1ByteReadMode(Sensor_ts *sensor);
+bool TLE493D_A2B6_disable1ByteReadMode(Sensor_ts *sensor);
+
+// bool TLE493D_A2B6_enableCollisionAvoidance(Sensor_ts *sensor);
+// bool TLE493D_A2B6_disableCollisionAvoidance(Sensor_ts *sensor);
 
 bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor);
-bool TLE493D_A2B6_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 // utility functions
+bool TLE493D_A2B6_hasValidFuseParity(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidBusParity(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidConfigurationParity(Sensor_ts *sensor);
+
 bool TLE493D_A2B6_hasValidIICadr(Sensor_ts *sensor);
 bool TLE493D_A2B6_hasWakeup(Sensor_ts *sensor);
 
+bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidTemperatureData(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidMagneticFieldData(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidTBit(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidPD0Bit(Sensor_ts *sensor);
+bool TLE493D_A2B6_hasValidPD3Bit(Sensor_ts *sensor);
 
-bool TLE493D_A2B6_enableCollisionAvoidance(Sensor_ts *sensor);
-bool TLE493D_A2B6_disableCollisionAvoidance(Sensor_ts *sensor);
+bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);
+
 
 #endif /** TLE493D_A2B6_H */

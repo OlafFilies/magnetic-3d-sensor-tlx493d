@@ -12,7 +12,7 @@
 #include "sensors_common.h"
 
 // sensor specific includes
-// #include "TLE493D_A1B6.h"
+// #include "TLx493D_A1B6.h"
 #include "TLE493D_A2B6.h"
 // #include "TLE493D_P2B6.h"
 // #include "TLE493D_W2B6.h"
@@ -25,8 +25,8 @@
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
    switch(sensorType) {
-     // case TLE493D_A1B6_e : return TLE493D_A1B6_init(sensor);
-     //                       break;                              
+      // case TLx493D_A1B6_e : return TLx493D_A1B6_init(sensor);
+      //                       break;                              
 
      case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
                            break;
@@ -174,6 +174,16 @@ bool hasValidData(Sensor_ts *sensor) {
 }
 
 
+bool hasValidTemperatureData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidTemperatureData(sensor);
+}
+
+
+bool hasValidMagneticFieldData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidMagneticFieldData(sensor);
+}
+
+
 bool isFunctional(Sensor_ts *sensor) {
    return sensor->functions->isFunctional(sensor);
 }
@@ -189,13 +199,13 @@ bool setDefaultConfig(Sensor_ts *sensor) {
 // }
 
 
-bool enableTemperature(Sensor_ts *sensor) {
-   return sensor->functions->enableTemperature(sensor);
+bool enableTemperatureMeasurement(Sensor_ts *sensor) {
+   return sensor->functions->enableTemperatureMeasurement(sensor);
 }
 
 
-bool disableTemperature(Sensor_ts *sensor) {
-   return sensor->functions->disableTemperature(sensor);
+bool disableTemperatureMeasurement(Sensor_ts *sensor) {
+   return sensor->functions->disableTemperatureMeasurement(sensor);
 }
 
 
@@ -218,11 +228,29 @@ bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
    return sensor->functions->setIICAddress(sensor, addr);
 }
 
+
+bool enableAngularMeasurement(Sensor_ts *sensor) {
+   return sensor->functions->enableAngularMeasurement(sensor);
+}
+
+
+bool disableAngularMeasurement(Sensor_ts *sensor) {
+   return sensor->functions->disableAngularMeasurement(sensor);
+}
+
+bool setTriggerBits(Sensor_ts *sensor, uint8_t bits) {
+   return sensor->functions->setTriggerBits(sensor, bits);
+}
+
+bool setUpdateRate(Sensor_ts *sensor, uint8_t bit) {
+   return sensor->functions->setUpdateRate(sensor, bit);
+}
+
 // utility function
 const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
    switch(sensorType) {
-      // case TLE493D_A1B6_e : return "TLE493D_A1B6";
-      //                       break;
+      // case TLx493D_A1B6_e : return "TLx493D_A1B6";
+      //                      break;
 
       case TLE493D_A2B6_e : return "TLE493D_A2B6";
                             break;

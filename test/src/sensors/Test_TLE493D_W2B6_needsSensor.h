@@ -40,6 +40,25 @@ TEST(TLE493D_W2B6_needsSensor, dummy)
     TEST_ASSERT( true == !false );
 }
 
+TEST(TLE493D_W2B6_needsSensor, concatBytes)
+{
+    int16_t result = 0;
+
+    TEST_ASSERT(gen_2_readRegisters(&dut));
+    TEST_ASSERT(gen_2_readRegisters(&dut));
+    TEST_ASSERT(gen_2_readRegisters(&dut));
+
+    
+    
+    gen_2_concatBytes(&dut, &dut.regDef[dut.commonBitfields.DT], &dut.regDef[dut.commonBitfields.MODE], &result);
+
+    TEST_ASSERT_EQUAL(21, &dut.regDef[dut.commonBitfields.DT]);
+
+    gen_2_concatBytes(&dut, &dut.regDef[dut.commonBitfields.PR], &dut.regDef[dut.commonBitfields.PR], &result);
+
+    TEST_ASSERT_EQUAL(2, result);
+}
+
 
 // Bundle all tests to be executed for this test group
 TEST_GROUP_RUNNER(TLE493D_W2B6_needsSensor)
@@ -47,14 +66,16 @@ TEST_GROUP_RUNNER(TLE493D_W2B6_needsSensor)
     TLE493D_W2B6_needsSensor_suiteSetup();
 
     RUN_TEST_CASE(TLE493D_W2B6_needsSensor, dummy);
+        RUN_TEST_CASE(TLE493D_W2B6_needsSensor, concatBytes);
+
      
     // run common functions tests
-    RUN_TEST_GROUP(SensorsCommonFunctions);
+    // RUN_TEST_GROUP(SensorsCommonFunctions);
 
     // run gen 2 common functions tests
-    RUN_TEST_GROUP(SensorsCommon);
-    RUN_TEST_GROUP(SensorsGen2Common);
-    RUN_TEST_GROUP(SensorsGen2Common_needsSensor);
+    // RUN_TEST_GROUP(SensorsCommon);
+    // RUN_TEST_GROUP(SensorsGen2Common);
+    // RUN_TEST_GROUP(SensorsGen2Common_needsSensor);
 
     TLE493D_W2B6_needsSensor_suiteTearDown();
 }

@@ -1,10 +1,7 @@
 // std includes
-#include <assert.h>
 
 // Arduino includes
-// #include <SPI.h>
 #include <Arduino.h>
-// #include "xmc_i2c.h"
 
 // project cpp includes
 #include "arduino_defines.h"
@@ -142,14 +139,14 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    // Serial.print(true == isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
-    // Serial.print(true == hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
-    // Serial.print(true == gen_2_hasValidTemperatureData(&dut) ? "gen_2_hasValidTemperatureData\n" : "NOT gen_2_hasValidTemperatureData\n");
-    // Serial.print(true == gen_2_hasValidFieldData(&dut) ? "gen_2_hasValidFieldData\n" : "NOT gen_2_hasValidFieldData\n");
+    Serial.print(true == isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
+    Serial.print(true == hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
+    Serial.print(true == hasValidTemperatureData(&dut) ? "hasValidTemperatureData\n" : "NOT hasValidTemperatureData\n");
+    Serial.print(true == hasValidMagneticFieldData(&dut) ? "hasValidMagneticFieldData\n" : "NOT hasValidFieldData\n");
 
 
-    // Serial.print(true == TLE493D_A2B6_hasValidIICadr(&dut) ? "TLE493D_A2B6_hasValidIICadr\n" : "NOT TLE493D_A2B6_hasValidIICadr\n");
-    // Serial.print(true == TLE493D_A2B6_hasWakeup(&dut) ? "TLE493D_A2B6_hasWakeup\n" : "NOT TLE493D_A2B6_hasWakeup\n");
+    Serial.print(true == TLE493D_A2B6_hasValidIICadr(&dut) ? "TLE493D_A2B6_hasValidIICadr\n" : "NOT TLE493D_A2B6_hasValidIICadr\n");
+    Serial.print(true == TLE493D_A2B6_hasWakeup(&dut) ? "TLE493D_A2B6_hasWakeup\n" : "NOT TLE493D_A2B6_hasWakeup\n");
 
 
     // printRegMap(&dut);
