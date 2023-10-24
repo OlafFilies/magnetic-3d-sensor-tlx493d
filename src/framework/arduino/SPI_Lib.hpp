@@ -26,14 +26,6 @@ template<> class SPI_Lib<SPIClass> {
 
         void init() {
             spi.begin();
-            spi.setDataMode(SPI_MODE2);
-spi.setClockDivider(SPI_CLOCK_DIV128);
-spi.setBitOrder(MSBFIRST);
-
-            // Serial.print("SPI_MODE2 : ");
-            // Serial.println(SPI_MODE2);
-            // Serial.print("SPI_MODE3 : ");
-            // Serial.println(SPI_MODE3);
         }
 
 

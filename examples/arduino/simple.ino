@@ -3,7 +3,6 @@
 
 // Arduino includes
 #include <Arduino.h>
-// #include <SPI.h>
 
 // project cpp includes
 #include "arduino_defines.h"
@@ -32,14 +31,6 @@ extern "C" {
 
     #include "TLE493D_P3B6.h"
     #include "TLE493D_P3I8.h"
-}
-
-
-void myPreTransferHook() {
-}
-
-
-void myPostTransferHook() {
 }
 
 

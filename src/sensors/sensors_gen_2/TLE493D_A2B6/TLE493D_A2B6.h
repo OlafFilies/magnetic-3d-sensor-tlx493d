@@ -14,7 +14,7 @@
 // common to same generation of sensors
 #include "sensors_gen_2_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 // #include "TLE493D_A2B6_defines.h"
 
 
@@ -22,14 +22,14 @@
 bool TLE493D_A2B6_init(Sensor_ts *sensor);
 bool TLE493D_A2B6_deinit(Sensor_ts *sensor);
 
-void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, float *temp);
-bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp);
+void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, double *temp);
+bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, double *temp);
 
-void TLE493D_A2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
-bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
+void TLE493D_A2B6_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+bool TLE493D_A2B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
 
-void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
-bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
+void TLE493D_A2B6_calculateMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
+bool TLE493D_A2B6_getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
 
 // bool TLE493D_A2B6_hasValidData(Sensor_ts *sensor);
 // bool TLE493D_A2B6_isFunctional(Sensor_ts *sensor);

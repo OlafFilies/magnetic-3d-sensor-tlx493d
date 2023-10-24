@@ -45,7 +45,8 @@ bool gen_3_writeRegisterSPI(Sensor_ts* sensor, uint8_t bitField) {
     if((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
         uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
 
-        return sensor->comLibIF->transfer.spi_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
+        return transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
+        // return sensor->comLibIF->transfer.spi_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
 
     return false;
@@ -57,5 +58,6 @@ bool gen_3_readRegistersSPI(Sensor_ts *sensor) {
     // In case multiple interfaces are supported, switch according to IF type and call appropriate function.
 
     sensor->regMap[0] = GEN_3_SPI_READ_BIT_ON | GEN_3_SPI_AUTO_INC_BIT_OFF;
-    return sensor->comLibIF->transfer.spi_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    // return sensor->comLibIF->transfer.spi_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }

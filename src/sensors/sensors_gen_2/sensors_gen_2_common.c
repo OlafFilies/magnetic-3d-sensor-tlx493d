@@ -16,7 +16,7 @@
 
 // framework functions
 // TODO: replace by function pointers in comLibIF structure
-extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
+// extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 
 void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
@@ -49,17 +49,60 @@ bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField) {
     if((bf->accessMode == WRITE_MODE_e) || (bf->accessMode == READ_WRITE_MODE_e)) {
         uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
 
-        return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
+        return transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
+        // return sensor->comLibIF->transfer.i2c_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
 
     return false;
 }
 
 
-bool gen_2_readRegisters(Sensor_ts *sensor) {
-    // Currently only 1 interface is supported per sensor, either I2C or SPI for some 3rd generation sensors.
-    // In case multiple interfaces are supported, switch according to IF type and call appropriate function.
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+// bool gen_2_readRegisters(Sensor_ts *sensor) {
+//     // Currently only 1 interface is supported per sensor, either I2C or SPI for some 3rd generation sensors.
+//     // In case multiple interfaces are supported, switch according to IF type and call appropriate function.
+//     return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+//     // return sensor->comLibIF->transfer.i2c_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+// }
+
+
+/***
+ * 
+*/
+void gen_2_calculateTemperature(Sensor_ts *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
+   int16_t value = 0;
+
+   concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
+
+   value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
+   *temp = (((double) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
+}
+
+
+/***
+ * 
+*/
+void gen_2_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z,
+                                  uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF) {
+   int16_t valueX = 0, valueY = 0, valueZ = 0;
+
+   concatBytes(sensor, bxMSBBF, bxLSBBF, &valueX);
+   concatBytes(sensor, byMSBBF, byLSBBF, &valueY);
+   concatBytes(sensor, bzMSBBF, bzLSBBF, &valueZ);
+
+   *x = ((double) valueX) * GEN_2_MAG_FIELD_MULT;
+   *y = ((double) valueY) * GEN_2_MAG_FIELD_MULT;
+   *z = ((double) valueZ) * GEN_2_MAG_FIELD_MULT;
+}
+
+
+/***
+ * 
+*/
+void gen_2_calculateMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp,
+                                                uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF,
+                                                uint8_t tempMSBBF, uint8_t tempLSBBF) {
+   gen_2_calculateMagneticField(sensor, x, y, z, bxMSBBF, bxLSBBF, byMSBBF, byLSBBF, bzMSBBF, bzLSBBF);
+   gen_2_calculateTemperature(sensor, temp, tempMSBBF, tempLSBBF);
 }
 
 

@@ -12,6 +12,7 @@
 
 typedef struct Sensor_ts Sensor_ts;
 
+
 /*
   List of all supported sensor devices.
 */
@@ -105,14 +106,15 @@ typedef bool (*InitFuncPtr)(Sensor_ts *);
 typedef bool (*DeinitFuncPtr)(Sensor_ts *);
 
 // TODO: to be removed
-typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, float *temp);
-typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, float *temp);
+typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, double *temp);
+typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, double *temp);
 
 // TODO: to be removed
-typedef void (*CalculateFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
-typedef bool (*GetFieldValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z);
+typedef void (*CalculateMagneticFieldFuncPtr)(Sensor_ts *, double *x, double *y, double *z);
+typedef bool (*GetMagneticFieldFuncPtr)(Sensor_ts *, double *x, double *y, double *z);
 
-typedef bool (*GetSensorValuesFuncPtr)(Sensor_ts *, float *x, float *y, float *z, float *temp);
+typedef void (*CalculateMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *x, double *y, double *z, double *temp);
+typedef bool (*GetMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *x, double *y, double *z, double *temp);
 
 // typedef bool (*ResetFuncPtr)(Sensor_ts *);
 
@@ -131,9 +133,10 @@ typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
 typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t mode);
 typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t addr);
 
-typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
+// typedef bool (*TransferRegistersFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 
+// Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
 typedef struct CommonFunctions_ts {
     InitFuncPtr                     init;
     DeinitFuncPtr                   deinit;
@@ -143,10 +146,11 @@ typedef struct CommonFunctions_ts {
     GetTemperatureFuncPtr           getTemperature;
 
 // TODO: to be removed
-    CalculateFieldValuesFuncPtr     calculateFieldValues;
-    GetFieldValuesFuncPtr           getFieldValues;
+    CalculateMagneticFieldFuncPtr   calculateMagneticField;
+    GetMagneticFieldFuncPtr         getMagneticField;
     
-    GetSensorValuesFuncPtr          getSensorValues;
+    CalculateMagneticFieldAndTemperatureFuncPtr   calculateMagneticFieldAndTemperature;
+    GetMagneticFieldAndTemperatureFuncPtr         getMagneticFieldAndTemperature;
     
     HasValidDataFuncPtr             hasValidData;
     IsFunctionalFuncPtr             isFunctional;
@@ -165,8 +169,7 @@ typedef struct CommonFunctions_ts {
     SetPowerModeFuncPtr             setPowerMode;
     SetIICAddressFuncPtr            setIICAddress;
 
-    // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
-    TransferRegistersFuncPtr        transfer;
+    // TransferRegistersFuncPtr        transfer;
 } CommonFunctions_ts;
 
 

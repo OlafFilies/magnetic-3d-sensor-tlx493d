@@ -1,5 +1,5 @@
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
+#ifndef LOGGER_H
+#define LOGGER_H
 
 
 // template<typename T> void logmsg(char *prefix, T p) {
@@ -15,8 +15,8 @@ extern "C" {
 
 void printRegMap(uint8_t *rm, uint8_t rmSize);
 
-void logmsg(const char *prefix, const char *s);
-void logmsgui(const char *prefix, uint8_t ui);
+void logMsg(const char *prefix, const char *s);
+void logMsgui(const char *prefix, uint8_t ui);
 
 void info(const char *s);
 void infoui(uint8_t ui);
@@ -37,4 +37,4 @@ void flush();
 #endif
 
 
-#endif // LOGGER_HPP
+#endif // LOGGER_H

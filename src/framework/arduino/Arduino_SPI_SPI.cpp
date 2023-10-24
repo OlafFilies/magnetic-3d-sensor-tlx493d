@@ -9,7 +9,7 @@
 // common to same generation of sensors
 #include "sensors_gen_2_common_defines.h"
 
-// sensor specicifc includes
+// sensor specific includes
 
 // project cpp includes
 #include "arduino_defines.h"
@@ -18,8 +18,12 @@
 
 extern "C" bool initSPI(Sensor_ts *sensor) {
     sensor->comLibObj.spi_obj->spi->init();
-    return true;
 
+    sensor->comLibObj.spi_obj->spi->getComIF().setDataMode(SPI_MODE2);
+    sensor->comLibObj.spi_obj->spi->getComIF().setClockDivider(SPI_CLOCK_DIV2);
+    sensor->comLibObj.spi_obj->spi->getComIF().setBitOrder(MSBFIRST);
+
+    return true;
 }
 
 
@@ -29,8 +33,8 @@ extern "C" bool deinitSPI(Sensor_ts *sensor) {
 }
 
 
-extern "C" bool transferSPI(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-    return sensor->comLibObj.spi_obj->spi->transfer(tx_buffer, tx_len, rx_buffer, rx_len);
+extern "C" bool transferSPI(Sensor_ts *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
+    return sensor->comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
 }
 
 

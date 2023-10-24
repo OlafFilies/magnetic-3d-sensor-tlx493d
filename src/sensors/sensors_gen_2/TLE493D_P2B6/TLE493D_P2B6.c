@@ -24,12 +24,10 @@
 #include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 #include "TLE493D_P2B6_defines.h"
 #include "TLE493D_P2B6.h"
 
-
-extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 /*
   Listing of all register names for this sensor.
@@ -269,7 +267,7 @@ bool TLE493D_P2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z
 
 
 /***
- * 
+ * Must be regs 0x07 - 0x10
 */
 uint8_t TLE493D_P2B6_calculateConfigurationParity(Sensor_ts *sensor) {
 	uint8_t parity = calculateParity(sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask);

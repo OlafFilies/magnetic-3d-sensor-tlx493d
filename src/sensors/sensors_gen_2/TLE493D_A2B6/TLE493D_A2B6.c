@@ -1,8 +1,6 @@
 // std includes
-#include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,14 +14,9 @@
 #include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 #include "TLE493D_A2B6_defines.h"
 #include "TLE493D_A2B6.h"
-
-
-// framework functions
-// TODO: replace by function pointers in comLibIF structure
-extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 
 /***
@@ -131,55 +124,56 @@ typedef enum {
  * 
 */
 CommonFunctions_ts TLE493D_A2B6_commonFunctions = {
-    .init                  = TLE493D_A2B6_init,
-    .deinit                = TLE493D_A2B6_deinit,
+    .init                   = TLE493D_A2B6_init,
+    .deinit                 = TLE493D_A2B6_deinit,
 
-    // TODO: remove everywhere   .calculateTemperature  = TLE493D_A2B6_calculateTemperature,
-    .getTemperature        = TLE493D_A2B6_getTemperature,
+    .calculateTemperature   = TLE493D_A2B6_calculateTemperature,
+    .getTemperature         = TLE493D_A2B6_getTemperature,
 
-    // TODO: remove everywhere   .calculateFieldValues  = TLE493D_A2B6_calculateFieldValues,
-    .getFieldValues        = TLE493D_A2B6_getFieldValues,
+    .calculateMagneticField = TLE493D_A2B6_calculateMagneticField,
+    .getMagneticField       = TLE493D_A2B6_getMagneticField,
 
-    .getSensorValues       = TLE493D_A2B6_getSensorValues,
+    .calculateMagneticFieldAndTemperature = TLE493D_A2B6_calculateMagneticFieldAndTemperature,
+    .getMagneticFieldAndTemperature       = TLE493D_A2B6_getMagneticFieldAndTemperature,
 
     .hasValidData          = gen_2_hasValidData,
     .isFunctional          = gen_2_isFunctional,
 
     .setDefaultConfig      = TLE493D_A2B6_setDefaultConfig,
-    .readRegisters         = gen_2_readRegisters,
+    .readRegisters         = readRegisters,
 
     .setPowerMode          = gen_2_setPowerMode,
     .setIICAddress         = gen_2_setIICAddress,
 
-    .transfer              = TLE493D_A2B6_transferRegisterMap,
+    // .transfer              = transfer,
 };
 
 
 /***
- * TODO: add parameter IICAddress or ad function to set address.
-*/
+ */
 bool TLE493D_A2B6_init(Sensor_ts *sensor) {
-    // regMap must be sensor specific, not sensor type specific, therefore malloc.
-    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
-    sensor->regDef            = TLE493D_A2B6_regDef;
-    sensor->commonBitfields   = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
-                                                       .DT = DT, .AM = AM, .TRIG = TRIG, .X2 = X2, .TL_MAG = TL_MAG, .IICADR = IICADR, .PR = PR, .CA = CA, .INT = INT, .MODE = MODE,
-                                                       .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
-                                                       .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
-                                                     };
-    sensor->commonRegisters   = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
-    sensor->functions         = &TLE493D_A2B6_commonFunctions;
-    sensor->regMapSize        = GEN_2_REG_MAP_SIZE;
-    sensor->sensorType        = TLE493D_A2B6_e;
-    sensor->comIFType         = I2C_e;
-    sensor->comLibIF          = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
+    // // regMap must be sensor specific, not sensor type specific, therefore malloc.
+    // sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
+    // sensor->regDef            = TLE493D_A2B6_regDef;
+    // // sensor->commonBitfields   = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
+    // //                                                    .DT = DT, .AM = AM, .TRIG = TRIG, .X2 = X2, .TL_MAG = TL_MAG, .IICADR = IICADR, .PR = PR, .CA = CA, .INT = INT, .MODE = MODE,
+    // //                                                    .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
+    // //                                                    .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
+    // //                                                  };
+    // // sensor->commonRegisters   = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
+    // sensor->functions         = &TLE493D_A2B6_commonFunctions;
+    // sensor->regMapSize        = GEN_2_REG_MAP_SIZE;
+    // sensor->sensorType        = TLE493D_A2B6_e;
+    // sensor->comIFType         = I2C_e;
+    // sensor->comLibIF          = NULL;
+    // sensor->comLibObj.i2c_obj = NULL;
 
-    memset(sensor->regMap, 0, sensor->regMapSize);
+    // memset(sensor->regMap, 0, sensor->regMapSize);
     
+    // TODO: use in initComLibIF
     setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
     
-    return true;
+    return initSensor(sensor, GEN_2_REG_MAP_SIZE, TLE493D_A2B6_regDef, &TLE493D_A2B6_commonFunctions, TLE493D_A2B6_e, I2C_e);
 }
 
 
@@ -187,75 +181,88 @@ bool TLE493D_A2B6_init(Sensor_ts *sensor) {
  * 
 */
 bool TLE493D_A2B6_deinit(Sensor_ts *sensor) {
-    free(sensor->regMap);
-    free(sensor->comLibObj.i2c_obj);
+    return deinitSensor(sensor);
 
-    sensor->regMap            = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
-    return true;
+
+    // free(sensor->regMap);
+    // free(sensor->comLibObj.i2c_obj);
+
+    // sensor->regMap            = NULL;
+    // sensor->comLibObj.i2c_obj = NULL;
+    // return true;
 }
 
 
 /***
  * 
 */
-void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, float *temp) {
-    int16_t value = 0;
+void TLE493D_A2B6_calculateTemperature(Sensor_ts *sensor, double *temp) {
+    gen_2_calculateTemperature(sensor, temp, TEMP_MSB, TEMP_LSB);
 
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.TEMP_MSB], &sensor->regDef[sensor->commonBitfields.TEMP_LSB], &value);
+    // int16_t value = 0;
 
-    value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
-    *temp = (((float) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
+    // concatBytes(sensor, TEMP_MSB, TEMP_LSB, &value);
+
+    // value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
+    // *temp = (((double) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
 }
 
 
 /***
  * 
 */
-bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, float *temp) {
-    if( gen_2_readRegisters(sensor) ) {
-        TLE493D_A2B6_calculateTemperature(sensor, temp);
-        return true;
-    }
+bool TLE493D_A2B6_getTemperature(Sensor_ts *sensor, double *temp) {
+    return getTemperature(sensor, temp);
+    // return getSensorTemperature(sensor, temp);
 
-    return false;
+    // if( gen_2_readRegisters(sensor) ) {
+    //     TLE493D_A2B6_calculateTemperature(sensor, temp);
+    //     return true;
+    // }
+
+    // return false;
 }
 
 
 /***
  * 
 */
-void TLE493D_A2B6_calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-    int16_t valueX = 0, valueY = 0, valueZ = 0;
+void TLE493D_A2B6_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z) {
+    gen_2_calculateMagneticField(sensor, x, y, z, BX_MSB, BX_LSB, BY_MSB, BY_LSB, BZ_MSB, BZ_LSB);
 
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BX_MSB], &sensor->regDef[sensor->commonBitfields.BX_LSB], &valueX);
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BY_MSB], &sensor->regDef[sensor->commonBitfields.BY_LSB], &valueY);
-    concatBytes(sensor, &sensor->regDef[sensor->commonBitfields.BZ_MSB], &sensor->regDef[sensor->commonBitfields.BZ_LSB], &valueZ);
+    // int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    *x = ((float) valueX) * GEN_2_MAG_FIELD_MULT;
-    *y = ((float) valueY) * GEN_2_MAG_FIELD_MULT;
-    *z = ((float) valueZ) * GEN_2_MAG_FIELD_MULT;
+    // concatBytes(sensor, BX_MSB, BX_LSB, &valueX);
+    // concatBytes(sensor, BY_MSB, BY_LSB, &valueY);
+    // concatBytes(sensor, BZ_MSB, BZ_LSB, &valueZ);
+
+    // *x = ((double) valueX) * GEN_2_MAG_FIELD_MULT;
+    // *y = ((double) valueY) * GEN_2_MAG_FIELD_MULT;
+    // *z = ((double) valueZ) * GEN_2_MAG_FIELD_MULT;
 }
 
 
 /***
  * 
 */
-bool TLE493D_A2B6_getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z) {
-    if( gen_2_readRegisters(sensor) ) {
-        TLE493D_A2B6_calculateFieldValues(sensor, x, y, z);
-        return true;
-    }
+bool TLE493D_A2B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z) {
+    return getMagneticField(sensor, x, y, z);
+    // return getSensorMagneticField(sensor, x, y, z);
 
-    return false;
+    // if( gen_2_readRegisters(sensor) ) {
+    //     TLE493D_A2B6_calculateMagneticField(sensor, x, y, z);
+    //     return true;
+    // }
+
+    // return false;
 }
 
 
 /***
  * 
 */
-void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp) {
-    TLE493D_A2B6_calculateFieldValues(sensor, x, y, z);
+void TLE493D_A2B6_calculateMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp) {
+    TLE493D_A2B6_calculateMagneticField(sensor, x, y, z);
     TLE493D_A2B6_calculateTemperature(sensor, temp);
 }
 
@@ -263,14 +270,14 @@ void TLE493D_A2B6_calculateSensorValues(Sensor_ts *sensor, float *x, float *y, f
 /***
  * 
 */
-bool TLE493D_A2B6_getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp) {
-    if( gen_2_readRegisters(sensor) ) {
-        TLE493D_A2B6_calculateSensorValues(sensor, x, y, z, temp);
-        return true;
-    }
-
-    return false;
+bool TLE493D_A2B6_getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp) {
+    return getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+    // return getSensorMagneticFieldAndTemperature(sensor, x, y, z, temp);
 }
+
+
+
+
 
 
 /***
@@ -504,7 +511,7 @@ bool TLE493D_A2B6_setUpdateRate(Sensor_ts *sensor, uint8_t ur) {
                        sensor->regMap[mod1 + 2]  // MOD2 register
                      };
 
-    return TLE493D_A2B6_transferRegisterMap(sensor, buf, sizeof(buf), NULL, 0);
+    return transfer(sensor, buf, sizeof(buf), NULL, 0);
 }
 
 
@@ -534,7 +541,7 @@ bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
         if( TLE493D_A2B6_enableTemperatureMeasurements(sensor) ) {
             // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
             // accidentally changing a preset values to 0.
-            if( gen_2_readRegisters(sensor) )
+            if( readRegisters(sensor) )
                 return TLE493D_A2B6_setLowUpdateRate(sensor);
 
             // return true;
@@ -543,16 +550,6 @@ bool TLE493D_A2B6_setDefaultConfig(Sensor_ts *sensor) {
 
     return false;
 }
-
-
-/***
- * 
-*/
-bool TLE493D_A2B6_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-    return sensor->comLibIF->transfer.i2c_transfer(sensor, tx_buffer, tx_len, rx_buffer, rx_len);
-}
-
-
 
 
 bool TLE493D_A2B6_hasValidIICadr(Sensor_ts *sensor) {

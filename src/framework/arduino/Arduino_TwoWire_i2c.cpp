@@ -9,7 +9,7 @@
 // common to same generation of sensors
 #include "sensors_gen_2_common_defines.h"
 
-// sensor specicifc includes
+// sensor specific includes
 
 // project cpp includes
 #include "arduino_defines.h"
@@ -29,8 +29,8 @@ extern "C" bool deinitIIC(Sensor_ts *sensor) {
 }
 
 
-extern "C" bool transferIIC(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
-    return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address, tx_buffer, tx_len, rx_buffer, rx_len);
+extern "C" bool transferIIC(Sensor_ts *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
+    return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address, txBuffer, txLen, rxBuffer, rxLen);
 }
 
 

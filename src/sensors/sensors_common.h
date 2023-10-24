@@ -7,16 +7,22 @@
 
 // functions common to all sensors
 bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType);
+bool initSensor(Sensor_ts *sensor, uint8_t regMapSize, Register_ts *regDef, CommonFunctions_ts *commonFuncs, SupportedSensorTypes_te sensorType, SupportedComLibraryInterfaceTypes_te comIFType);
+
 bool deinit(Sensor_ts *sensor);
+bool deinitSensor(Sensor_ts *sensor);
 
-// void calculateTemperature(Sensor_ts *sensor, float *temp);
-bool getTemperature(Sensor_ts *sensor, float *temp);
+// bool getSensorTemperature(Sensor_ts *sensor, double *temp);
+// bool getSensorMagneticField(Sensor_ts *sensor, double *x, double *y, double *z );
+// bool getSensorMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
 
-// void calculateFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
-bool getFieldValues(Sensor_ts *sensor, float *x, float *y, float *z);
+// // void calculateTemperature(Sensor_ts *sensor, float *temp);
+bool getTemperature(Sensor_ts *sensor, double *temp);
 
-// bool getFieldAndTemperatureValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
-bool getSensorValues(Sensor_ts *sensor, float *x, float *y, float *z, float *temp);
+// // void calculateMagneticField(Sensor_ts *sensor, float *x, float *y, float *z);
+bool getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+
+bool getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
 
 
 bool hasValidData(Sensor_ts *sensor);
@@ -52,7 +58,8 @@ uint8_t calculateParity(uint8_t data);
 uint8_t getOddParity(uint8_t parity);
 uint8_t getEvenParity(uint8_t parity);
 
-void concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result);
+// void concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result);
+void concatBytes(Sensor_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
 
 
 // functions available only to a subset of sensors

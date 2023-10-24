@@ -34,10 +34,8 @@ bool initComLibIF(Sensor_ts *sensor, TwoWire_Lib<TwoWire> &tw);
 bool initComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi);
 
 
-// extern "C" {
-    bool initComLibIF(Sensor_ts *sensor, TwoWire &iic);
-    bool initComLibIF(Sensor_ts *sensor, SPIClass &spi);
-// }
+bool initComLibIF(Sensor_ts *sensor, TwoWire &iic);
+bool initComLibIF(Sensor_ts *sensor, SPIClass &spi);
 
 
 #endif // ARDUINO_DEFINES_H

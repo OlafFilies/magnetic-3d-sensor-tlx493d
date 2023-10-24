@@ -27,7 +27,7 @@
 // #include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 // #include "TLE493D_P2B6_defines.h"
 
 

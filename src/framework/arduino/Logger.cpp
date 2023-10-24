@@ -22,13 +22,13 @@ extern "C" {
     }
 
 
-    void logmsg(const char *prefix, const char *s) {
+    void logMsg(const char *prefix, const char *s) {
         Serial.print(prefix);
         Serial.println(s);
     }
 
 
-    void logmsgui(const char *prefix, uint8_t ui) {
+    void logMsgui(const char *prefix, uint8_t ui) {
         Serial.print(prefix);
         Serial.print("0x");
         Serial.println(ui, HEX);
@@ -36,37 +36,37 @@ extern "C" {
 
 
     void info(const char *s) {
-        logmsg("INFO : ", s);
+        logMsg("INFO : ", s);
         Serial.flush();
     }
 
 
     void infoui(uint8_t ui) {
-        logmsgui("INFO : ", ui);
+        logMsgui("INFO : ", ui);
         Serial.flush();
     }
 
 
     void warn(const char *s) {
-        logmsg("WARNING : ", s);
+        logMsg("WARNING : ", s);
         Serial.flush();
     }
 
 
     void warnui(uint8_t ui) {
-        logmsgui("INFO : ", ui);
+        logMsgui("INFO : ", ui);
         Serial.flush();
     }
 
 
     void error(const char *s) {
-        logmsg("ERROR : ", s);
+        logMsg("ERROR : ", s);
         Serial.flush();
     }
 
 
     void errorui(uint8_t ui) {
-        logmsgui("INFO : ", ui);
+        logMsgui("INFO : ", ui);
         Serial.flush();
     }
 

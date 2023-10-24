@@ -27,7 +27,7 @@
 #include "sensors_gen_3_common_defines.h"
 #include "sensors_gen_3_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 #include "TLE493D_P3I8_defines.h"
 #include "TLE493D_P3I8.h"
 

@@ -22,16 +22,16 @@ extern "C" {
     #include "sensor_types.h"
     #include "sensors_gen_2_common_defines.h"
     #include "sensors_gen_2_common.h"
-    #include "sensors_gen_3_common_defines.h"
-    #include "sensors_gen_3_common.h"
+    // #include "sensors_gen_3_common_defines.h"
+    // #include "sensors_gen_3_common.h"
     #include "sensors_common.h"
 
     #include "TLE493D_A2B6.h"
-    #include "TLE493D_P2B6.h"
-    #include "TLE493D_W2B6.h"
+    // #include "TLE493D_P2B6.h"
+    // #include "TLE493D_W2B6.h"
 
-    #include "TLE493D_P3B6.h"
-    #include "TLE493D_P3I8.h"
+    // #include "TLE493D_P3B6.h"
+    // #include "TLE493D_P3I8.h"
 }
 
 // extern "C" void frameworkReset(Sensor_ts *sensor);
@@ -51,7 +51,10 @@ Sensor_ts dut;
  
 //     Serial.println();
 //  }
- 
+
+
+#define USE_I2C  (1)
+
 
 void setup() {
     // // required for S2Go
@@ -62,21 +65,18 @@ void setup() {
     delay(3000);
 
 
-// #define USE_I2C  (1)
-
-
 #ifdef USE_I2C
 
     // I2C
     // required for S2Go
-    // pinMode(POWER_PIN_HIGH, OUTPUT);
-    // digitalWrite(POWER_PIN_HIGH, HIGH);
+    pinMode(POWER_PIN_HIGH, OUTPUT);
+    digitalWrite(POWER_PIN_HIGH, HIGH);
 
 
-    // init(&dut, TLE493D_A2B6_e);
+    init(&dut, TLE493D_A2B6_e);
     // init(&dut, TLE493D_P2B6_e);
     // init(&dut, TLE493D_W2B6_e);
-    init(&dut, TLE493D_P3B6_e);
+    // init(&dut, TLE493D_P3B6_e);
 
     initComLibIF(&dut, Wire);
 
@@ -116,21 +116,21 @@ void setup() {
 
 
 void loop() {
-    float temp = 0.0;
-    float valX = 0, valY = 0, valZ = 0;
+    double temp = 0.0;
+    double valX = 0, valY = 0, valZ = 0;
     Serial.println("loop ...");
 
-    digitalWrite(POWER_PIN_LOW, LOW);
+    // digitalWrite(POWER_PIN_LOW, LOW);
     Serial.print(true == getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
-    digitalWrite(POWER_PIN_LOW, HIGH);
+    // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    digitalWrite(POWER_PIN_LOW, LOW);
-    Serial.print(true == getFieldValues(&dut, &valX, &valY, &valZ) ? "getFieldValues ok\n" : "getFieldValues error\n");
-    digitalWrite(POWER_PIN_LOW, HIGH);
+    // digitalWrite(POWER_PIN_LOW, LOW);
+    Serial.print(true == getMagneticField(&dut, &valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
+    // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Value X is: ");
     Serial.print(valX);

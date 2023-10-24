@@ -25,7 +25,16 @@ void gen_2_getBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t *bitFieldVal
 void gen_2_setBitfield(Sensor_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue);
 
 bool gen_2_writeRegister(Sensor_ts* sensor, uint8_t bitField);
-bool gen_2_readRegisters(Sensor_ts *sensor);
+// bool gen_2_readRegisters(Sensor_ts *sensor);
+
+void gen_2_calculateTemperature(Sensor_ts *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF);
+
+void gen_2_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z,
+                                  uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF);
+
+void gen_2_calculateMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp,
+                                                uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF,
+                                                uint8_t tempMSBBF, uint8_t tempLSBBF);                
 
 // TODO: cleanup
 // uint8_t gen_2_calculateFuseParityBit(Sensor_ts *sensor);

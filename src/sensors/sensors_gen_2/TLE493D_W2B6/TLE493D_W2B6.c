@@ -24,12 +24,10 @@
 #include "sensors_gen_2_common_defines.h"
 #include "sensors_gen_2_common.h"
 
-// sensor specicifc includes
+// sensor specific includes
 #include "TLE493D_W2B6_defines.h"
 #include "TLE493D_W2B6.h"
 
-
-extern void setI2CParameters(Sensor_ts *sensor, uint8_t addr);
 
 /*
   Listing of all register names for this sensor.
