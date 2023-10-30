@@ -1,16 +1,21 @@
 // std includes
-#include <stdbool.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 
 // Arduino includes
-#include <SPI.h>
+// #include <SPI.h>
 #include <Arduino.h>
 
 
 #include "Logger.h"
 
 
+#define BUFFER_SIZE  512
+
+
 extern "C" {
-    void printRegMap(uint8_t *rm, uint8_t rmSize) {
+    void printRegisters(uint8_t *rm, uint8_t rmSize) {
         Serial.print("regMap :"); 
 
         for(uint8_t i = 0; i < rmSize; ++i) {
@@ -22,55 +27,115 @@ extern "C" {
     }
 
 
-    void logMsg(const char *prefix, const char *s) {
-        Serial.print(prefix);
-        Serial.println(s);
+    // void logMessage(const char *prefix, const char *format, ...) {
+    //     char buffer[BUFFER_SIZE];
+    //     size_t prefixSize = strlen(prefix);
+    //     memcpy(buffer, prefix, prefixSize);
+
+    //     va_list ap;
+    //     va_start(ap, format);      
+    //     int ret = vsprintf(buffer + prefixSize, format, ap);
+    //     va_end(ap);
+
+    //     if( (ret + prefixSize) > BUFFER_SIZE ) {
+    //         Serial.println("FATAL : Buffer overflow (>256 characters) because message too long !");
+    //     }
+
+    //     // Serial.print(prefix);
+    //     Serial.println(buffer);
+    // }
+
+
+    // void logMessage(const char *prefix, const char *format, va_list vaList) {
+    //     char buffer[BUFFER_SIZE];
+
+    //     double f = va_arg(vaList, double);
+    //     Serial.print("f : ");
+    //     Serial.println(f);
+
+    //     size_t prefixSize = strlen(prefix);
+    //     memcpy(buffer, prefix, prefixSize);
+    //     int ret = vsprintf(buffer + prefixSize, format, vaList);
+        
+    //     Serial.print("ret : ");
+    //     Serial.println(ret);
+
+    //     if( (ret + prefixSize) > BUFFER_SIZE ) {
+    //         Serial.println("FATAL : Buffer overflow (> 512 characters) because message too long !\n");
+    //     }
+
+    //     Serial.println(buffer);
+    // }
+
+
+    void logMessage(const char *prefix, const char *format, va_list vaList) {
+    // void logMessage(const char *prefix, const char *format, va_list *vaList) {
+        char buffer[BUFFER_SIZE];
+
+        size_t prefixSize = strlen(prefix);
+        memcpy(buffer, prefix, prefixSize);
+        int ret = vsprintf(buffer + prefixSize, format, vaList);
+
+        if( (ret + prefixSize) > BUFFER_SIZE ) {
+            Serial.println("FATAL : Buffer overflow (> 512 characters) because message too long !\n");
+        }
+
+        Serial.println(buffer);
+        // DO NOT USE FLUSH HERE ! DEVICE WILL HANGUP !
+        // Serial.flush();
     }
 
 
-    void logMsgui(const char *prefix, uint8_t ui) {
-        Serial.print(prefix);
-        Serial.print("0x");
-        Serial.println(ui, HEX);
+    void info(const char *format, ...) {
+        va_list ap;
+        va_start(ap, format);
+        // Serial.println(formatMsg("INFO : ", format, ap));
+        logMessage("INFO : ", format, ap);
+        va_end(ap);
     }
 
 
-    void info(const char *s) {
-        logMsg("INFO : ", s);
-        Serial.flush();
-    }
+    // void warn(const char *format, ...) {
+    //     va_list ap;
+    //     va_start(ap, format);
+    //     logMessage("WARNING : ", format, &ap);
+    //     va_end(ap);
+    // }
 
 
-    void infoui(uint8_t ui) {
-        logMsgui("INFO : ", ui);
-        Serial.flush();
-    }
+    // void error(const char *format, ...) {
+    //     va_list ap;
+    //     va_start(ap, format);
+    //     logMessage("ERROR : ", format, &ap);
+    //     va_end(ap);
+    // }
 
 
-    void warn(const char *s) {
-        logMsg("WARNING : ", s);
-        Serial.flush();
-    }
+    // void logMsg(const char *prefix, const char *s) {
+    //     Serial.print(prefix);
+    //     Serial.println(s);
+    // }
 
 
-    void warnui(uint8_t ui) {
-        logMsgui("INFO : ", ui);
-        Serial.flush();
-    }
+    // void info(const char *s) {
+    //     logMsg("INFO : ", s);
+    //     // Serial.flush();
+    // }
 
 
-    void error(const char *s) {
-        logMsg("ERROR : ", s);
-        Serial.flush();
-    }
+    // void warn(const char *s) {
+    //     logMsg("WARNING : ", s);
+    //     Serial.flush();
+    // }
 
 
-    void errorui(uint8_t ui) {
-        logMsgui("INFO : ", ui);
-        Serial.flush();
-    }
+    // void error(const char *s) {
+    //     logMsg("ERROR : ", s);
+    //     Serial.flush();
+    // }
 
 
+    // USE WITH CAUTION ! DEVICE MAY HANGUP !
     void flush() {
         Serial.flush();
     }

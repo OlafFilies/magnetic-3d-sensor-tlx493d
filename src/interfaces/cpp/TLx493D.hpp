@@ -117,6 +117,49 @@ class TLx493D {
         }
 
 
+        bool isWakeUpActive() {
+            return ::isWakeUpActive(&sensor);
+        }
+
+
+        bool enableWakeUpMode() {
+            return ::enableWakeUpMode(&sensor);
+        }
+
+
+        bool disableWakeUpMode() {
+            return ::disableWakeUpMode(&sensor);
+        }
+        
+        bool setLowerWakeUpThresholdX(int16_t threshold) {
+            return ::setLowerWakeUpThresholdX(&sensor, threshold);
+        }
+
+        bool setLowerWakeUpThresholdY(int16_t threshold) {
+            return ::setLowerWakeUpThresholdY(&sensor, threshold);
+        }
+
+        bool setLowerWakeUpThresholdZ(int16_t threshold) {
+            return ::setLowerWakeUpThresholdZ(&sensor, threshold);
+        }
+
+        bool setUpperWakeUpThresholdX(int16_t threshold) {
+            return ::setUpperWakeUpThresholdX(&sensor, threshold);
+        }
+
+        bool setUpperWakeUpThresholdY(int16_t threshold) {
+            return ::setUpperWakeUpThresholdY(&sensor, threshold);
+        }
+
+        bool setUpperWakeUpThresholdZ(int16_t threshold) {
+            return ::setUpperWakeUpThresholdZ(&sensor, threshold);
+        }
+
+        bool setWakeUpThresholds(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+            return ::setWakeUpThresholds(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
+        }
+
+
         Sensor_ts *getSensorStruct() {
             return &sensor;
         }

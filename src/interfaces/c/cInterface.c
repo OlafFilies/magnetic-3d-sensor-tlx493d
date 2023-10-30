@@ -7,19 +7,19 @@
 
 // project c includes
 // common to all sensors
-#include "sensor_types.h"
-#include "sensors_common_defines.h"
-#include "sensors_common.h"
+#include "tlx493d_types.h"
+#include "tlx493d_common_defines.h"
+#include "tlx493d_common.h"
 
 // sensor specific includes
 // #include "TLx493D_A1B6.h"
-#include "TLE493D_A2B6.h"
-// #include "TLE493D_P2B6.h"
-// #include "TLE493D_W2B6.h"
-// #include "TLV493D_A2BW.h"
-// // #include "TLV493D_W2BW.h"
-// #include "TLE493D_P3B6.h"
-// #include "TLE493D_P3I8.h"
+#include "TLx493D_A2B6.h"
+// #include "TLx493D_P2B6.h"
+#include "TLx493D_W2B6.h"
+// #include "TLx493D_A2BW.h"
+// // #include "TLx493D_W2BW.h"
+// #include "TLx493D_P3B6.h"
+// #include "TLx493D_P3I8.h"
 
 
 // functions common to all sensors
@@ -28,25 +28,25 @@ bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType) {
       // case TLx493D_A1B6_e : return TLx493D_A1B6_init(sensor);
       //                       break;                              
 
-     case TLE493D_A2B6_e : return TLE493D_A2B6_init(sensor);
+     case TLx493D_A2B6_e : return TLx493D_A2B6_init(sensor);
                            break;
 
-     // case TLV493D_A2BW_e : return TLV493D_A2BW_init(sensor);
+     // case TLx493D_A2BW_e : return TLx493D_A2BW_init(sensor);
      //                       break;
 
-     // case TLE493D_P2B6_e : return TLE493D_P2B6_init(sensor);
+     // case TLx493D_P2B6_e : return TLx493D_P2B6_init(sensor);
      //                       break;
 
-     // case TLE493D_W2B6_e : return TLE493D_W2B6_init(sensor);
-     //                       break;
+     case TLx493D_W2B6_e : return TLx493D_W2B6_init(sensor);
+                           break;
 
-     // // case TLV493D_W2BW_e : return TLV493D_W2BW_init(sensor);
+     // // case TLx493D_W2BW_e : return TLx493D_W2BW_init(sensor);
      // //                       break;
 
-     // case TLE493D_P3B6_e : return TLE493D_P3B6_init(sensor);
+     // case TLx493D_P3B6_e : return TLx493D_P3B6_init(sensor);
      //                       break;
 
-     // case TLE493D_P3I8_e : return TLE493D_P3I8_init(sensor);
+     // case TLx493D_P3I8_e : return TLx493D_P3I8_init(sensor);
      //                       break;
 
       default : return false;
@@ -60,16 +60,12 @@ bool deinit(Sensor_ts *sensor) {
 
 
 /***
- * Generations 2 and 3, not 1.
+ * 
 */
 bool readRegisters(Sensor_ts *sensor) {
-   return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+   // return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+   return sensor->functions->readRegisters(sensor);
 }
-
-
-// bool readRegisters(Sensor_ts *sensor) {
-//    return sensor->functions->readRegisters(sensor);
-// }
 
 
 bool setDefaultConfig(Sensor_ts *sensor) {
@@ -77,11 +73,13 @@ bool setDefaultConfig(Sensor_ts *sensor) {
 }
 
 
+// bool setPowerMode(Sensor_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
 bool setPowerMode(Sensor_ts *sensor, uint8_t mode) {
    return sensor->functions->setPowerMode(sensor, mode);
 }
 
 
+// bool setIICAddress(Sensor_ts *sensor, enum <possible combinations> addr); // Gen. 1 and 2
 bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
    return sensor->functions->setIICAddress(sensor, addr);
 }
@@ -91,13 +89,8 @@ bool setIICAddress(Sensor_ts *sensor, uint8_t addr) {
  * 
 */
 bool getTemperature(Sensor_ts *sensor, double *temp) {
-// bool getSensorTemperature(Sensor_ts *sensor, double *temp) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateTemperature(sensor, temp);
-     return true;
-   }
-
-   return false;
+   tlx493d_getTemperature(sensor, temp);
+   // return sensor->functions->getTemperature(sensor, temp);
 }
 
 
@@ -105,13 +98,8 @@ bool getTemperature(Sensor_ts *sensor, double *temp) {
  * 
 */
 bool getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z ) {
-// bool getSensorMagneticField(Sensor_ts *sensor, double *x, double *y, double *z ) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateMagneticField(sensor, x, y, z);
-      return true;
-   }
-
-   return false;
+   tlx493d_getMagneticField(sensor, x, y, z);
+   // return sensor->functions->getMagneticField(sensor, x, y, z);
 }
 
 
@@ -119,97 +107,120 @@ bool getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z ) {
  * 
 */
 bool getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp) {
-// bool getSensorMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateMagneticFieldAndTemperature(sensor, x, y, z, temp);
-      return true;
-   }
-
-   return false;
-}
-
-// bool getTemperature(Sensor_ts *sensor, double *temp) {
-//    return sensor->functions->getTemperature(sensor, temp);
-// }
-
-// bool getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z) {
-//    return sensor->functions->getMagneticField(sensor, x, y, z);
-//  }
-
-// bool getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp) {
-//    return sensor->functions->getMagneticFieldAndTemperature(sensor, x, y, z, temp);
-//  }
-
-
-bool hasValidData(Sensor_ts *sensor) {
-   return sensor->functions->hasValidData(sensor);
-}
-
-// bool hasValidDataTemperatureData(Sensor_ts *sensor);
-// bool hasValidDataMagneticFieldData(Sensor_ts *sensor);
-
-
-
-bool isFunctional(Sensor_ts *sensor) {
-   return sensor->functions->isFunctional(sensor);
+   tlx493d_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+   // return sensor->functions->getMagneticFieldAndTemperature(sensor, x, y, z, temp);
 }
 
 
+// bool selectMeasuredValues(Sensor_ts *sensor, enum <possible combinations> mVals); // Bx/By/Bz, Bx/By, Bx/By/Temp, ...
 bool enableTemperatureMeasurement(Sensor_ts *sensor) {
-   return sensor->functions->enableTemperature(sensor);
+   return sensor->functions->enableTemperatureMeasurement(sensor);
 }
-
-
 bool disableTemperatureMeasurement(Sensor_ts *sensor) {
-   return sensor->functions->disableTemperature(sensor);
+   return sensor->functions->disableTemperatureMeasurement(sensor);
 }
-
-
 bool enableAngularMeasurement(Sensor_ts *sensor) {
    return sensor->functions->enableAngularMeasurement(sensor);
 }
-
-
 bool disableAngularMeasurement(Sensor_ts *sensor) {
    return sensor->functions->disableAngularMeasurement(sensor);
 }
 
+
+// bool setUpdateRate(Sensor_ts *sensor, enum <possible combinations> rate);
 bool setUpdateRate(Sensor_ts *sensor, uint8_t bit) {
    return sensor->functions->setUpdateRate(sensor, bit);
 }
 
 
-// bool setSensorRange(Sensor_ts *sensor, enum <possible combinations> range); // full, short, extreme short : whatever is supported
+// bool setRange(Sensor_ts *sensor, enum <possible combinations> range); // full, short, extreme short : whatever is supported
 
 // bool setInterruptAndCollisionAvoidance(Sensor_ts *sensor, enum <possible combinations> eVal);
 bool enableInterrupt(Sensor_ts *sensor) {
    return sensor->functions->enableInterrupt(sensor);
 }
-
-
 bool disableInterrupt(Sensor_ts *sensor) {
    return sensor->functions->disableInterrupt(sensor);
 }
+// bool enableCollisionAvoidance(Sensor_ts *sensor);
+// bool disableCollisionAvoidance(Sensor_ts *sensor);
 
 
-// bool enableWakeup(Sensor_ts *sensor);
-// bool disableWakeup(Sensor_ts *sensor);
-// // thesholds im mT, to be converted to proper format
-// bool setWakeupThesholds(Sensor_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool isWakeUpActive(Sensor_ts *sensor) {
+   return sensor->functions->isWakeUpActive(sensor);
+}
+
+bool enableWakeUpMode(Sensor_ts *sensor) {
+   return sensor->functions->enableWakeUpMode(sensor);
+}
+
+bool disableWakeUpMode(Sensor_ts *sensor) {
+   return sensor->functions->disableWakeUpMode(sensor);
+}
+
+bool setUpperWakeUpThresholdX(Sensor_ts *sensor, int16_t threshold) {
+   return sensor->functions->setUpperWakeUpThresholdX(sensor, threshold);
+}
+
+bool setUpperWakeUpThresholdY(Sensor_ts *sensor, int16_t threshold) {
+   return sensor->functions->setUpperWakeUpThresholdY(sensor, threshold);
+}
+
+bool setUpperWakeUpThresholdZ(Sensor_ts *sensor, int16_t threshold) {
+   return sensor->functions->setUpperWakeUpThresholdZ(sensor, threshold);
+}
+
+bool setLowerWakeUpThresholdX(Sensor_ts *sensor, int16_t threshold) {
+   return sensor->functions->setLowerWakeUpThresholdX(sensor, threshold);
+}
+
+bool setLowerWakeUpThresholdY(Sensor_ts *sensor, int16_t threshold) {
+   return sensor->functions->setLowerWakeUpThresholdY(sensor, threshold);
+}
+
+bool setLowerWakeUpThresholdZ(Sensor_ts *sensor, int16_t threshold) {
+   return sensor->functions->setLowerWakeUpThresholdZ(sensor, threshold);
+}
+
+bool setWakeUpThresholds(Sensor_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+   return sensor->functions->setWakeUpThresholds(sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
+}
+
+// thesholds im mT, to be converted to proper format
+bool setWakeupThesholds(Sensor_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+   return sensor->functions->setWakeUpThresholds(sensor, xLow, xHigh, yLow, yHigh, zLow, zHigh);
+}
 
 // bool softReset(Sensor_ts *sensor) {
 //    return sensor->functions->reset(sensor);
 // }
 
 
+// Severin : nice to have, set proper defaults
 // set register bits
 // bool setTrigger(Sensor_ts *sensor, uint8_t trigger);
 // trigger bits shall be ORed to register address always by shifting left by 5 -> default is 0b000
-bool setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits) {
-   return sensor->functions->setTriggerBits(sensor, triggerBits);
+// bool setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits) {
+//    return sensor->functions->setTriggerBits(sensor, triggerBits);
+// }
+
+
+// diagnosis functions
+bool hasValidData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidData(sensor);
 }
 
+bool hasValidTemperatureData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidTemperatureData(sensor);
+}
 
+bool hasValidMagneticFieldData(Sensor_ts *sensor) {
+   return sensor->functions->hasValidMagneticFieldData(sensor);
+}
+
+bool isFunctional(Sensor_ts *sensor) {
+   return sensor->functions->isFunctional(sensor);
+}
 
 
 // utility function
@@ -218,73 +229,28 @@ const char *getTypeAsString(SupportedSensorTypes_te sensorType) {
       // case TLx493D_A1B6_e : return "TLx493D_A1B6";
       //                      break;
 
-      case TLE493D_A2B6_e : return "TLE493D_A2B6";
+      case TLx493D_A2B6_e : return "TLx493D_A2B6";
                             break;
 
-      // case TLV493D_A2BW_e : return "TLV493D_A2BW";
+      // case TLx493D_A2BW_e : return "TLx493D_A2BW";
       //                       break;
 
-      // case TLE493D_P2B6_e : return "TLE493D_P2B6";
+      // case TLx493D_P2B6_e : return "TLx493D_P2B6";
       //                       break;
 
-      // case TLE493D_W2B6_e : return "TLE493D_W2B6";
-      //                       break;
+      case TLx493D_W2B6_e : return "TLx493D_W2B6";
+                            break;
 
-      // // case TLV493D_W2BW_e : return "TLV493D_W2BW";
+      // // case TLx493D_W2BW_e : return "TLx493D_W2BW";
       // //                      break;
 
-      // case TLE493D_P3B6_e : return "TLE493D_P3B6";
+      // case TLx493D_P3B6_e : return "TLx493D_P3B6";
       //                       break;
 
-      // case TLE493D_P3I8_e : return "TLE493D_P3I8";
+      // case TLx493D_P3I8_e : return "TLx493D_P3I8";
       //                       break;
 
       default : return "ERROR : Unknown sensorType !";
                break;
    }
 }
-
-
-uint8_t calculateParity(uint8_t data) {
-	data ^= data >> 4;
-	data ^= data >> 2;
-	data ^= data >> 1;
-	return data & 1U;
-}
-
-
-uint8_t getOddParity(uint8_t parity) {
-    return (parity ^ 1U) & 1U;
-}
-
-
-uint8_t getEvenParity(uint8_t parity) {
-    return parity & 1U;
-}
-
-
-/**
- * More generic version wrt size and offsets of MSB and LSB. Register values are in two's complement form.
- * Assumptions :
- *    - registers are 8 bits wide
-*/
-void concatBytes(Sensor_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result) {
-    Register_ts *msb = &sensor->regDef[msbBitfield];
-    Register_ts *lsb = &sensor->regDef[lsbBitfield];
-
-    *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
-    *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
-    *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-}
-
-
-// /**
-//  * More generic version wrt size and offsets of MSB and LSB. Register values are in two's complement form.
-//  * Assumptions :
-//  *    - registers are 8 bits wide
-// */
-// void concatBytes(Sensor_ts *sensor, Register_ts *msb, Register_ts *lsb, int16_t *result) {
-//     *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
-//     *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
-//     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-// }

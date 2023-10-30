@@ -3,7 +3,7 @@
 
 // project c includes
 // common to all sensors
-#include "sensor_types.h"
+#include "tlx493d_types.h"
 
 // common to same generation of sensors
 

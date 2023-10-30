@@ -15,39 +15,39 @@ $(info PORT : $(PORT))
 # 						 -DTEST_SENSORS_GEN_2_COMMON_NEEDS_SENSOR \
 # 			 			 -DTEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
 
-TESTS_NEEDS_SENSOR=-DTEST_TLE493D_A1B6_NEEDS_SENSOR \
-                   -DTEST_TLE493D_A2B6_NEEDS_SENSOR \
-	               -DTEST_TLV493D_A2BW_NEEDS_SENSOR \
-				   -DTEST_TLE493D_P2B6_NEEDS_SENSOR \
-				   -DTEST_TLE493D_W2B6_NEEDS_SENSOR
+TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
+                   -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
+				   -DTEST_TLx493D_P2B6_NEEDS_SENSOR \
+				   -DTEST_TLx493D_W2B6_NEEDS_SENSOR \
+	               -DTEST_TLx493D_W2BW_NEEDS_SENSOR
 
-TESTS_NO_SENSOR=-DTEST_TLE493D_A1B6 \
-                -DTEST_TLE493D_A2B6 \
-			 	-DTEST_TLV493D_A2BW \
-				-DTEST_TLE493D_P2B6 \
-				-DTEST_TLE493D_W2B6
+TESTS_NO_SENSOR=-DTEST_TLx493D_A1B6 \
+                -DTEST_TLx493D_A2B6 \
+				-DTEST_TLx493D_P2B6 \
+				-DTEST_TLx493D_W2B6 \
+			 	-DTEST_TLx493D_A2BW
 				
 
-arduino_A1B6_needsSensor: TESTS=-DTEST_TLE493D_A1B6 -DTEST_TLE493D_A1B6_NEEDS_SENSOR
-arduino_A1B6: TESTS=-DTEST_TLE493D_A1B6
+arduino_A1B6_needsSensor: TESTS=-DTEST_TLx493D_A1B6 -DTEST_TLx493D_A1B6_NEEDS_SENSOR
+arduino_A1B6: TESTS=-DTEST_TLx493D_A1B6
 
-arduino_A2B6_needsSensor: TESTS=-DTEST_TLE493D_A2B6 -DTEST_TLE493D_A2B6_NEEDS_SENSOR
-arduino_A2B6: TESTS=-DTEST_TLE493D_A2B6
+arduino_A2B6_needsSensor: TESTS=-DTEST_TLx493D_A2B6 -DTEST_TLx493D_A2B6_NEEDS_SENSOR
+arduino_A2B6: TESTS=-DTEST_TLx493D_A2B6
 
-arduino_A2BW_needsSensor: TESTS=-DTEST_TLV493D_A2BW -DTEST_TLV493D_A2BW_NEEDS_SENSOR
-arduino_A2BW: TESTS=-DTEST_TLV493D_A2BW
+arduino_P2B6_needsSensor: TESTS=-DTEST_TLx493D_P2B6 -DTEST_TLx493D_P2B6_NEEDS_SENSOR
+arduino_P2B6: TESTS=-DTEST_TLx493D_P2B6
 
-arduino_P2B6_needsSensor: TESTS=-DTEST_TLE493D_P2B6 -DTEST_TLE493D_P2B6_NEEDS_SENSOR
-arduino_P2B6: TESTS=-DTEST_TLE493D_P2B6
+arduino_W2B6_needsSensor: TESTS=-DTEST_TLx493D_W2B6 -DTEST_TLx493D_W2B6_NEEDS_SENSOR
+arduino_W2B6: TESTS=-DTEST_TLx493D_W2B6
 
-arduino_W2B6_needsSensor: TESTS=-DTEST_TLE493D_W2B6 -DTEST_TLE493D_W2B6_NEEDS_SENSOR
-arduino_W2B6: TESTS=-DTEST_TLE493D_W2B6
+arduino_A2BW_needsSensor: TESTS=-DTEST_TLx493D_W2BW -DTEST_TLx493D_W2BW_NEEDS_SENSOR
+arduino_A2BW: TESTS=-DTEST_TLx493D_W2BW
 
 arduino_A1B6_needsSensor arduino_A1B6 \
 arduino_A2B6_needsSensor arduino_A2B6 \
-arduino_A2BW_needsSensor arduino_A2BW \
 arduino_P2B6_needsSensor arduino_P2B6 \
-arduino_W2B6_needsSensor arduino_W2B6 : arduino_unity arduino_flash
+arduino_W2B6_needsSensor arduino_W2B6 \
+arduino_A2BW_needsSensor arduino_W2BW : arduino_unity arduino_flash
 
 
 # arduino_sensor_common_needsSensor: TESTS=$(TEST_COMMON_NEEDS_SENSOR)
@@ -73,20 +73,19 @@ arduino: arduino_clean
 
 
 arduino_plain_c: arduino
-	cp examples/arduino/simple_plain_c.ino build/build.ino
+	cp examples/arduino/read_sensors_plain_c.ino build/build.ino
  
 
 arduino_cpp: arduino
-	cp examples/arduino/simple.ino build/build.ino
+	cp examples/arduino/read_sensors.ino build/build.ino
 
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 arduino_unity arduino_flash arduino_monitor
 arduino_unity: arduino
 	cp -r test/Unity/*.[hc] build
-	cp test/src//Test_*.h build
-	cp test/src/sensors/Test_*.h build
-	cp test/src/arduino/Test_*.c* build
-	cp test/src/arduino/Test_*.h* build
+	cp test/src/Test_*.h build
+	cp test/src/tlx493d/Test_*.h build
+	cp test/src/arduino/Test_*.[hc]* build
 	cp test/src/arduino/Test_main.ino build/build.ino
 
 

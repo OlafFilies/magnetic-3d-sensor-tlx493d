@@ -125,6 +125,50 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             return sensor.setUpdateRate(bit);
         }
 
+
+        bool isWakeUpActive() {
+            return sensor.isWakeUpActive();
+        }
+
+
+        bool enableWakeUpMode() {
+            return sensor.enableWakeUpMode();
+        }
+
+
+        bool disableWakeUpMode() {
+            return sensor.disableWakeUpMode();
+        }
+
+        bool setLowerWakeUpThresholdX(int16_t threshold) {
+            return sensor.setLowerWakeUpThresholdX(threshold);
+        }
+
+        bool setLowerWakeUpThresholdY(int16_t threshold) {
+            return sensor.setLowerWakeUpThresholdY(threshold);
+        }
+
+        bool setLowerWakeUpThresholdZ(int16_t threshold) {
+            return sensor.setLowerWakeUpThresholdZ(threshold);
+        }
+
+        bool setUpperWakeUpThresholdX(int16_t threshold) {
+            return sensor.setUpperWakeUpThresholdX(threshold);
+        }
+
+        bool setUpperWakeUpThresholdY(int16_t threshold) {
+            return sensor.setUpperWakeUpThresholdY(threshold);
+        }
+
+        bool setUpperWakeUpThresholdZ(int16_t threshold) {
+            return sensor.setUpperWakeUpThresholdZ(threshold);
+        }
+
+        bool setWakeUpThresholds(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+            return sensor.setWakeUpThresholds(xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
+        }
+
+
     private:
 
         BoardSupportClassType  bsc;

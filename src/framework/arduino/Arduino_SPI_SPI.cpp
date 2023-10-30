@@ -4,10 +4,10 @@
 
 // project c includes
 // common to all sensors
-#include "sensor_types.h"
+#include "tlx493d_types.h"
 
 // common to same generation of sensors
-#include "sensors_gen_2_common_defines.h"
+#include "tlx493d_gen_2_common_defines.h"
 
 // sensor specific includes
 

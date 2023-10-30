@@ -35,8 +35,10 @@ template<> class SPI_Lib<SPIClass> {
 
 
         bool transfer(uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
+            uint8_t bytesWritten = 0;
+
              if( (txLen > 0) && (txBuffer != NULL) ) {
-                for(uint8_t bytesWritten = 0; bytesWritten < txLen; ++bytesWritten) {
+                for(; bytesWritten < txLen; ++bytesWritten) {
                     spi.transfer(txBuffer[bytesWritten]);
                 }
 
@@ -46,9 +48,10 @@ template<> class SPI_Lib<SPIClass> {
             }
 
             if( (rxLen > 0)  && (rxBuffer != NULL) ) {
+                uint16_t bytesRead = 0;
                 spi.transfer(0x80);
 
-                for(uint16_t bytesRead = 0; bytesRead < rxLen; ++bytesRead) {
+                for(; bytesRead < rxLen; ++bytesRead) {
                     rxBuffer[bytesRead] = spi.transfer(0x80);
                 }
 
