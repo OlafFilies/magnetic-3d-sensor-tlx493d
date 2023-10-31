@@ -20,15 +20,12 @@
 // project c includes
 // common to all sensors
 #include "tlx493d_types.h"
-// #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
 
 /** Common to the same generation of senors */
-// #include "tlx493d_gen_3_common_defines.h"
 #include "tlx493d_gen_3_common.h"
 
 // sensor specific includes
-// #include "TLx493D_P3B6_defines.h"
 
 
 /**
@@ -39,7 +36,7 @@
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P3B6_init(Sensor_ts *sensor);
+bool TLx493D_P3B6_init(TLx493D_ts *sensor);
 
 
 /**
@@ -50,7 +47,7 @@ bool TLx493D_P3B6_init(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P3B6_deinit(Sensor_ts *sensor);
+bool TLx493D_P3B6_deinit(TLx493D_ts *sensor);
 
 
 /**
@@ -62,7 +59,7 @@ bool TLx493D_P3B6_deinit(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P3B6_getTemperature(Sensor_ts *sensor, double *temp);
+bool TLx493D_P3B6_getTemperature(TLx493D_ts *sensor, double *temp);
 
 
 /**
@@ -76,7 +73,7 @@ bool TLx493D_P3B6_getTemperature(Sensor_ts *sensor, double *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_P3B6_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+void TLx493D_P3B6_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 
 /**
  * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLx493D-P3B6 magnetic 3D sensor
@@ -89,7 +86,7 @@ void TLx493D_P3B6_calculateMagneticField(Sensor_ts *sensor, double *x, double *y
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P3B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+bool TLx493D_P3B6_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 
 /**
  * @brief Sets the default configuration for the XENSIV™ TLx493D-P3B6 magnetic 3D sensor
@@ -99,16 +96,7 @@ bool TLx493D_P3B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, doub
  * @return true - If successful
  * @return false - If unsuccessful 
  */
-bool TLx493D_P3B6_setDefaultConfig(Sensor_ts *sensor);
+bool TLx493D_P3B6_setDefaultConfig(TLx493D_ts *sensor);
 
-
-// /**
-//  * @brief Updates all registers of the XENSIV™ TLx493D-P3B6 magnetic 3D sensor
-//  * 
-//  * @param[in] sensor Pointer to the XENSIV™ TLx493D-P3B6 magnetic 3D sensor structure
-//  * @return true - If successful
-//  * @return false - If unsuccessful
-//  */
-// bool TLx493D_P3B6_updateRegisterMap(Sensor_ts *sensor);
 
 #endif // TLX493D_P3B6_H

@@ -11,7 +11,6 @@
 #define TLX493D_W2BW_H_
 
 /** std includes*/
-#include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -38,7 +37,7 @@
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_init(Sensor_ts *sensor);
+bool TLx493D_W2BW_init(TLx493D_ts *sensor);
 
 /**
  * @brief De-Initializes the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -48,7 +47,7 @@ bool TLx493D_W2BW_init(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_deinit(Sensor_ts *sensor);
+bool TLx493D_W2BW_deinit(TLx493D_ts *sensor);
 
 /**
  * @brief Updates the required registers to read the temperature value of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -59,7 +58,7 @@ bool TLx493D_W2BW_deinit(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_W2BW_calculateTemperature(Sensor_ts *sensor, double *temp);
+void TLx493D_W2BW_calculateTemperature(TLx493D_ts *sensor, double *temp);
 
 /**
  * @brief Retrieves the temperature value of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -70,7 +69,7 @@ void TLx493D_W2BW_calculateTemperature(Sensor_ts *sensor, double *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_getTemperature(Sensor_ts *sensor, double *temp);
+bool TLx493D_W2BW_getTemperature(TLx493D_ts *sensor, double *temp);
 
 /**
  * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -83,7 +82,7 @@ bool TLx493D_W2BW_getTemperature(Sensor_ts *sensor, double *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_W2BW_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+void TLx493D_W2BW_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 
 /**
  * @brief Retrieves the magnetic field values of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -96,14 +95,14 @@ void TLx493D_W2BW_calculateMagneticField(Sensor_ts *sensor, double *x, double *y
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+bool TLx493D_W2BW_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 
-// bool TLx493D_W2BW_getSensorValues(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
+// bool TLx493D_W2BW_getSensorValues(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 
-uint8_t TLx493D_W2BW_calculateConfigurationParityBit(Sensor_ts *sensor);
+uint8_t TLx493D_W2BW_calculateConfigurationParityBit(TLx493D_ts *sensor);
 
-bool TLx493D_W2BW_reset(Sensor_ts *sensor);
-bool TLx493D_W2BW_getDiagnosis(Sensor_ts *sensor);
+bool TLx493D_W2BW_reset(TLx493D_ts *sensor);
+bool TLx493D_W2BW_getDiagnosis(TLx493D_ts *sensor);
 
 /**
  * @brief Calculates the parity and sets the corresponding parity flags for the necessary registers f the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -112,7 +111,7 @@ bool TLx493D_W2BW_getDiagnosis(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_W2BW_calculateParity(Sensor_ts *sensor);
+void TLx493D_W2BW_calculateParity(TLx493D_ts *sensor);
 
 /**
  * @brief Sets the default configuration for the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -122,12 +121,12 @@ void TLx493D_W2BW_calculateParity(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful 
  */
-bool TLx493D_W2BW_setDefaultConfig(Sensor_ts *sensor);
+bool TLx493D_W2BW_setDefaultConfig(TLx493D_ts *sensor);
 
 
-bool TLx493D_W2BW_setPowerMode(Sensor_ts *sensor, uint8_t mode);
-bool TLx493D_W2BW_setIICAddress(Sensor_ts *sensor, StandardIICAddresses_te address);
-bool TLx493D_W2BW_setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits);
+bool TLx493D_W2BW_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
+bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address);
+bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, uint8_t triggerBits);
 
 // /**
 //  * @brief 
@@ -140,7 +139,7 @@ bool TLx493D_W2BW_setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits);
 //  * @return true 
 //  * @return false 
 //  */
-// bool TLx493D_W2BW_transferRegisterMap(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
+// bool TLx493D_W2BW_transferRegisterMap(TLx493D_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 /**
  * @brief Enables the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
@@ -149,7 +148,7 @@ bool TLx493D_W2BW_setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_enableTemperatureMeasurement(Sensor_ts* sensor);
+bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_ts* sensor);
 
 /**
  * @brief Disable the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
@@ -158,7 +157,7 @@ bool TLx493D_W2BW_enableTemperatureMeasurement(Sensor_ts* sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_disableTemperatureMeasurement(Sensor_ts *sensor);
+bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_ts *sensor);
 
 /**
  * @brief Enables the interrupt after measurement completion of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -167,7 +166,7 @@ bool TLx493D_W2BW_disableTemperatureMeasurement(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_enableInterrupt(Sensor_ts *sensor);
+bool TLx493D_W2BW_enableInterrupt(TLx493D_ts *sensor);
 
 /**
  * @brief Disables the interrupt after measurement completion of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -176,7 +175,7 @@ bool TLx493D_W2BW_enableInterrupt(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_disableInterrupt(Sensor_ts *sensor);
+bool TLx493D_W2BW_disableInterrupt(TLx493D_ts *sensor);
 
 
 /**
@@ -187,7 +186,7 @@ bool TLx493D_W2BW_disableInterrupt(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful 
  */
-bool TLx493D_W2BW_setUpdateRate(Sensor_ts *sensor, uint8_t bit);
+bool TLx493D_W2BW_setUpdateRate(TLx493D_ts *sensor, uint8_t bit);
 
 /**
  * @brief Checks if the wake up functionality is enabled
@@ -196,20 +195,20 @@ bool TLx493D_W2BW_setUpdateRate(Sensor_ts *sensor, uint8_t bit);
  * @return true - If wake up is enabled
  * @return false - If wake up is disabled
  */
-bool TLx493D_W2BW_isWakeUpActive(Sensor_ts *sensor);
+bool TLx493D_W2BW_isWakeUpActive(TLx493D_ts *sensor);
 
-bool TLx493D_W2BW_enableWakeUpMode(Sensor_ts *sensor);
-bool TLx493D_W2BW_disableWakeUpMode(Sensor_ts *sensor);
+bool TLx493D_W2BW_enableWakeUpMode(TLx493D_ts *sensor);
+bool TLx493D_W2BW_disableWakeUpMode(TLx493D_ts *sensor);
 
-bool TLx493D_W2BW_setLowerWakeUpThresholdX(Sensor_ts *sensor, int16_t threshold);
-bool TLx493D_W2BW_setLowerWakeUpThresholdY(Sensor_ts *sensor, int16_t threshold); 
-bool TLx493D_W2BW_setLowerWakeUpThresholdZ(Sensor_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setLowerWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setLowerWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold); 
+bool TLx493D_W2BW_setLowerWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
 
-bool TLx493D_W2BW_setUpperWakeUpThresholdX(Sensor_ts *sensor, int16_t threshold);
-bool TLx493D_W2BW_setUpperWakeUpThresholdY(Sensor_ts *sensor, int16_t threshold);
-bool TLx493D_W2BW_setUpperWakeUpThresholdZ(Sensor_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setUpperWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setUpperWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
 
-bool TLx493D_W2BW_setWakeUpThresholds(Sensor_ts *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
+bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_ts *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
 
 
 #endif /** TLX493D_W2BW_H */

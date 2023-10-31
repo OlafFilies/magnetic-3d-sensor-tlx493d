@@ -10,7 +10,7 @@
 #include "pal.h"
 
 
-typedef struct Sensor_ts Sensor_ts;
+typedef struct TLx493D_ts  TLx493D_ts;
 
 
 /*
@@ -19,307 +19,265 @@ typedef struct Sensor_ts Sensor_ts;
 typedef enum {
                TLx493D_A1B6_e = 0,
                TLx493D_A2B6_e,
-            //    TLx493D_A2BW_e,
                TLx493D_P2B6_e,
                TLx493D_W2B6_e,
                TLx493D_W2BW_e,
                TLx493D_P3B6_e,
-               TLx493D_P3I8_e } SupportedSensorTypes_te;
+               TLx493D_P3I8_e } TLx493D_SupportedSensorTypes_te;
 
 
 /*
   List of all supported communication interfaces.
 */
 typedef enum {
-               I2C_e = 0,
-               SPI_e,
-               I2C_OR_SPI_e } SupportedComLibraryInterfaceTypes_te;
+               TLx493D_I2C_e = 0,
+               TLx493D_SPI_e,
+               TLx493D_I2C_OR_SPI_e } TLx493D_SupportedComLibraryInterfaceTypes_te;
 
 
 /*
   List of supported register access modes.
 */
-typedef enum { READ_MODE_e = 0, 
-               WRITE_MODE_e,
-               READ_WRITE_MODE_e } REG_ACCESS_MODE_te;
+typedef enum { TLx493D_READ_MODE_e = 0, 
+               TLx493D_WRITE_MODE_e,
+               TLx493D_READ_WRITE_MODE_e } TLx493D_RegisterAccessMode_te;
+
+
+/*
+  List of supported ranges.
+*/
+typedef enum { TLx493D_FULL_RANGE_e = 0, 
+               TLx493D_SHORT_RANGE_e,
+               TLx493D_EXTRA_SHORT_RANGE_e } TLx493D_RangeTypes_te;
+
+
+typedef enum {
+    TLx493D_IIC_ADDR_A0_e = 0,
+    TLx493D_IIC_ADDR_A1_e,
+    TLx493D_IIC_ADDR_A2_e,
+    TLx493D_IIC_ADDR_A3_e
+} TLx493D_IICAddresses_te;
 
 
 /*
   Structure to store name, access mode, address, mask and offset of registers.
 */
-typedef struct Register_ts {
-    uint8_t             name;
-    REG_ACCESS_MODE_te  accessMode;
-    uint8_t             address;
-    uint8_t             mask;
-    uint8_t             offset;
-    uint8_t             numBits;
-} Register_ts;
+typedef struct TLx493D_Register_ts {
+    uint8_t                        name;
+    TLx493D_RegisterAccessMode_te  accessMode;
+    uint8_t                        address;
+    uint8_t                        mask;
+    uint8_t                        offset;
+    uint8_t                        numBits;
+} TLx493D_Register_ts;
 
 
-typedef bool (*OneParamsFuncPtr)(Sensor_ts *sensor);
-typedef bool (*TransferFuncPtr)(Sensor_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
+typedef bool (*TLx493D_OneParamsFuncPtr)(TLx493D_ts *sensor);
+typedef bool (*TLx493D_TransferFuncPtr)(TLx493D_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 
-typedef struct SPIParameters_ts {
+typedef struct TLx493D_SPIParameters_ts {
     uint8_t dummy;
-} SPIParameters_ts;
+} TLx493D_SPIParameters_ts;
 
 
-typedef struct I2CParameters_ts {
+typedef struct TLx493D_I2CParameters_ts {
     uint8_t address;
-} I2CParameters_ts;
+} TLx493D_I2CParameters_ts;
 
 
-typedef struct ComLibraryFunctions_ts {
+typedef struct TLx493D_ComLibraryFunctions_ts {
     union {
-        OneParamsFuncPtr  spi_init;
-        OneParamsFuncPtr  i2c_init;
+        TLx493D_OneParamsFuncPtr  spi_init;
+        TLx493D_OneParamsFuncPtr  i2c_init;
     } init;
 
     union {
-        OneParamsFuncPtr  spi_deinit;
-        OneParamsFuncPtr  i2c_deinit;
+        TLx493D_OneParamsFuncPtr  spi_deinit;
+        TLx493D_OneParamsFuncPtr  i2c_deinit;
     } deinit;
 
     union {
-        TransferFuncPtr  spi_transfer;
-        TransferFuncPtr  i2c_transfer;
+        TLx493D_TransferFuncPtr  spi_transfer;
+        TLx493D_TransferFuncPtr  i2c_transfer;
     } transfer;
-} ComLibraryFunctions_ts;
+} TLx493D_ComLibraryFunctions_ts;
 
 
-typedef union ComLibraryParameters_ts {
-    SPIParameters_ts  spi_params;
-    I2CParameters_ts  i2c_params;
-} ComLibraryParameters_ts;
+typedef union TLx493D_ComLibraryParameters_ts {
+    TLx493D_SPIParameters_ts  spi_params;
+    TLx493D_I2CParameters_ts  i2c_params;
+} TLx493D_ComLibraryParameters_ts;
 
 
-typedef union ComLibraryObject_ts {
-    SPIObject_ts  *spi_obj;
-    I2CObject_ts  *i2c_obj;
-} ComLibraryObject_ts;
+typedef union TLx493D_ComLibraryObject_ts {
+    TLx493D_SPIObject_ts  *spi_obj;
+    TLx493D_I2CObject_ts  *i2c_obj;
+} TLx493D_ComLibraryObject_ts;
 
 
 // Functions common to all sensors
-typedef bool (*InitFuncPtr)(Sensor_ts *);
-typedef bool (*DeinitFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_InitFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_DeinitFuncPtr)(TLx493D_ts *);
 
 // TODO: to be removed
-typedef void (*CalculateTemperatureFuncPtr)(Sensor_ts *, double *);
-// typedef bool (*GetTemperatureFuncPtr)(Sensor_ts *, double *);
+typedef void (*TLx493D_CalculateTemperatureFuncPtr)(TLx493D_ts *, double *);
+// typedef bool (*TLx493D_GetTemperatureFuncPtr)(TLx493D_ts *, double *);
 
 // TODO: to be removed
-typedef void (*CalculateMagneticFieldFuncPtr)(Sensor_ts *, double *, double *, double *);
-// typedef bool (*GetMagneticFieldFuncPtr)(Sensor_ts *, double *, double *, double *);
+typedef void (*TLx493D_CalculateMagneticFieldFuncPtr)(TLx493D_ts *, double *, double *, double *);
+// typedef bool (*TLx493D_GetMagneticFieldFuncPtr)(TLx493D_ts *, double *, double *, double *);
 
-typedef void (*CalculateMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *, double *, double *, double *);
-// typedef bool (*GetMagneticFieldAndTemperatureFuncPtr)(Sensor_ts *, double *, double *, double *, double *);
+typedef void (*TLx493D_CalculateMagneticFieldAndTemperatureFuncPtr)(TLx493D_ts *, double *, double *, double *, double *);
+// typedef bool (*TLx493D_GetMagneticFieldAndTemperatureFuncPtr)(TLx493D_ts *, double *, double *, double *, double *);
 
-typedef bool (*ReadRegistersFuncPtr)(Sensor_ts *);
-typedef bool (*SetDefaultConfigFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_ReadRegistersFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_SetDefaultConfigFuncPtr)(TLx493D_ts *);
 
-typedef bool (*SetPowerModeFuncPtr)(Sensor_ts *, uint8_t);
-typedef bool (*SetIICAddressFuncPtr)(Sensor_ts *, uint8_t);
+typedef bool (*TLx493D_SetPowerModeFuncPtr)(TLx493D_ts *, uint8_t);
 
-typedef bool (*EnableTemperatureMeasurementFuncPtr)(Sensor_ts *);
-typedef bool (*DisableTemperatureMeasurementFuncPtr)(Sensor_ts *);
+// typedef bool (*TLx493D_SetIICAddressFuncPtr)(TLx493D_ts *, uint8_t);
+typedef bool (*TLx493D_SetIICAddressFuncPtr)(TLx493D_ts *, TLx493D_IICAddresses_te);
 
-typedef bool (*EnableInterruptFuncPtr)(Sensor_ts *);
-typedef bool (*DisableInterruptFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_EnableTemperatureMeasurementFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_DisableTemperatureMeasurementFuncPtr)(TLx493D_ts *);
 
-typedef bool (*EnableAngularMeasurementFuncPtr)(Sensor_ts *);
-typedef bool (*DisableAngularMeasurementFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_EnableInterruptFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_DisableInterruptFuncPtr)(TLx493D_ts *);
 
-typedef bool (*SetTriggerBitsFuncPtr)(Sensor_ts *, uint8_t);
-typedef bool (*SetUpdateRateFuncPtr)(Sensor_ts *, uint8_t);
+typedef bool (*TLx493D_EnableCollisionAvoidanceFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_DisableCollisionAvoidanceFuncPtr)(TLx493D_ts *);
 
-typedef bool (*IsWakeUpActiveFuncPtr)(Sensor_ts *sensor);
-typedef bool (*EnableWakeUpModeFuncPtr)(Sensor_ts *sensor);
-typedef bool (*DisableWakeUpModeFuncPtr)(Sensor_ts *sensor);
+typedef bool (*TLx493D_EnableAngularMeasurementFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_DisableAngularMeasurementFuncPtr)(TLx493D_ts *);
 
-typedef bool (*SetLowerWakeUpThresholdXFuncPtr)(Sensor_ts *sensor, int16_t threshold);
-typedef bool (*SetLowerWakeUpThresholdYFuncPtr)(Sensor_ts *sensor, int16_t threshold);
-typedef bool (*SetLowerWakeUpThresholdZFuncPtr)(Sensor_ts *sensor, int16_t threshold);
+typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_ts *, uint8_t);
+typedef bool (*TLx493D_SetUpdateRateFuncPtr)(TLx493D_ts *, uint8_t);
+typedef bool (*TLx493D_SetRangeFuncPtr)(TLx493D_ts *, TLx493D_RangeTypes_te);
 
-typedef bool (*SetUpperWakeUpThresholdXFuncPtr)(Sensor_ts *sensor, int16_t threshold);
-typedef bool (*SetUpperWakeUpThresholdYFuncPtr)(Sensor_ts *sensor, int16_t threshold);
-typedef bool (*SetUpperWakeUpThresholdZFuncPtr)(Sensor_ts *sensor, int16_t threshold);
+typedef bool (*TLx493D_IsWakeUpActiveFuncPtr)(TLx493D_ts *sensor);
+typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_ts *sensor);
+typedef bool (*TLx493D_DisableWakeUpModeFuncPtr)(TLx493D_ts *sensor);
 
-typedef bool (*SetWakeUpThresholdsFuncPtr)(Sensor_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
+typedef bool (*TLx493D_SetLowerWakeUpThresholdXFuncPtr)(TLx493D_ts *sensor, int16_t threshold);
+typedef bool (*TLx493D_SetLowerWakeUpThresholdYFuncPtr)(TLx493D_ts *sensor, int16_t threshold);
+typedef bool (*TLx493D_SetLowerWakeUpThresholdZFuncPtr)(TLx493D_ts *sensor, int16_t threshold);
 
-typedef bool (*Enable1ByteReadModeFuncPtr)(Sensor_ts *);
-typedef bool (*Disable1ByteReadModeFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_SetUpperWakeUpThresholdXFuncPtr)(TLx493D_ts *sensor, int16_t threshold);
+typedef bool (*TLx493D_SetUpperWakeUpThresholdYFuncPtr)(TLx493D_ts *sensor, int16_t threshold);
+typedef bool (*TLx493D_SetUpperWakeUpThresholdZFuncPtr)(TLx493D_ts *sensor, int16_t threshold);
 
-typedef uint8_t (*CalculateFuseParityFuncPtr)(Sensor_ts *);
-typedef uint8_t (*CalculateBusParityFuncPtr)(Sensor_ts *);
-typedef uint8_t (*CalculateConfigParityFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
 
-typedef bool (*HasValidFuseParityFuncPtr)(Sensor_ts *);
-typedef bool (*HasValidBusParityFuncPtr)(Sensor_ts *);
-typedef bool (*HasValidConfigParityFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_Enable1ByteReadModeFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_Disable1ByteReadModeFuncPtr)(TLx493D_ts *);
 
-typedef bool (*HasValidDataFuncPtr)(Sensor_ts *);
-typedef bool (*HasValidTemperatureDataFuncPtr)(Sensor_ts *);
-typedef bool (*HasValidMagneticFieldDataFuncPtr)(Sensor_ts *);
+typedef uint8_t (*TLx493D_CalculateFuseParityFuncPtr)(TLx493D_ts *);
+typedef uint8_t (*TLx493D_CalculateBusParityFuncPtr)(TLx493D_ts *);
+typedef uint8_t (*TLx493D_CalculateConfigParityFuncPtr)(TLx493D_ts *);
 
-typedef bool (*HasValidTBitFuncPtr)(Sensor_ts *);
-typedef bool (*HasValidPD0BitFuncPtr)(Sensor_ts *);
-typedef bool (*HasValidPD3BitFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_HasValidFuseParityFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_HasValidBusParityFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(TLx493D_ts *);
 
-typedef bool (*IsFunctionalFuncPtr)(Sensor_ts *);
+typedef bool (*TLx493D_HasValidDataFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_HasValidTemperatureDataFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_HasValidMagneticFieldDataFuncPtr)(TLx493D_ts *);
+
+typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_HasValidPD0BitFuncPtr)(TLx493D_ts *);
+typedef bool (*TLx493D_HasValidPD3BitFuncPtr)(TLx493D_ts *);
+
+typedef bool (*TLx493D_IsFunctionalFuncPtr)(TLx493D_ts *);
 
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
-typedef struct CommonFunctions_ts {
-    InitFuncPtr                         init;
-    DeinitFuncPtr                       deinit;
+typedef struct TLx493D_CommonFunctions_ts {
+    TLx493D_InitFuncPtr                         init;
+    TLx493D_DeinitFuncPtr                       deinit;
 
-    ReadRegistersFuncPtr                readRegisters;
-    SetDefaultConfigFuncPtr             setDefaultConfig;
-    SetPowerModeFuncPtr                 setPowerMode;
-    SetIICAddressFuncPtr                setIICAddress;
+    TLx493D_ReadRegistersFuncPtr                readRegisters;
+    TLx493D_SetDefaultConfigFuncPtr             setDefaultConfig;
+    TLx493D_SetPowerModeFuncPtr                 setPowerMode;
+    TLx493D_SetIICAddressFuncPtr                setIICAddress;
 
-    CalculateTemperatureFuncPtr         calculateTemperature;
-    // GetTemperatureFuncPtr               getTemperature;
+    TLx493D_CalculateTemperatureFuncPtr         calculateTemperature;
+    // TLx493D_GetTemperatureFuncPtr               getTemperature;
 
-    CalculateMagneticFieldFuncPtr       calculateMagneticField;
-    // GetMagneticFieldFuncPtr             getMagneticField;
+    TLx493D_CalculateMagneticFieldFuncPtr       calculateMagneticField;
+    // TLx493D_GetMagneticFieldFuncPtr             getMagneticField;
     
-    CalculateMagneticFieldAndTemperatureFuncPtr  calculateMagneticFieldAndTemperature;
-    // GetMagneticFieldAndTemperatureFuncPtr        getMagneticFieldAndTemperature;
+    TLx493D_CalculateMagneticFieldAndTemperatureFuncPtr  calculateMagneticFieldAndTemperature;
+    // TLx493D_GetMagneticFieldAndTemperatureFuncPtr        getMagneticFieldAndTemperature;
 
-    EnableTemperatureMeasurementFuncPtr   enableTemperatureMeasurement;
-    DisableTemperatureMeasurementFuncPtr  disableTemperatureMeasurement;
+    TLx493D_EnableTemperatureMeasurementFuncPtr   enableTemperatureMeasurement;
+    TLx493D_DisableTemperatureMeasurementFuncPtr  disableTemperatureMeasurement;
 
-    EnableAngularMeasurementFuncPtr     enableAngularMeasurement;
-    DisableAngularMeasurementFuncPtr    disableAngularMeasurement;
+    TLx493D_EnableAngularMeasurementFuncPtr     enableAngularMeasurement;
+    TLx493D_DisableAngularMeasurementFuncPtr    disableAngularMeasurement;
 
-    EnableInterruptFuncPtr              enableInterrupt;
-    DisableInterruptFuncPtr             disableInterrupt;
+    TLx493D_EnableInterruptFuncPtr              enableInterrupt;
+    TLx493D_DisableInterruptFuncPtr             disableInterrupt;
 
-    SetTriggerBitsFuncPtr               setTriggerBits;
-    SetUpdateRateFuncPtr                setUpdateRate;
+    TLx493D_EnableCollisionAvoidanceFuncPtr     enableCollisionAvoidance;
+    TLx493D_DisableCollisionAvoidanceFuncPtr    disableCollisionAvoidance;
 
-    IsWakeUpActiveFuncPtr               isWakeUpActive;
-    EnableWakeUpModeFuncPtr             enableWakeUpMode;
-    DisableWakeUpModeFuncPtr            disableWakeUpMode;
+    TLx493D_SetTriggerFuncPtr                   setTrigger;
+    TLx493D_SetUpdateRateFuncPtr                setUpdateRate;
+    TLx493D_SetRangeFuncPtr                     setRange;
 
-    SetLowerWakeUpThresholdXFuncPtr     setLowerWakeUpThresholdX;
-    SetLowerWakeUpThresholdYFuncPtr     setLowerWakeUpThresholdY; 
-    SetLowerWakeUpThresholdZFuncPtr     setLowerWakeUpThresholdZ;
+    TLx493D_IsWakeUpActiveFuncPtr               isWakeUpActive;
+    TLx493D_EnableWakeUpModeFuncPtr             enableWakeUpMode;
+    TLx493D_DisableWakeUpModeFuncPtr            disableWakeUpMode;
 
-    SetUpperWakeUpThresholdXFuncPtr     setUpperWakeUpThresholdX;
-    SetUpperWakeUpThresholdYFuncPtr     setUpperWakeUpThresholdY; 
-    SetUpperWakeUpThresholdZFuncPtr     setUpperWakeUpThresholdZ;
+    TLx493D_SetLowerWakeUpThresholdXFuncPtr     setLowerWakeUpThresholdX;
+    TLx493D_SetLowerWakeUpThresholdYFuncPtr     setLowerWakeUpThresholdY; 
+    TLx493D_SetLowerWakeUpThresholdZFuncPtr     setLowerWakeUpThresholdZ;
 
-    SetWakeUpThresholdsFuncPtr          setWakeUpThresholds;                
-    Enable1ByteReadModeFuncPtr          enable1ByteReadMode;
-    Disable1ByteReadModeFuncPtr         disable1ByteReadMode;
+    TLx493D_SetUpperWakeUpThresholdXFuncPtr     setUpperWakeUpThresholdX;
+    TLx493D_SetUpperWakeUpThresholdYFuncPtr     setUpperWakeUpThresholdY; 
+    TLx493D_SetUpperWakeUpThresholdZFuncPtr     setUpperWakeUpThresholdZ;
 
-    CalculateFuseParityFuncPtr          calculateFuseParity;
-    CalculateBusParityFuncPtr           calculateBusParity;
-    CalculateConfigParityFuncPtr        calculateConfigurationParity;
+    TLx493D_SetWakeUpThresholdsFuncPtr          setWakeUpThresholds;                
+    TLx493D_Enable1ByteReadModeFuncPtr          enable1ByteReadMode;
+    TLx493D_Disable1ByteReadModeFuncPtr         disable1ByteReadMode;
+
+    TLx493D_CalculateFuseParityFuncPtr          calculateFuseParity;
+    TLx493D_CalculateBusParityFuncPtr           calculateBusParity;
+    TLx493D_CalculateConfigParityFuncPtr        calculateConfigurationParity;
     
-    HasValidFuseParityFuncPtr           hasValidFuseParity;
-    HasValidBusParityFuncPtr            hasValidBusParity;
-    HasValidConfigParityFuncPtr         hasValidConfigurationParity;
+    TLx493D_HasValidFuseParityFuncPtr           hasValidFuseParity;
+    TLx493D_HasValidBusParityFuncPtr            hasValidBusParity;
+    TLx493D_HasValidConfigParityFuncPtr         hasValidConfigurationParity;
 
-    HasValidDataFuncPtr                 hasValidData;
-    HasValidTemperatureDataFuncPtr      hasValidTemperatureData;
-    HasValidMagneticFieldDataFuncPtr    hasValidMagneticFieldData;
+    TLx493D_HasValidDataFuncPtr                 hasValidData;
+    TLx493D_HasValidTemperatureDataFuncPtr      hasValidTemperatureData;
+    TLx493D_HasValidMagneticFieldDataFuncPtr    hasValidMagneticFieldData;
 
-    HasValidTBitFuncPtr                 hasValidTBit;
-    HasValidPD0BitFuncPtr               hasValidPD0Bit;
-    HasValidPD3BitFuncPtr               hasValidPD3Bit;
+    TLx493D_HasValidTBitFuncPtr                 hasValidTBit;
+    TLx493D_HasValidPD0BitFuncPtr               hasValidPD0Bit;
+    TLx493D_HasValidPD3BitFuncPtr               hasValidPD3Bit;
     
-    IsFunctionalFuncPtr                 isFunctional;
-} CommonFunctions_ts;
-
-
-// typedef struct CommonBitfields_ts {
-//     uint8_t CP;
-//     uint8_t FP;
-
-//     uint8_t ID;
-//     uint8_t P;
-//     uint8_t FF;
-//     uint8_t CF;
-//     uint8_t T;
-//     uint8_t PD3;
-//     uint8_t PD0;
-//     uint8_t FRM;
-//     uint8_t PRD;
-
-//     uint8_t TYPE;
-//     uint8_t HWV;
-
-//     uint8_t DT;
-//     uint8_t AM;
-//     uint8_t TRIG;
-//     uint8_t X2;
-//     uint8_t TL_MAG;
-
-//     uint8_t IICADR;
-//     uint8_t PR;
-//     uint8_t CA;
-//     uint8_t INT;
-//     uint8_t MODE;
-
-//     uint8_t BX_MSB;
-//     uint8_t BY_MSB;
-//     uint8_t BZ_MSB;
-//     uint8_t TEMP_MSB;
-//     uint8_t BX_LSB;
-//     uint8_t BY_LSB;
-//     uint8_t TEMP_LSB;
-//     uint8_t BZ_LSB;
-//     uint8_t TEMP2;
-
-//     uint8_t CH;
-//     uint8_t PD;
-//     uint8_t FAST;
-//     uint8_t LOW_POWER;
-//     uint8_t LP;
-//     uint8_t Temp_NEN;
-//     uint8_t PT;
-//     uint8_t R_RES_1;
-//     uint8_t R_RES_2;
-//     uint8_t R_RES_3;
-//     uint8_t W_RES_0;
-//     uint8_t W_RES_1;
-//     uint8_t W_RES_2;
-//     uint8_t W_RES_3;
-// } CommonBitfields_ts;
-
-
-// typedef struct CommonRegisters_ts {
-//     uint8_t DIAG;
-//     uint8_t CONFIG;
-//     uint8_t MOD1;
-//     uint8_t MOD2;
-//     uint8_t VER;
-// } CommonRegisters_ts;
+    TLx493D_IsFunctionalFuncPtr                 isFunctional;
+} TLx493D_CommonFunctions_ts;
 
 
 /*
   Structure to store all relevant infos for a particular sensor.
 */
-typedef struct Sensor_ts {
-    uint8_t                 *regMap;
-    Register_ts             *regDef;
-    // CommonBitfields_ts       commonBitfields;
-    // CommonRegisters_ts       commonRegisters;
-    CommonFunctions_ts      *functions;
+typedef struct TLx493D_ts {
+    uint8_t                         *regMap;
+    TLx493D_Register_ts             *regDef;
+    TLx493D_CommonFunctions_ts      *functions;
 
-    ComLibraryFunctions_ts  *comLibIF;
-    ComLibraryParameters_ts  comLibIFParams;
-    ComLibraryObject_ts      comLibObj;
+    TLx493D_ComLibraryFunctions_ts  *comLibIF;
+    TLx493D_ComLibraryParameters_ts  comLibIFParams;
+    TLx493D_ComLibraryObject_ts      comLibObj;
 
-    uint8_t                               regMapSize;
-    SupportedSensorTypes_te               sensorType;
-    SupportedComLibraryInterfaceTypes_te  comIFType;
-} Sensor_ts;
+    uint8_t                                       regMapSize;
+    TLx493D_SupportedSensorTypes_te               sensorType;
+    TLx493D_SupportedComLibraryInterfaceTypes_te  comIFType;
+} TLx493D_ts;
 
 
 #endif // TLX493D_TYPES_H

@@ -1,5 +1,5 @@
-#ifndef SPI_LIB_HPP
-#define SPI_LIB_HPP
+#ifndef TLX493D_SPI_LIB_HPP
+#define TLX493D_SPI_LIB_HPP
 
 
 // std includes
@@ -8,10 +8,6 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-// project cpp includes
-#include "arduino_defines.h"
-
-#include "Logger.h"
 
 template<typename ComIF> class SPI_Lib {
 };
@@ -75,4 +71,4 @@ template<> class SPI_Lib<SPIClass> {
 };
 
 
-#endif // SPI_LIB_HPP
+#endif // TLX493D_SPI_LIB_HPP

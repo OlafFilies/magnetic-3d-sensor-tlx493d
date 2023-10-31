@@ -17,8 +17,6 @@
 
 extern "C" {
     #include "tlx493d_types.h"
-    // #include "tlx493d_gen_1_common_defines.h"
-    // #include "tlx493d_gen_1_common.h"
     #include "tlx493d_gen_2_common_defines.h"
     #include "tlx493d_gen_2_common.h"
     #include "tlx493d_gen_3_common_defines.h"
@@ -38,23 +36,19 @@ extern "C" {
     #include "TLx493D_P3I8.h"
 }
 
-// extern "C" void frameworkReset(Sensor_ts *sensor);
+
+TLx493D_ts dut;
 
 
-Sensor_ts dut;
+TLx493D_ts a1b6;
 
+TLx493D_ts a2b6;
+TLx493D_ts p2b6;
+TLx493D_ts w2b6;
+TLx493D_ts w2bw;
 
-// void printRegMap2(Sensor_ts *sensor) {
-//     Serial.print("regMap : "); 
- 
-//     for(int i = 0; i < sensor->regMapSize; ++i) {
-//         Serial.print("  0x");
-//         Serial.print(sensor->regMap[i], HEX);
-//         // Serial.print(sensor->regMap[i], BIN);
-//     }
- 
-//     Serial.println();
-//  }
+TLx493D_ts p3b6;
+TLx493D_ts p3i8;
 
 
 #define USE_I2C  (1)
@@ -77,12 +71,33 @@ void setup() {
     digitalWrite(POWER_PIN_HIGH, HIGH);
 
 
-    // init(&dut, TLx493D_A2B6_e);
-    // init(&dut, TLx493D_P2B6_e);
-    init(&dut, TLx493D_W2B6_e);
-    // init(&dut, TLx493D_P3B6_e);
+    // tlx493d_init(&dut, TLx493D_A1B6_e);
+    // tlx493d_init(&dut, TLx493D_A2B6_e);
+    // tlx493d_init(&dut, TLx493D_P2B6_e);
+    tlx493d_init(&dut, TLx493D_W2B6_e);
+    // tlx493d_init(&dut, TLx493D_W2BW_e);
+    // tlx493d_init(&dut, TLx493D_P3B6_e);
 
-    initComLibIF(&dut, Wire);
+    TLx493D_initCommunication(&dut, Wire);
+    tlx493d_setDefaultConfig(&dut);
+
+
+    // tlx493d_init(&a1b6, TLx493D_A1B6_e);
+    tlx493d_init(&a2b6, TLx493D_A2B6_e);
+    // tlx493d_init(&p2b6, TLx493D_P2B6_e);
+    tlx493d_init(&w2b6, TLx493D_W2B6_e);
+    // tlx493d_init(&w2bw, TLx493D_W2BW_e);
+    // tlx493d_init(&p3b6, TLx493D_P3B6_e);
+
+    // TLx493D_initCommunication(&a1b6, Wire);
+    TLx493D_initCommunication(&a2b6, Wire);
+    tlx493d_setDefaultConfig(&a2b6);
+    // TLx493D_initCommunication(&p2b6, Wire);
+    TLx493D_initCommunication(&w2b6, Wire);
+    tlx493d_setDefaultConfig(&w2b6);
+    // TLx493D_initCommunication(&w2bw, Wire);
+    // TLx493D_initCommunication(&p3b6, Wire);
+
 
 #else
 
@@ -94,23 +109,25 @@ void setup() {
     // pinMode(POWER_PIN_LOW, OUTPUT);
     // digitalWrite(POWER_PIN_LOW, LOW);
 
-    init(&dut, TLx493D_P3I8_e);
-    initComLibIF(&dut, SPI);
+    tlx493d_init(&dut, TLx493D_P3I8_e);
+    TLx493D_initCommunication(&dut, SPI);
+
+
+    tlx493d_init(&p3i8, TLx493D_P3I8_e);
+    TLx493D_initCommunication(&p3i8, SPI);
 
 #endif
 
     digitalWrite(POWER_PIN_LOW, LOW);
-    setDefaultConfig(&dut);
+    // tlx493d_setDefaultConfig(&dut);
     digitalWrite(POWER_PIN_LOW, HIGH);
     
 
     // Serial.println("setDefaultConfig done.");
-    // printRegMap(&dut);
     // // frameworkReset(&dut);
     // Serial.println("updateRegisterMap ...");
     // readRegisters(&dut);
     // Serial.println("updateRegisterMap done.");
-    // printRegMap(&dut);
     // setDefaultConfig(&dut);
     // Serial.println("2 setDefaultConfig done.");
 
@@ -120,26 +137,12 @@ void setup() {
 
 
 void loop() {
-// // logMsg("logMsg  INFO : ", 11.11, 1, 2.330, "hallo !");
-// // info("%d  0x%x  '%f'  %c  %s\n", 11.11, 1, 2, 2.330, 'n', "hallo !");
-
-// info("'%d'\n", 30);
-
-// info("%d  %d  %c  %s\n", 1, 3, 'l', "hallo !");
-// info("%d  '%f'\n", 30, 3.0);
-// info("'%f'\n", (double) 3.0);
-// info("'%lf'\n", 3.0);
-// info("'%lf'\n", (double) 3);
-// info("%d  '%e'  %s\n", 1, 2.33, "hallo !");
-// warn("%d  0x%x  '%f'  %s\n", 1, 2, 2.330, "hallo !");
-// error("%d  0x%x  '%g'  %c  %s\n", 1, 2, 2.330, 'n', "hallo !");
-
     double temp = 0.0;
     double valX = 0, valY = 0, valZ = 0;
     Serial.println("loop ...");
 
     // digitalWrite(POWER_PIN_LOW, LOW);
-    Serial.print(true == getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
+    Serial.print(true == tlx493d_getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
     // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Temperature is: ");
@@ -147,7 +150,7 @@ void loop() {
     Serial.println("°C");
 
     // digitalWrite(POWER_PIN_LOW, LOW);
-    Serial.print(true == getMagneticField(&dut, &valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
+    Serial.print(true == tlx493d_getMagneticField(&dut, &valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
     // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Value X is: ");
@@ -160,34 +163,30 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    Serial.print(true == isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
-    Serial.print(true == hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
-    Serial.print(true == hasValidTemperatureData(&dut) ? "hasValidTemperatureData\n" : "NOT hasValidTemperatureData\n");
-    Serial.print(true == hasValidMagneticFieldData(&dut) ? "hasValidMagneticFieldData\n" : "NOT hasValidFieldData\n");
+    Serial.print(true == tlx493d_isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
+    Serial.print(true == tlx493d_hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
+    Serial.print(true == tlx493d_hasValidTemperatureData(&dut) ? "hasValidTemperatureData\n" : "NOT hasValidTemperatureData\n");
+    Serial.print(true == tlx493d_hasValidMagneticFieldData(&dut) ? "hasValidMagneticFieldData\n" : "NOT hasValidFieldData\n");
 
 
     Serial.print(true == TLx493D_A2B6_hasValidIICadr(&dut) ? "TLx493D_A2B6_hasValidIICadr\n" : "NOT TLx493D_A2B6_hasValidIICadr\n");
     Serial.print(true == TLx493D_A2B6_hasWakeup(&dut) ? "TLx493D_A2B6_hasWakeup\n" : "NOT TLx493D_A2B6_hasWakeup\n");
 
 
-    // printRegMap(&dut);
-    // Serial.print("\n");
-
-    // setIICAddress(&dut, GEN_2_STD_IIC_ADDR_A1);
+    // tlx493d_setIICAddress(&dut, GEN_2_STD_IIC_ADDR_A1);
     // Serial.print(dut.comLibIFParams.i2c_params.address << 1);
     // Serial.print(true == TLx493D_A2B6_hasValidIICadr(&dut) ? "TLx493D_A2B6_hasValidIICadr\n" : "NOT TLx493D_A2B6_hasValidIICadr\n");
 
-// gen_2_setPowerMode(&dut, 0b00);
-//     delay(1000);
-// gen_2_setPowerMode(&dut, 0b01);
-//     delay(1000);
+    // tlx493d_setPowerMode(&dut, 0b00);
+    // delay(1000);
+    // tlx493d_setPowerMode(&dut, 0b01);
+    // delay(1000);
 
-// TLx493D_A2B6_disableCollisionAvoidance(&dut);
-// gen_2_setPowerMode(&dut, 0b11);
-//    delay(1000);
-// TLx493D_A2B6_enableCollisionAvoidance(&dut);
+    // TLx493D_A2B6_disableCollisionAvoidance(&dut);
+    // tlx493d_setPowerMode(&dut, 0b11);
+    // delay(1000);
+    // TLx493D_A2B6_enableCollisionAvoidance(&dut);
 
-    // printRegMap2(&dut);
     printRegisters(dut.regMap, dut.regMapSize);
     Serial.print("\n");
 

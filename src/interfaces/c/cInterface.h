@@ -1,5 +1,5 @@
-#ifndef C_INTERFACE_H
-#define C_INTERFACE_H
+#ifndef TLx493D_C_INTERFACE_H
+#define TLx493D_C_INTERFACE_H
 
 // project c includes
 // common to all sensors
@@ -13,79 +13,82 @@ extern "C" {
 #endif
 
 
-bool init(Sensor_ts *sensor, SupportedSensorTypes_te sensorType);
-bool deinit(Sensor_ts *sensor);
+// functions related to the initialization of the sensor data structure
+bool tlx493d_init(TLx493D_ts *sensor, TLx493D_SupportedSensorTypes_te sensorType);
+bool tlx493d_deinit(TLx493D_ts *sensor);
 
-bool readRegisters(Sensor_ts *sensor);
-bool setDefaultConfig(Sensor_ts *sensor);
 
-bool setPowerMode(Sensor_ts *sensor, uint8_t mode);
-// bool setPowerMode(Sensor_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
+// functions related to the retrieval of data from the sensor
+bool tlx493d_readRegisters(TLx493D_ts *sensor);
 
-bool setIICAddress(Sensor_ts *sensor, uint8_t addr);
-// bool setIICAddress(Sensor_ts *sensor, enum <possible combinations> addr); // Gen. 1 and 2
+bool tlx493d_getTemperature(TLx493D_ts *sensor, double *temp);
+bool tlx493d_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
+bool tlx493d_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 
-bool getTemperature(Sensor_ts *sensor, double *temp);
-bool getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
-bool getMagneticFieldAndTemperature(Sensor_ts *sensor, double *x, double *y, double *z, double *temp);
 
-// bool selectMeasuredValues(Sensor_ts *sensor, enum <possible combinations> mVals); // Bx/By/Bz, Bx/By, Bx/By/Temp, ...
+// functions related to the "Config" register
+// bool selectMeasuredValues(TLx493D_ts *sensor, enum <possible combinations> mVals); // Bx/By/Bz, Bx/By, Bx/By/Temp, ...
 // or do it separately ? Like :
-bool enableTemperatureMeasurement(Sensor_ts *sensor);
-bool disableTemperatureMeasurement(Sensor_ts *sensor);
-bool enableAngularMeasurement(Sensor_ts *sensor);
-bool disableAngularMeasurement(Sensor_ts *sensor);
+bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor);
+bool tlx493d_disableTemperatureMeasurement(TLx493D_ts *sensor);
+
+bool tlx493d_enableAngularMeasurement(TLx493D_ts *sensor);
+bool tlx493d_disableAngularMeasurement(TLx493D_ts *sensor);
+
+bool tlx493d_setTrigger(TLx493D_ts *sensor, uint8_t trigger);
+
+bool tlx493d_setRange(TLx493D_ts *sensor, TLx493D_RangeTypes_te range);
+
+
+// functions related to the "Mod1" and "Mod2" registers
+bool tlx493d_setDefaultConfig(TLx493D_ts *sensor);
+
+bool tlx493d_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te addr); // Gen. 1 and 2
+
+bool tlx493d_enableInterrupt(TLx493D_ts *sensor);
+bool tlx493d_disableInterrupt(TLx493D_ts *sensor);
+
+bool tlx493d_enableCollisionAvoidance(TLx493D_ts *sensor);
+bool tlx493d_disableCollisionAvoidance(TLx493D_ts *sensor);
+
+bool tlx493d_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
+// bool tlx493d_setPowerMode(TLx493D_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
 
 // value of update rate is sensor / generation specific !
-// bool setUpdateRate(Sensor_ts *sensor, enum <possible combinations> rate);
-bool setUpdateRate(Sensor_ts* sensor, uint8_t bit);
+// bool tlx493d_setUpdateRate(TLx493D_ts *sensor, enum <possible combinations> rate);
+bool tlx493d_setUpdateRate(TLx493D_ts* sensor, uint8_t bit);
 
 
-// bool setRange(Sensor_ts *sensor, enum <possible combinations> range); // full, short, extreme short : whatever is supported
+// functions related to the "Diag" register
+bool tlx493d_hasValidData(TLx493D_ts *sensor);
+bool tlx493d_hasValidTemperatureData(TLx493D_ts *sensor);
+bool tlx493d_hasValidMagneticFieldData(TLx493D_ts *sensor);
 
-// bool setInterruptAndCollisionAvoidance(Sensor_ts *sensor, enum <possible combinations> eVal);
-bool enableInterrupt(Sensor_ts *sensor);
-bool disableInterrupt(Sensor_ts *sensor);
-// bool enableCollisionAvoidance(Sensor_ts *sensor);
-// bool disableCollisionAvoidance(Sensor_ts *sensor);
+bool tlx493d_isFunctional(TLx493D_ts *sensor);
 
-bool isWakeUpActive(Sensor_ts *sensor);
-bool enableWakeUpMode(Sensor_ts *sensor);
-bool disableWakeUpMode(Sensor_ts *sensor);
 
-bool setLowerWakeUpThresholdX(Sensor_ts *sensor, int16_t threshold);
-bool setLowerWakeUpThresholdY(Sensor_ts *sensor, int16_t threshold);
-bool setLowerWakeUpThresholdZ(Sensor_ts *sensor, int16_t threshold);
+// functions available only to a subset of sensors with wake-up functionality
+// functions related to the "WU" register
+bool tlx493d_isWakeUpActive(TLx493D_ts *sensor);
+bool tlx493d_enableWakeUpMode(TLx493D_ts *sensor);
+bool tlx493d_disableWakeUpMode(TLx493D_ts *sensor);
 
-bool setUpperWakeUpThresholdX(Sensor_ts *sensor, int16_t threshold);
-bool setUpperWakeUpThresholdY(Sensor_ts *sensor, int16_t threshold);
-bool setUpperWakeUpThresholdZ(Sensor_ts *sensor, int16_t threshold);
+bool tlx493d_setLowerWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold);
+bool tlx493d_setLowerWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold);
+bool tlx493d_setLowerWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
 
-bool setWakeUpThresholds(Sensor_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
+bool tlx493d_setUpperWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold);
+bool tlx493d_setUpperWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold);
+bool tlx493d_setUpperWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
+
+bool tlx493d_setWakeUpThresholds(TLx493D_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
 // thesholds im mT, to be converted to proper format
-bool setWakeupThesholds(Sensor_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
-
-bool softReset(Sensor_ts *sensor);
-
-// Severin : nice to have, set proper defaults
-// set register bits
-// bool setTrigger(Sensor_ts *sensor, uint8_t trigger);
-// trigger bits shall be ORed to register address always by shifting left by 5 -> default is 0b000
-// bool setTriggerBits(Sensor_ts *sensor, uint8_t triggerBits);
-
-// diagnosis functions
-bool hasValidData(Sensor_ts *sensor);
-bool hasValidTemperatureData(Sensor_ts *sensor);
-bool hasValidMagneticFieldData(Sensor_ts *sensor);
-
-bool isFunctional(Sensor_ts *sensor);
+bool tlx493d_setWakeupThesholds(TLx493D_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 
 // utilities
-const char *getTypeAsString(SupportedSensorTypes_te sensorType);
-
-
-// functions available only to a subset of sensors
+bool tlx493d_softReset(TLx493D_ts *sensor);
+const char *tlx493d_getTypeAsString(TLx493D_ts *sensor);
 
 
 #ifdef __cplusplus
@@ -95,4 +98,4 @@ const char *getTypeAsString(SupportedSensorTypes_te sensorType);
 #endif
 
 
-#endif // C_INTERFACE_H
+#endif // TLx493D_C_INTERFACE_H

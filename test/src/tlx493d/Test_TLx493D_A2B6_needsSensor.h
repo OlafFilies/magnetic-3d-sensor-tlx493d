@@ -8,7 +8,7 @@ void TLx493D_A2B6_needsSensor_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static Sensor_ts dut;
+static TLx493D_ts dut;
 
 
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
@@ -50,7 +50,7 @@ TEST_TEAR_DOWN(TLx493D_A2B6_needsSensor)
 
 TEST(TLx493D_A2B6_needsSensor, readRegisters)
 {
-    TEST_ASSERT_EQUAL( true, tlx493d_readRegisters(&dut) );
+    TEST_ASSERT_EQUAL( true, tlx493d_common_readRegisters(&dut) );
 //    TEST_ASSERT_EQUAL( true, readRegisters(&dut) );
 }
 
@@ -59,7 +59,7 @@ TEST(TLx493D_A2B6_needsSensor, getTemperature)
 {
     double temperature = 0.0;
 
-    TEST_ASSERT_EQUAL( true, tlx493d_getTemperature(&dut, &temperature));
+    TEST_ASSERT_EQUAL( true, tlx493d_common_getTemperature(&dut, &temperature));
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, temperature );
 }
 

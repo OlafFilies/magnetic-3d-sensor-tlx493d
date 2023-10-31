@@ -16,7 +16,7 @@
 #include "SPI_Lib.hpp"
 
 
-extern "C" bool initSPI(Sensor_ts *sensor) {
+extern "C" bool TLx493D_initSPI(TLx493D_ts *sensor) {
     sensor->comLibObj.spi_obj->spi->init();
 
     sensor->comLibObj.spi_obj->spi->getComIF().setDataMode(SPI_MODE2);
@@ -27,36 +27,36 @@ extern "C" bool initSPI(Sensor_ts *sensor) {
 }
 
 
-extern "C" bool deinitSPI(Sensor_ts *sensor) {
+extern "C" bool TLx493D_deinitSPI(TLx493D_ts *sensor) {
     sensor->comLibObj.spi_obj->spi->deinit();
     return true;
 }
 
 
-extern "C" bool transferSPI(Sensor_ts *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
+extern "C" bool TLx493D_transferSPI(TLx493D_ts *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
     return sensor->comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
 }
 
 
-ComLibraryFunctions_ts  comLibIF_spi = {
-                                            .init     = { .spi_init     = initSPI },
-                                            .deinit   = { .spi_deinit   = deinitSPI },
-                                            .transfer = { .spi_transfer = transferSPI },
+TLx493D_ComLibraryFunctions_ts  comLibIF_spi = {
+                                            .init     = { .spi_init     = TLx493D_initSPI },
+                                            .deinit   = { .spi_deinit   = TLx493D_deinitSPI },
+                                            .transfer = { .spi_transfer = TLx493D_transferSPI },
                                        };
 
 
-// extern "C" void setSPIParameters(Sensor_ts *sensor, uint8_t addr) {
+// extern "C" void setSPIParameters(TLx493D_ts *sensor, uint8_t addr) {
 //     sensor->comLibIFParams.spi_params.address = addr >> 1;
 // }
 
 
-bool initComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi) {
-    if( sensor->comIFType != SPI_e ) {
+bool TLx493D_initCommunication(TLx493D_ts *sensor, SPI_Lib<SPIClass> &spi) {
+    if( sensor->comIFType != TLx493D_SPI_e ) {
         return false;
     }
 
     // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
-    sensor->comLibObj.spi_obj      = (SPIObject_ts *) malloc(sizeof(SPIObject_ts));
+    sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_ts *) malloc(sizeof(TLx493D_SPIObject_ts));
     sensor->comLibObj.spi_obj->spi = &spi;
     sensor->comLibIF               = &comLibIF_spi;
 
@@ -68,13 +68,13 @@ bool initComLibIF(Sensor_ts *sensor, SPI_Lib<SPIClass> &spi) {
 
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
 // extern "C" 
-bool initComLibIF(Sensor_ts *sensor, SPIClass &spi) {
-    if( sensor->comIFType != SPI_e ) {
+bool TLx493D_initCommunication(TLx493D_ts *sensor, SPIClass &spi) {
+    if( sensor->comIFType != TLx493D_SPI_e ) {
         return false;
     }
 
     // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
-    sensor->comLibObj.spi_obj      = (SPIObject_ts *) malloc(sizeof(SPIObject_ts));
+    sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_ts *) malloc(sizeof(TLx493D_SPIObject_ts));
     sensor->comLibObj.spi_obj->spi = new SPI_Lib<SPIClass>(spi);
     sensor->comLibIF               = &comLibIF_spi;
 

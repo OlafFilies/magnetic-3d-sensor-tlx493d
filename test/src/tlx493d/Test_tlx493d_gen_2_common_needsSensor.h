@@ -36,13 +36,13 @@ TEST_IFX(SensorsGen2Common_needsSensor, concatBytes)
 {
     int16_t result = 0;
 
-    TEST_ASSERT(tlx493d_readRegisters(&dut));
+    TEST_ASSERT(tlx493d_common_readRegisters(&dut));
 
-    // tlx493d_concatBytes(&dut, 0x10, 0x11, &result);
+    // tlx493d_common_concatBytes(&dut, 0x10, 0x11, &result);
 
     // TEST_ASSERT_EQUAL_INT16(0, result);
 
-    // tlx493d_concatBytes(&dut, 0x13, 0x10, &result);
+    // tlx493d_common_concatBytes(&dut, 0x13, 0x10, &result);
 
     // TEST_ASSERT_EQUAL_INT16(2, result);
 }

@@ -2,7 +2,6 @@
 #define TLX493D_GEN_2_COMMON_DEFINES_H
 
 // std includes
-#include <stdint.h>
 
 // General defines
 #define GEN_2_MAG_FIELD_MULT            0.13

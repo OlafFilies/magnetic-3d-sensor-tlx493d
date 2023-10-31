@@ -25,7 +25,7 @@
 #include "TLE493D_A2B6.h"
 
 
-Sensor_ts a2b6;
+TLx493D_ts a2b6;
 
 
 void initTests(void) {

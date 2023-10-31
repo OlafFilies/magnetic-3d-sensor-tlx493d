@@ -30,7 +30,7 @@ TEST_IFX(SensorsCommonFunctions, getTemperature)
 {
     double temperature = 0.0;
 
-    TEST_ASSERT_EQUAL( true, tlx493d_getTemperature(&dut, &temperature));
+    TEST_ASSERT_EQUAL( true, tlx493d_common_getTemperature(&dut, &temperature));
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, temperature );
 }
 

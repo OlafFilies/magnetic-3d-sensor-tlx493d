@@ -39,7 +39,7 @@
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P2B6_init(Sensor_ts *sensor);
+bool TLx493D_P2B6_init(TLx493D_ts *sensor);
 
 
 /**
@@ -50,7 +50,7 @@ bool TLx493D_P2B6_init(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P2B6_deinit(Sensor_ts *sensor);
+bool TLx493D_P2B6_deinit(TLx493D_ts *sensor);
 
 
 /**
@@ -62,7 +62,7 @@ bool TLx493D_P2B6_deinit(Sensor_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P2B6_getTemperature(Sensor_ts *sensor, double *temp);
+bool TLx493D_P2B6_getTemperature(TLx493D_ts *sensor, double *temp);
 
 
 /**
@@ -76,7 +76,7 @@ bool TLx493D_P2B6_getTemperature(Sensor_ts *sensor, double *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_P2B6_calculateMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+void TLx493D_P2B6_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 
 /**
  * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLx493D-P2B6 magnetic 3D sensor
@@ -89,7 +89,7 @@ void TLx493D_P2B6_calculateMagneticField(Sensor_ts *sensor, double *x, double *y
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_P2B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, double *z);
+bool TLx493D_P2B6_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 
 /**
  * @brief Sets the default configuration for the XENSIV™ TLx493D-P2B6 magnetic 3D sensor
@@ -99,7 +99,7 @@ bool TLx493D_P2B6_getMagneticField(Sensor_ts *sensor, double *x, double *y, doub
  * @return true - If successful
  * @return false - If unsuccessful 
  */
-bool TLx493D_P2B6_setDefaultConfig(Sensor_ts *sensor);
+bool TLx493D_P2B6_setDefaultConfig(TLx493D_ts *sensor);
 
 
 // /**
@@ -109,6 +109,6 @@ bool TLx493D_P2B6_setDefaultConfig(Sensor_ts *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-// bool TLx493D_P2B6_updateRegisterMap(Sensor_ts *sensor);
+// bool TLx493D_P2B6_updateRegisterMap(TLx493D_ts *sensor);
 
 #endif // TLX493D_P2B6_H

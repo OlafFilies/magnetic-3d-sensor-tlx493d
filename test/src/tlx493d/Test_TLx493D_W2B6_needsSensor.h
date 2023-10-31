@@ -7,7 +7,7 @@ void TLx493D_W2B6_needsSensor_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static Sensor_ts dut;
+static TLx493D_ts dut;
 
 
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
@@ -44,9 +44,9 @@ TEST(TLx493D_W2B6_needsSensor, concatBytes)
 {
     int16_t result = 0;
 
-    TEST_ASSERT(tlx493d_readRegisters(&dut));
-    TEST_ASSERT(tlx493d_readRegisters(&dut));
-    TEST_ASSERT(tlx493d_readRegisters(&dut));
+    TEST_ASSERT(tlx493d_common_readRegisters(&dut));
+    TEST_ASSERT(tlx493d_common_readRegisters(&dut));
+    TEST_ASSERT(tlx493d_common_readRegisters(&dut));
 }
 
 

@@ -1,5 +1,5 @@
-#ifndef TWOWIRE_LIB_HPP
-#define TWOWIRE_LIB_HPP
+#ifndef TLX493D_TWOWIRE_LIB_HPP
+#define TLX493D_TWOWIRE_LIB_HPP
 
 
 // std includes
@@ -7,9 +7,6 @@
 // Arduino includes
 #include <Arduino.h>
 #include <Wire.h>
-
-// project cpp includes
-#include "arduino_defines.h"
 
 
 template<typename ComIF> class TwoWire_Lib {
@@ -35,9 +32,6 @@ template<> class TwoWire_Lib<TwoWire> {
 
 
         bool transfer(uint8_t i2cAddress, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
-            // TODO: get channel from used Wire object !
-           	//  XMC_I2C_CH_ClearStatusFlag(XMC_I2C0_CH1, 0xFFFFFFFF);
-
             if( (txLen > 0) && (txBuffer != NULL) ) {
                 i2c.beginTransmission(i2cAddress);
 
@@ -78,4 +72,4 @@ template<> class TwoWire_Lib<TwoWire> {
 };
 
 
-#endif // TWOWIRE_LIB_HPP
+#endif // TLX493D_TWOWIRE_LIB_HPP

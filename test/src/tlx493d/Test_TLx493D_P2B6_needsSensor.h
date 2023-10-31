@@ -7,7 +7,7 @@ void TLx493D_P2B6_needsSensor_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static Sensor_ts dut;
+static TLx493D_ts dut;
 
 
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
