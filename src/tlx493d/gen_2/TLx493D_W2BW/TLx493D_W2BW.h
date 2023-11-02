@@ -125,7 +125,7 @@ bool TLx493D_W2BW_setDefaultConfig(TLx493D_ts *sensor);
 
 
 bool TLx493D_W2BW_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
-bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address);
+bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address);
 bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, uint8_t triggerBits);
 
 // /**
@@ -208,7 +208,7 @@ bool TLx493D_W2BW_setUpperWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold
 bool TLx493D_W2BW_setUpperWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold);
 bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
 
-bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_ts *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
+bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_ts *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
 
 
 #endif /** TLX493D_W2BW_H */

@@ -160,8 +160,9 @@ TLx493D_CommonFunctions_ts TLx493D_A1B6_commonFunctions = {
                                 .setDefaultConfig      = TLx493D_A1B6_setDefaultConfig,
                                 .readRegisters         = TLx493D_A1B6_readRegisters,
 
-                                .enableTemperatureMeasurement     = TLx493D_A1B6_enableTemperatureMeasurement,
-                                .disableTemperatureMeasurement    = TLx493D_A1B6_disableTemperatureMeasurement, //TODO: rebase common functions as per new common functions struct 
+                                // TODO: Jens : use selectMeasureValues
+                                // .enableTemperatureMeasurement     = TLx493D_A1B6_enableTemperatureMeasurement,
+                                // .disableTemperatureMeasurement    = TLx493D_A1B6_disableTemperatureMeasurement, //TODO: rebase common functions as per new common functions struct 
 
                                 .setIICAddress         = TLx493D_A1B6_setIICAddress,
 
@@ -353,7 +354,7 @@ bool TLE493D_A2B6_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, 
     return false;
 }
 
-bool TLx493D_A1B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te addr) {
+bool TLx493D_A1B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr) {
 // bool TLx493D_A1B6_setIICAddress(TLx493D_ts *sensor, TLx493D_StandardIICAddresses_te addr) {
     uint8_t bitfieldValue = 0;
     uint8_t deviceAddress = 0;

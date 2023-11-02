@@ -75,7 +75,7 @@ bool TLx493D_A1B6_disableParityTest(TLx493D_ts *sensor);
 void TLE493D_A2B6_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 bool TLE493D_A2B6_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 
-bool TLx493D_A1B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te addr);
+bool TLx493D_A1B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr);
 // bool TLx493D_A1B6_setIICAddress(TLx493D_ts *sensor, TLx493D_StandardIICAddresses_te addr);
 
 bool TLx493D_A1B6_setLowPowerPeriod(TLx493D_ts *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t lp_period);

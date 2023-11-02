@@ -40,7 +40,7 @@ bool tlx493d_gen_2_setDefaultConfig(TLx493D_ts *sensor, uint8_t configREG, uint8
 }
 
 
-bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, uint8_t mode) {
+bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_te mode) {
     if( (mode != 0b10) && (mode <= 0b11) ){
         tlx493d_common_setBitfield(sensor, modeBF, mode);
         tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
@@ -53,7 +53,7 @@ bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF
 }
 
 
-bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, TLx493D_IICAddresses_te addr) {
+bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, TLx493D_IICAddressType_te addr) {
 // bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, StandardIICAddresses_te addr) {
     uint8_t bitfieldValue = 0;
     uint8_t deviceAddress = 0;
@@ -146,7 +146,7 @@ bool tlx493d_gen_2_setAngularMeasurement(TLx493D_ts *sensor, uint8_t amBF, uint8
 /***
  * 
 */
-bool tlx493d_gen_2_setUpdateRate(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF, uint8_t ur) {
+bool tlx493d_gen_2_setUpdateRate(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_te ur) {
     uint8_t mod1 = sensor->regDef[fpBF].address;
 
     tlx493d_common_setBitfield(sensor, prdBF, ur);

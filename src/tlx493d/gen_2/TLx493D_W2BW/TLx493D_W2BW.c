@@ -87,11 +87,11 @@ TLx493D_Register_ts TLx493D_W2BW_regDef[] = {
     {HWV,       TLx493D_READ_MODE_e,        0x16,   0x0F,   0,  4}
 };
 
-typedef enum {
-               LOW_POWER_MODE         = 0x00,
-               MASTER_CONTROLLED_MODE = 0x01,
-               RESERVED_MODE          = 0x10,
-               FAST_MODE              = 0x11 } TLE493D_A2B6_modes_te;
+// typedef enum {
+//                LOW_POWER_MODE         = 0x00,
+//                MASTER_CONTROLLED_MODE = 0x01,
+//                RESERVED_MODE          = 0x10,
+//                FAST_MODE              = 0x11 } TLE493D_A2B6_modes_te;
 
 
 typedef enum { 
@@ -118,8 +118,8 @@ TLx493D_CommonFunctions_ts TLx493D_W2BW_commonFunctions = {
     .readRegisters                      = tlx493d_common_readRegisters,
     // .transfer                           = TLx493D_W2BW_transferRegisterMap,
 
-    .enableTemperatureMeasurement       = TLx493D_W2BW_enableTemperatureMeasurement,
-    .disableTemperatureMeasurement      = TLx493D_W2BW_disableTemperatureMeasurement,
+    // .enableTemperatureMeasurement       = TLx493D_W2BW_enableTemperatureMeasurement,
+    // .disableTemperatureMeasurement      = TLx493D_W2BW_disableTemperatureMeasurement,
 
     .enableInterrupt                    = TLx493D_W2BW_enableInterrupt,
     .disableInterrupt                   = TLx493D_W2BW_disableInterrupt,
@@ -147,7 +147,7 @@ TLx493D_CommonFunctions_ts TLx493D_W2BW_commonFunctions = {
     .setUpperWakeUpThresholdY           = TLx493D_W2BW_setUpperWakeUpThresholdY,
     .setUpperWakeUpThresholdZ           = TLx493D_W2BW_setUpperWakeUpThresholdZ,
 
-    .setWakeUpThresholds                = TLx493D_W2BW_setWakeUpThresholds
+    .setWakeUpThresholdsAsInteger       = TLx493D_W2BW_setWakeUpThresholdsAsInteger
 };
 
 bool TLx493D_W2BW_init(TLx493D_ts *sensor) {
@@ -324,7 +324,7 @@ bool TLx493D_W2BW_setPowerMode(TLx493D_ts *sensor, uint8_t mode) {
 }
 
 
-bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address) {
+bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address) {
     return tlx493d_gen_2_setIICAddress(sensor, IICADR, FP, address);
 }
 
@@ -587,7 +587,7 @@ bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold
     return transfer(sensor, tx_buffer, sizeof(tx_buffer), NULL, 0);
 }
 
-bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
     bool returnValue = TLx493D_W2BW_setLowerWakeUpThresholdX(sensor, xl_th);
     returnValue &= TLx493D_W2BW_setUpperWakeUpThresholdX(sensor, xh_th);
 

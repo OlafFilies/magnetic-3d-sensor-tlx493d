@@ -23,7 +23,7 @@ bool TLx493D_A2B6_init(TLx493D_ts *sensor);
 bool TLx493D_A2B6_deinit(TLx493D_ts *sensor);
 
 bool TLx493D_A2B6_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
-bool TLx493D_A2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address);
+bool TLx493D_A2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address);
 
 void TLx493D_A2B6_calculateTemperature(TLx493D_ts *sensor, double *temp);
 bool TLx493D_A2B6_getTemperature(TLx493D_ts *sensor, double *temp);
@@ -46,6 +46,10 @@ bool TLx493D_A2B6_disableTemperatureMeasurement(TLx493D_ts *sensor);
 
 bool TLx493D_A2B6_enable1ByteReadMode(TLx493D_ts *sensor);
 bool TLx493D_A2B6_disable1ByteReadMode(TLx493D_ts *sensor);
+
+bool TLx493D_A2B6_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te mVals);
+bool TLx493D_A2B6_selectSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te sens);
+bool TLx493D_A2B6_setTriggerOptions(TLx493D_ts *sensor, uint8_t trig);
 
 // bool TLx493D_A2B6_enableCollisionAvoidance(TLx493D_ts *sensor);
 // bool TLx493D_A2B6_disableCollisionAvoidance(TLx493D_ts *sensor);

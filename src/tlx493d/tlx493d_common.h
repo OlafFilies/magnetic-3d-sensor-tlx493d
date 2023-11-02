@@ -14,7 +14,7 @@
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_init(TLx493D_ts *sensor, uint8_t regMapSize, TLx493D_Register_ts *regDef, TLx493D_CommonFunctions_ts *commonFuncs, TLx493D_SupportedSensorTypes_te sensorType, TLx493D_SupportedComLibraryInterfaceTypes_te comIFType);
+bool tlx493d_common_init(TLx493D_ts *sensor, uint8_t regMapSize, TLx493D_Register_ts *regDef, TLx493D_CommonFunctions_ts *commonFuncs, TLx493D_SupportedSensorType_te sensorType, TLx493D_SupportedComLibraryInterfaceType_te comIFType);
 
 
 // /**

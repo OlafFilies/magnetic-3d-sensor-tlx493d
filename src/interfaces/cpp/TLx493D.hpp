@@ -18,8 +18,8 @@ extern "C" {
 // keyword "export" not supported by current Arduino C++ compiler, therefore definitions must go here. Update C++ compiler to newer version ???
 // export
 template<typename BoardSupportClass, template<typename> typename ComLibrary, typename ComIF,
-         TLx493D_SupportedSensorTypes_te sensorType,
-         TLx493D_SupportedComLibraryInterfaceTypes_te comLibIFType = TLx493D_I2C_e> class TLx493D {
+         TLx493D_SupportedSensorType_te sensorType,
+         TLx493D_SupportedComLibraryInterfaceType_te comLibIFType = TLx493D_I2C_e> class TLx493D {
     public:
         typedef BoardSupportClass   BoardSupportClassType;
         typedef ComLibrary<ComIF>   ComLibraryIFType;
@@ -75,14 +75,14 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool enableTemperatureMeasurement() {
-            return ::tlx493d_enableTemperatureMeasurement(&sensor);
-        }
+        // bool enableTemperatureMeasurement() {
+        //     return ::tlx493d_enableTemperatureMeasurement(&sensor);
+        // }
 
 
-        bool disableTdisableTemperatureMeasurementemperature() {
-            return ::tlx493d_disableTemperatureMeasurement(&sensor);
-        }
+        // bool disableTdisableTemperatureMeasurementemperature() {
+        //     return ::tlx493d_disableTemperatureMeasurement(&sensor);
+        // }
 
 
         bool enableInterrupt() {
@@ -105,7 +105,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool setPowerMode(uint8_t mode) {
+        bool setPowerMode(TLx493D_PowerModeType_te mode) {
             return ::tlx493d_setPowerMode(&sensor, mode);
         }
 
@@ -115,14 +115,14 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
         
-        bool enableAngularMeasurement() {
-            return ::tlx493d_enableAngularMeasurement(&sensor);
-        }
+        // bool enableAngularMeasurement() {
+        //     return ::tlx493d_enableAngularMeasurement(&sensor);
+        // }
 
 
-        bool disableAngularMeasurement() {
-            return ::tlx493d_disableAngularMeasurement(&sensor);
-        }
+        // bool disableAngularMeasurement() {
+        //     return ::tlx493d_disableAngularMeasurement(&sensor);
+        // }
 
 
         bool setTrigger(uint8_t bits) {
@@ -135,8 +135,8 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
         
-        bool setRange(TLx493D_RangeTypes_te range) {
-            return ::tlx493d_setRange(&sensor, range);
+        bool setSensitivity(TLx493D_SensitivityType_te range) {
+            return ::tlx493d_setSensitivity(&sensor, range);
         }
 
 
@@ -178,7 +178,11 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
             return ::tlx493d_setUpperWakeUpThresholdZ(&sensor, threshold);
         }
 
-        bool setWakeUpThresholds(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+        bool setWakeUpThresholdsAsInteger(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+            return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
+        }
+
+        bool setWakeUpThresholds(double xl_th, double xh_th, double yl_th, double yh_th, double zl_th, double zh_th) {
             return ::tlx493d_setWakeUpThresholds(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
         }
 
@@ -188,12 +192,12 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        TLx493D_SupportedSensorTypes_te getSensorType() {
+        TLx493D_SupportedSensorType_te getSensorType() {
             return sensor.sensorType;
         }
 
 
-        TLx493D_SupportedComLibraryInterfaceTypes_te getComLibIFType() {
+        TLx493D_SupportedComLibraryInterfaceType_te getComLibIFType() {
             return sensor.comIFType;
         }
 

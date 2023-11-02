@@ -136,11 +136,11 @@ TLx493D_Register_ts TLx493D_W2B6_regDef[] = {
 /***
  * 
 */
-typedef enum {
-               LOW_POWER_MODE         = 0x00,
-               MASTER_CONTROLLED_MODE = 0x01,
-               RESERVED_MODE          = 0x10,
-               FAST_MODE              = 0x11 } TLx493D_W2B6_modes_te;
+// typedef enum {
+//                LOW_POWER_MODE         = 0x00,
+//                MASTER_CONTROLLED_MODE = 0x01,
+//                RESERVED_MODE          = 0x10,
+//                FAST_MODE              = 0x11 } TLx493D_W2B6_modes_te;
 
 
 /***
@@ -167,11 +167,11 @@ TLx493D_CommonFunctions_ts TLx493D_W2B6_commonFunctions = {
     .calculateMagneticField = TLx493D_W2B6_calculateMagneticField,
     .calculateMagneticFieldAndTemperature = TLx493D_W2B6_calculateMagneticFieldAndTemperature,
 
-    .enableAngularMeasurement  = TLx493D_W2B6_enableAngularMeasurement,
-    .disableAngularMeasurement = TLx493D_W2B6_disableAngularMeasurement,
+    // .enableAngularMeasurement  = TLx493D_W2B6_enableAngularMeasurement,
+    // .disableAngularMeasurement = TLx493D_W2B6_disableAngularMeasurement,
 
-    .enableTemperatureMeasurement  = TLx493D_W2B6_enableTemperatureMeasurement,
-    .disableTemperatureMeasurement = TLx493D_W2B6_disableTemperatureMeasurement,
+    // .enableTemperatureMeasurement  = TLx493D_W2B6_enableTemperatureMeasurement,
+    // .disableTemperatureMeasurement = TLx493D_W2B6_disableTemperatureMeasurement,
 
     .enable1ByteReadMode           = TLx493D_W2B6_enable1ByteReadMode,
     .disable1ByteReadMode          = TLx493D_W2B6_disable1ByteReadMode,
@@ -188,8 +188,8 @@ TLx493D_CommonFunctions_ts TLx493D_W2B6_commonFunctions = {
     .hasValidConfigurationParity = TLx493D_W2B6_hasValidConfigurationParity,
 
     .hasValidData              = tlx493d_gen_2_hasValidData,
-    .hasValidTemperatureData   = tlx493d_gen_2_hasValidTemperatureData,
-    .hasValidMagneticFieldData = tlx493d_gen_2_hasValidMagneticFieldData,
+    // .hasValidTemperatureData   = tlx493d_gen_2_hasValidTemperatureData,
+    // .hasValidMagneticFieldData = tlx493d_gen_2_hasValidMagneticFieldData,
 
     .hasValidTBit   = TLx493D_W2B6_hasValidTBit,
     .hasValidPD0Bit = TLx493D_W2B6_hasValidPD0Bit,
@@ -251,7 +251,7 @@ bool TLx493D_W2B6_setPowerMode(TLx493D_ts *sensor, uint8_t mode) {
 }
 
 
-bool TLx493D_W2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address) {
+bool TLx493D_W2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address) {
     return tlx493d_gen_2_setIICAddress(sensor, IICADR, FP, address);
 }
 

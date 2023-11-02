@@ -22,7 +22,7 @@
 
 
 // functions common to all sensors
-bool tlx493d_init(TLx493D_ts *sensor, TLx493D_SupportedSensorTypes_te sensorType) {
+bool tlx493d_init(TLx493D_ts *sensor, TLx493D_SupportedSensorType_te sensorType) {
    switch(sensorType) {
       case TLx493D_A1B6_e : return TLx493D_A1B6_init(sensor);
                             break;                              
@@ -68,8 +68,8 @@ bool tlx493d_readRegisters(TLx493D_ts *sensor) {
  * 
 */
 bool tlx493d_getTemperature(TLx493D_ts *sensor, double *temp) {
-   tlx493d_common_getTemperature(sensor, temp);
-   // return sensor->functions->getTemperature(sensor, temp);
+   // tlx493d_common_getTemperature(sensor, temp);
+   return sensor->functions->getTemperature(sensor, temp);
 }
 
 
@@ -77,8 +77,8 @@ bool tlx493d_getTemperature(TLx493D_ts *sensor, double *temp) {
  * 
 */
 bool tlx493d_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z ) {
-   tlx493d_common_getMagneticField(sensor, x, y, z);
-   // return sensor->functions->getMagneticField(sensor, x, y, z);
+   // tlx493d_common_getMagneticField(sensor, x, y, z);
+   return sensor->functions->getMagneticField(sensor, x, y, z);
 }
 
 
@@ -86,24 +86,26 @@ bool tlx493d_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *
  * 
 */
 bool tlx493d_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
-   tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
-   // return sensor->functions->getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+   // tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+   return sensor->functions->getMagneticFieldAndTemperature(sensor, x, y, z, temp);
 }
 
 
-// bool selectMeasuredValues(TLx493D_ts *sensor, enum <possible combinations> mVals); // Bx/By/Bz, Bx/By, Bx/By/Temp, ...
-bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor) {
-   return sensor->functions->enableTemperatureMeasurement(sensor);
+bool selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas) {
+   return sensor->functions->selectMeasureValues(sensor, meas);
 }
-bool tlx493d_disableTemperatureMeasurement(TLx493D_ts *sensor) {
-   return sensor->functions->disableTemperatureMeasurement(sensor);
-}
-bool tlx493d_enableAngularMeasurement(TLx493D_ts *sensor) {
-   return sensor->functions->enableAngularMeasurement(sensor);
-}
-bool tlx493d_disableAngularMeasurement(TLx493D_ts *sensor) {
-   return sensor->functions->disableAngularMeasurement(sensor);
-}
+// bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor) {
+//    return sensor->functions->enableTemperatureMeasurement(sensor);
+// }
+// bool tlx493d_disableTemperatureMeasurement(TLx493D_ts *sensor) {
+//    return sensor->functions->disableTemperatureMeasurement(sensor);
+// }
+// bool tlx493d_enableAngularMeasurement(TLx493D_ts *sensor) {
+//    return sensor->functions->enableAngularMeasurement(sensor);
+// }
+// bool tlx493d_disableAngularMeasurement(TLx493D_ts *sensor) {
+//    return sensor->functions->disableAngularMeasurement(sensor);
+// }
 
 
 bool tlx493d_setTrigger(TLx493D_ts *sensor, uint8_t trigger) {
@@ -111,8 +113,8 @@ bool tlx493d_setTrigger(TLx493D_ts *sensor, uint8_t trigger) {
 }
 
 
-bool tlx493d_setRange(TLx493D_ts *sensor, TLx493D_RangeTypes_te range) {
-   return sensor->functions->setRange(sensor, range);
+bool tlx493d_setSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te range) {
+   return sensor->functions->setSensitivity(sensor, range);
 }
 
 
@@ -121,7 +123,7 @@ bool tlx493d_setDefaultConfig(TLx493D_ts *sensor) {
 }
 
 
-bool setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te addr) {
+bool setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr) {
    return sensor->functions->setIICAddress(sensor, addr);
 }
 // bool tlx493d_setIICAddress(TLx493D_ts *sensor, uint8_t addr) {
@@ -143,15 +145,13 @@ bool tlx493d_disableCollisionAvoidance(TLx493D_ts *sensor) {
 }
 
 
-// bool tlx493d_setPowerMode(TLx493D_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
-bool tlx493d_setPowerMode(TLx493D_ts *sensor, uint8_t mode) {
+bool tlx493d_setPowerMode(TLx493D_ts *sensor, TLx493D_PowerModeType_te mode) {
    return sensor->functions->setPowerMode(sensor, mode);
 }
 
 
-// bool tlx493d_setUpdateRate(TLx493D_ts *sensor, enum <possible combinations> rate);
-bool tlx493d_setUpdateRate(TLx493D_ts *sensor, uint8_t bit) {
-   return sensor->functions->setUpdateRate(sensor, bit);
+bool tlx493d_setUpdateRate(TLx493D_ts *sensor, TLx493D_UpdateRateType_te rate) {
+   return sensor->functions->setUpdateRate(sensor, rate);
 }
 
 
@@ -159,13 +159,13 @@ bool tlx493d_hasValidData(TLx493D_ts *sensor) {
    return sensor->functions->hasValidData(sensor);
 }
 
-bool tlx493d_hasValidTemperatureData(TLx493D_ts *sensor) {
-   return sensor->functions->hasValidTemperatureData(sensor);
-}
+// bool tlx493d_hasValidTemperatureData(TLx493D_ts *sensor) {
+//    return sensor->functions->hasValidTemperatureData(sensor);
+// }
 
-bool tlx493d_hasValidMagneticFieldData(TLx493D_ts *sensor) {
-   return sensor->functions->hasValidMagneticFieldData(sensor);
-}
+// bool tlx493d_hasValidMagneticFieldData(TLx493D_ts *sensor) {
+//    return sensor->functions->hasValidMagneticFieldData(sensor);
+// }
 
 bool tlx493d_isFunctional(TLx493D_ts *sensor) {
    return sensor->functions->isFunctional(sensor);
@@ -208,19 +208,20 @@ bool tlx493d_setLowerWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold) {
    return sensor->functions->setLowerWakeUpThresholdZ(sensor, threshold);
 }
 
-bool tlx493d_setWakeUpThresholds(TLx493D_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
-   return sensor->functions->setWakeUpThresholds(sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
+bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_ts *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+   return sensor->functions->setWakeUpThresholdsAsInteger(sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
 }
 
 // thesholds im mT, to be converted to proper format
-bool tlx493d_setWakeupThesholds(TLx493D_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+bool tlx493d_setWakeUpThresholds(TLx493D_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
    return sensor->functions->setWakeUpThresholds(sensor, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
 
-// bool tlx493d_softReset(TLx493D_ts *sensor) {
+bool tlx493d_softReset(TLx493D_ts *sensor) {
+   return false;
 //    return sensor->functions->reset(sensor);
-// }
+}
 
 
 const char *tlx493d_getTypeAsString(TLx493D_ts *sensor) {

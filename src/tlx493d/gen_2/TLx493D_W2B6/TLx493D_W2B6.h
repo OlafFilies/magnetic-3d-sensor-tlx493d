@@ -30,7 +30,7 @@ bool TLx493D_W2B6_init(TLx493D_ts *sensor);
 bool TLx493D_W2B6_deinit(TLx493D_ts *sensor);
 
 bool TLx493D_W2B6_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
-bool TLx493D_W2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address);
+bool TLx493D_W2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address);
 
 void TLx493D_W2B6_calculateTemperature(TLx493D_ts *sensor, double *temp);
 bool TLx493D_W2B6_getTemperature(TLx493D_ts *sensor, double *temp);

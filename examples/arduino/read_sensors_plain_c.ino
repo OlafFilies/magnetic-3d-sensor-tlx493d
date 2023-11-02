@@ -1,11 +1,12 @@
 // std includes
 
-// Arduino includes
-#include <Arduino.h>
+// // Arduino includes
+// #include <Arduino.h>
 
 // project cpp includes
-#include "arduino_defines.h"
-#include "Logger.h"
+#include "TLx493D.h"
+// #include "arduino_defines.h"
+// #include "Logger.h"
 
 
 // S2Go boards
@@ -15,26 +16,26 @@
 #define POWER_PIN_LOW 3
 
 
-extern "C" {
-    #include "tlx493d_types.h"
-    #include "tlx493d_gen_2_common_defines.h"
-    #include "tlx493d_gen_2_common.h"
-    #include "tlx493d_gen_3_common_defines.h"
-    #include "tlx493d_gen_3_common.h"
+// extern "C" {
+//     #include "tlx493d_types.h"
+// //     #include "tlx493d_gen_2_common_defines.h"
+// //     #include "tlx493d_gen_2_common.h"
+// //     #include "tlx493d_gen_3_common_defines.h"
+// //     #include "tlx493d_gen_3_common.h"
 
-    #include "tlx493d_common.h"
-    #include "cInterface.h"
+// //     #include "tlx493d_common.h"
+//     #include "cInterface.h"
 
-    #include "TLx493D_A1B6.h"
+//     #include "TLx493D_A1B6.h"
 
-    #include "TLx493D_A2B6.h"
-    #include "TLx493D_P2B6.h"
-    #include "TLx493D_W2B6.h"
-    #include "TLx493D_W2BW.h"
+//     #include "TLx493D_A2B6.h"
+//     #include "TLx493D_P2B6.h"
+//     #include "TLx493D_W2B6.h"
+//     #include "TLx493D_W2BW.h"
 
-    #include "TLx493D_P3B6.h"
-    #include "TLx493D_P3I8.h"
-}
+//     #include "TLx493D_P3B6.h"
+//     #include "TLx493D_P3I8.h"
+// }
 
 
 TLx493D_ts dut;
@@ -72,9 +73,9 @@ void setup() {
 
 
     // tlx493d_init(&dut, TLx493D_A1B6_e);
-    // tlx493d_init(&dut, TLx493D_A2B6_e);
+    tlx493d_init(&dut, TLx493D_A2B6_e);
     // tlx493d_init(&dut, TLx493D_P2B6_e);
-    tlx493d_init(&dut, TLx493D_W2B6_e);
+    // tlx493d_init(&dut, TLx493D_W2B6_e);
     // tlx493d_init(&dut, TLx493D_W2BW_e);
     // tlx493d_init(&dut, TLx493D_P3B6_e);
 
@@ -165,8 +166,8 @@ void loop() {
 
     Serial.print(true == tlx493d_isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
     Serial.print(true == tlx493d_hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
-    Serial.print(true == tlx493d_hasValidTemperatureData(&dut) ? "hasValidTemperatureData\n" : "NOT hasValidTemperatureData\n");
-    Serial.print(true == tlx493d_hasValidMagneticFieldData(&dut) ? "hasValidMagneticFieldData\n" : "NOT hasValidFieldData\n");
+    // Serial.print(true == tlx493d_hasValidTemperatureData(&dut) ? "hasValidTemperatureData\n" : "NOT hasValidTemperatureData\n");
+    // Serial.print(true == tlx493d_hasValidMagneticFieldData(&dut) ? "hasValidMagneticFieldData\n" : "NOT hasValidFieldData\n");
 
 
     Serial.print(true == TLx493D_A2B6_hasValidIICadr(&dut) ? "TLx493D_A2B6_hasValidIICadr\n" : "NOT TLx493D_A2B6_hasValidIICadr\n");

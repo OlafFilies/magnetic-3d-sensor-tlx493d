@@ -144,11 +144,11 @@ TLx493D_Register_ts TLx493D_P3B6_regDef[] = {
 /***
  * 
 */
-typedef enum {
-               LOW_POWER_MODE         = 0x00,
-               MASTER_CONTROLLED_MODE = 0x01,
-               RESERVED_MODE          = 0x10,
-               FAST_MODE              = 0x11 } TLx493D_P3B6_modes_te;
+// typedef enum {
+//                LOW_POWER_MODE         = 0x00,
+//                MASTER_CONTROLLED_MODE = 0x01,
+//                RESERVED_MODE          = 0x10,
+//                FAST_MODE              = 0x11 } TLx493D_P3B6_modes_te;
 
 
 /***

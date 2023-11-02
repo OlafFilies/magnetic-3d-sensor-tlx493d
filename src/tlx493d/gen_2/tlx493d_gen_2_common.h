@@ -21,9 +21,9 @@
 bool tlx493d_gen_2_setDefaultConfig(TLx493D_ts *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF);
 
 // bool setPowerMode(TLx493D_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
-bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, uint8_t mode);
+bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_te mode);
 
-bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, TLx493D_IICAddresses_te addr); // Gen. 1 and 2
+bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, TLx493D_IICAddressType_te addr); // Gen. 1 and 2
 // bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, StandardIICAddresses_te addr);
 
 void tlx493d_gen_2_calculateTemperature(TLx493D_ts *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF);
@@ -40,7 +40,7 @@ bool tlx493d_gen_2_setAngularMeasurement(TLx493D_ts *sensor, uint8_t amBF, uint8
 
 // value of update rate is sensor / generation specific !
 // bool setUpdateRate(TLx493D_ts *sensor, enum <possible combinations> rate);
-bool tlx493d_gen_2_setUpdateRate(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF, uint8_t ur);
+bool tlx493d_gen_2_setUpdateRate(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_te ur);
 bool tlx493d_gen_2_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t x2BF, uint8_t cpBF, uint8_t srs);
 
 // bool setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, enum <possible combinations> eVal);

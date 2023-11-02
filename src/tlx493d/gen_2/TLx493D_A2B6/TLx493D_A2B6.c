@@ -98,14 +98,14 @@ TLx493D_Register_ts TLx493D_A2B6_regDef[] = {
 };
 
 
-/***
- * 
-*/
-typedef enum {
-               LOW_POWER_MODE         = 0x00,
-               MASTER_CONTROLLED_MODE = 0x01,
-               RESERVED_MODE          = 0x10,
-               FAST_MODE              = 0x11 } TLx493D_A2B6_modes_te;
+// /***
+//  * 
+// */
+// typedef enum {
+//                LOW_POWER_MODE         = 0x00,
+//                MASTER_CONTROLLED_MODE = 0x01,
+//                RESERVED_MODE          = 0x10,
+//                FAST_MODE              = 0x11 } TLx493D_A2B6_modes_te;
 
 
 /***
@@ -128,25 +128,67 @@ TLx493D_CommonFunctions_ts TLx493D_A2B6_commonFunctions = {
     .deinit                 = TLx493D_A2B6_deinit,
 
     .readRegisters          = tlx493d_common_readRegisters,
-    .setDefaultConfig       = TLx493D_A2B6_setDefaultConfig,
-    .setPowerMode           = TLx493D_A2B6_setPowerMode,
-    .setIICAddress          = TLx493D_A2B6_setIICAddress,
 
     .calculateTemperature   = TLx493D_A2B6_calculateTemperature,
-    // .getTemperature         = TLx493D_A2B6_getTemperature,
+    .getTemperature         = TLx493D_A2B6_getTemperature,
 
     .calculateMagneticField = TLx493D_A2B6_calculateMagneticField,
-    // .getMagneticField       = TLx493D_A2B6_getMagneticField,
+    .getMagneticField       = TLx493D_A2B6_getMagneticField,
 
     .calculateMagneticFieldAndTemperature = TLx493D_A2B6_calculateMagneticFieldAndTemperature,
-    // .getMagneticFieldAndTemperature       = TLx493D_A2B6_getMagneticFieldAndTemperature,
+    .getMagneticFieldAndTemperature       = TLx493D_A2B6_getMagneticFieldAndTemperature,
 
-    .enableAngularMeasurement  = TLx493D_A2B6_enableAngularMeasurement,
-    .disableAngularMeasurement = TLx493D_A2B6_disableAngularMeasurement,
+    // functions related to the "Config" register
+    .selectMeasureValues   = TLx493D_A2B6_selectMeasureValues,
+    // .enableAngularMeasurement  = TLx493D_A2B6_enableAngularMeasurement,
+    // .disableAngularMeasurement = TLx493D_A2B6_disableAngularMeasurement,
 
-    .enableTemperatureMeasurement  = TLx493D_A2B6_enableTemperatureMeasurement,
-    .disableTemperatureMeasurement = TLx493D_A2B6_disableTemperatureMeasurement,
+    // .enableTemperatureMeasurement  = TLx493D_A2B6_enableTemperatureMeasurement,
+    // .disableTemperatureMeasurement = TLx493D_A2B6_disableTemperatureMeasurement,
 
+    .setTrigger             = TLx493D_A2B6_setTriggerOptions,
+    .setSensitivity         = TLx493D_A2B6_selectSensitivity,
+
+    
+    // functions related to the "Mod1" and "Mod2" registers
+    .setDefaultConfig       = TLx493D_A2B6_setDefaultConfig,
+    .setIICAddress          = TLx493D_A2B6_setIICAddress,
+
+    // .enableInterrupt        = ,
+    // .disableInterrupt       = ,
+    // .enableCollisionAvoidance = ,
+    // .disableCollisionAvoidance = ,
+
+    .setPowerMode           = TLx493D_A2B6_setPowerMode,
+    // .setUpdateRate          = ,
+
+
+    // functions related to the "Diag" register
+    .hasValidData              = tlx493d_gen_2_hasValidData,
+    // .hasValidTemperatureData   = tlx493d_gen_2_hasValidTemperatureData,
+    // .hasValidMagneticFieldData = tlx493d_gen_2_hasValidMagneticFieldData,
+    .isFunctional          = tlx493d_gen_2_isFunctional,
+
+
+    // functions available only to a subset of sensors with wake-up functionality
+    // functions related to the "WU" register
+    // .isWakeUpActive = ,
+    // .enableWakeUpMode = ,
+    // .disableWakeUpMode = ,
+
+    // .setLowerWakeUpThresholdX = ,
+    // .setLowerWakeUpThresholdY = ,
+    // .setLowerWakeUpThresholdZ = ,
+
+    // .setUpperWakeUpThresholdX = ,
+    // .setUpperWakeUpThresholdY = ,
+    // .setUpperWakeUpThresholdZ = ,
+
+    // .setWakeUpThresholdsAsInteger = ,
+    // .setWakeUpThresholds = ,
+
+
+    // functions used internally and not accessible through the common interface
     .enable1ByteReadMode           = TLx493D_A2B6_enable1ByteReadMode,
     .disable1ByteReadMode          = TLx493D_A2B6_disable1ByteReadMode,
 
@@ -158,15 +200,11 @@ TLx493D_CommonFunctions_ts TLx493D_A2B6_commonFunctions = {
     .hasValidBusParity     = TLx493D_A2B6_hasValidBusParity,
     .hasValidConfigurationParity = TLx493D_A2B6_hasValidConfigurationParity,
 
-    .hasValidData              = tlx493d_gen_2_hasValidData,
-    .hasValidTemperatureData   = tlx493d_gen_2_hasValidTemperatureData,
-    .hasValidMagneticFieldData = tlx493d_gen_2_hasValidMagneticFieldData,
 
     .hasValidTBit   = TLx493D_A2B6_hasValidTBit,
     .hasValidPD0Bit = TLx493D_A2B6_hasValidPD0Bit,
     .hasValidPD3Bit = TLx493D_A2B6_hasValidPD3Bit,
 
-    .isFunctional          = tlx493d_gen_2_isFunctional,
 };
 
 
@@ -214,12 +252,12 @@ bool TLx493D_A2B6_deinit(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_A2B6_setPowerMode(TLx493D_ts *sensor, uint8_t mode) {
+bool TLx493D_A2B6_setPowerMode(TLx493D_ts *sensor, TLx493D_PowerModeType_te mode) {
     return tlx493d_gen_2_setPowerMode(sensor, MODE, FP, mode);
 }
 
 
-bool TLx493D_A2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddresses_te address) {
+bool TLx493D_A2B6_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address) {
     return tlx493d_gen_2_setIICAddress(sensor, IICADR, FP, address);
 }
 
@@ -334,6 +372,26 @@ uint8_t TLx493D_A2B6_calculateConfigurationParity(TLx493D_ts *sensor) {
 }
 
 
+bool TLx493D_A2B6_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas) {
+    switch(meas) {
+        case TLx493D_BxByBzTemp_e : return true; // set DT to 0, AM to 0
+
+        case TLx493D_BxByBz_e : return true; // set DT to 1, AM to 0
+        
+        case TLx493D_BxBy_e : return true; // set DT to 1, AM to 1
+        
+        default : return false; // give message
+    }
+
+    return true;
+}
+
+
+bool TLx493D_A2B6_selectSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te sens) {
+    return true;
+}
+
+
 bool TLx493D_A2B6_enableTemperatureMeasurement(TLx493D_ts *sensor) {
     return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 0);
 }
@@ -342,8 +400,6 @@ bool TLx493D_A2B6_enableTemperatureMeasurement(TLx493D_ts *sensor) {
 bool TLx493D_A2B6_disableTemperatureMeasurement(TLx493D_ts *sensor) {
     return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 1);
 }
-
-
 // /***
 //  * 
 // */
@@ -392,12 +448,12 @@ bool TLx493D_A2B6_disableAngularMeasurement(TLx493D_ts *sensor) {
 // /***
 //  * This option depends on PR and MODE.
 // */
-// bool TLx493D_A2B6_setTriggerOptions(TLx493D_ts *sensor, uint8_t trig) {
-//     tlx493d_common_setBitfield(sensor, TRIG, trig);
-//     tlx493d_common_setBitfield(sensor, CP, TLx493D_A2B6_calculateConfigurationParity(sensor));
+bool TLx493D_A2B6_setTriggerOptions(TLx493D_ts *sensor, uint8_t trig) {
+    tlx493d_common_setBitfield(sensor, TRIG, trig);
+    tlx493d_common_setBitfield(sensor, CP, TLx493D_A2B6_calculateConfigurationParity(sensor));
 
-//     return tlx493d_common_writeRegister(sensor, TRIG);
-// }
+    return tlx493d_common_writeRegister(sensor, TRIG);
+}
 
 
 bool TLx493D_A2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor) {
