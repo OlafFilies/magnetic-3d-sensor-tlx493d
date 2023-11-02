@@ -1,6 +1,6 @@
 
-#ifndef S2GO_TEMPLATE_ARDUINO_HPP
-#define S2GO_TEMPLATE_ARDUINO_HPP
+#ifndef TLX493D_S2GO_TEMPLATE_ARDUINO_HPP
+#define TLX493D_S2GO_TEMPLATE_ARDUINO_HPP
 
 
 // std include
@@ -28,10 +28,6 @@ template<> class S2GoTemplate<pinCtrl> {
         }
 
         void init() {
-            // using global function to demonstrate usage
-            preTransferHook  = myPreTransferHook;
-            postTransferHook = myPostTransferHook;
-
             for(auto &p : constantPins) {
                 pinMode(p.pinNumber, p.direction);
                 digitalWrite(p.pinNumber, p.enableValue);
@@ -54,8 +50,6 @@ template<> class S2GoTemplate<pinCtrl> {
 
 
         void enable() {
-            preTransferHook();
-
             for(auto &p : switchedPins) {
                 digitalWrite(p.pinNumber, p.enableValue);
             }
@@ -63,8 +57,6 @@ template<> class S2GoTemplate<pinCtrl> {
 
 
         void disable() {
-            postTransferHook();
-
             for(auto &p : switchedPins) {
                 digitalWrite(p.pinNumber, p.disableValue);
             }
@@ -72,9 +64,6 @@ template<> class S2GoTemplate<pinCtrl> {
 
 
     private:
-
-        hookFunctionType preTransferHook;
-        hookFunctionType postTransferHook;
 
         pinCtrl constantPins[1];
         pinCtrl switchedPins[0];
@@ -84,4 +73,4 @@ template<> class S2GoTemplate<pinCtrl> {
 typedef S2GoTemplate<pinCtrl> S2GoTemplateArduino;
 
 
-#endif // S2GO_TEMPLATE_ARDUINO_HPP
+#endif // TLX493D_S2GO_TEMPLATE_ARDUINO_HPP
