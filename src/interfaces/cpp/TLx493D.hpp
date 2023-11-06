@@ -60,8 +60,8 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool setDefaultConfig() {
-            return ::tlx493d_setDefaultConfig(&sensor);
+        bool readRegisters() {
+            return ::tlx493d_readRegisters(&sensor);
         }
 
 
@@ -75,14 +75,49 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
+        bool getMagneticFieldAndTemperature(double *x, double *y, double *z, double *temp) {
+            return ::tlx493d_getMagneticFieldAndTemperature(&sensor, x, y, z, temp);
+        }
+
+
+        // functions related to the "Config" register
+        bool tlx493d_selectMeasureValues(TLx493D_MeasureType_te meas) {
+            return ::tlx493d_selectMeasureValues(&sensor, meas);
+        }
+
         // bool enableTemperatureMeasurement() {
         //     return ::tlx493d_enableTemperatureMeasurement(&sensor);
         // }
-
-
         // bool disableTdisableTemperatureMeasurementemperature() {
         //     return ::tlx493d_disableTemperatureMeasurement(&sensor);
+        // }    
+        // bool enableAngularMeasurement() {
+        //     return ::tlx493d_enableAngularMeasurement(&sensor);
         // }
+        // bool disableAngularMeasurement() {
+        //     return ::tlx493d_disableAngularMeasurement(&sensor);
+        // }
+
+
+        bool setTrigger(uint8_t bits) {
+            return ::tlx493d_setTrigger(&sensor, bits);
+        }
+
+        
+        bool setSensitivity(TLx493D_SensitivityType_te range) {
+            return ::tlx493d_setSensitivity(&sensor, range);
+        }
+
+
+        // functions related to the "Mod1" and "Mod2" registers
+        bool setDefaultConfig() {
+            return ::tlx493d_setDefaultConfig(&sensor);
+        }
+
+        
+        bool setIICAddress(uint8_t addr) {
+            return ::tlx493d_setIICAddress(&sensor, addr);
+        }
 
 
         bool enableInterrupt() {
@@ -110,36 +145,22 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
         
-        bool setIICAddress(uint8_t addr) {
-            return ::tlx493d_setIICAddress(&sensor, addr);
-        }
-
-        
-        // bool enableAngularMeasurement() {
-        //     return ::tlx493d_enableAngularMeasurement(&sensor);
-        // }
-
-
-        // bool disableAngularMeasurement() {
-        //     return ::tlx493d_disableAngularMeasurement(&sensor);
-        // }
-
-
-        bool setTrigger(uint8_t bits) {
-            return ::tlx493d_setTrigger(&sensor, bits);
-        }
-
-        
         bool setUpdateRate(uint8_t bit) {
             return ::tlx493d_setUpdateRate(&sensor, bit);
         }
 
-        
-        bool setSensitivity(TLx493D_SensitivityType_te range) {
-            return ::tlx493d_setSensitivity(&sensor, range);
+
+        // functions related to the "Diag" register
+        bool tlx493d_hasValidData() {
+            return ::tlx493d_hasValidData(&sensor);
+        }
+
+        bool tlx493d_isFunctional() {
+            return ::tlx493d_isFunctional(&sensor);
         }
 
 
+        // functions available only to a subset of sensors with wake-up functionality
         bool isWakeUpActive() {
             return ::tlx493d_isWakeUpActive(&sensor);
         }
@@ -187,6 +208,17 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
+        // utilities
+        bool tlx493d_softReset() {
+            return ::tlx493d_softReset(&sensor);
+        }
+
+        const char *tlx493d_getTypeAsString() {
+            return ::tlx493d_getTypeAsString(&sensor);
+        }
+
+
+        // Attribute getters for TLx493D object
         TLx493D_ts *getSensor() {
             return &sensor;
         }
@@ -221,7 +253,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
         BoardSupportClassType  bsc;
         ComLibraryIFType       comLIF;
-        TLx493D_ts              sensor;
+        TLx493D_ts             sensor;
 };
 
 #endif // TLx493D_HPP

@@ -82,5 +82,9 @@ uint8_t tlx493d_common_getEvenParity(uint8_t parity);
 
 void tlx493d_common_concatBytes(TLx493D_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
 
+const char *tlx493d_common_getTypeAsString(TLx493D_ts *sensor);
+
+void warnFeatureNotAvailableForSensorType(TLx493D_ts *sensor, const char *featureName);
+
 
 #endif // TLX493D_COMMON_H

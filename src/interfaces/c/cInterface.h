@@ -27,7 +27,7 @@ bool tlx493d_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, doubl
 
 
 // functions related to the "Config" register
-bool selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas);
+bool tlx493d_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas);
 // or do it separately ? Like :
 // bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor);
 // bool tlx493d_disableTemperatureMeasurement(TLx493D_ts *sensor);

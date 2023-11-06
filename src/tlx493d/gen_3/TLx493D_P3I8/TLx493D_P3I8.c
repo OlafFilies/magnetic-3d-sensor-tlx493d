@@ -1,12 +1,3 @@
-/**
- * @file        TLV493D_P3I8.c
- * @author      Infineon Technologies AG
- * @brief       Contains the implementation of the complete sensor functionality
- * @copyright   Copyright (c) 2023
- *
- * SPDX-License-Identifier: MIT
- */
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -18,6 +9,7 @@
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
+#include "Logger.h"
 
 // common to same generation of sensors
 #include "tlx493d_gen_3_common_defines.h"
@@ -135,19 +127,6 @@ TLx493D_Register_ts TLx493D_P3I8_regDef[] = {
 };
 
 
-/***
- * 
-*/
-// typedef enum {
-//                LOW_POWER_MODE         = 0x00,
-//                MASTER_CONTROLLED_MODE = 0x01,
-//                RESERVED_MODE          = 0x10,
-//                FAST_MODE              = 0x11 } TLx493D_P3I8_modes_te;
-
-
-/***
- * 
-*/
 // typedef enum { 
 //                TEMP2_REG  = 0x05,
 //                DIAG_REG   = 0x06,
@@ -158,135 +137,80 @@ TLx493D_Register_ts TLx493D_P3I8_regDef[] = {
 
 
 TLx493D_CommonFunctions_ts TLx493D_P3I8_commonFunctions = {
-                                .init                 = TLx493D_P3I8_init,
-                                .deinit               = TLx493D_P3I8_deinit,
+    .init                           = TLx493D_P3I8_init,
+    .deinit                         = TLx493D_P3I8_deinit,
 
-                                // .getTemperature       = TLx493D_P3I8_getTemperature,
+    .readRegisters                  = TLx493D_P3I8_readRegisters, //tlx493d_gen_3_readRegistersSPI,
 
-                                .calculateMagneticField = TLx493D_P3I8_calculateMagneticField,
-                                // .getFieldValues       = TLx493D_P3I8_getFieldValues,
+    .calculateTemperature           = TLx493D_P3I8_calculateTemperature,
+    .getTemperature                 = TLx493D_P3I8_getTemperature,
 
-                                .setDefaultConfig     = TLx493D_P3I8_setDefaultConfig,
-                                .readRegisters        = tlx493d_gen_3_readRegistersSPI,
+    .calculateMagneticField         = TLx493D_P3I8_calculateMagneticField,
+    .getMagneticField               = TLx493D_P3I8_getMagneticField,
+
+    .calculateMagneticFieldAndTemperature = TLx493D_P3I8_calculateMagneticFieldAndTemperature,
+    .getMagneticFieldAndTemperature = TLx493D_P3I8_getMagneticFieldAndTemperature,
+
+
+    .setDefaultConfig               = TLx493D_P3I8_setDefaultConfig,
+    
+    .setResetValues                 = TLx493D_P3I8_setResetValues,
 };
 
 
-/***
- * TODO: add parameter IICAddress or ad function to set address.
-*/
+// TODO: add parameter IICAddress or ad function to set address !
 bool TLx493D_P3I8_init(TLx493D_ts *sensor) {
-    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * GEN_3_REG_MAP_SIZE);
-    sensor->regDef            = TLx493D_P3I8_regDef;
-    sensor->functions         = &TLx493D_P3I8_commonFunctions;
-    sensor->regMapSize        = GEN_3_REG_MAP_SIZE;
-    sensor->sensorType        = TLx493D_P3I8_e;
-    sensor->comIFType         = TLx493D_SPI_e;
-    sensor->comLibIF          = NULL;
-    sensor->comLibObj.spi_obj = NULL;
-
-    memset(sensor->regMap, 0, sensor->regMapSize);
-   
-    return true;
+    return tlx493d_common_init(sensor, GEN_3_REG_MAP_SIZE, TLx493D_P3I8_regDef, &TLx493D_P3I8_commonFunctions, TLx493D_P3I8_e, TLx493D_SPI_e);
 }
 
 
-/***
- * 
-*/
 bool TLx493D_P3I8_deinit(TLx493D_ts *sensor) {
-    free(sensor->regMap);
-    free(sensor->comLibObj.spi_obj);
-
-    sensor->regMap            = NULL;
-    sensor->comLibObj.spi_obj = NULL;
-    return true;
+    return tlx493d_common_deinit(sensor);
 }
 
 
-/***
- * 
-*/
+bool TLx493D_P3I8_readRegisters(TLx493D_ts *sensor) {
+    return tlx493d_gen_3_readRegistersSPI(sensor);
+}
+
+
 void TLx493D_P3I8_calculateRawTemperature(TLx493D_ts *sensor, double *temp) {
-    int16_t value = 0;
-
-    tlx493d_common_concatBytes(sensor, TEMP_MSBS, TEMP_LSBS, &value);
-    *temp = (double) value;
+    tlx493d_gen_3_calculateRawTemperature(sensor, temp, TEMP_MSBS, TEMP_LSBS);
 }
 
 
-/***
- * 
-*/
 void TLx493D_P3I8_calculateTemperature(TLx493D_ts *sensor, double *temp) {
-    int16_t value = 0;
-
-    tlx493d_common_concatBytes(sensor, TEMP_MSBS, TEMP_LSBS, &value);
-    *temp = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_MULT) + GEN_3_TEMP_REF;
+    tlx493d_gen_3_calculateTemperature(sensor, temp, TEMP_MSBS, TEMP_LSBS);
 }
 
 
-/***
- * 
-*/
 bool TLx493D_P3I8_getTemperature(TLx493D_ts *sensor, double *temp) {
-    if( tlx493d_gen_3_readRegistersSPI(sensor) ) {
-        TLx493D_P3I8_calculateTemperature(sensor, temp);
-        return true;
-    }
-
-    return false;
+    return tlx493d_common_getTemperature(sensor, temp);
 }
 
 
-/***
- * 
-*/
 void TLx493D_P3I8_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
-    int16_t valueX = 0, valueY = 0, valueZ = 0;
-
-    tlx493d_common_concatBytes(sensor, BX_MSBS, BX_LSBS, &valueX);
-    tlx493d_common_concatBytes(sensor, BY_MSBS, BY_LSBS, &valueY);
-    tlx493d_common_concatBytes(sensor, BZ_MSBS, BZ_LSBS, &valueZ);
-
-// TODO: temp unten in LSB format; x,y,z dann auch in LSB format => mittels sensitivity umrechnen in mT !
-// TODO: TLx493D_P3I8_calculateTemperatureRaw hinzufügen um die LSB Werte für Temp zu bekommen !
-double r    = 1.0; // TODO: r is range specific !
-// double temp = 0.0;
-double temp = 0.0;
-double sensitivity = GEN_3_FULL_RANGE_FIELD_SENSITIVITY;  // TODO: r is range specific !
-    
-    TLx493D_P3I8_calculateRawTemperature(sensor, &temp);
-
-    *x = (r * (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + GEN_3_O3x * temp)))
-          + ((double) valueX) * (GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + GEN_3_L3x * temp))))
-       / sensitivity;
-
-    *y = (r * (GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + GEN_3_O3y * temp)))
-          + ((double) valueY) * (GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + GEN_3_L3y * temp))))
-       / sensitivity;
-
-    *z = (r * (GEN_3_O0z + temp * (GEN_3_O1z + temp * (GEN_3_O2z + GEN_3_O3z * temp)))
-          + ((double) valueZ) * (GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + GEN_3_L3z * temp))))
-       / sensitivity;
+    tlx493d_gen_3_calculateMagneticField(sensor, x, y, z, BX_MSBS, BX_LSBS, BY_MSBS, BY_LSBS, BZ_MSBS, BZ_LSBS, TEMP_MSBS, TEMP_LSBS);
 }
 
 
-/***
- * 
-*/
 bool TLx493D_P3I8_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
-    if( tlx493d_gen_3_readRegistersSPI(sensor) ) {
-        TLx493D_P3I8_calculateMagneticField(sensor, x, y, z);
-        return true;
-    }
-
-    return false;
+    return tlx493d_common_getMagneticField(sensor, x, y, z);
 }
 
 
-/***
- * TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
-*/
+void TLx493D_P3I8_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
+    TLx493D_P3I8_calculateMagneticField(sensor, x, y, z);
+    TLx493D_P3I8_calculateTemperature(sensor, temp);
+}
+
+
+bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
+    return tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+}
+
+
+// TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_ts *sensor) {
     sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
 
@@ -305,4 +229,20 @@ bool TLx493D_P3I8_setDefaultConfig(TLx493D_ts *sensor) {
     // tlx493d_common_setBitfield(sensor, CHANNEL_SEL, 0);
 
     return true;
+}
+
+
+void TLx493D_P3I8_setResetValues(TLx493D_ts *sensor) {
+    sensor->regMap[0x0A] = 0x02; // MOD1
+    sensor->regMap[0x0B] = 0x00; // MOD2
+
+    // for wake-up parity calculation
+    sensor->regMap[0x0C] = 0x7F;
+    sensor->regMap[0x0D] = 0x80;
+    sensor->regMap[0x0E] = 0x7F;
+    sensor->regMap[0x0F] = 0x80;  
+    sensor->regMap[0x10] = 0x7F;
+    sensor->regMap[0x11] = 0x80;
+    sensor->regMap[0x12] = 0xCC;
+    sensor->regMap[0x13] = 0x2C;
 }

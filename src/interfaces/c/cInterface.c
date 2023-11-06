@@ -91,7 +91,7 @@ bool tlx493d_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, doubl
 }
 
 
-bool selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas) {
+bool tlx493d_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas) {
    return sensor->functions->selectMeasureValues(sensor, meas);
 }
 // bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor) {
@@ -123,7 +123,7 @@ bool tlx493d_setDefaultConfig(TLx493D_ts *sensor) {
 }
 
 
-bool setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr) {
+bool tlx493d_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr) {
    return sensor->functions->setIICAddress(sensor, addr);
 }
 // bool tlx493d_setIICAddress(TLx493D_ts *sensor, uint8_t addr) {
@@ -225,29 +225,5 @@ bool tlx493d_softReset(TLx493D_ts *sensor) {
 
 
 const char *tlx493d_getTypeAsString(TLx493D_ts *sensor) {
-   switch(sensor->sensorType) {
-      case TLx493D_A1B6_e : return "TLx493D_A1B6";
-                           break;
-
-      case TLx493D_A2B6_e : return "TLx493D_A2B6";
-                            break;
-
-      case TLx493D_P2B6_e : return "TLx493D_P2B6";
-                            break;
-
-      case TLx493D_W2B6_e : return "TLx493D_W2B6";
-                            break;
-
-      case TLx493D_W2BW_e : return "TLx493D_W2BW";
-                           break;
-
-      case TLx493D_P3B6_e : return "TLx493D_P3B6";
-                            break;
-
-      case TLx493D_P3I8_e : return "TLx493D_P3I8";
-                            break;
-
-      default : return "ERROR : Unknown sensorType !";
-               break;
-   }
+   return tlx493d_common_getTypeAsString(sensor);
 }

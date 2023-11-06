@@ -10,6 +10,7 @@
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
+#include "Logger.h"
 
 // sensor specific includes
 #include "TLx493D_A1B6.h"
@@ -53,37 +54,6 @@ bool tlx493d_common_deinit(TLx493D_ts *sensor) {
    sensor->regMap            = NULL;
    sensor->comLibObj.i2c_obj = NULL; // TODO: provide central function to set to null SPI/IIC objects !
    return true;
-}
-
-
-void tlx493d_common_getBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
-    TLx493D_Register_ts *bf = &sensor->regDef[bitField];
-
-    if((bf->accessMode == TLx493D_READ_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
-        *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
-    }
-}
-
-
-void tlx493d_common_setBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue) {
-    TLx493D_Register_ts *bf = &sensor->regDef[bitField];
-
-    if((bf->accessMode == TLx493D_WRITE_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
-        sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask);
-    }
-}
-
-
-bool tlx493d_common_writeRegister(TLx493D_ts* sensor, uint8_t bitField) {
-    TLx493D_Register_ts *bf = &sensor->regDef[bitField];
-
-    if((bf->accessMode == TLx493D_WRITE_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
-        uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
-
-        return transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
-    }
-
-    return false;
 }
 
 
@@ -134,6 +104,37 @@ bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x
 }
 
 
+void tlx493d_common_getBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
+    TLx493D_Register_ts *bf = &sensor->regDef[bitField];
+
+    if((bf->accessMode == TLx493D_READ_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
+        *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
+    }
+}
+
+
+void tlx493d_common_setBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue) {
+    TLx493D_Register_ts *bf = &sensor->regDef[bitField];
+
+    if((bf->accessMode == TLx493D_WRITE_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
+        sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask);
+    }
+}
+
+
+bool tlx493d_common_writeRegister(TLx493D_ts* sensor, uint8_t bitField) {
+    TLx493D_Register_ts *bf = &sensor->regDef[bitField];
+
+    if((bf->accessMode == TLx493D_WRITE_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
+        uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
+
+        return transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
+    }
+
+    return false;
+}
+
+
 uint8_t tlx493d_common_calculateParity(uint8_t data) {
 	data ^= data >> 4;
 	data ^= data >> 2;
@@ -164,4 +165,38 @@ void tlx493d_common_concatBytes(TLx493D_ts *sensor, uint8_t msbBitfield, uint8_t
     *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
     *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
+}
+
+
+const char *tlx493d_common_getTypeAsString(TLx493D_ts *sensor) {
+   switch(sensor->sensorType) {
+      case TLx493D_A1B6_e : return "TLx493D_A1B6";
+                           break;
+
+      case TLx493D_A2B6_e : return "TLx493D_A2B6";
+                            break;
+
+      case TLx493D_P2B6_e : return "TLx493D_P2B6";
+                            break;
+
+      case TLx493D_W2B6_e : return "TLx493D_W2B6";
+                            break;
+
+      case TLx493D_W2BW_e : return "TLx493D_W2BW";
+                           break;
+
+      case TLx493D_P3B6_e : return "TLx493D_P3B6";
+                            break;
+
+      case TLx493D_P3I8_e : return "TLx493D_P3I8";
+                            break;
+
+      default : return "ERROR : Unknown sensorType !";
+               break;
+   }
+}
+
+
+void warnFeatureNotAvailableForSensorType(TLx493D_ts *sensor, const char *featureName) {
+    warn("Feature '%s' not available for sensor type '%s' !\n", featureName, tlx493d_common_getTypeAsString(sensor));
 }

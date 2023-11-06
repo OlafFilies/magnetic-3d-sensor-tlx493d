@@ -1,15 +1,6 @@
-/**
- * @file        TLV493D_P2B6.c
- * @author      Infineon Technologies AG
- * @brief       Contains the implementation of the complete sensor functionality
- * @copyright   Copyright (c) 2023
- *
- * SPDX-License-Identifier: MIT
- */
-
+// std includes
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -133,19 +124,6 @@ TLx493D_Register_ts TLx493D_P2B6_regDef[] = {
 };
 
 
-/***
- * 
-*/
-// typedef enum {
-//                LOW_POWER_MODE         = 0x00,
-//                MASTER_CONTROLLED_MODE = 0x01,
-//                RESERVED_MODE          = 0x10,
-//                FAST_MODE              = 0x11 } TLx493D_P2B6_modes_te;
-
-
-/***
- * 
-*/
 typedef enum { 
                TEMP2_REG  = 0x05,
                DIAG_REG   = 0x06,
@@ -156,126 +134,75 @@ typedef enum {
 
 
 TLx493D_CommonFunctions_ts TLx493D_P2B6_commonFunctions = {
-                                .init                 = TLx493D_P2B6_init,
-                                .deinit               = TLx493D_P2B6_deinit,
+    .init                           = TLx493D_P2B6_init,
+    .deinit                         = TLx493D_P2B6_deinit,
 
-                                // .getTemperature       = TLx493D_P2B6_getTemperature,
+    .readRegisters                  = TLx493D_P2B6_readRegisters, //tlx493d_common_readRegisters,
 
-                                .calculateMagneticField = TLx493D_P2B6_calculateMagneticField,
-                                // .getMagneticFieldValues       = TLx493D_P2B6_getFieldValues,
+    .calculateTemperature           = TLx493D_P2B6_calculateTemperature,
+    .getTemperature                 = TLx493D_P2B6_getTemperature,
 
-                                .setDefaultConfig     = TLx493D_P2B6_setDefaultConfig,
-                                .readRegisters        = tlx493d_common_readRegisters,
+    .calculateMagneticField         = TLx493D_P2B6_calculateMagneticField,
+    .getMagneticField               = TLx493D_P2B6_getMagneticField,
+
+    .calculateMagneticFieldAndTemperature = TLx493D_P2B6_calculateMagneticFieldAndTemperature,
+    .getMagneticFieldAndTemperature = TLx493D_P2B6_getMagneticFieldAndTemperature,
+
+    .setDefaultConfig               = TLx493D_P2B6_setDefaultConfig,
+
+    .setResetValues                 = TLx493D_P2B6_setResetValues,
 };
 
 
-/***
- * TODO: add parameter IICAddress or ad function to set address.
-*/
+// TODO: add parameter IICAddress or ad function to set address.
 bool TLx493D_P2B6_init(TLx493D_ts *sensor) {
-    // regMap must be sensor specific, not sensor type specific, therefore malloc.
-    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
-    sensor->regDef            = TLx493D_P2B6_regDef;
-    // sensor->commonBitfields   = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
-    //                                                    .DT = DT, .AM = AM, .TRIG = TRIG, .X2 = X2, .TL_MAG = TL_MAG, .IICADR = IICADR, .PR = PR, .CA = CA, .INT = INT, .MODE = MODE,
-    //                                                    .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
-    //                                                    .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
-    //                                                  };
-    // sensor->commonRegisters   = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
-    sensor->functions         = &TLx493D_P2B6_commonFunctions;
-    sensor->regMapSize        = GEN_2_REG_MAP_SIZE;
-    sensor->sensorType        = TLx493D_P2B6_e;
-    sensor->comIFType         = TLx493D_I2C_e;
-    sensor->comLibIF          = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
-
-    memset(sensor->regMap, 0, sensor->regMapSize);
-    
+    // TODO: use in TLx493D_initCommunication
     TLx493D_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
-    
-    return true;
+
+    return tlx493d_common_init(sensor, GEN_2_REG_MAP_SIZE, TLx493D_P2B6_regDef, &TLx493D_P2B6_commonFunctions, TLx493D_P2B6_e, TLx493D_I2C_e);
 }
 
 
-/***
- * 
-*/
 bool TLx493D_P2B6_deinit(TLx493D_ts *sensor) {
-    free(sensor->regMap);
-    free(sensor->comLibObj.i2c_obj);
-
-    sensor->regMap            = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
-    return true;
+    return tlx493d_common_deinit(sensor);
 }
 
 
-/***
- * 
-*/
+bool TLx493D_P2B6_readRegisters(TLx493D_ts *sensor) {
+    return tlx493d_common_readRegisters(sensor);
+}
+
+
 void TLx493D_P2B6_calculateTemperature(TLx493D_ts *sensor, double *temp) {
-    int16_t value = 0;
-
-    tlx493d_common_concatBytes(sensor, TEMP_MSB, TEMP_LSB, &value);
-
-    value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
-    *temp = (((double) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
+    tlx493d_gen_2_calculateTemperature(sensor, temp, TEMP_MSB, TEMP_LSB);
 }
 
 
-/***
- * 
-*/
 bool TLx493D_P2B6_getTemperature(TLx493D_ts *sensor, double *temp) {
-    if( tlx493d_common_readRegisters(sensor) ) {
-        TLx493D_P2B6_calculateTemperature(sensor, temp);
-        return true;
-    }
-
-    return false;
+    return tlx493d_common_getTemperature(sensor, temp);
 }
 
 
-/***
- * 
-*/
 void TLx493D_P2B6_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
-    int16_t valueX = 0, valueY = 0, valueZ = 0;
-
-    tlx493d_common_concatBytes(sensor, BX_MSB, BX_LSB, &valueX);
-    tlx493d_common_concatBytes(sensor, BY_MSB, BY_LSB, &valueY);
-    tlx493d_common_concatBytes(sensor, BZ_MSB, BZ_LSB, &valueZ);
-
-    *x = ((double) valueX) * GEN_2_MAG_FIELD_MULT;
-    *y = ((double) valueY) * GEN_2_MAG_FIELD_MULT;
-    *z = ((double) valueZ) * GEN_2_MAG_FIELD_MULT;
+    tlx493d_gen_2_calculateMagneticField(sensor, x, y, z, BX_MSB, BX_LSB, BY_MSB, BY_LSB, BZ_MSB, BZ_LSB);
 }
 
 
-/***
- * 
-*/
-bool TLx493D_P2B6_getFieldValues(TLx493D_ts *sensor, double *x, double *y, double *z) {
-    if( tlx493d_common_readRegisters(sensor) ) {
-        TLx493D_P2B6_calculateMagneticField(sensor, x, y, z);
-        return true;
-    }
-
-    return false;
+bool TLx493D_P2B6_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
+    return tlx493d_common_getMagneticField(sensor, x, y, z);
 }
 
 
-/***
- * Must be regs 0x07 - 0x10
-*/
-uint8_t TLx493D_P2B6_calculateConfigurationParity(TLx493D_ts *sensor) {
-	uint8_t parity = tlx493d_common_calculateParity(sensor->regMap[CONFIG_REG] & ~sensor->regDef[CP].mask);
-	return tlx493d_common_getEvenParity(parity);
+void TLx493D_P2B6_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
+    TLx493D_P2B6_calculateMagneticField(sensor, x, y, z);
+    TLx493D_P2B6_calculateTemperature(sensor, temp);
 }
 
-/***
- * 
-*/
+
+bool TLx493D_P2B6_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
+    return tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+}
+
 bool TLx493D_P2B6_setDisableTemperatureMeasurements(TLx493D_ts *sensor, uint8_t dt) {
     // uint8_t config = sensor->commonRegisters.CONFIG;
 
@@ -297,32 +224,8 @@ bool TLx493D_P2B6_disableTemperatureMeasurements(TLx493D_ts *sensor) {
 }
 
 
-/***
- * 
-*/
-bool TLx493D_P2B6_set1ByteReadMode(TLx493D_ts *sensor, uint8_t pr) {
-    // uint8_t mod1 = sensor->commonRegisters.MOD1;
 
-    tlx493d_common_setBitfield(sensor, PR, pr);
-    tlx493d_common_setBitfield(sensor, FP, tlx493d_gen_2_calculateFuseParity(sensor, FP, PRD));
-
-    tlx493d_common_writeRegister(sensor, PR);
-}
-
-
-bool TLx493D_P2B6_enable1ByteMode(TLx493D_ts *sensor) {
-     return TLx493D_P2B6_set1ByteReadMode(sensor, 1);
-}
-
-
-bool TLx493D_P2B6_disable1ByteMode(TLx493D_ts *sensor) {
-     return TLx493D_P2B6_set1ByteReadMode(sensor, 0);
-}
-
-
-/***
- * TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
-*/
+// TODO: set all options that must be set, eg MODE ?, reset all bits to defaults !
 bool TLx493D_P2B6_setDefaultConfig(TLx493D_ts *sensor) {
     sensor->regMap[CONFIG_REG] = 0x00;
     sensor->regMap[MOD1_REG]   = 0x00;
@@ -344,4 +247,47 @@ bool TLx493D_P2B6_setDefaultConfig(TLx493D_ts *sensor) {
     }
 
     return false;
+}
+
+
+bool TLx493D_P2B6_set1ByteReadMode(TLx493D_ts *sensor, uint8_t pr) {
+    // uint8_t mod1 = sensor->commonRegisters.MOD1;
+
+    tlx493d_common_setBitfield(sensor, PR, pr);
+    tlx493d_common_setBitfield(sensor, FP, tlx493d_gen_2_calculateFuseParity(sensor, FP, PRD));
+
+    tlx493d_common_writeRegister(sensor, PR);
+}
+
+
+bool TLx493D_P2B6_enable1ByteMode(TLx493D_ts *sensor) {
+     return TLx493D_P2B6_set1ByteReadMode(sensor, 1);
+}
+
+
+bool TLx493D_P2B6_disable1ByteMode(TLx493D_ts *sensor) {
+     return TLx493D_P2B6_set1ByteReadMode(sensor, 0);
+}
+
+
+// Must be regs 0x07 - 0x10
+uint8_t TLx493D_P2B6_calculateConfigurationParity(TLx493D_ts *sensor) {
+	uint8_t parity = tlx493d_common_calculateParity(sensor->regMap[CONFIG_REG] & ~sensor->regDef[CP].mask);
+	return tlx493d_common_getEvenParity(parity);
+}
+
+
+void TLx493D_P2B6_setResetValues(TLx493D_ts *sensor) {
+    sensor->regMap[0x07] = 0x80;
+    sensor->regMap[0x08] = 0x7F;
+    sensor->regMap[0x09] = 0x80;
+    sensor->regMap[0x0A] = 0x7F;
+    sensor->regMap[0x0B] = 0x80;
+    sensor->regMap[0x0C] = 0x7F;
+    sensor->regMap[0x0D] = 0x38;
+    sensor->regMap[0x0E] = 0x38;
+    sensor->regMap[0x0F] = 0x38;  
+    sensor->regMap[0x10] = 0x01; // CONFIG
+    sensor->regMap[0x11] = 0x80; // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
+    sensor->regMap[0x13] = 0x00; // MOD2
 }

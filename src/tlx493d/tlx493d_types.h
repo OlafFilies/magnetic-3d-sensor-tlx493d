@@ -85,7 +85,12 @@ typedef enum {
 
 
 typedef enum {
-               _RATE_e = 0,
+               UPDATE_RATE_SLOW_e = 0,
+               UPDATE_RATE_FAST_e,
+               UPDATE_RATE_1000_HZ_e,
+               UPDATE_RATE_125_HZ_e,
+               UPDATE_RATE_31_HZ_e,
+               UPDATE_RATE_16_HZ_e,
 } TLx493D_UpdateRateType_te;
 
 
@@ -214,6 +219,8 @@ typedef bool (*TLx493D_SetUpperWakeUpThresholdZFuncPtr)(TLx493D_ts *, int16_t);
 typedef bool (*TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr)(TLx493D_ts *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);
 typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_ts *, double, double, double, double, double, double);
 
+typedef bool (*TLx493D_SoftResetFuncPtr)(TLx493D_ts *);
+
 
 // functions used internally and not accessible through the common interface
 typedef bool (*TLx493D_Enable1ByteReadModeFuncPtr)(TLx493D_ts *);
@@ -230,6 +237,8 @@ typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(TLx493D_ts *);
 typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_ts *);
 typedef bool (*TLx493D_HasValidPD0BitFuncPtr)(TLx493D_ts *);
 typedef bool (*TLx493D_HasValidPD3BitFuncPtr)(TLx493D_ts *);
+
+typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_ts *);
 
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
@@ -297,6 +306,8 @@ typedef struct TLx493D_CommonFunctions_ts {
     TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr setWakeUpThresholdsAsInteger;                
     TLx493D_SetWakeUpThresholdsFuncPtr          setWakeUpThresholds;                
 
+    TLx493D_SoftResetFuncPtr                    softReset;
+    
 
     // functions used internally and not accessible through the common interface
     TLx493D_Enable1ByteReadModeFuncPtr          enable1ByteReadMode;
@@ -314,6 +325,7 @@ typedef struct TLx493D_CommonFunctions_ts {
     TLx493D_HasValidPD0BitFuncPtr               hasValidPD0Bit;
     TLx493D_HasValidPD3BitFuncPtr               hasValidPD3Bit;
     
+    TLx493D_SetResetValuesFuncPtr               setResetValues;
 } TLx493D_CommonFunctions_ts;
 
 
