@@ -26,33 +26,10 @@ static TEST_TEAR_DOWN(SensorsGen2Common_needsSensor)
 }
 
 
-// Define all relevant tests for the sensor device
-TEST_IFX(SensorsGen2Common_needsSensor, dummy)
-{
-    TEST_ASSERT( true == !false );
-}
-
-TEST_IFX(SensorsGen2Common_needsSensor, concatBytes)
-{
-    int16_t result = 0;
-
-    TEST_ASSERT(tlx493d_common_readRegisters(&dut));
-
-    // tlx493d_common_concatBytes(&dut, 0x10, 0x11, &result);
-
-    // TEST_ASSERT_EQUAL_INT16(0, result);
-
-    // tlx493d_common_concatBytes(&dut, 0x13, 0x10, &result);
-
-    // TEST_ASSERT_EQUAL_INT16(2, result);
-}
-
-
 // Bundle all tests to be executed for this test group
 static TEST_GROUP_RUNNER(SensorsGen2Common_needsSensor)
 {
-    RUN_TEST_CASE(SensorsGen2Common_needsSensor, dummy);
-    RUN_TEST_CASE(SensorsGen2Common_needsSensor, concatBytes);
+    // RUN_TEST_CASE(SensorsGen2Common_needsSensor, );
 }
 
 

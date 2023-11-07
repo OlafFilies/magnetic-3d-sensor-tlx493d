@@ -3,8 +3,6 @@
 
 // test includes
 #include "Test_includes.h"
-#include "Test_tlx493d_common.h"
-#include "Test_tlx493d_gen_2_common.h"
 
 
 void TLx493D_P2B6_suiteSetUp(void);
@@ -12,7 +10,12 @@ void TLx493D_P2B6_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-// static TLx493D_ts dut;
+static TLx493D_ts dut;
+
+
+// test includes that may require dut
+#include "Test_tlx493d_common.h"
+#include "Test_tlx493d_gen_2_common.h"
 
 
 // define test group name

@@ -83,15 +83,13 @@ bool TLx493D_A2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor);
 bool TLx493D_A2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor);
 bool TLx493D_A2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor);
 
-// bool TLx493D_A2B6_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t srs);
 bool TLx493D_A2B6_enableShortRangeSensitivity(TLx493D_ts *sensor);
 bool TLx493D_A2B6_disableShortRangeSensitivity(TLx493D_ts *sensor);
 
-// bool TLx493D_A2B6_setMagneticTemperatureCompensation(TLx493D_ts *sensor, uint8_t mtc);
-bool TLx493D_A2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor);
-bool TLx493D_A2B6_setTC1MagneticTemperatureCompensation(TLx493D_ts *sensor);
-bool TLx493D_A2B6_setTC2MagneticTemperatureCompensation(TLx493D_ts *sensor);
-bool TLx493D_A2B6_setTC3MagneticTemperatureCompensation(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setTC1MagneticTemperatureCompensation(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setTC2MagneticTemperatureCompensation(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setTC3MagneticTemperatureCompensation(TLx493D_ts *sensor);
 
 
 bool TLx493D_A2B6_enable1ByteReadMode(TLx493D_ts *sensor);
@@ -101,14 +99,14 @@ uint8_t TLx493D_A2B6_calculateFuseParity(TLx493D_ts *sensor);
 uint8_t TLx493D_A2B6_calculateBusParity(TLx493D_ts *sensor);
 uint8_t TLx493D_A2B6_calculateConfigurationParity(TLx493D_ts *sensor);
 
-bool TLx493D_A2B6_hasValidTemperatureData(TLx493D_ts *sensor);
-bool TLx493D_A2B6_hasValidMagneticFieldData(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_hasValidTemperatureData(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_hasValidMagneticFieldData(TLx493D_ts *sensor);
 bool TLx493D_A2B6_hasValidTBit(TLx493D_ts *sensor);
-bool TLx493D_A2B6_hasValidPD0Bit(TLx493D_ts *sensor);
-bool TLx493D_A2B6_hasValidPD3Bit(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_hasValidPD0Bit(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_hasValidPD3Bit(TLx493D_ts *sensor);
 
-bool TLx493D_A2B6_hasValidIICadr(TLx493D_ts *sensor);
-bool TLx493D_A2B6_hasWakeup(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_hasValidIICadr(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_hasWakeup(TLx493D_ts *sensor);
 
 bool TLx493D_A2B6_hasValidFuseParity(TLx493D_ts *sensor);
 bool TLx493D_A2B6_hasValidBusParity(TLx493D_ts *sensor);

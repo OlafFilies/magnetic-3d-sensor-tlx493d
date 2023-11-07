@@ -26,18 +26,36 @@ static TEST_TEAR_DOWN(SensorsCommon_needsSensor)
 }
 
 
-// Define all relevant tests for the sensor device
-
-TEST_IFX(SensorsCommon_needsSensor, dummy)
+TEST_IFX(SensorsCommon_needsSensor, checkGetMagneticFieldAndTemperature)
 {
-    TEST_ASSERT( true == !false );
+    double  x, y, z, t;
+    double  xl, xh, yl, yh, zl, zh;
+    int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
+
+    TEST_ASSERT( tlx493d_common_getTemperature(&dut, &t) == true );
+    TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, t );
+
+    tlx493d_common_getMagneticField(&dut, &x, &y, &z);
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
+
+    x = 0.0;
+    y = 0.0;
+    z = 0.0;
+    t = 0.0;
+    tlx493d_common_getMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
+    TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, t );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
 }
 
 
 // Bundle all tests to be executed for this test group
 static TEST_GROUP_RUNNER(SensorsCommon_needsSensor)
 {
-    RUN_TEST_CASE(SensorsCommon_needsSensor, dummy);
+    RUN_TEST_CASE(SensorsCommon_needsSensor, checkGetMagneticFieldAndTemperature);
 }
 
 

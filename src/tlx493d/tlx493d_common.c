@@ -161,10 +161,26 @@ uint8_t tlx493d_common_getEvenParity(uint8_t parity) {
 void tlx493d_common_concatBytes(TLx493D_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result) {
     TLx493D_Register_ts *msb = &sensor->regDef[msbBitfield];
     TLx493D_Register_ts *lsb = &sensor->regDef[lsbBitfield];
+    // print("\nmsb = %#x   %#x\n", sensor->regMap[msb->address] & msb->mask, (sensor->regMap[msb->address] & msb->mask) >> msb->offset);
+    // print("\nlsb = %#x   %#x\n", sensor->regMap[lsb->address] & lsb->mask, (sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset);
 
-    *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
+    // print("\nmsb->numBits = %#x    mask : %#x\n", msb->numBits, msb->mask);
+    // print("\nlsb->numBits = %#x    mask : %#x\n", lsb->numBits, lsb->mask);
+
+    *result   = ((sensor->regMap[msb->address] & msb->mask) << (16 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
+    // print("\nshift = %#x\n", 16 - msb->numBits - msb->offset);
+    // print("\nresult 0 = %#x\n", *result);
+    // print("\nresult >> 1 = %#x\n", *result >> 1);
+    // print("\nresult >> 2 = %#x\n", *result >> 2);
+    // print("\nresult >> 3 = %#x\n", *result >> 3);
+    // print("\nresult >> 4 = %#x\n", *result >> 4);
+    // print("\nresult >> 5 = %#x\n", *result >> 5);
+    // print("\nresult >> 6 = %#x\n", *result >> 6);
     *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
+    // print("\nshift = %#x\n", 16 - msb->numBits - lsb->numBits);
+    // print("\nresult 1 = %#x\n", *result);
     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
+    // print("\nresult 2 = %#x\n", *result);
 }
 
 
@@ -192,7 +208,7 @@ const char *tlx493d_common_getTypeAsString(TLx493D_ts *sensor) {
                             break;
 
       default : return "ERROR : Unknown sensorType !";
-               break;
+                break;
    }
 }
 

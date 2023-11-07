@@ -38,6 +38,7 @@ typedef enum {
 	MASTERCONTROLLEDMODE
 } TLx493D_A1B6_PowerMode_t;	
 
+
 typedef struct{
 	uint8_t FAST;
 	uint8_t LOW_POWER;

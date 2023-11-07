@@ -10,6 +10,7 @@ void TLx493D_P2B6_needsSensor_suiteTearDown(void);
 static TLx493D_ts dut;
 
 
+// test includes that may require dut
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
 #include "Test_tlx493d_common_needsSensor.h"
 #include "Test_tlx493d_common.h"

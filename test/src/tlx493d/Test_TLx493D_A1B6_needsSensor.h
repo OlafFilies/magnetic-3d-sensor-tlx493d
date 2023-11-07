@@ -7,6 +7,7 @@ void TLx493D_A1B6_needsSensor_suiteTearDown(void);
 void TLx493D_A1B6_atReset_suiteSetup(void);
 void TLx493D_A1B6_atReset_suiteTearDown(void);
 
+
 // variables used in the tests below that have to be accessed in the setup and tear down methods
 static TLx493D_ts dut;
 

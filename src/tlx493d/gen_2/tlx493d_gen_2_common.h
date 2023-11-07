@@ -34,6 +34,8 @@ bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t f
 
 // bool setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, enum <possible combinations> eVal);
 bool tlx493d_gen_2_setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, uint8_t intBF, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, bool intIsOn, bool caIsOn);
+bool tlx493d_gen_2_setInterrupt(TLx493D_ts *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq);
+bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_ts *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca);
 
 // bool setPowerMode(TLx493D_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
 bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_te mode);
@@ -67,32 +69,32 @@ bool tlx493d_gen_2_isFunctional(TLx493D_ts *sensor);
 // bool tlx493d_softReset(TLx493D_ts *sensor);
 
 
-bool tlx493d_gen_2_setMagneticTemperatureCompensation(TLx493D_ts *sensor, uint8_t tl_magBF, uint8_t cpBF, uint8_t mtc);
+// bool tlx493d_gen_2_setMagneticTemperatureCompensation(TLx493D_ts *sensor, uint8_t tl_magBF, uint8_t cpBF, uint8_t mtc);
 bool tlx493d_gen_2_set1ByteReadMode(TLx493D_ts *sensor, uint8_t prBF, uint8_t fpBF, uint8_t prdBF, uint8_t pr);
 
 // TODO: cleanup
 uint8_t tlx493d_gen_2_calculateFuseParity(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF);
 uint8_t tlx493d_gen_2_calculateBusParity(TLx493D_ts *sensor, uint8_t to);
 uint8_t tlx493d_gen_2_calculateConfigurationParity(TLx493D_ts *sensor, uint8_t cpBF);
-uint8_t tlx493d_gen_2_calculateConfigurationParityWakeup(TLx493D_ts *sensor, uint8_t cpBF, uint8_t from, uint8_t to);
+uint8_t tlx493d_gen_2_calculateConfigurationParityWakeup(TLx493D_ts *sensor, uint8_t cpBF); //, uint8_t from, uint8_t to);
 
 bool tlx493d_gen_2_hasValidFuseParity(TLx493D_ts *sensor, uint8_t ffBF);
 bool tlx493d_gen_2_hasValidBusParity(TLx493D_ts *sensor, uint8_t pBF);
 bool tlx493d_gen_2_hasValidConfigurationParity(TLx493D_ts *sensor, uint8_t cpBF);
 
-bool tlx493d_gen_2_hasValidTemperatureData(TLx493D_ts *sensor);
-bool tlx493d_gen_2_hasValidMagneticFieldData(TLx493D_ts *sensor);
+// bool tlx493d_gen_2_hasValidTemperatureData(TLx493D_ts *sensor);
+// bool tlx493d_gen_2_hasValidMagneticFieldData(TLx493D_ts *sensor);
 bool tlx493d_gen_2_hasValidTBit(TLx493D_ts *sensor, uint8_t tBF) ;
-bool tlx493d_gen_2_hasValidPD3Bit(TLx493D_ts *sensor, uint8_t pd3BF);
-bool tlx493d_gen_2_hasValidPD0Bit(TLx493D_ts *sensor, uint8_t pd0BF);
+// bool tlx493d_gen_2_hasValidPD3Bit(TLx493D_ts *sensor, uint8_t pd3BF);
+// bool tlx493d_gen_2_hasValidPD0Bit(TLx493D_ts *sensor, uint8_t pd0BF);
 
-bool tlx493d_gen_2_hasValidIICadr(TLx493D_ts *sensor, uint8_t idBF, uint8_t iicAdrBF);
-bool tlx493d_gen_2_hasWakeup(TLx493D_ts *sensor, uint8_t typeBF);
+// bool tlx493d_gen_2_hasValidIICadr(TLx493D_ts *sensor, uint8_t idBF, uint8_t iicAdrBF);
+// bool tlx493d_gen_2_hasWakeup(TLx493D_ts *sensor, uint8_t typeBF);
 
-uint8_t tlx493d_gen_2_getID(TLx493D_ts *sensor, uint8_t idBF);
-uint8_t tlx493d_gen_2_getFrameCounter(TLx493D_ts *sensor, uint8_t frmBF) ;
-uint8_t tlx493d_gen_2_getType(TLx493D_ts *sensor, uint8_t typeBF);
-uint8_t tlx493d_gen_2_getHWV(TLx493D_ts *sensor, uint8_t hwvBF);
+// uint8_t tlx493d_gen_2_getID(TLx493D_ts *sensor, uint8_t idBF);
+// uint8_t tlx493d_gen_2_getFrameCounter(TLx493D_ts *sensor, uint8_t frmBF) ;
+// uint8_t tlx493d_gen_2_getType(TLx493D_ts *sensor, uint8_t typeBF);
+// uint8_t tlx493d_gen_2_getHWV(TLx493D_ts *sensor, uint8_t hwvBF);
 
 
 #endif // TLX493D_GEN_2_COMMON_H

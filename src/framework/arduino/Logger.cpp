@@ -27,7 +27,7 @@ extern "C" {
     }
 
 
-    void print(double d) {
+    void printDouble(double d) {
         Serial.print(d);
     }
 
@@ -46,6 +46,14 @@ extern "C" {
         }
 
         Serial.println(buffer);
+    }
+
+
+    void print(const char *format, ...) {
+        va_list ap;
+        va_start(ap, format);
+        logMessage("", format, ap);
+        va_end(ap);
     }
 
 

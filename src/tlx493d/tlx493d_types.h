@@ -85,8 +85,19 @@ typedef enum {
 
 
 typedef enum {
-               UPDATE_RATE_SLOW_e = 0,
-               UPDATE_RATE_FAST_e,
+               // Generation 2
+               UPDATE_RATE_FAST_e = 0,
+               UPDATE_RATE_SLOW_e,
+               UPDATE_RATE_770_HZ_e,
+               UPDATE_RATE_97_HZ_e,
+               UPDATE_RATE_24_HZ_e,
+               UPDATE_RATE_12_HZ_e,
+               UPDATE_RATE_6_HZ_e,
+               UPDATE_RATE_3_HZ_e,
+               UPDATE_RATE_0_4_HZ_e,
+               UPDATE_RATE_0_05_HZ_e,
+
+               // Generation 3
                UPDATE_RATE_1000_HZ_e,
                UPDATE_RATE_125_HZ_e,
                UPDATE_RATE_31_HZ_e,
@@ -235,8 +246,8 @@ typedef bool (*TLx493D_HasValidBusParityFuncPtr)(TLx493D_ts *);
 typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(TLx493D_ts *);
 
 typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_ts *);
-typedef bool (*TLx493D_HasValidPD0BitFuncPtr)(TLx493D_ts *);
-typedef bool (*TLx493D_HasValidPD3BitFuncPtr)(TLx493D_ts *);
+// typedef bool (*TLx493D_HasValidPD0BitFuncPtr)(TLx493D_ts *);
+// typedef bool (*TLx493D_HasValidPD3BitFuncPtr)(TLx493D_ts *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_ts *);
 
@@ -322,8 +333,8 @@ typedef struct TLx493D_CommonFunctions_ts {
     TLx493D_HasValidConfigParityFuncPtr         hasValidConfigurationParity;
 
     TLx493D_HasValidTBitFuncPtr                 hasValidTBit;
-    TLx493D_HasValidPD0BitFuncPtr               hasValidPD0Bit;
-    TLx493D_HasValidPD3BitFuncPtr               hasValidPD3Bit;
+    // TLx493D_HasValidPD0BitFuncPtr               hasValidPD0Bit;
+    // TLx493D_HasValidPD3BitFuncPtr               hasValidPD3Bit;
     
     TLx493D_SetResetValuesFuncPtr               setResetValues;
 } TLx493D_CommonFunctions_ts;

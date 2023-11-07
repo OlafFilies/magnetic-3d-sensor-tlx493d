@@ -178,8 +178,8 @@ TLx493D_CommonFunctions_ts TLx493D_W2B6_commonFunctions = {
     // .hasValidMagneticFieldData     = tlx493d_gen_2_hasValidMagneticFieldData,
 
     .hasValidTBit                   = TLx493D_W2B6_hasValidTBit,
-    .hasValidPD0Bit                 = TLx493D_W2B6_hasValidPD0Bit,
-    .hasValidPD3Bit                 = TLx493D_W2B6_hasValidPD3Bit,
+    // .hasValidPD0Bit                 = TLx493D_W2B6_hasValidPD0Bit,
+    // .hasValidPD3Bit                 = TLx493D_W2B6_hasValidPD3Bit,
     
     .setResetValues                 = TLx493D_W2B6_setResetValues,
 };
@@ -277,7 +277,7 @@ bool TLx493D_W2B6_setDefaultConfig(TLx493D_ts *sensor) {
     tlx493d_common_setBitfield(sensor, CA, 0);
     tlx493d_common_setBitfield(sensor, INT, 1);
 
-    if( sensor->functions->enable1ByteReadMode(sensor) ) {
+    if( TLx493D_W2B6_enable1ByteReadMode(sensor) ) {
         // if( sensor->functions->disableTemperatureMeasurement(sensor) ) {
             // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
             // accidentally changing a preset values to 0.
@@ -554,24 +554,24 @@ bool TLx493D_W2B6_disableShortRangeSensitivity(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_W2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b00);
-}
+// bool TLx493D_W2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b00);
+// }
 
 
-bool TLx493D_W2B6_setTC1MagneticTemperatureCompensation(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b01);
-}
+// bool TLx493D_W2B6_setTC1MagneticTemperatureCompensation(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b01);
+// }
 
 
-bool TLx493D_W2B6_setTC2MagneticTemperatureCompensation(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b10);
-}
+// bool TLx493D_W2B6_setTC2MagneticTemperatureCompensation(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b10);
+// }
 
 
-bool TLx493D_W2B6_setTC3MagneticTemperatureCompensation(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b11);
-}
+// bool TLx493D_W2B6_setTC3MagneticTemperatureCompensation(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, TL_MAG, CP, 0b11);
+// }
 
 
 
@@ -624,24 +624,24 @@ bool TLx493D_W2B6_hasValidConfigurationParity(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_W2B6_hasValidIICadr(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_hasValidIICadr(sensor, ID, IICADR);
-}
+// bool TLx493D_W2B6_hasValidIICadr(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_hasValidIICadr(sensor, ID, IICADR);
+// }
 
 
-bool TLx493D_W2B6_hasWakeup(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_hasWakeup(sensor, TYPE);
-}
+// bool TLx493D_W2B6_hasWakeup(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_hasWakeup(sensor, TYPE);
+// }
 
 
-bool TLx493D_W2B6_hasValidTemperatureData(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_hasValidTemperatureData(sensor);
-}
+// bool TLx493D_W2B6_hasValidTemperatureData(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_hasValidTemperatureData(sensor);
+// }
 
 
-bool TLx493D_W2B6_hasValidMagneticFieldData(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_hasValidMagneticFieldData(sensor);
-}
+// bool TLx493D_W2B6_hasValidMagneticFieldData(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_hasValidMagneticFieldData(sensor);
+// }
 
 
 bool TLx493D_W2B6_hasValidTBit(TLx493D_ts *sensor) {
@@ -649,14 +649,14 @@ bool TLx493D_W2B6_hasValidTBit(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_W2B6_hasValidPD0Bit(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_hasValidPD0Bit(sensor, PD0);
-}
+// bool TLx493D_W2B6_hasValidPD0Bit(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_hasValidPD0Bit(sensor, PD0);
+// }
 
 
-bool TLx493D_W2B6_hasValidPD3Bit(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_hasValidPD3Bit(sensor, PD3);
-}
+// bool TLx493D_W2B6_hasValidPD3Bit(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_hasValidPD3Bit(sensor, PD3);
+// }
 
 
 void TLx493D_W2B6_setResetValues(TLx493D_ts *sensor) {
