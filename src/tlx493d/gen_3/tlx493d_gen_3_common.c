@@ -69,7 +69,12 @@ double sensitivity = GEN_3_FULL_RANGE_FIELD_SENSITIVITY; // TODO: r is range spe
           + ((double) valueZ) * (GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + GEN_3_L3z * temp))))
        / sensitivity;
 }
-    
+
+// Calc. int from mT :
+// valueX = x * sensitivity;
+// valueY = y * sensitivity;
+// valueZ = z * sensitivity;
+
 
 // void tlx493d_gen_3_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp,
 //                                                         uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,

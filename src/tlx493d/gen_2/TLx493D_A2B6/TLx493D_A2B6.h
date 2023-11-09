@@ -32,9 +32,9 @@ bool TLx493D_A2B6_getMagneticField(TLx493D_ts *sensor, double *x, double *y, dou
 void TLx493D_A2B6_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 bool TLx493D_A2B6_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 
-bool TLx493D_A2B6_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te mVals);
+bool TLx493D_A2B6_setMeasurement(TLx493D_ts *sensor, TLx493D_MeasurementType_te mVals);
 
-bool TLx493D_A2B6_setTrigger(TLx493D_ts *sensor, uint8_t trig);
+bool TLx493D_A2B6_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trig);
 bool TLx493D_A2B6_setSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te sens);
 
 
@@ -74,17 +74,17 @@ bool TLx493D_A2B6_softReset(TLx493D_ts *sensor);
 
 
 // utilities
-bool TLx493D_A2B6_enableTemperatureMeasurement(TLx493D_ts *sensor);
-bool TLx493D_A2B6_disableTemperatureMeasurement(TLx493D_ts *sensor);
-bool TLx493D_A2B6_enableAngularMeasurement(TLx493D_ts *sensor);
-bool TLx493D_A2B6_disableAngularMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_enableTemperatureMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_disableTemperatureMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_enableAngularMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_disableAngularMeasurement(TLx493D_ts *sensor);
 
-bool TLx493D_A2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor);
-bool TLx493D_A2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor);
-bool TLx493D_A2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor);
 
-bool TLx493D_A2B6_enableShortRangeSensitivity(TLx493D_ts *sensor);
-bool TLx493D_A2B6_disableShortRangeSensitivity(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_enableShortRangeSensitivity(TLx493D_ts *sensor);
+// bool TLx493D_A2B6_disableShortRangeSensitivity(TLx493D_ts *sensor);
 
 // bool TLx493D_A2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor);
 // bool TLx493D_A2B6_setTC1MagneticTemperatureCompensation(TLx493D_ts *sensor);
@@ -105,7 +105,7 @@ bool TLx493D_A2B6_hasValidTBit(TLx493D_ts *sensor);
 // bool TLx493D_A2B6_hasValidPD0Bit(TLx493D_ts *sensor);
 // bool TLx493D_A2B6_hasValidPD3Bit(TLx493D_ts *sensor);
 
-// bool TLx493D_A2B6_hasValidIICadr(TLx493D_ts *sensor);
+bool TLx493D_A2B6_hasValidIICadr(TLx493D_ts *sensor);
 // bool TLx493D_A2B6_hasWakeup(TLx493D_ts *sensor);
 
 bool TLx493D_A2B6_hasValidFuseParity(TLx493D_ts *sensor);

@@ -17,14 +17,16 @@ void tlx493d_gen_2_calculateMagneticField(TLx493D_ts *sensor, double *x, double 
 //                                                 uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF,
 //                                                 uint8_t tempMSBBF, uint8_t tempLSBBF);                
 
+bool tlx493d_gen_2_setOneConfigBitfield(TLx493D_ts *sensor, uint8_t firstBF, uint8_t cpBF, uint8_t first);
+bool tlx493d_gen_2_setTwoConfigBitfields(TLx493D_ts *sensor, uint8_t firstBF, uint8_t secondBF, uint8_t cpBF, uint8_t first, uint8_t second);
 
 // bool selectMeasuredValues(TLx493D_ts *sensor, enum <possible combinations> mVals); // Bx/By/Bz, Bx/By, Bx/By/Temp, ...
 // or do it separately ? Like :
-bool tlx493d_gen_2_setDisableTemperatureMeasurement(TLx493D_ts *sensor, uint8_t dtBF, uint8_t cpBF, uint8_t dt);
-bool tlx493d_gen_2_setAngularMeasurement(TLx493D_ts *sensor, uint8_t amBF, uint8_t dtBF, uint8_t cpBF, uint8_t am, uint8_t dt);
+// bool tlx493d_gen_2_setDisableTemperatureMeasurement(TLx493D_ts *sensor, uint8_t dtBF, uint8_t cpBF, uint8_t dt);
+// bool tlx493d_gen_2_setAngularMeasurement(TLx493D_ts *sensor, uint8_t amBF, uint8_t dtBF, uint8_t cpBF, uint8_t am, uint8_t dt);
 
-bool tlx493d_gen_2_setTrigger(TLx493D_ts *sensor, uint8_t trigBF, uint8_t cpBF, uint8_t trig);
-bool tlx493d_gen_2_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t x2BF, uint8_t cpBF, uint8_t srs);
+// bool tlx493d_gen_2_setTrigger(TLx493D_ts *sensor, uint8_t trigBF, uint8_t cpBF, TLx493D_TriggerType_te trig);
+// bool tlx493d_gen_2_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t x2BF, uint8_t cpBF, uint8_t srs);
 
 
 bool tlx493d_gen_2_setDefaultConfig(TLx493D_ts *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF);
@@ -33,9 +35,9 @@ bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t f
 // bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t fpBF, StandardIICAddresses_te addr);
 
 // bool setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, enum <possible combinations> eVal);
-bool tlx493d_gen_2_setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, uint8_t intBF, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, bool intIsOn, bool caIsOn);
-bool tlx493d_gen_2_setInterrupt(TLx493D_ts *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq);
+// bool tlx493d_gen_2_setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, uint8_t intBF, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, bool intIsOn, bool caIsOn);
 bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_ts *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca);
+bool tlx493d_gen_2_setInterrupt(TLx493D_ts *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq);
 
 // bool setPowerMode(TLx493D_ts *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
 bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_te mode);
@@ -88,7 +90,7 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_ts *sensor, uint8_t tBF) ;
 // bool tlx493d_gen_2_hasValidPD3Bit(TLx493D_ts *sensor, uint8_t pd3BF);
 // bool tlx493d_gen_2_hasValidPD0Bit(TLx493D_ts *sensor, uint8_t pd0BF);
 
-// bool tlx493d_gen_2_hasValidIICadr(TLx493D_ts *sensor, uint8_t idBF, uint8_t iicAdrBF);
+bool tlx493d_gen_2_hasValidIICadr(TLx493D_ts *sensor, uint8_t idBF, uint8_t iicAdrBF);
 // bool tlx493d_gen_2_hasWakeup(TLx493D_ts *sensor, uint8_t typeBF);
 
 // uint8_t tlx493d_gen_2_getID(TLx493D_ts *sensor, uint8_t idBF);

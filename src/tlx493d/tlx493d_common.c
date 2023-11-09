@@ -214,5 +214,13 @@ const char *tlx493d_common_getTypeAsString(TLx493D_ts *sensor) {
 
 
 void warnFeatureNotAvailableForSensorType(TLx493D_ts *sensor, const char *featureName) {
-    warn("Feature '%s' not available for sensor type '%s' !\n", featureName, tlx493d_common_getTypeAsString(sensor));
+    print("");
+    warn("Feature '%s' not available for sensor type '%s' !", featureName, tlx493d_common_getTypeAsString(sensor));
+}
+
+
+
+void warnSelectionNotSupportedForSensorType(TLx493D_ts *sensor, uint8_t sel, const char *selType) {
+    print("");
+    warn("Selection '%d' for type '%s' not supported for sensor type '%s' !", sel, selType, tlx493d_common_getTypeAsString(sensor));
 }

@@ -10,17 +10,23 @@
 // project cpp includes
 #include "Logger.h"
 
+// project c includes
+#include "tlx493d_types.h"
+
 
 #define BUFFER_SIZE  512
 
 
 extern "C" {
-    void printRegisters(uint8_t *rm, uint8_t rmSize) {
-        Serial.print("regMap :"); 
+    void printRegisters(TLx493D_ts *sensor) {
+    // void printRegisters(uint8_t *rm, uint8_t rmSize) {
+        Serial.print("\nregMap :"); 
 
-        for(uint8_t i = 0; i < rmSize; ++i) {
+        for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
+        // for(uint8_t i = 0; i < rmSize; ++i) {
             Serial.print("  0x");
-            Serial.print(rm[i], HEX);
+            Serial.print(sensor->regMap[i], HEX);
+            // Serial.print(rm[i], HEX);
         }
 
         Serial.println();

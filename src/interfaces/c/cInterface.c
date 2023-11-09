@@ -91,8 +91,8 @@ bool tlx493d_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, doubl
 }
 
 
-bool tlx493d_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas) {
-   return sensor->functions->selectMeasureValues(sensor, meas);
+bool tlx493d_setMeasurement(TLx493D_ts *sensor, TLx493D_MeasurementType_te meas) {
+   return sensor->functions->setMeasurement(sensor, meas);
 }
 // bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor) {
 //    return sensor->functions->enableTemperatureMeasurement(sensor);
@@ -108,7 +108,7 @@ bool tlx493d_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas
 // }
 
 
-bool tlx493d_setTrigger(TLx493D_ts *sensor, uint8_t trigger) {
+bool tlx493d_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trigger) {
    return sensor->functions->setTrigger(sensor, trigger);
 }
 
@@ -126,22 +126,25 @@ bool tlx493d_setDefaultConfig(TLx493D_ts *sensor) {
 bool tlx493d_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr) {
    return sensor->functions->setIICAddress(sensor, addr);
 }
-// bool tlx493d_setIICAddress(TLx493D_ts *sensor, uint8_t addr) {
-//    return sensor->functions->setIICAddress(sensor, addr);
-// }
+
+
+bool tlx493d_enableCollisionAvoidance(TLx493D_ts *sensor) {
+   return sensor->functions->enableCollisionAvoidance(sensor);
+}
+
+
+bool tlx493d_disableCollisionAvoidance(TLx493D_ts *sensor) {
+   return sensor->functions->disableCollisionAvoidance(sensor);
+}
 
 
 bool tlx493d_enableInterrupt(TLx493D_ts *sensor) {
    return sensor->functions->enableInterrupt(sensor);
 }
+
+
 bool tlx493d_disableInterrupt(TLx493D_ts *sensor) {
    return sensor->functions->disableInterrupt(sensor);
-}
-bool tlx493d_enableCollisionAvoidance(TLx493D_ts *sensor) {
-   return sensor->functions->enableCollisionAvoidance(sensor);
-}
-bool tlx493d_disableCollisionAvoidance(TLx493D_ts *sensor) {
-   return sensor->functions->disableCollisionAvoidance(sensor);
 }
 
 

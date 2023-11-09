@@ -25,16 +25,20 @@ bool tlx493d_getTemperature(TLx493D_ts *sensor, double *temp);
 bool tlx493d_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
 bool tlx493d_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 
+bool tlx493d_getRawTemperature(TLx493D_ts *sensor, uint16_t *temp);
+bool tlx493d_getRawMagneticField(TLx493D_ts *sensor, uint16_t *x, uint16_t *y, uint16_t *z);
+bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_ts *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temp);
+
 
 // functions related to the "Config" register
-bool tlx493d_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas);
+bool tlx493d_setMeasurement(TLx493D_ts *sensor, TLx493D_MeasurementType_te meas);
 // or do it separately ? Like :
 // bool tlx493d_enableTemperatureMeasurement(TLx493D_ts *sensor);
 // bool tlx493d_disableTemperatureMeasurement(TLx493D_ts *sensor);
 // bool tlx493d_enableAngularMeasurement(TLx493D_ts *sensor);
 // bool tlx493d_disableAngularMeasurement(TLx493D_ts *sensor);
 
-bool tlx493d_setTrigger(TLx493D_ts *sensor, uint8_t trigger);
+bool tlx493d_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trigger);
 bool tlx493d_setSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te range);
 
 
@@ -42,11 +46,11 @@ bool tlx493d_setSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te range
 bool tlx493d_setDefaultConfig(TLx493D_ts *sensor);
 bool tlx493d_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te addr); // Gen. 1 and 2
 
-bool tlx493d_enableInterrupt(TLx493D_ts *sensor);
-bool tlx493d_disableInterrupt(TLx493D_ts *sensor);
-
 bool tlx493d_enableCollisionAvoidance(TLx493D_ts *sensor);
 bool tlx493d_disableCollisionAvoidance(TLx493D_ts *sensor);
+
+bool tlx493d_enableInterrupt(TLx493D_ts *sensor);
+bool tlx493d_disableInterrupt(TLx493D_ts *sensor);
 
 bool tlx493d_setPowerMode(TLx493D_ts *sensor, TLx493D_PowerModeType_te mode);  // value of mode is sensor / generation specific !
 

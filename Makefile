@@ -73,20 +73,20 @@ arduino: arduino_clean
 
 
 arduino_plain_c: arduino
-	cp examples/arduino/read_sensors_plain_c.ino build/build.ino
+	cp examples/framework/arduino/read_sensors_plain_c.ino build/build.ino
  
 
 arduino_cpp: arduino
-	cp examples/arduino/read_sensors.ino build/build.ino
+	cp examples/framework/arduino/read_sensors.ino build/build.ino
 
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 arduino_unity arduino_flash arduino_monitor
 arduino_unity: arduino
-	cp -r test/Unity/*.[hc] build
-	cp test/src/Test_*.h build
-	cp test/src/tlx493d/Test_*.h build
-	cp test/src/arduino/Test_*.[hc]* build
-	cp test/src/arduino/Test_main.ino build/build.ino
+	cp -r test/unit/Unity/*.[hc] build
+	cp test/unit/src/Test_*.h build
+	cp test/unit/src/tlx493d/Test_*.h build
+	cp test/unit/src/framework/arduino/Test_*.[hc]* build
+	cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
 
 
 # For WSL and Windows :
@@ -169,7 +169,7 @@ endif
 ifeq ($(BOARD),)
 	$(error "Must set variable BOARD (board name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to MTB directories !")
 else
-	cp examples/mtb/xmc/main_i2c.c ~/mtb3DMagneticSensors/src
+	cp examples/framework/mtb/xmc/main_i2c.c ~/mtb3DMagneticSensors/src
 	cp -r ~/mtb3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/mtw/$(BOARD)_I2C_Master_and_Slave/IFX3DMagneticSensors
 endif
 
@@ -181,7 +181,7 @@ endif
 ifeq ($(BOARD),)
 	$(error "Must set variable BOARD (board name prefix, eg XMC4700_Relax or XMC1100_Boot) in order to be able to copy files to MTB directories !")
 else
-	cp test/src/mtb/xmc/ut_TLE493D_A2B6.c ~/mtb3DMagneticSensors/src
-	cp -r test/Unity ~/mtb3DMagneticSensors/src
+	cp test/unit/src/framework/mtb/xmc/ut_TLE493D_A2B6.c ~/mtb3DMagneticSensors/src
+	cp -r test/unit/Unity ~/mtb3DMagneticSensors/src
 	cp -r ~/mtb3DMagneticSensors/* /mnt/c/Users/$(WIN_USER)/mtw/$(BOARD)_I2C_Master_and_Slave/IFX3DMagneticSensors
 endif

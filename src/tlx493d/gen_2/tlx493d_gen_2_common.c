@@ -47,47 +47,64 @@ void tlx493d_gen_2_calculateMagneticField(TLx493D_ts *sensor, double *x, double 
 // }
 
 
-bool tlx493d_gen_2_setDisableTemperatureMeasurement(TLx493D_ts *sensor, uint8_t dtBF, uint8_t cpBF, uint8_t dt) {
-    tlx493d_common_setBitfield(sensor, dtBF, dt);
+bool tlx493d_gen_2_setOneConfigBitfield(TLx493D_ts *sensor, uint8_t bfBF, uint8_t cpBF, uint8_t val) {
+    tlx493d_common_setBitfield(sensor, bfBF, val);
     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
 
-    return tlx493d_common_writeRegister(sensor, dtBF);
+    return tlx493d_common_writeRegister(sensor, cpBF);
 }
 
 
-//  AM depends on value of DT !
-// TODO: really set DT when AM should be set ? The issue is when disabling AM : unset DT as well ?
-bool tlx493d_gen_2_setAngularMeasurement(TLx493D_ts *sensor, uint8_t amBF, uint8_t dtBF, uint8_t cpBF, uint8_t am, uint8_t dt) {
-    tlx493d_common_setBitfield(sensor, dtBF, dt);
-    tlx493d_common_setBitfield(sensor, amBF, am);
+bool tlx493d_gen_2_setTwoConfigBitfields(TLx493D_ts *sensor, uint8_t firstBF, uint8_t secondBF, uint8_t cpBF, uint8_t first, uint8_t second) {
+    tlx493d_common_setBitfield(sensor, firstBF, first);
+    tlx493d_common_setBitfield(sensor, secondBF, second);
     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
 
-    return tlx493d_common_writeRegister(sensor, amBF);
+    return tlx493d_common_writeRegister(sensor, cpBF);
 }
 
 
-// This option depends on PR and MODE.
-bool tlx493d_gen_2_setTrigger(TLx493D_ts *sensor, uint8_t trigBF, uint8_t cpBF, uint8_t trig) {
-    // bool b = tlx493d_common_readRegisters(sensor);
+// bool tlx493d_gen_2_setDisableTemperatureMeasurement(TLx493D_ts *sensor, uint8_t dtBF, uint8_t cpBF, uint8_t dt) {
+//     tlx493d_common_setBitfield(sensor, dtBF, dt);
+//     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
 
-    if( trig >= 0 && trig <= 3 ) 
-        tlx493d_common_setBitfield(sensor, trigBF, trig);
-    else
-        return false;
-
-    // tlx493d_common_setBitfield(sensor, trigBF, trig);
-    tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
-
-    return tlx493d_common_writeRegister(sensor, trigBF);
-}
+//     return tlx493d_common_writeRegister(sensor, cpBF);
+// }
 
 
-bool tlx493d_gen_2_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t x2BF, uint8_t cpBF, uint8_t srs) {
-    tlx493d_common_setBitfield(sensor, x2BF, srs);
-    tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
+// //  AM depends on value of DT !
+// // TODO: really set DT when AM should be set ? The issue is when disabling AM : unset DT as well ?
+// bool tlx493d_gen_2_setAngularMeasurement(TLx493D_ts *sensor, uint8_t amBF, uint8_t dtBF, uint8_t cpBF, uint8_t am, uint8_t dt) {
+//     tlx493d_common_setBitfield(sensor, dtBF, dt);
+//     tlx493d_common_setBitfield(sensor, amBF, am);
+//     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
 
-    return tlx493d_common_writeRegister(sensor, x2BF);
-}
+//     return tlx493d_common_writeRegister(sensor, cpBF);
+// }
+
+
+// // This option depends on PR and MODE.
+// bool tlx493d_gen_2_setTrigger(TLx493D_ts *sensor, uint8_t trigBF, uint8_t cpBF, TLx493D_TriggerType_te trig) {
+//     // bool b = tlx493d_common_readRegisters(sensor);
+
+//     if( trig >= 0 && trig <= 3 ) 
+//         tlx493d_common_setBitfield(sensor, trigBF, trig);
+//     else
+//         return false;
+
+//     // tlx493d_common_setBitfield(sensor, trigBF, trig);
+//     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
+
+//     return tlx493d_common_writeRegister(sensor, trigBF);
+// }
+
+
+// bool tlx493d_gen_2_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t x2BF, uint8_t cpBF, uint8_t srs) {
+//     tlx493d_common_setBitfield(sensor, x2BF, srs);
+//     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
+
+//     return tlx493d_common_writeRegister(sensor, x2BF);
+// }
 
 
 // bool tlx493d_gen_2_setExtraShortRangeSensitivity(TLx493D_ts *sensor, uint8_t x2BF, uint8_t x4BF, uint8_t cpBF, TLx493D_SensitivityType_te sens) {
@@ -115,7 +132,7 @@ bool tlx493d_gen_2_setDefaultConfig(TLx493D_ts *sensor, uint8_t configREG, uint8
     // sensor->regMap[mod2REG]   = 0x00;
 
 // TODO: cleanup : set reset values and really set CP bit ?
- // sensor->functions->setResetValues();
+    sensor->functions->setResetValues(sensor);
 
     tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
     tlx493d_common_writeRegister(sensor, cpBF);
@@ -167,32 +184,24 @@ bool tlx493d_gen_2_setIICAddress(TLx493D_ts *sensor, uint8_t iicadrBF, uint8_t f
     tlx493d_common_setBitfield(sensor, iicadrBF, bitfieldValue);
     tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
 
-    bool b = tlx493d_common_writeRegister(sensor, iicadrBF);
+    bool b = tlx493d_common_writeRegister(sensor, fpBF);
     TLx493D_setI2CParameters(sensor, deviceAddress);
 
     return b;
 }
 
 
-// TODO: implement checks !
-// CA only in Low Power and MCM mode, not in Fast Mode !
-// MODE depends on PR and TRIG !
-bool tlx493d_gen_2_setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, uint8_t intBF, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, bool intIsOn, bool caIsOn) {
-// tlx493d_common_setBitfield(sensor, sensor->commonBitfields.MODE, 0b11);
-    tlx493d_common_setBitfield(sensor, intBF, intIsOn ? 0 : 1);
-    tlx493d_common_setBitfield(sensor, caBF, caIsOn ? 1 : 0);
-    tlx493d_common_setBitfield(sensor, fpBF, tlx493d_gen_2_calculateFuseParity(sensor, fpBF, prdBF));
+// // TODO: implement checks !
+// // CA only in Low Power and MCM mode, not in Fast Mode !
+// // MODE depends on PR and TRIG !
+// bool tlx493d_gen_2_setInterruptAndCollisionAvoidance(TLx493D_ts *sensor, uint8_t intBF, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, bool intIsOn, bool caIsOn) {
+// // tlx493d_common_setBitfield(sensor, sensor->commonBitfields.MODE, 0b11);
+//     tlx493d_common_setBitfield(sensor, intBF, intIsOn ? 0 : 1);
+//     tlx493d_common_setBitfield(sensor, caBF, caIsOn ? 1 : 0);
+//     tlx493d_common_setBitfield(sensor, fpBF, tlx493d_gen_2_calculateFuseParity(sensor, fpBF, prdBF));
 
-    return tlx493d_common_writeRegister(sensor, intBF); 
-}
-
-
-bool tlx493d_gen_2_setInterrupt(TLx493D_ts *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq) {
-    tlx493d_common_setBitfield(sensor, intBF, irq);
-    tlx493d_common_setBitfield(sensor, fpBF, tlx493d_gen_2_calculateFuseParity(sensor, fpBF, prdBF));
-
-    return tlx493d_common_writeRegister(sensor, intBF);
-}
+//     return tlx493d_common_writeRegister(sensor, intBF); 
+// }
 
 
 // CA only in Low Power and MCM mode, not in Fast Mode !
@@ -207,23 +216,50 @@ bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_ts *sensor, uint8_t caBF, uint8
 }
 
 
-bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_te mode) {
-    if( (mode != 0b10) && (mode <= 0b11) ){
-        tlx493d_common_setBitfield(sensor, modeBF, mode);
-        tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
-        return tlx493d_common_writeRegister(sensor, modeBF);
-    }
-    else {
-        return false;
-    }
+bool tlx493d_gen_2_setInterrupt(TLx493D_ts *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq) {
+    tlx493d_common_setBitfield(sensor, intBF, irq);
+    tlx493d_common_setBitfield(sensor, fpBF, tlx493d_gen_2_calculateFuseParity(sensor, fpBF, prdBF));
+
+    return tlx493d_common_writeRegister(sensor, intBF);
 }
 
 
-bool tlx493d_gen_2_setUpdateRate(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_te ur) {
+bool tlx493d_gen_2_setPowerMode(TLx493D_ts *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_te val) {
+    uint8_t mod1 = sensor->regDef[fpBF].address;
+    uint8_t mode = 0;
+
+    switch(val) {
+        case LOW_POWER_MODE_e : mode = 0b00;
+                                break;
+
+        case MASTER_CONTROLLED_MODE_e : mode = 0b01;
+                                        break;
+
+        case FAST_MODE_e : mode = 0b11;
+                                  break;
+
+        default : warnSelectionNotSupportedForSensorType(sensor, val, "TLx493D_PowerModeType_te");
+                  return false;
+    }
+
+    tlx493d_common_setBitfield(sensor, modeBF, mode);
+    tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
+
+    uint8_t buf[4] = { mod1,
+                       sensor->regMap[mod1],
+                       sensor->regMap[mod1 + 1], // reserved register must have been read once in setDefaultConfig to get factory settings !
+                       sensor->regMap[mod1 + 2]
+                     };
+
+    return transfer(sensor, buf, sizeof(buf), NULL, 0);
+}
+
+
+bool tlx493d_gen_2_setUpdateRate(TLx493D_ts *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_te val) {
     uint8_t mod1 = sensor->regDef[fpBF].address;
     uint8_t rate = 0;
 
-    switch(ur) {
+    switch(val) {
         case UPDATE_RATE_770_HZ_e : rate = 0b000;
                                   break;
 
@@ -407,11 +443,11 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_ts *sensor, uint8_t tBF) {
 // }
 
 
-// bool tlx493d_gen_2_hasValidIICadr(TLx493D_ts *sensor, uint8_t idBF, uint8_t iicAdrBF) {
-//     TLx493D_Register_ts *id     = &sensor->regDef[idBF];
-//     TLx493D_Register_ts *iicAdr = &sensor->regDef[iicAdrBF];
-//     return ((sensor->regMap[id->address] & id->mask) >> id->offset) == ((sensor->regMap[iicAdr->address] & iicAdr->mask) >> iicAdr->offset);
-// }
+bool tlx493d_gen_2_hasValidIICadr(TLx493D_ts *sensor, uint8_t idBF, uint8_t iicAdrBF) {
+    TLx493D_Register_ts *id     = &sensor->regDef[idBF];
+    TLx493D_Register_ts *iicAdr = &sensor->regDef[iicAdrBF];
+    return ((sensor->regMap[id->address] & id->mask) >> id->offset) == ((sensor->regMap[iicAdr->address] & iicAdr->mask) >> iicAdr->offset);
+}
 
 
 // bool tlx493d_gen_2_hasWakeup(TLx493D_ts *sensor, uint8_t typeBF) {

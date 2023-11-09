@@ -261,43 +261,44 @@ bool TLx493D_W2BW_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, 
 }
 
 
-bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_ts *sensor) {
-    bool b = tlx493d_common_readRegisters(sensor);
+// bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_ts *sensor) {
+//     bool b = tlx493d_common_readRegisters(sensor);
 
-    tlx493d_common_setBitfield(sensor, DT, 0);
-    tlx493d_common_setBitfield(sensor, CP, TLx493D_W2BW_calculateConfigurationParityBit(sensor));
-    // sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask) | TLx493D_W2BW_calculateConfigurationParityBit(sensor);
+//     tlx493d_common_setBitfield(sensor, DT, 0);
+//     tlx493d_common_setBitfield(sensor, CP, TLx493D_W2BW_calculateConfigurationParityBit(sensor));
+//     // sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask) | TLx493D_W2BW_calculateConfigurationParityBit(sensor);
 
-    return b && tlx493d_common_writeRegister(sensor, DT);
-}
+//     return b && tlx493d_common_writeRegister(sensor, DT);
+// }
 
-bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_ts *sensor) {
-    bool b = tlx493d_common_readRegisters(sensor);
+// bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_ts *sensor) {
+//     bool b = tlx493d_common_readRegisters(sensor);
 
-    tlx493d_common_setBitfield(sensor, DT, 1);
-    tlx493d_common_setBitfield(sensor, CP, TLx493D_W2BW_calculateConfigurationParityBit(sensor));
-    // sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask) | TLx493D_W2BW_calculateConfigurationParityBit(sensor);
+//     tlx493d_common_setBitfield(sensor, DT, 1);
+//     tlx493d_common_setBitfield(sensor, CP, TLx493D_W2BW_calculateConfigurationParityBit(sensor));
+//     // sensor->regMap[sensor->commonRegisters.CONFIG] = (sensor->regMap[sensor->commonRegisters.CONFIG] & ~sensor->regDef[CP].mask) | TLx493D_W2BW_calculateConfigurationParityBit(sensor);
     
-    return b && tlx493d_common_writeRegister(sensor, DT);
-}
+//     return b && tlx493d_common_writeRegister(sensor, DT);
+// }
 
 
-static bool TLx493D_W2BW_enableTemperatureMeasurements(TLx493D_ts *sensor) {
-    bool b = false;
+// static bool TLx493D_W2BW_enableTemperatureMeasurements(TLx493D_ts *sensor) {
+//     bool b = false;
 
-    sensor->regMap[sensor->regDef[CP].address] = 0;
+//     sensor->regMap[sensor->regDef[CP].address] = 0;
 
-    tlx493d_common_setBitfield(sensor, DT, 0);
-    tlx493d_common_setBitfield(sensor, CP, 0);
+//     tlx493d_common_setBitfield(sensor, DT, 0);
+//     tlx493d_common_setBitfield(sensor, CP, 0);
 
-    b = tlx493d_common_writeRegister(sensor, DT);
+//     b = tlx493d_common_writeRegister(sensor, DT);
 
-    return b;
-}
+//     return b;
+// }
 
 
-bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, uint8_t trigger) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, trigger);
+bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trigger) {
+    // return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, trigger);
+    return false;
 }
 
 

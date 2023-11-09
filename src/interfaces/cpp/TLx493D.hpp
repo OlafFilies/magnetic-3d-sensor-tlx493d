@@ -81,8 +81,8 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // functions related to the "Config" register
-        bool tlx493d_selectMeasureValues(TLx493D_MeasureType_te meas) {
-            return ::tlx493d_selectMeasureValues(&sensor, meas);
+        bool tlx493d_setMeasurement(TLx493D_MeasurementType_te meas) {
+            return ::tlx493d_setMeasurement(&sensor, meas);
         }
 
         // bool enableTemperatureMeasurement() {
@@ -120,16 +120,6 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool enableInterrupt() {
-            return ::tlx493d_enableInterrupt(&sensor);
-        }
-
-
-        bool disableInterrupt() {
-            return ::tlx493d_disableInterrupt(&sensor);
-        }
-
-
         bool enableCollisionAvoidance() {
             return ::tlx493d_enableCollisionAvoidance(&sensor);
         }
@@ -137,6 +127,16 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
         bool disableCollisionAvoidance() {
             return ::tlx493d_disableCollisionAvoidance(&sensor);
+        }
+
+
+        bool enableInterrupt() {
+            return ::tlx493d_enableInterrupt(&sensor);
+        }
+
+
+        bool disableInterrupt() {
+            return ::tlx493d_disableInterrupt(&sensor);
         }
 
 

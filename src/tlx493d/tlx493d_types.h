@@ -46,15 +46,6 @@ typedef enum { TLx493D_READ_MODE_e = 0,
 } TLx493D_RegisterAccessModeType_te;
 
 
-/*
-  List of supported ranges.
-*/
-typedef enum { TLx493D_FULL_RANGE_e = 0, 
-               TLx493D_SHORT_RANGE_e,
-               TLx493D_EXTRA_SHORT_RANGE_e,
-} TLx493D_SensitivityType_te;
-
-
 typedef enum {
     TLx493D_IIC_ADDR_A0_e = 0,
     TLx493D_IIC_ADDR_A1_e,
@@ -64,23 +55,40 @@ typedef enum {
 
 
 typedef enum {
+    // 2nd generation
+    TLx493D_BxByBz_e = 0,
     //  3rd generation
-    TLx493D_BxByBzTemp_e = 0,
+    TLx493D_BxByBzTemp_e,
     TLx493D_VHall_Bias_e,
     TLx493D_Spintest_e,
     TLx493D_SAT_test_e,
     TLx493D_BxTemp_e,
     TLx493D_BxBy_e,
     TLx493D_BzTemp_e,
-    // 2nd generation add-ons
-    TLx493D_BxByBz_e,
-} TLx493D_MeasureType_te;
+} TLx493D_MeasurementType_te;
 
 
 typedef enum {
-               LOW_POWER_MODE = 0,
-               MASTER_CONTROLLED_MODE,
-               FAST_MODE,
+               TLx493D_NO_ADC_ON_READ_e = 0,
+               TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e,
+               TLx493D_ADC_ON_READ_AFTER_REG_05_e,
+} TLx493D_TriggerType_te;
+
+
+/*
+  List of supported ranges.
+*/
+typedef enum {
+               TLx493D_FULL_RANGE_e = 0, 
+               TLx493D_SHORT_RANGE_e,
+               TLx493D_EXTRA_SHORT_RANGE_e,
+} TLx493D_SensitivityType_te;
+
+
+typedef enum {
+               LOW_POWER_MODE_e = 0,
+               MASTER_CONTROLLED_MODE_e,
+               FAST_MODE_e,
 } TLx493D_PowerModeType_te;
 
 
@@ -179,7 +187,7 @@ typedef bool (*TLx493D_GetMagneticFieldAndTemperatureFuncPtr)(TLx493D_ts *, doub
 
 
 // functions related to the "Config" register
-typedef bool (*TLx493D_SelectMeasureValuesFuncPtr)(TLx493D_ts *, TLx493D_MeasureType_te);
+typedef bool (*TLx493D_SetMeasurementFuncPtr)(TLx493D_ts *, TLx493D_MeasurementType_te);
 // typedef bool (*TLx493D_EnableTemperatureMeasurementFuncPtr)(TLx493D_ts *);
 // typedef bool (*TLx493D_DisableTemperatureMeasurementFuncPtr)(TLx493D_ts *);
 
@@ -269,7 +277,7 @@ typedef struct TLx493D_CommonFunctions_ts {
     TLx493D_GetMagneticFieldAndTemperatureFuncPtr        getMagneticFieldAndTemperature;
 
     // functions related to the "Config" register
-    TLx493D_SelectMeasureValuesFuncPtr           selectMeasureValues;
+    TLx493D_SetMeasurementFuncPtr             setMeasurement;
     // TLx493D_EnableTemperatureMeasurementFuncPtr   enableTemperatureMeasurement;
     // TLx493D_DisableTemperatureMeasurementFuncPtr  disableTemperatureMeasurement;
 

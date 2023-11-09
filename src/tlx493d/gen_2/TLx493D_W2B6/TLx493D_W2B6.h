@@ -45,11 +45,11 @@ bool TLx493D_W2B6_hasValidData(TLx493D_ts *sensor);
 bool TLx493D_W2B6_isFunctional(TLx493D_ts *sensor);
 
 
-bool TLx493D_W2B6_enableTemperatureMeasurement(TLx493D_ts *sensor);
-bool TLx493D_W2B6_disableTemperatureMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_enableTemperatureMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_disableTemperatureMeasurement(TLx493D_ts *sensor);
 
-bool TLx493D_W2B6_enableAngularMeasurement(TLx493D_ts *sensor);
-bool TLx493D_W2B6_disableAngularMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_enableAngularMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_disableAngularMeasurement(TLx493D_ts *sensor);
 
 
 bool TLx493D_W2B6_enable1ByteReadMode(TLx493D_ts *sensor);
@@ -61,11 +61,11 @@ uint8_t TLx493D_W2B6_calculateConfigurationParity(TLx493D_ts *sensor);
 
 
 // utility functions
-bool TLx493D_W2B6_hasValidTemperatureData(TLx493D_ts *sensor);
-bool TLx493D_W2B6_hasValidMagneticFieldData(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_hasValidTemperatureData(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_hasValidMagneticFieldData(TLx493D_ts *sensor);
 bool TLx493D_W2B6_hasValidTBit(TLx493D_ts *sensor);
-bool TLx493D_W2B6_hasValidPD0Bit(TLx493D_ts *sensor);
-bool TLx493D_W2B6_hasValidPD3Bit(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_hasValidPD0Bit(TLx493D_ts *sensor);
+// bool TLx493D_W2B6_hasValidPD3Bit(TLx493D_ts *sensor);
 
 bool TLx493D_W2B6_hasValidIICadr(TLx493D_ts *sensor);
 bool TLx493D_W2B6_hasWakeup(TLx493D_ts *sensor);

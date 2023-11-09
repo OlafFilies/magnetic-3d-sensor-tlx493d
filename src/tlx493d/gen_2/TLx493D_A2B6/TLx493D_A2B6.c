@@ -120,7 +120,7 @@ TLx493D_CommonFunctions_ts TLx493D_A2B6_commonFunctions = {
     .getMagneticFieldAndTemperature = TLx493D_A2B6_getMagneticFieldAndTemperature,
 
     // functions related to the "Config" register
-    .selectMeasureValues            = TLx493D_A2B6_selectMeasureValues,
+    .setMeasurement                 = TLx493D_A2B6_setMeasurement,
     // .enableTemperatureMeasurement  = TLx493D_A2B6_enableTemperatureMeasurement,
     // .disableTemperatureMeasurement = TLx493D_A2B6_disableTemperatureMeasurement,
     // .enableAngularMeasurement  = TLx493D_A2B6_enableAngularMeasurement,
@@ -244,38 +244,73 @@ bool TLx493D_A2B6_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, 
 }
 
 
-bool TLx493D_A2B6_selectMeasureValues(TLx493D_ts *sensor, TLx493D_MeasureType_te meas) {
-    switch(meas) {
-        case TLx493D_BxByBzTemp_e : return true; // set DT to 0, AM to 0
+bool TLx493D_A2B6_setMeasurement(TLx493D_ts *sensor, TLx493D_MeasurementType_te val) {
+    uint8_t dt = 0;
+    uint8_t am = 0;
 
-        case TLx493D_BxByBz_e : return true; // set DT to 1, AM to 0
+    switch(val) {
+        case TLx493D_BxByBzTemp_e : dt = 0;
+                                    am = 0;
+                                    break;
+
+        case TLx493D_BxByBz_e : dt = 1;
+                                am = 0;
+                                break;
         
-        case TLx493D_BxBy_e : return true; // set DT to 1, AM to 1
+        case TLx493D_BxBy_e : dt = 1;
+                              am = 1;
+                              break;
         
-        default : return false; // give message
+        default : warnSelectionNotSupportedForSensorType(sensor, val, "TLx493D_MeasurementType_te");
+                  return false;
     }
 
-    return true;
+    return tlx493d_gen_2_setTwoConfigBitfields(sensor, DT, AM, CP, dt, am);
 }
 
 
 //  // This option depends on PR and MODE.
-bool TLx493D_A2B6_setTrigger(TLx493D_ts *sensor, uint8_t trig) {
-    tlx493d_common_setBitfield(sensor, TRIG, trig);
-    tlx493d_common_setBitfield(sensor, CP, TLx493D_A2B6_calculateConfigurationParity(sensor));
+bool TLx493D_A2B6_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te val) {
+    uint8_t trig = 0;
 
-    return tlx493d_common_writeRegister(sensor, TRIG);
+    switch(val) {
+        case TLx493D_NO_ADC_ON_READ_e : trig = 0;
+                                        break;
+
+        case TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e : trig = 1;
+                                                      break;
+        
+        case TLx493D_ADC_ON_READ_AFTER_REG_05_e : trig = 2;
+                                                  break;
+        
+        default : warnSelectionNotSupportedForSensorType(sensor, val, "TLx493D_TriggerType_te");
+                  return false;
+    }
+
+    return tlx493d_gen_2_setOneConfigBitfield(sensor, TRIG, CP, trig);
 }
 
 
-bool TLx493D_A2B6_setSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te sens) {
-    return true;
+bool TLx493D_A2B6_setSensitivity(TLx493D_ts *sensor, TLx493D_SensitivityType_te val) {
+    uint8_t sens = 0;
+
+    switch(val) {
+        case TLx493D_FULL_RANGE_e : sens = 0;
+                                    break;
+
+        case TLx493D_SHORT_RANGE_e : sens = 1;
+                                     break;
+        
+        default : warnSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_te");
+                  return false;
+    }
+
+    return tlx493d_gen_2_setOneConfigBitfield(sensor, X2, CP, sens);
 }
 
 
 bool TLx493D_A2B6_setDefaultConfig(TLx493D_ts *sensor) {
     return tlx493d_gen_2_setDefaultConfig(sensor, CONFIG_REG, MOD1_REG, MOD2_REG, CP, CA, INT);
-    // return tlx493d_gen_2_setDefaultConfig(sensor, CONFIG_REG, TLx493D_A2B6_CONFIG_RESET_VALUE, MOD1_REG, MOD2_REG, CA, INT);
 }
 
 
@@ -309,18 +344,19 @@ bool TLx493D_A2B6_setPowerMode(TLx493D_ts *sensor, TLx493D_PowerModeType_te mode
 }
 
 
-bool TLx493D_A2B6_setUpdateRate(TLx493D_ts *sensor, TLx493D_UpdateRateType_te ur) {
+bool TLx493D_A2B6_setUpdateRate(TLx493D_ts *sensor, TLx493D_UpdateRateType_te val) {
     uint8_t mod1 = MOD1_REG; // sensor->regDef[fpBF].address;
     uint8_t rate = 0;
 
-    switch(ur) {
+    switch(val) {
         case UPDATE_RATE_FAST_e : rate = 0;
                                   break;
 
         case UPDATE_RATE_SLOW_e : rate = 1;
                                   break;
 
-        default : return false;
+        default : warnSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_te");
+                  return false;
     }
 
     tlx493d_common_setBitfield(sensor, PRD, rate);
@@ -408,49 +444,49 @@ bool TLx493D_A2B6_softReset(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_A2B6_enableTemperatureMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 0);
-}
+// bool TLx493D_A2B6_enableTemperatureMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 0);
+// }
 
 
-bool TLx493D_A2B6_disableTemperatureMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 1);
-}
+// bool TLx493D_A2B6_disableTemperatureMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 1);
+// }
 
 
-bool TLx493D_A2B6_enableAngularMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 1, 1);
-}
+// bool TLx493D_A2B6_enableAngularMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 1, 1);
+// }
 
 
-bool TLx493D_A2B6_disableAngularMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 0, 0);
-}
+// bool TLx493D_A2B6_disableAngularMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 0, 0);
+// }
 
 
-bool TLx493D_A2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b00);
-}
+// bool TLx493D_A2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b00);
+// }
 
 
-bool TLx493D_A2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b01);
-}
+// bool TLx493D_A2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b01);
+// }
 
 
-bool TLx493D_A2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b10);
-}
+// bool TLx493D_A2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b10);
+// }
 
 
-bool TLx493D_A2B6_enableShortRangeSensitivity(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 1);
-}
+// bool TLx493D_A2B6_enableShortRangeSensitivity(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 1);
+// }
 
 
-bool TLx493D_A2B6_disableShortRangeSensitivity(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 0);
-}
+// bool TLx493D_A2B6_disableShortRangeSensitivity(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 0);
+// }
 
 
 // bool TLx493D_A2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor) {
@@ -524,9 +560,9 @@ bool TLx493D_A2B6_hasValidTBit(TLx493D_ts *sensor) {
 // }
 
 
-// bool TLx493D_A2B6_hasValidIICadr(TLx493D_ts *sensor) {
-//     return tlx493d_gen_2_hasValidIICadr(sensor, ID, IICADR);
-// }
+bool TLx493D_A2B6_hasValidIICadr(TLx493D_ts *sensor) {
+    return tlx493d_gen_2_hasValidIICadr(sensor, ID, IICADR);
+}
 
 
 // bool TLx493D_A2B6_hasWakeup(TLx493D_ts *sensor) {

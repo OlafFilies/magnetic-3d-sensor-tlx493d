@@ -460,14 +460,14 @@ uint8_t TLx493D_W2B6_calculateConfigurationParity(TLx493D_ts *sensor) {
 // }
 
 
-bool TLx493D_W2B6_enableTemperatureMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 0);
-}
+// bool TLx493D_W2B6_enableTemperatureMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 0);
+// }
 
 
-bool TLx493D_W2B6_disableTemperatureMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 1);
-}
+// bool TLx493D_W2B6_disableTemperatureMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setDisableTemperatureMeasurement(sensor, DT, CP, 1);
+// }
 
 
 
@@ -511,29 +511,29 @@ bool TLx493D_W2B6_disableTemperatureMeasurement(TLx493D_ts *sensor) {
 // }
 
 
-bool TLx493D_W2B6_enableAngularMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 1, 1);
-}
+// bool TLx493D_W2B6_enableAngularMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 1, 1);
+// }
 
 
-bool TLx493D_W2B6_disableAngularMeasurement(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 0, 0);
-}
+// bool TLx493D_W2B6_disableAngularMeasurement(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setAngularMeasurement(sensor, AM, DT, CP, 0, 0);
+// }
 
 
-bool TLx493D_W2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b00);
-}
+// bool TLx493D_W2B6_setNoTriggerOnReadTriggerOption(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b00);
+// }
 
 
-bool TLx493D_W2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b01);
-}
+// bool TLx493D_W2B6_setTriggerOnReadBeforeFirstMSBTriggerOption(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b01);
+// }
 
 
-bool TLx493D_W2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b10);
-}
+// bool TLx493D_W2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setTrigger(sensor, TRIG, CP, 0b10);
+// }
 
 
 // bool TLx493D_W2B6_setShortRangeSensitivity(TLx493D_ts *sensor, uint8_t srs) {
@@ -544,14 +544,14 @@ bool TLx493D_W2B6_setTriggerOnReadAfterRegister05TriggerOption(TLx493D_ts *senso
 // }
 
 
-bool TLx493D_W2B6_enableShortRangeSensitivity(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 1);
-}
+// bool TLx493D_W2B6_enableShortRangeSensitivity(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 1);
+// }
 
 
-bool TLx493D_W2B6_disableShortRangeSensitivity(TLx493D_ts *sensor) {
-    return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 0);
-}
+// bool TLx493D_W2B6_disableShortRangeSensitivity(TLx493D_ts *sensor) {
+//     return tlx493d_gen_2_setShortRangeSensitivity(sensor, X2, CP, 0);
+// }
 
 
 // bool TLx493D_W2B6_setTC0MagneticTemperatureCompensation(TLx493D_ts *sensor) {

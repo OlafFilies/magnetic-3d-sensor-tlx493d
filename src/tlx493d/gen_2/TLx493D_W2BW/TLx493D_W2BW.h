@@ -96,7 +96,7 @@ bool TLx493D_W2BW_getMagneticField(TLx493D_ts *sensor, double *x, double *y, dou
 void TLx493D_W2BW_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 bool TLx493D_W2BW_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
 
-bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, uint8_t triggerBits);
+bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trigger);
 
 
 /**
@@ -175,23 +175,23 @@ bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_ts *sensor, double xLow, double xH
 bool TLx493D_W2BW_softReset(TLx493D_ts *sensor);
 
 
-/**
- * @brief Enables the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
- * 
- * @param[in] sensor Pointer to the XENSIV™ TLx493D-W2BW magnetic 3D sensor structure
- * @return true - If successful
- * @return false - If unsuccessful
- */
-bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_ts* sensor);
+// /**
+//  * @brief Enables the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
+//  * 
+//  * @param[in] sensor Pointer to the XENSIV™ TLx493D-W2BW magnetic 3D sensor structure
+//  * @return true - If successful
+//  * @return false - If unsuccessful
+//  */
+// bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_ts* sensor);
 
-/**
- * @brief Disable the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
- * 
- * @param[in] sensor Pointer to the XENSIV™ TLx493D-W2BW magnetic 3D sensor structure
- * @return true - If successful
- * @return false - If unsuccessful
- */
-bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_ts *sensor);
+// /**
+//  * @brief Disable the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
+//  * 
+//  * @param[in] sensor Pointer to the XENSIV™ TLx493D-W2BW magnetic 3D sensor structure
+//  * @return true - If successful
+//  * @return false - If unsuccessful
+//  */
+// bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_ts *sensor);
 
 
 bool TLx493D_W2BW_enable1ByteMode(TLx493D_ts *sensor);

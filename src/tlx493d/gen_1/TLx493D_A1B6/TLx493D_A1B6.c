@@ -155,7 +155,7 @@ TLx493D_CommonFunctions_ts TLx493D_A1B6_commonFunctions = {
     .calculateMagneticFieldAndTemperature = TLx493D_A1B6_calculateMagneticFieldAndTemperature,
     .getMagneticFieldAndTemperature = TLx493D_A1B6_getMagneticFieldAndTemperature,
 
-    // TODO: Jens : use tlx493d_selectMeasureValues
+    // TODO: Jens : use tlx493d_setMeasurement
     // .enableTemperatureMeasurement     = TLx493D_A1B6_enableTemperatureMeasurement,
     // .disableTemperatureMeasurement    = TLx493D_A1B6_disableTemperatureMeasurement,
 
