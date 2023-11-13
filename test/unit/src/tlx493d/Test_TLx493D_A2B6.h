@@ -11,7 +11,7 @@ void TLx493D_A2B6_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static TLx493D_ts dut;
+static TLx493D_t dut;
 
 
 // test includes that may require dut
@@ -71,7 +71,8 @@ static TEST_TEAR_DOWN(TLx493D_A2B6_internal)
  */
 TEST_IFX(TLx493D_A2B6_internal, checkUnsupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->isWakeUpActive(&dut) == false );
+    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == false );
+    TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
     TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == false );
     TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == false );
 
@@ -98,9 +99,6 @@ TEST_IFX(TLx493D_A2B6_internal, checkUnsupportedFunctionality)
 TEST_IFX(TLx493D_A2B6_internal, checkSupportedFunctionality)
 {
     TEST_ASSERT( dut.functions->init(&dut) == true );
-
-    // TEST_ASSERT( dut.functions->hasValidFuseParity(&dut) == true );
-
     TEST_ASSERT( dut.functions->deinit(&dut) == true );
 }
 
@@ -113,9 +111,9 @@ TEST_IFX(TLx493D_A2B6_internal, checkResetValues)
 
     dut.functions->setResetValues(&dut);
 
-    for(uint8_t i = 0; i < dut.regMapSize; ++i) {
-        TEST_ASSERT( dut.regMap[i] == 0 );
-    }
+    TEST_ASSERT( dut.regMap[0x10] == 0x00 ); // CONFIG
+    TEST_ASSERT( dut.regMap[0x11] == 0x00 ); // MOD1
+    TEST_ASSERT( dut.regMap[0x13] == 0x00 ); // MOD2
 }
 
 

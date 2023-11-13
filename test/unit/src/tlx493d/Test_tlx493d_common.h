@@ -127,7 +127,7 @@ TEST_IFX(SensorsCommon, checkConcatBytes)
     } registerNames_te;
 
 
-    TLx493D_Register_ts regDef[] = {
+    TLx493D_Register_t regDef[] = {
         { MSB0,  TLx493D_READ_MODE_e,  0x00, 0xFF, 0, 8 },
         { MSB1,  TLx493D_READ_MODE_e,  0x01, 0x0F, 0, 4 },
         { MSB2,  TLx493D_READ_MODE_e,  0x02, 0x3F, 0, 6 }, 
@@ -174,13 +174,14 @@ TEST_IFX(SensorsCommon, checkConcatBytes)
 
 TEST_IFX(SensorsCommon, checkGetTypeAsString)
 {
+    dut.sensorType = TLx493D_A2B6_e;
     TEST_ASSERT( tlx493d_common_getTypeAsString(&dut) == "TLx493D_A2B6" );
 
-    TEST_ASSERT(tlx493d_init(&dut, (TLx493D_SupportedSensorType_te) 0x19) == false);
+    TEST_ASSERT(tlx493d_init(&dut, (TLx493D_SupportedSensorType_t) 0x19) == false);
 
-    dut.sensorType = (TLx493D_SupportedSensorType_te) 0x19;
+    dut.sensorType = (TLx493D_SupportedSensorType_t) 0x19;
     TEST_ASSERT( tlx493d_common_getTypeAsString(&dut) == "ERROR : Unknown sensorType !" );
-    dut.sensorType = TLx493D_A2B6_e;
+    // dut.sensorType = TLx493D_A2B6_e;
 }
 
 

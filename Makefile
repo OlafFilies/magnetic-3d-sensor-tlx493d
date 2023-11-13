@@ -28,60 +28,60 @@ TESTS_NO_SENSOR=-DTEST_TLx493D_A1B6 \
 			 	-DTEST_TLx493D_A2BW
 				
 
-arduino_A1B6_needsSensor: TESTS=-DTEST_TLx493D_A1B6 -DTEST_TLx493D_A1B6_NEEDS_SENSOR
-arduino_A1B6: TESTS=-DTEST_TLx493D_A1B6
+A1B6_needsSensor: TESTS=-DTEST_TLx493D_A1B6 -DTEST_TLx493D_A1B6_NEEDS_SENSOR
+A1B6: TESTS=-DTEST_TLx493D_A1B6
 
-arduino_A2B6_needsSensor: TESTS=-DTEST_TLx493D_A2B6 -DTEST_TLx493D_A2B6_NEEDS_SENSOR
-arduino_A2B6: TESTS=-DTEST_TLx493D_A2B6
+A2B6_needsSensor: TESTS=-DTEST_TLx493D_A2B6 -DTEST_TLx493D_A2B6_NEEDS_SENSOR
+A2B6: TESTS=-DTEST_TLx493D_A2B6
 
-arduino_P2B6_needsSensor: TESTS=-DTEST_TLx493D_P2B6 -DTEST_TLx493D_P2B6_NEEDS_SENSOR
-arduino_P2B6: TESTS=-DTEST_TLx493D_P2B6
+P2B6_needsSensor: TESTS=-DTEST_TLx493D_P2B6 -DTEST_TLx493D_P2B6_NEEDS_SENSOR
+P2B6: TESTS=-DTEST_TLx493D_P2B6
 
-arduino_W2B6_needsSensor: TESTS=-DTEST_TLx493D_W2B6 -DTEST_TLx493D_W2B6_NEEDS_SENSOR
-arduino_W2B6: TESTS=-DTEST_TLx493D_W2B6
+W2B6_needsSensor: TESTS=-DTEST_TLx493D_W2B6 -DTEST_TLx493D_W2B6_NEEDS_SENSOR
+W2B6: TESTS=-DTEST_TLx493D_W2B6
 
-arduino_A2BW_needsSensor: TESTS=-DTEST_TLx493D_W2BW -DTEST_TLx493D_W2BW_NEEDS_SENSOR
-arduino_A2BW: TESTS=-DTEST_TLx493D_W2BW
+A2BW_needsSensor: TESTS=-DTEST_TLx493D_W2BW -DTEST_TLx493D_W2BW_NEEDS_SENSOR
+A2BW: TESTS=-DTEST_TLx493D_W2BW
 
-arduino_A1B6_needsSensor arduino_A1B6 \
-arduino_A2B6_needsSensor arduino_A2B6 \
-arduino_P2B6_needsSensor arduino_P2B6 \
-arduino_W2B6_needsSensor arduino_W2B6 \
-arduino_A2BW_needsSensor arduino_W2BW : arduino_unity arduino_flash
-
-
-# arduino_sensor_common_needsSensor: TESTS=$(TEST_COMMON_NEEDS_SENSOR)
-# arduino_sensor_common: TESTS=$(TEST_COMMON)
+A1B6_needsSensor A1B6 \
+A2B6_needsSensor A2B6 \
+P2B6_needsSensor P2B6 \
+W2B6_needsSensor W2B6 \
+A2BW_needsSensor W2BW : unity flash
 
 
-arduino_test_all: TESTS=$(TESTS_NEEDS_SENSOR) $(TESTS_NO_SENSOR)
-arduino_test_needsSensor: TESTS=$(TESTS_NEEDS_SENSOR) $(TEST_COMMON_NEEDS_SENSOR)
-arduino_test: TESTS=$(TESTS_NO_SENSOR)
+# sensor_common_needsSensor: TESTS=$(TEST_COMMON_NEEDS_SENSOR)
+# sensor_common: TESTS=$(TEST_COMMON)
 
-arduino_test_all \
-arduino_test_needsSensor \
-arduino_test: arduino_unity arduino_flash
+
+test_all: TESTS=$(TESTS_NEEDS_SENSOR) $(TESTS_NO_SENSOR)
+test_needsSensor: TESTS=$(TESTS_NEEDS_SENSOR) $(TEST_COMMON_NEEDS_SENSOR)
+test: TESTS=$(TESTS_NO_SENSOR)
+
+test_all \
+test_needsSensor \
+test: unity flash
 
 
 ### Arduino targets
-arduino_clean:
+clean:
 	-rm -rf build/*
 
-arduino: arduino_clean
+arduino: clean
 	cp -r config/arduinoLibraryTemplate/* build
 	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} build \;
 
 
-arduino_plain_c: arduino
+plain_c: arduino
 	cp examples/framework/arduino/read_sensors_plain_c.ino build/build.ino
  
 
-arduino_cpp: arduino
+cpp: arduino
 	cp examples/framework/arduino/read_sensors.ino build/build.ino
 
 
-# example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 arduino_unity arduino_flash arduino_monitor
-arduino_unity: arduino
+# example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 unity flash monitor
+unity: arduino
 	cp -r test/unit/Unity/*.[hc] build
 	cp test/unit/src/Test_*.h build
 	cp test/unit/src/tlx493d/Test_*.h build
@@ -91,7 +91,7 @@ arduino_unity: arduino
 
 # For WSL and Windows :
 # download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
-arduino_prepare:
+prepare:
 	arduino-cli.exe core update-index
 	arduino-cli.exe core install Infineon:xmc
 	arduino-cli.exe core update-index
@@ -101,7 +101,7 @@ arduino_prepare:
 	arduino-cli.exe board listall Infineon
 
 
-arduino_compile:
+compile:
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
@@ -111,7 +111,7 @@ else
 endif
 
 
-arduino_upload:	
+upload:	
 ifeq ($(PORT),)
 	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
 endif
@@ -122,10 +122,10 @@ else
 endif
 
 
-arduino_flash: arduino_compile arduino_upload
+flash: compile upload
 
 
-arduino_monitor:
+monitor:
 ifeq ($(PORT),)
 	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
 endif

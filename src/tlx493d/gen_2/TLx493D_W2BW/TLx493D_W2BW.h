@@ -16,10 +16,10 @@
 
 /** Common to all sensors */
 #include "tlx493d_types.h"
-#include "tlx493d_common.h"
+// #include "tlx493d_common.h"
 
 /** Common to the same generation of senors */
-#include "tlx493d_gen_2_common.h"
+// #include "tlx493d_gen_2_common.h"
 
 /** Sensor specific includes */
 
@@ -32,7 +32,7 @@
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_init(TLx493D_ts *sensor);
+bool TLx493D_W2BW_init(TLx493D_t *sensor);
 
 /**
  * @brief De-Initializes the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -42,7 +42,7 @@ bool TLx493D_W2BW_init(TLx493D_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_deinit(TLx493D_ts *sensor);
+bool TLx493D_W2BW_deinit(TLx493D_t *sensor);
 
 /**
  * @brief Updates the required registers to read the temperature value of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -53,7 +53,7 @@ bool TLx493D_W2BW_deinit(TLx493D_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_W2BW_calculateTemperature(TLx493D_ts *sensor, double *temp);
+void TLx493D_W2BW_calculateTemperature(TLx493D_t *sensor, double *temp);
 
 /**
  * @brief Retrieves the temperature value of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -64,7 +64,7 @@ void TLx493D_W2BW_calculateTemperature(TLx493D_ts *sensor, double *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_getTemperature(TLx493D_ts *sensor, double *temp);
+bool TLx493D_W2BW_getTemperature(TLx493D_t *sensor, double *temp);
 
 /**
  * @brief Updates the required registers to read the magnetic field values of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -77,7 +77,7 @@ bool TLx493D_W2BW_getTemperature(TLx493D_ts *sensor, double *temp);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-void TLx493D_W2BW_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
+void TLx493D_W2BW_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
 
 /**
  * @brief Retrieves the magnetic field values of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -90,13 +90,13 @@ void TLx493D_W2BW_calculateMagneticField(TLx493D_ts *sensor, double *x, double *
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
+bool TLx493D_W2BW_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
 
 
-void TLx493D_W2BW_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
-bool TLx493D_W2BW_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
+void TLx493D_W2BW_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
+bool TLx493D_W2BW_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 
-bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trigger);
+bool TLx493D_W2BW_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trigger);
 
 
 /**
@@ -107,8 +107,8 @@ bool TLx493D_W2BW_setTrigger(TLx493D_ts *sensor, TLx493D_TriggerType_te trigger)
  * @return true - If successful
  * @return false - If unsuccessful 
  */
-bool TLx493D_W2BW_setDefaultConfig(TLx493D_ts *sensor);
-bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te address);
+bool TLx493D_W2BW_setDefaultConfig(TLx493D_t *sensor);
+bool TLx493D_W2BW_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address);
 
 /**
  * @brief Enables the interrupt after measurement completion of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -117,7 +117,7 @@ bool TLx493D_W2BW_setIICAddress(TLx493D_ts *sensor, TLx493D_IICAddressType_te ad
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_enableInterrupt(TLx493D_ts *sensor);
+bool TLx493D_W2BW_enableInterrupt(TLx493D_t *sensor);
 
 /**
  * @brief Disables the interrupt after measurement completion of the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -126,10 +126,10 @@ bool TLx493D_W2BW_enableInterrupt(TLx493D_ts *sensor);
  * @return true - If successful
  * @return false - If unsuccessful
  */
-bool TLx493D_W2BW_disableInterrupt(TLx493D_ts *sensor);
+bool TLx493D_W2BW_disableInterrupt(TLx493D_t *sensor);
 
 
-bool TLx493D_W2BW_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
+bool TLx493D_W2BW_setPowerMode(TLx493D_t *sensor, uint8_t mode);
 
 
 /**
@@ -140,11 +140,13 @@ bool TLx493D_W2BW_setPowerMode(TLx493D_ts *sensor, uint8_t mode);
  * @return true - If successful
  * @return false - If unsuccessful 
  */
-bool TLx493D_W2BW_setUpdateRate(TLx493D_ts *sensor, uint8_t bit);
+bool TLx493D_W2BW_setUpdateRate(TLx493D_t *sensor, uint8_t bit);
 
 
-bool TLx493D_W2BW_hasValidData(TLx493D_ts *sensor);
-bool TLx493D_W2BW_isFunctional(TLx493D_ts *sensor);
+bool TLx493D_W2BW_hasValidData(TLx493D_t *sensor);
+bool TLx493D_W2BW_isFunctional(TLx493D_t *sensor);
+
+bool TLx493D_W2BW_hasWakeUp(TLx493D_t *sensor);
 
 /**
  * @brief Checks if the wake up functionality is enabled
@@ -153,26 +155,26 @@ bool TLx493D_W2BW_isFunctional(TLx493D_ts *sensor);
  * @return true - If wake up is enabled
  * @return false - If wake up is disabled
  */
-bool TLx493D_W2BW_isWakeUpActive(TLx493D_ts *sensor);
+bool TLx493D_W2BW_isWakeUpEnabled(TLx493D_t *sensor);
 
-bool TLx493D_W2BW_enableWakeUpMode(TLx493D_ts *sensor);
-bool TLx493D_W2BW_disableWakeUpMode(TLx493D_ts *sensor);
+bool TLx493D_W2BW_enableWakeUpMode(TLx493D_t *sensor);
+bool TLx493D_W2BW_disableWakeUpMode(TLx493D_t *sensor);
 
-bool TLx493D_W2BW_setLowerWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold);
-bool TLx493D_W2BW_setLowerWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold); 
-bool TLx493D_W2BW_setLowerWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
+bool TLx493D_W2BW_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold); 
+bool TLx493D_W2BW_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
 
-bool TLx493D_W2BW_setUpperWakeUpThresholdX(TLx493D_ts *sensor, int16_t threshold);
-bool TLx493D_W2BW_setUpperWakeUpThresholdY(TLx493D_ts *sensor, int16_t threshold);
-bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_ts *sensor, int16_t threshold);
+bool TLx493D_W2BW_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
+bool TLx493D_W2BW_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
+bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
 
-bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_ts *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
+bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
 // thesholds im mT, to be converted to proper format
-bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_ts *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 
 
-bool TLx493D_W2BW_softReset(TLx493D_ts *sensor);
+bool TLx493D_W2BW_softReset(TLx493D_t *sensor);
 
 
 // /**
@@ -182,7 +184,7 @@ bool TLx493D_W2BW_softReset(TLx493D_ts *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-// bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_ts* sensor);
+// bool TLx493D_W2BW_enableTemperatureMeasurement(TLx493D_t* sensor);
 
 // /**
 //  * @brief Disable the temperature measurement of the XENSIV™ TLx493D-W2BW magnetic 3D sensor 
@@ -191,10 +193,10 @@ bool TLx493D_W2BW_softReset(TLx493D_ts *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-// bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_ts *sensor);
+// bool TLx493D_W2BW_disableTemperatureMeasurement(TLx493D_t *sensor);
 
 
-bool TLx493D_W2BW_enable1ByteMode(TLx493D_ts *sensor);
+bool TLx493D_W2BW_enable1ByteMode(TLx493D_t *sensor);
 
 // /**
 //  * @brief Calculates the parity and sets the corresponding parity flags for the necessary registers f the XENSIV™ TLx493D-W2BW magnetic 3D sensor
@@ -203,10 +205,10 @@ bool TLx493D_W2BW_enable1ByteMode(TLx493D_ts *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-// void TLx493D_W2BW_calculateParity(TLx493D_ts *sensor);
-uint8_t TLx493D_W2BW_calculateConfigurationParityBit(TLx493D_ts *sensor);
+// void TLx493D_W2BW_calculateParity(TLx493D_t *sensor);
+uint8_t TLx493D_W2BW_calculateConfigurationParityBit(TLx493D_t *sensor);
 
-void TLx493D_W2BW_setResetValues(TLx493D_ts *sensor);
+void TLx493D_W2BW_setResetValues(TLx493D_t *sensor);
 
 
 #endif /** TLX493D_W2BW_H */

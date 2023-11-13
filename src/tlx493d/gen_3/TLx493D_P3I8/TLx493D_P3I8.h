@@ -8,32 +8,32 @@
 // project c includes
 // common to all sensors
 #include "tlx493d_types.h"
-#include "tlx493d_common.h"
+// #include "tlx493d_common.h"
 
 // common to same generation of sensors
-#include "tlx493d_gen_3_common.h"
+// #include "tlx493d_gen_3_common.h"
 
 // sensor specific includes
 
 
-bool TLx493D_P3I8_init(TLx493D_ts *sensor);
-bool TLx493D_P3I8_deinit(TLx493D_ts *sensor);
+bool TLx493D_P3I8_init(TLx493D_t *sensor);
+bool TLx493D_P3I8_deinit(TLx493D_t *sensor);
 
-bool TLx493D_P3I8_readRegisters(TLx493D_ts *sensor);
+bool TLx493D_P3I8_readRegisters(TLx493D_t *sensor);
 
-void TLx493D_P3I8_calculateTemperature(TLx493D_ts *sensor, double *temp);
-bool TLx493D_P3I8_getTemperature(TLx493D_ts *sensor, double *temp);
+void TLx493D_P3I8_calculateTemperature(TLx493D_t *sensor, double *temp);
+bool TLx493D_P3I8_getTemperature(TLx493D_t *sensor, double *temp);
 
-void TLx493D_P3I8_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
-bool TLx493D_P3I8_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
+void TLx493D_P3I8_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
+bool TLx493D_P3I8_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
 
-void TLx493D_P3I8_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
-bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
+void TLx493D_P3I8_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
+bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 
 
-bool TLx493D_P3I8_setDefaultConfig(TLx493D_ts *sensor);
+bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor);
 
-void TLx493D_P3I8_setResetValues(TLx493D_ts *sensor);
+void TLx493D_P3I8_setResetValues(TLx493D_t *sensor);
 
 
 #endif // TLX493D_P3I8_H

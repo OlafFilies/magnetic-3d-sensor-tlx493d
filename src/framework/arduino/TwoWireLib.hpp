@@ -9,15 +9,15 @@
 #include <Wire.h>
 
 
-template<typename ComIF> class TwoWire_Lib {
+template<typename ComIF> class TwoWireLib {
 };
 
 
-template<> class TwoWire_Lib<TwoWire> {
+template<> class TwoWireLib<TwoWire> {
    public:
 
 
-        TwoWire_Lib(TwoWire &comif) : i2c(comif) {
+        TwoWireLib(TwoWire &comif) : i2c(comif) {
         }
 
 

@@ -9,14 +9,14 @@
 #include <SPI.h>
 
 
-template<typename ComIF> class SPI_Lib {
+template<typename ComIF> class SPILib {
 };
 
 
-template<> class SPI_Lib<SPIClass> {
+template<> class SPILib<SPIClass> {
    public:
 
-        SPI_Lib(SPIClass &comif) : spi(comif) {
+        SPILib(SPIClass &comif) : spi(comif) {
         }
 
 

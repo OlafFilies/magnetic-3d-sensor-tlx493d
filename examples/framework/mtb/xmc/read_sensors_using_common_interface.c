@@ -22,8 +22,8 @@
 #include "TLx493D_A2B6.h"
 
 
-extern void frameworkReset(TLx493D_ts *sensor);
-extern void printRegMap(TLx493D_ts *sensor);
+extern void frameworkReset(TLx493D_t *sensor);
+extern void printRegMap(TLx493D_t *sensor);
 
 
 int main(int argc, char *argv[]) {
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 
     cy_retarget_io_init(CYBSP_DEBUG_UART_HW);
 
-    TLx493D_ts a2b6;
+    TLx493D_t a2b6;
 
     init(&a2b6, TLx493D_A2B6_e);
 

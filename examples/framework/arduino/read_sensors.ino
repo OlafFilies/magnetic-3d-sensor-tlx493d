@@ -4,7 +4,7 @@
 // Arduino includes
 
 // project cpp includes
-#include "TLx493D.h"
+#include "TLx493D_inc.hpp"
 
 
 // SPI chip
@@ -83,7 +83,7 @@ void loop() {
 
     // Serial.print(true == dut.isWakeUpActive() ? "isWakeUpActive ok\n" : "isWakeUpActive error\n");
 
-    printRegisters(dut.getRegisterMap(), dut.getRegisterMapSize());
+    printRegisters(dut.getSensor());
     Serial.print("\n");
 
     delay(1000);

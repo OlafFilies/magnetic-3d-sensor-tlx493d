@@ -9,7 +9,7 @@
 #include <Arduino.h>
 
 // project cpp includes
-#include "arduino_defines.h"
+// #include "arduino_defines.h"
 #include "S2GoTemplate.hpp"
 
 

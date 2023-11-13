@@ -3,7 +3,7 @@
 // // Arduino includes
 
 // project cpp includes
-#include "TLx493D.h"
+#include "TLx493D_inc.hpp"
 
 
 // S2Go boards
@@ -13,18 +13,18 @@
 #define POWER_PIN_LOW 3
 
 
-TLx493D_ts dut;
+TLx493D_t dut;
 
 
-TLx493D_ts a1b6;
+TLx493D_t a1b6;
 
-TLx493D_ts a2b6;
-TLx493D_ts p2b6;
-TLx493D_ts w2b6;
-TLx493D_ts w2bw;
+TLx493D_t a2b6;
+TLx493D_t p2b6;
+TLx493D_t w2b6;
+TLx493D_t w2bw;
 
-TLx493D_ts p3b6;
-TLx493D_ts p3i8;
+TLx493D_t p3b6;
+TLx493D_t p3i8;
 
 
 #define USE_I2C  (1)
@@ -59,18 +59,18 @@ void setup() {
 
 
     // tlx493d_init(&a1b6, TLx493D_A1B6_e);
-    tlx493d_init(&a2b6, TLx493D_A2B6_e);
+    // tlx493d_init(&a2b6, TLx493D_A2B6_e);
     // tlx493d_init(&p2b6, TLx493D_P2B6_e);
-    tlx493d_init(&w2b6, TLx493D_W2B6_e);
+    // tlx493d_init(&w2b6, TLx493D_W2B6_e);
     // tlx493d_init(&w2bw, TLx493D_W2BW_e);
     // tlx493d_init(&p3b6, TLx493D_P3B6_e);
 
     // TLx493D_initCommunication(&a1b6, Wire);
-    TLx493D_initCommunication(&a2b6, Wire);
-    tlx493d_setDefaultConfig(&a2b6);
+    // TLx493D_initCommunication(&a2b6, Wire);
+    // tlx493d_setDefaultConfig(&a2b6);
     // TLx493D_initCommunication(&p2b6, Wire);
-    TLx493D_initCommunication(&w2b6, Wire);
-    tlx493d_setDefaultConfig(&w2b6);
+    // TLx493D_initCommunication(&w2b6, Wire);
+    // tlx493d_setDefaultConfig(&w2b6);
     // TLx493D_initCommunication(&w2bw, Wire);
     // TLx493D_initCommunication(&p3b6, Wire);
 
@@ -139,14 +139,14 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    Serial.print(true == tlx493d_isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
-    Serial.print(true == tlx493d_hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
+    // Serial.print(true == tlx493d_isFunctional(&dut) ? "isFunctional\n" : "NOT isFunctional\n");
+    // Serial.print(true == tlx493d_hasValidData(&dut) ? "hasValidData\n" : "NOT hasValidData\n");
     // Serial.print(true == tlx493d_hasValidTemperatureData(&dut) ? "hasValidTemperatureData\n" : "NOT hasValidTemperatureData\n");
     // Serial.print(true == tlx493d_hasValidMagneticFieldData(&dut) ? "hasValidMagneticFieldData\n" : "NOT hasValidFieldData\n");
 
 
-    Serial.print(true == TLx493D_A2B6_hasValidIICadr(&dut) ? "TLx493D_A2B6_hasValidIICadr\n" : "NOT TLx493D_A2B6_hasValidIICadr\n");
-    Serial.print(true == TLx493D_A2B6_hasWakeup(&dut) ? "TLx493D_A2B6_hasWakeup\n" : "NOT TLx493D_A2B6_hasWakeup\n");
+    // Serial.print(true == TLx493D_A2B6_hasValidIICadr(&dut) ? "TLx493D_A2B6_hasValidIICadr\n" : "NOT TLx493D_A2B6_hasValidIICadr\n");
+    // Serial.print(true == tlx493d_hasWakeUp(&dut) ? "hasWakeup\n" : "NOT hasWakeup\n");
 
 
     // tlx493d_setIICAddress(&dut, GEN_2_STD_IIC_ADDR_A1);
@@ -163,7 +163,7 @@ void loop() {
     // delay(1000);
     // TLx493D_A2B6_enableCollisionAvoidance(&dut);
 
-    printRegisters(dut.regMap, dut.regMapSize);
+    printRegisters(&dut);
     Serial.print("\n");
 
     delay(1000);

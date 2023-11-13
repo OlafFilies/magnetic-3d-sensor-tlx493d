@@ -17,13 +17,13 @@
 #include "tlx493d_gen_3_common.h"
 
 
-bool tlx493d_gen_3_readRegistersSPI(TLx493D_ts *sensor) {
+bool tlx493d_gen_3_readRegistersSPI(TLx493D_t *sensor) {
     // sensor->regMap[0] = GEN_3_SPI_READ_BIT_ON | GEN_3_SPI_AUTO_INC_BIT_OFF;
     return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
 
-void tlx493d_gen_3_calculateRawTemperature(TLx493D_ts *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
+void tlx493d_gen_3_calculateRawTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
     int16_t value = 0;
 
     tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
@@ -31,7 +31,7 @@ void tlx493d_gen_3_calculateRawTemperature(TLx493D_ts *sensor, double *temp, uin
 }
 
 
-void tlx493d_gen_3_calculateTemperature(TLx493D_ts *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
+void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
     int16_t value = 0;
 
     tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
@@ -39,7 +39,7 @@ void tlx493d_gen_3_calculateTemperature(TLx493D_ts *sensor, double *temp, uint8_
 }
 
 
-void tlx493d_gen_3_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z,
+void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z,
                                           uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
                                           uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
@@ -76,7 +76,7 @@ double sensitivity = GEN_3_FULL_RANGE_FIELD_SENSITIVITY; // TODO: r is range spe
 // valueZ = z * sensitivity;
 
 
-// void tlx493d_gen_3_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp,
+// void tlx493d_gen_3_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp,
 //                                                         uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
 //                                                         uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF) {
 

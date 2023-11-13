@@ -7,12 +7,12 @@
 #include <stdint.h>
 
 
-typedef union TLx493D_ComLibraryParameters_ts TLx493D_ComLibraryParameters_ts;
+typedef union TLx493D_ComLibraryParameters_t TLx493D_ComLibraryParameters_t;
 
-typedef struct TLx493D_I2CObject_ts TLx493D_I2CObject_ts;
-typedef struct TLx493D_SPIObject_ts TLx493D_SPIObject_ts;
+typedef struct TLx493D_I2CObject_t TLx493D_I2CObject_t;
+typedef struct TLx493D_SPIObject_t TLx493D_SPIObject_t;
 
-typedef struct TLx493D_ts   TLx493D_ts;
+typedef struct TLx493D_t   TLx493D_t;
 
 
 #ifdef __cplusplus
@@ -22,8 +22,8 @@ extern "C" {
 #endif
 
 
-bool transfer(TLx493D_ts *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
-void TLx493D_setI2CParameters(TLx493D_ts *sensor, uint8_t addr);
+bool transfer(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
+void TLx493D_setI2CParameters(TLx493D_t *sensor, uint8_t addr);
 
 
 #ifdef __cplusplus

@@ -13,13 +13,13 @@ extern "C" {
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_W2B6_init(&dut);
         TLx493D_initCommunication(&dut, Wire);
-        TLx493D_W2B6_setDefaultConfig(&dut);
+        dut.functions->setDefaultConfig(&dut);
     }
     
     
     // Method invoked by Unity after a test suite is run 
     void TLx493D_W2B6_needsSensor_suiteTearDown() {
         // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
-        (void) TLx493D_W2B6_deinit(&dut);
+        dut.functions->deinit(&dut);
     }
 }

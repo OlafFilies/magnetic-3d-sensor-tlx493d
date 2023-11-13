@@ -77,7 +77,7 @@ typedef enum {
                CHIP_ID_5 } TLx493D_P3B6_registerNames_te;
 
 
-TLx493D_Register_ts TLx493D_P3B6_regDef[] = {
+TLx493D_Register_t TLx493D_P3B6_regDef[] = {
     { BX_MSBS,       TLx493D_READ_MODE_e,       0x00, 0xFF, 0, 8 },
     { IIC_ADR_CP,    TLx493D_READ_MODE_e,       0x01, 0xC0, 6, 2 },
     { BX_LSBS,       TLx493D_READ_MODE_e,       0x01, 0x3F, 0, 6 },
@@ -141,7 +141,7 @@ TLx493D_Register_ts TLx493D_P3B6_regDef[] = {
 //                VER_REG    = 0x16 } SpecialRegisters_te;
 
 
-TLx493D_CommonFunctions_ts TLx493D_P3B6_commonFunctions = {
+TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
     .init                           = TLx493D_P3B6_init,
     .deinit                         = TLx493D_P3B6_deinit,
 
@@ -164,7 +164,7 @@ TLx493D_CommonFunctions_ts TLx493D_P3B6_commonFunctions = {
 
 
 // TODO: add parameter IICAddress or ad function to set address.
-bool TLx493D_P3B6_init(TLx493D_ts *sensor) {
+bool TLx493D_P3B6_init(TLx493D_t *sensor) {
     // TODO: use in TLx493D_initCommunication
     // TLx493D_setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A0);
     TLx493D_setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A1);
@@ -173,54 +173,54 @@ bool TLx493D_P3B6_init(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_P3B6_deinit(TLx493D_ts *sensor) {
+bool TLx493D_P3B6_deinit(TLx493D_t *sensor) {
     return tlx493d_common_deinit(sensor);
 }
 
 
-bool TLx493D_P3B6_readRegisters(TLx493D_ts *sensor) {
+bool TLx493D_P3B6_readRegisters(TLx493D_t *sensor) {
     return tlx493d_common_readRegisters(sensor);
 }
 
 
-void TLx493D_P3B6_calculateRawTemperature(TLx493D_ts *sensor, double *temp) {
+void TLx493D_P3B6_calculateRawTemperature(TLx493D_t *sensor, double *temp) {
     tlx493d_gen_3_calculateRawTemperature(sensor, temp, TEMP_MSBS, TEMP_LSBS);
 }
 
 
-void TLx493D_P3B6_calculateTemperature(TLx493D_ts *sensor, double *temp) {
+void TLx493D_P3B6_calculateTemperature(TLx493D_t *sensor, double *temp) {
     tlx493d_gen_3_calculateTemperature(sensor, temp, TEMP_MSBS, TEMP_LSBS);
 }
 
 
-bool TLx493D_P3B6_getTemperature(TLx493D_ts *sensor, double *temp) {
+bool TLx493D_P3B6_getTemperature(TLx493D_t *sensor, double *temp) {
     return tlx493d_common_getTemperature(sensor, temp);
 }
 
 
-void TLx493D_P3B6_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
+void TLx493D_P3B6_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z) {
     tlx493d_gen_3_calculateMagneticField(sensor, x, y, z, BX_MSBS, BX_LSBS, BY_MSBS, BY_LSBS, BZ_MSBS, BZ_LSBS, TEMP_MSBS, TEMP_LSBS);
 }
 
 
-bool TLx493D_P3B6_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
+bool TLx493D_P3B6_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z) {
      return tlx493d_common_getMagneticField(sensor, x, y, z);
 }
 
 
-void TLx493D_P3B6_calculateMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
+void TLx493D_P3B6_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp) {
     TLx493D_P3B6_calculateMagneticField(sensor, x, y, z);
     TLx493D_P3B6_calculateTemperature(sensor, temp);
 }
 
 
-bool TLx493D_P3B6_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
+bool TLx493D_P3B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp) {
     return tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
 }
 
 
 // TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
-bool TLx493D_P3B6_setDefaultConfig(TLx493D_ts *sensor) {
+bool TLx493D_P3B6_setDefaultConfig(TLx493D_t *sensor) {
      tlx493d_common_setBitfield(sensor, MODE_SEL, 0);
      tlx493d_common_setBitfield(sensor, INT_DIS, 1);
      tlx493d_common_setBitfield(sensor, COLLISION_DIS, 0);
@@ -243,24 +243,24 @@ bool TLx493D_P3B6_setDefaultConfig(TLx493D_ts *sensor) {
 }
 
 
-bool TLx493D_P3B6_set1ByteReadMode(TLx493D_ts *sensor, uint8_t pr) {
+bool TLx493D_P3B6_set1ByteReadMode(TLx493D_t *sensor, uint8_t pr) {
     tlx493d_common_setBitfield(sensor, PROT_SEL, pr);
 
     return tlx493d_common_writeRegister(sensor, PROT_SEL);
 }
 
 
-bool TLx493D_P3B6_enable1ByteMode(TLx493D_ts *sensor) {
+bool TLx493D_P3B6_enable1ByteMode(TLx493D_t *sensor) {
      return TLx493D_P3B6_set1ByteReadMode(sensor, 1);
 }
 
 
-bool TLx493D_P3B6_disable1ByteMode(TLx493D_ts *sensor) {
+bool TLx493D_P3B6_disable1ByteMode(TLx493D_t *sensor) {
      return TLx493D_P3B6_set1ByteReadMode(sensor, 0);
 }
 
 
-void TLx493D_P3B6_setResetValues(TLx493D_ts *sensor) {
+void TLx493D_P3B6_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x0A] = 0x62; // MOD1
     sensor->regMap[0x0B] = 0x00; // MOD2
 

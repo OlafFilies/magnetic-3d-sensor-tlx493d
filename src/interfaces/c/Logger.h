@@ -13,11 +13,10 @@ extern "C" {
 #endif
 
 
-typedef struct TLx493D_ts  TLx493D_ts;
+typedef struct TLx493D_t  TLx493D_t;
 
 
-// void printRegisters(uint8_t *rm, uint8_t rmSize);
-void printRegisters(TLx493D_ts *sensor);
+void printRegisters(TLx493D_t *sensor);
 void printDouble(double d);
 
 void logMessage(const char *prefix, const char *format, va_list vaList);

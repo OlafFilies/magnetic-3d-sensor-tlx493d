@@ -10,7 +10,7 @@ void TLx493D_P2B6_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static TLx493D_ts dut;
+static TLx493D_t dut;
 
 
 // test includes that may require dut

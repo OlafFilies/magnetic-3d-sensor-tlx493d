@@ -22,7 +22,7 @@
 // #include "TLE493D_A2B6.h"
 
 
-bool initIIC(TLx493D_ts *sensor) {
+bool initIIC(TLx493D_t *sensor) {
     XMC_GPIO_CONFIG_t i2c_scl = {
         .mode            = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT6,
         // .output_strength = XMC_GPIO_OUTPUT_STRENGTH_MEDIUM,
@@ -75,7 +75,7 @@ bool initIIC(TLx493D_ts *sensor) {
 }
 
 
-bool deinitIIC(TLx493D_ts *sensor) {
+bool deinitIIC(TLx493D_t *sensor) {
     I2CObject_ts  *i2c_obj = sensor->comLibObj.i2c_obj;
     XMC_USIC_CH_t *channel = i2c_obj->channel;
 
@@ -114,7 +114,7 @@ bool deinitIIC(TLx493D_ts *sensor) {
 }
 
 
-bool transferIIC(TLx493D_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
+bool transferIIC(TLx493D_t *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len) {
     XMC_USIC_CH_t *channel = sensor->comLibObj.i2c_obj->channel;
 
 
@@ -202,23 +202,23 @@ bool transferIIC(TLx493D_ts *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t
 }
 
 
-TLx493D_ComLibraryFunctions_ts  comLibIF_i2c = {
+TLx493D_ComLibraryFunctions_t  comLibIF_i2c = {
                                             .init     = { .i2c_init     = initIIC },
                                             .deinit   = { .i2c_deinit   = deinitIIC },
                                             .transfer = { .i2c_transfer = transferIIC },
                                        };
 
 
-// void TLx493D_setI2CParameters(TLx493D_ComLibraryParameters_ts *params, uint8_t addr) {
+// void TLx493D_setI2CParameters(TLx493D_ComLibraryParameters_t *params, uint8_t addr) {
 //     params->i2c_params.address = addr;
 // }
 
-void TLx493D_setI2CParameters(TLx493D_ts *sensor, uint8_t addr) {
+void TLx493D_setI2CParameters(TLx493D_t *sensor, uint8_t addr) {
     sensor->comLibIFParams.i2c_params.address = addr;
 }
 
 
-bool initI2CComLibIF(TLx493D_ts *sensor, XMC_USIC_CH_t *const channel,
+bool initI2CComLibIF(TLx493D_t *sensor, XMC_USIC_CH_t *const channel,
                      const uint8_t sourceSDA, const uint8_t sourceSCL,
                      XMC_GPIO_PORT_t *const portSDA, const uint8_t pinSDA,
                      XMC_GPIO_PORT_t *const portSCL, const uint8_t pinSCL) {
@@ -244,7 +244,7 @@ bool initI2CComLibIF(TLx493D_ts *sensor, XMC_USIC_CH_t *const channel,
 }
 
 
-void printRegMap(TLx493D_ts *sensor) {
+void printRegMap(TLx493D_t *sensor) {
     printf("regMap : "); 
  
     for(int i = 0; i < sensor->regMapSize; ++i) {

@@ -18,15 +18,12 @@
 
 
 extern "C" {
-    void printRegisters(TLx493D_ts *sensor) {
-    // void printRegisters(uint8_t *rm, uint8_t rmSize) {
+    void printRegisters(TLx493D_t *sensor) {
         Serial.print("\nregMap :"); 
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
-        // for(uint8_t i = 0; i < rmSize; ++i) {
             Serial.print("  0x");
             Serial.print(sensor->regMap[i], HEX);
-            // Serial.print(rm[i], HEX);
         }
 
         Serial.println();

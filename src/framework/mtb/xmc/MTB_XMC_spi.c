@@ -26,28 +26,28 @@
     Currently unused.
 */
 
-// bool SPIInitFunc(TLx493D_ts *sensor) {
+// bool SPIInitFunc(TLx493D_t *sensor) {
 //     return true;
 // }
 
 
-// bool SPIDeinitFunc(TLx493D_ts *sensor) {
+// bool SPIDeinitFunc(TLx493D_t *sensor) {
 //     return true;
 // }
 
 
-// bool SPITransferFunc(TLx493D_ts *sensor, uint8_t *tx_buffer, uint16_t tx_len, uint8_t *rx_buffer, uint16_t rx_len) {
+// bool SPITransferFunc(TLx493D_t *sensor, uint8_t *tx_buffer, uint16_t tx_len, uint8_t *rx_buffer, uint16_t rx_len) {
 //     return true;
 // }
 
 
-// TLx493D_ComLibraryFunctions_ts  comLibIF_spi = {
+// TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
 //                                            .init.spi_init         = SPIInitFunc,
 //                                            .deinit.spi_deinit     = SPIDeinitFunc,
 //                                            .transfer.spi_transfer = SPITransferFunc,
 //                                        };
 
 
-// void setSPIParameters(TLx493D_ComLibraryParameters_ts *params) {
+// void setSPIParameters(TLx493D_ComLibraryParameters_t *params) {
 //     params->spi_params.dummy = 0;
 // }

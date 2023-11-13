@@ -12,7 +12,7 @@ void TLx493D_A1B6_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static TLx493D_ts dut;
+static TLx493D_t dut;
 
 
 // test includes that may require dut
@@ -69,7 +69,7 @@ TEST(TLx493D_A1B6, setter_BitFields)
     // for gen1 setBitField is used to set values of WRITE registers (BitFields) only (due to a check for TLx493D_WRITE_MODE_e access)
     // so we test this function only for WRITE BitFields 
     for(uint8_t i=0; i < GEN_1_BITFIELDS_COUNT; i++){
-        TLx493D_Register_ts *bf = &dut.regDef[i];
+        TLx493D_Register_t *bf = &dut.regDef[i];
         if (bf->accessMode == TLx493D_WRITE_MODE_e){
             TLx493D_A1B6_setBitfield(&dut, i, (pow(2, bf->numBits)-1)); //set all bits of bitfield as HIGH 
             TEST_ASSERT_EQUAL(pow(2,bf->numBits)-1, (dut.regMap[bf->address+GEN_1_WRITE_REGISTERS_OFFSET] & bf->mask) >> bf->offset); // check if it matches the same value, we set above
@@ -86,7 +86,7 @@ TEST(TLx493D_A1B6, getter_BitFields)
     // for gen1 returnBitField is used to get values of READ registers (BitFields) only (due to a check for TLx493D_READ_MODE_e access)
     // so we test this function only for READ BitFields 
     for(uint8_t i=0; i<GEN_1_BITFIELDS_COUNT; i++){
-        TLx493D_Register_ts *bf = &dut.regDef[i];
+        TLx493D_Register_t *bf = &dut.regDef[i];
         if (bf->accessMode == TLx493D_READ_MODE_e){
             // first set the values (all bits as HIGH) of READ BitFields directly in the regMap
             dut.regMap[bf->address] = (dut.regMap[bf->address] & ~bf->mask) | ((uint8_t)(pow(2,bf->numBits)-1) << bf->offset);

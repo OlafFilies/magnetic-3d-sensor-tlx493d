@@ -7,7 +7,7 @@ void TLx493D_W2BW_needsSensor_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
-static TLx493D_ts dut;
+static TLx493D_t dut;
 
 
 // test includes that may require dut

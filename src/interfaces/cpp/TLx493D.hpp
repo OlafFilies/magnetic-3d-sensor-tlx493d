@@ -1,5 +1,5 @@
-#ifndef TLx493D_HPP
-#define TLx493D_HPP
+#ifndef TLX493D_HPP
+#define TLX493D_HPP
 
 // std includes
 #include <stdbool.h>
@@ -7,19 +7,21 @@
 
 // project cpp includes
 #include "arduino_defines.h"
+#include "SPI_SPI.hpp"
+#include "TwoWire_I2C.hpp"
 
 // project c includes
 extern "C" {
     #include "tlx493d_types.h"
-    #include "cInterface.h"
+    #include "tlx493d.h"
 }
 
 
 // keyword "export" not supported by current Arduino C++ compiler, therefore definitions must go here. Update C++ compiler to newer version ???
 // export
 template<typename BoardSupportClass, template<typename> typename ComLibrary, typename ComIF,
-         TLx493D_SupportedSensorType_te sensorType,
-         TLx493D_SupportedComLibraryInterfaceType_te comLibIFType = TLx493D_I2C_e> class TLx493D {
+         TLx493D_SupportedSensorType_t sensorType,
+         TLx493D_SupportedComLibraryInterfaceType_t comLibIFType = TLx493D_I2C_e> class TLx493D {
     public:
         typedef BoardSupportClass   BoardSupportClassType;
         typedef ComLibrary<ComIF>   ComLibraryIFType;
@@ -81,7 +83,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // functions related to the "Config" register
-        bool tlx493d_setMeasurement(TLx493D_MeasurementType_te meas) {
+        bool tlx493d_setMeasurement(TLx493D_MeasurementType_t meas) {
             return ::tlx493d_setMeasurement(&sensor, meas);
         }
 
@@ -104,7 +106,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
         
-        bool setSensitivity(TLx493D_SensitivityType_te range) {
+        bool setSensitivity(TLx493D_SensitivityType_t range) {
             return ::tlx493d_setSensitivity(&sensor, range);
         }
 
@@ -140,7 +142,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool setPowerMode(TLx493D_PowerModeType_te mode) {
+        bool setPowerMode(TLx493D_PowerModeType_t mode) {
             return ::tlx493d_setPowerMode(&sensor, mode);
         }
 
@@ -161,8 +163,14 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // functions available only to a subset of sensors with wake-up functionality
-        bool isWakeUpActive() {
-            return ::tlx493d_isWakeUpActive(&sensor);
+        bool hasWakeUp() {
+            return ::tlx493d_hasWakeUp(&sensor);
+        }
+
+
+        // functions available only to a subset of sensors with wake-up functionality
+        bool isWakeUpEnabled() {
+            return ::tlx493d_isWakeUpEnabled(&sensor);
         }
 
 
@@ -219,17 +227,17 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // Attribute getters for TLx493D object
-        TLx493D_ts *getSensor() {
+        TLx493D_t *getSensor() {
             return &sensor;
         }
 
 
-        TLx493D_SupportedSensorType_te getSensorType() {
+        TLx493D_SupportedSensorType_t getSensorType() {
             return sensor.sensorType;
         }
 
 
-        TLx493D_SupportedComLibraryInterfaceType_te getComLibIFType() {
+        TLx493D_SupportedComLibraryInterfaceType_t getComLibIFType() {
             return sensor.comIFType;
         }
 
@@ -253,7 +261,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
         BoardSupportClassType  bsc;
         ComLibraryIFType       comLIF;
-        TLx493D_ts             sensor;
+        TLx493D_t             sensor;
 };
 
-#endif // TLx493D_HPP
+#endif // TLX493D_HPP

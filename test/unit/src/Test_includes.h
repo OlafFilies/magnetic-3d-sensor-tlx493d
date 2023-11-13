@@ -28,12 +28,14 @@
 #include "TLx493D_A1B6.h"
 
 #include "TLx493D_A2B6_defines.h"
+#include "TLx493D_A2B6_enums.h"
 #include "TLx493D_A2B6.h"
 
 #include "TLx493D_P2B6_defines.h"
 #include "TLx493D_P2B6.h"
 
 #include "TLx493D_W2B6_defines.h"
+#include "TLx493D_W2B6_enums.h"
 #include "TLx493D_W2B6.h"
 
 #include "TLx493D_W2BW_defines.h"

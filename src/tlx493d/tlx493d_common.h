@@ -14,7 +14,7 @@
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_init(TLx493D_ts *sensor, uint8_t regMapSize, TLx493D_Register_ts *regDef, TLx493D_CommonFunctions_ts *commonFuncs, TLx493D_SupportedSensorType_te sensorType, TLx493D_SupportedComLibraryInterfaceType_te comIFType);
+bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register_t *regDef, TLx493D_CommonFunctions_t *commonFuncs, TLx493D_SupportedSensorType_t sensorType, TLx493D_SupportedComLibraryInterfaceType_t comIFType);
 
 
 // /**
@@ -25,14 +25,15 @@ bool tlx493d_common_init(TLx493D_ts *sensor, uint8_t regMapSize, TLx493D_Registe
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_deinit(TLx493D_ts *sensor);
+bool tlx493d_common_deinit(TLx493D_t *sensor);
 
 
-void tlx493d_common_getBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue);
-void tlx493d_common_setBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue);
+void    tlx493d_common_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
+uint8_t tlx493d_common_returnBitfield(TLx493D_t *sensor, uint8_t bitField);
+void    tlx493d_common_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBitFieldValue);
 
-bool tlx493d_common_writeRegister(TLx493D_ts* sensor, uint8_t bitField);
-bool tlx493d_common_readRegisters(TLx493D_ts *sensor);
+bool tlx493d_common_writeRegister(TLx493D_t* sensor, uint8_t bitField);
+bool tlx493d_common_readRegisters(TLx493D_t *sensor);
 
 
 // /**
@@ -44,7 +45,7 @@ bool tlx493d_common_readRegisters(TLx493D_ts *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getTemperature(TLx493D_ts *sensor, double *temp);
+bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temp);
 
 
 // /**
@@ -58,7 +59,7 @@ bool tlx493d_common_getTemperature(TLx493D_ts *sensor, double *temp);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
+bool tlx493d_common_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
 
 
 // /**
@@ -72,7 +73,7 @@ bool tlx493d_common_getMagneticField(TLx493D_ts *sensor, double *x, double *y, d
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
+bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 
 
 // utilities
@@ -80,12 +81,14 @@ uint8_t tlx493d_common_calculateParity(uint8_t data);
 uint8_t tlx493d_common_getOddParity(uint8_t parity);
 uint8_t tlx493d_common_getEvenParity(uint8_t parity);
 
-void tlx493d_common_concatBytes(TLx493D_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
+void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
 
-const char *tlx493d_common_getTypeAsString(TLx493D_ts *sensor);
+const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor);
 
-void warnFeatureNotAvailableForSensorType(TLx493D_ts *sensor, const char *featureName);
-void warnSelectionNotSupportedForSensorType(TLx493D_ts *sensor, uint8_t sel, const char *selType);
+void warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
+void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);
+void errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t field);
+void errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType);
 
 
 #endif // TLX493D_COMMON_H
