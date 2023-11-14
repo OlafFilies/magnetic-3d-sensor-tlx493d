@@ -16,6 +16,14 @@
 
 // sensor specicifc includes
 
+
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 //enums
 // typedef enum {
 //     GEN_1_STD_IIC_ADDR_00 = 0,
@@ -101,6 +109,13 @@ void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBi
 bool TLx493D_A1B6_hasValidFuseParity(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidTBit(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLx493D_A1B6_H

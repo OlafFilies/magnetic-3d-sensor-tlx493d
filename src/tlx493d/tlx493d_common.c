@@ -26,21 +26,23 @@
 */
 bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register_t *regDef, TLx493D_CommonFunctions_t *commonFuncs,
                          TLx493D_SupportedSensorType_t sensorType, TLx493D_SupportedComLibraryInterfaceType_t comIFType) {
-   sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * regMapSize);
-   sensor->regDef            = regDef;
-   sensor->functions         = commonFuncs;
-   sensor->regMapSize        = regMapSize;
-   sensor->sensorType        = sensorType;
-   sensor->comIFType         = comIFType;
-   sensor->comLibIF          = NULL;
-   sensor->comLibObj.i2c_obj = NULL;
+    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * regMapSize);
+    sensor->regDef            = regDef;
+    sensor->functions         = commonFuncs;
+    sensor->regMapSize        = regMapSize;
+    sensor->sensorType        = sensorType;
+    sensor->comIFType         = comIFType;
+    sensor->comLibIF          = NULL;
+    sensor->comLibObj.i2c_obj = NULL;
 
-   memset(sensor->regMap, 0, sensor->regMapSize);
+    memset(sensor->regMap, 0, sensor->regMapSize);
+
+    sensor->functions->setResetValues(sensor);
+
+    // TODO: set address in TLx493D_initCommunication !
+    // tlx493d_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
     
-   // TODO: set address in TLx493D_initCommunication !
-   // TLx493D_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
-    
-   return true;
+    return true;
 }
 
 
@@ -48,12 +50,12 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
  * 
 */
 bool tlx493d_common_deinit(TLx493D_t *sensor) {
-   free(sensor->regMap);
-   free(sensor->comLibObj.i2c_obj); // TODO: provide central function to deallocate SPI/IIC objects !
+    free(sensor->regMap);
+    free(sensor->comLibObj.i2c_obj); // TODO: provide central function to deallocate SPI/IIC objects !
 
-   sensor->regMap            = NULL;
-   sensor->comLibObj.i2c_obj = NULL; // TODO: provide central function to set to null SPI/IIC objects !
-   return true;
+    sensor->regMap            = NULL;
+    sensor->comLibObj.i2c_obj = NULL; // TODO: provide central function to set to null SPI/IIC objects !
+    return true;
 }
 
 
@@ -61,7 +63,7 @@ bool tlx493d_common_deinit(TLx493D_t *sensor) {
 //  * Generations 2 and 3, not 1.
 // */
 bool tlx493d_common_readRegisters(TLx493D_t *sensor) {
-   return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
 
@@ -69,12 +71,12 @@ bool tlx493d_common_readRegisters(TLx493D_t *sensor) {
  * 
 */
 bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temp) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateTemperature(sensor, temp);
-     return true;
-   }
+    if( sensor->functions->readRegisters(sensor) ) {
+        sensor->functions->calculateTemperature(sensor, temp);
+        return true;
+    }
 
-   return false;
+    return false;
 }
 
 
@@ -82,12 +84,12 @@ bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temp) {
  * 
 */
 bool tlx493d_common_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z ) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateMagneticField(sensor, x, y, z);
-      return true;
-   }
+    if( sensor->functions->readRegisters(sensor) ) {
+        sensor->functions->calculateMagneticField(sensor, x, y, z);
+        return true;
+    }
 
-   return false;
+    return false;
 }
 
 
@@ -95,12 +97,12 @@ bool tlx493d_common_getMagneticField(TLx493D_t *sensor, double *x, double *y, do
  * 
 */
 bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateMagneticFieldAndTemperature(sensor, x, y, z, temp);
-      return true;
-   }
+    if( sensor->functions->readRegisters(sensor) ) {
+        sensor->functions->calculateMagneticFieldAndTemperature(sensor, x, y, z, temp);
+        return true;
+    }
 
-   return false;
+    return false;
 }
 
 
@@ -112,6 +114,7 @@ uint8_t tlx493d_common_returnBitfield(TLx493D_t *sensor, uint8_t bitField) {
     }
     
     errorBitfieldNotReadableForSensorType(sensor, bitField);
+    return 0;
 }
 
 
@@ -203,31 +206,31 @@ void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t 
 
 
 const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor) {
-   switch(sensor->sensorType) {
-      case TLx493D_A1B6_e : return "TLx493D_A1B6";
-                           break;
-
-      case TLx493D_A2B6_e : return "TLx493D_A2B6";
+    switch(sensor->sensorType) {
+        case TLx493D_A1B6_e : return "TLx493D_A1B6";
                             break;
 
-      case TLx493D_P2B6_e : return "TLx493D_P2B6";
+        case TLx493D_A2B6_e : return "TLx493D_A2B6";
+                                break;
+
+        case TLx493D_P2B6_e : return "TLx493D_P2B6";
+                                break;
+
+        case TLx493D_W2B6_e : return "TLx493D_W2B6";
+                                break;
+
+        case TLx493D_W2BW_e : return "TLx493D_W2BW";
                             break;
 
-      case TLx493D_W2B6_e : return "TLx493D_W2B6";
-                            break;
+        case TLx493D_P3B6_e : return "TLx493D_P3B6";
+                                break;
 
-      case TLx493D_W2BW_e : return "TLx493D_W2BW";
-                           break;
+        case TLx493D_P3I8_e : return "TLx493D_P3I8";
+                                break;
 
-      case TLx493D_P3B6_e : return "TLx493D_P3B6";
-                            break;
-
-      case TLx493D_P3I8_e : return "TLx493D_P3I8";
-                            break;
-
-      default : return "ERROR : Unknown sensorType !";
-                break;
-   }
+        default : return "ERROR : Unknown sensorType !";
+                    break;
+    }
 }
 
 

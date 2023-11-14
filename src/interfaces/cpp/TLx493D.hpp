@@ -6,15 +6,15 @@
 #include <stdint.h>
 
 // project cpp includes
-#include "arduino_defines.h"
+#include "arduino_defines.hpp"
 #include "SPI_SPI.hpp"
 #include "TwoWire_I2C.hpp"
 
 // project c includes
-extern "C" {
+// extern "C" {
     #include "tlx493d_types.h"
     #include "tlx493d.h"
-}
+// }
 
 
 // keyword "export" not supported by current Arduino C++ compiler, therefore definitions must go here. Update C++ compiler to newer version ???
@@ -22,7 +22,9 @@ extern "C" {
 template<typename BoardSupportClass, template<typename> typename ComLibrary, typename ComIF,
          TLx493D_SupportedSensorType_t sensorType,
          TLx493D_SupportedComLibraryInterfaceType_t comLibIFType = TLx493D_I2C_e> class TLx493D {
+
     public:
+
         typedef BoardSupportClass   BoardSupportClassType;
         typedef ComLibrary<ComIF>   ComLibraryIFType;
         typedef ComIF               ComIFType;
@@ -40,7 +42,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
         void init() {
             bsc.init();
-            TLx493D_initCommunication(&sensor, comLIF); // includes call to comLIF.init();
+            tlx493d_initCommunication(&sensor, comLIF); // includes call to comLIF.init();
             setDefaultConfig();
         }
 
@@ -83,22 +85,9 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // functions related to the "Config" register
-        bool tlx493d_setMeasurement(TLx493D_MeasurementType_t meas) {
+        bool setMeasurement(TLx493D_MeasurementType_t meas) {
             return ::tlx493d_setMeasurement(&sensor, meas);
         }
-
-        // bool enableTemperatureMeasurement() {
-        //     return ::tlx493d_enableTemperatureMeasurement(&sensor);
-        // }
-        // bool disableTdisableTemperatureMeasurementemperature() {
-        //     return ::tlx493d_disableTemperatureMeasurement(&sensor);
-        // }    
-        // bool enableAngularMeasurement() {
-        //     return ::tlx493d_enableAngularMeasurement(&sensor);
-        // }
-        // bool disableAngularMeasurement() {
-        //     return ::tlx493d_disableAngularMeasurement(&sensor);
-        // }
 
 
         bool setTrigger(uint8_t bits) {
@@ -153,11 +142,11 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // functions related to the "Diag" register
-        bool tlx493d_hasValidData() {
+        bool hasValidData() {
             return ::tlx493d_hasValidData(&sensor);
         }
 
-        bool tlx493d_isFunctional() {
+        bool isFunctional() {
             return ::tlx493d_isFunctional(&sensor);
         }
 
@@ -168,7 +157,6 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        // functions available only to a subset of sensors with wake-up functionality
         bool isWakeUpEnabled() {
             return ::tlx493d_isWakeUpEnabled(&sensor);
         }
@@ -217,11 +205,11 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
 
         // utilities
-        bool tlx493d_softReset() {
+        bool softReset() {
             return ::tlx493d_softReset(&sensor);
         }
 
-        const char *tlx493d_getTypeAsString() {
+        const char *getTypeAsString() {
             return ::tlx493d_getTypeAsString(&sensor);
         }
 

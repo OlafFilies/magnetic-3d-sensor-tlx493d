@@ -16,6 +16,13 @@
 // sensor specific includes
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 bool TLx493D_P3I8_init(TLx493D_t *sensor);
 bool TLx493D_P3I8_deinit(TLx493D_t *sensor);
 
@@ -34,6 +41,13 @@ bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor);
 
 void TLx493D_P3I8_setResetValues(TLx493D_t *sensor);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLX493D_P3I8_H

@@ -20,11 +20,11 @@
 #include "tlx493d_types.h"
 
 
-extern "C" bool TLx493D_transferIIC(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
-extern "C" void TLx493D_setI2CParameters(TLx493D_t *sensor, uint8_t addr);
+extern "C" bool tlx493d_transferIIC(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
+extern "C" void tlx493d_setI2CParameters(TLx493D_t *sensor, uint8_t addr);
 
-bool TLx493D_initCommunication(TLx493D_t *sensor, TwoWireLib<TwoWire> &tw);
-bool TLx493D_initCommunication(TLx493D_t *sensor, TwoWire &tw);
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireLib<TwoWire> &tw);
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw);
 
 
 #endif // TLX493D_TWOWIRE_I2C_HPP

@@ -10,6 +10,13 @@
 #include "pal.h"
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 typedef struct TLx493D_t  TLx493D_t;
 
 
@@ -363,6 +370,13 @@ typedef struct TLx493D_t {
     TLx493D_SupportedSensorType_t               sensorType;
     TLx493D_SupportedComLibraryInterfaceType_t  comIFType;
 } TLx493D_t;
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLX493D_TYPES_H

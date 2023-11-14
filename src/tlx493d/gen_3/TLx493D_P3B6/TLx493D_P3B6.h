@@ -16,6 +16,13 @@
 // sensor specific includes
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 bool TLx493D_P3B6_init(TLx493D_t *sensor);
 bool TLx493D_P3B6_deinit(TLx493D_t *sensor);
 
@@ -36,6 +43,13 @@ bool TLx493D_P3B6_setDefaultConfig(TLx493D_t *sensor);
 bool TLx493D_P3B6_enable1ByteMode(TLx493D_t *sensor);
 
 void TLx493D_P3B6_setResetValues(TLx493D_t *sensor);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLX493D_P3B6_H

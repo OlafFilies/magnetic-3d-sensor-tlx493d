@@ -34,9 +34,6 @@ typedef struct TLx493D_SPIObject_t {
 } TLx493D_SPIObject_t;
 
 
-// extern "C" typedef struct TLx493D_t  TLx493D_t;
-
-
 typedef TLx493D<S2GoTemplateArduino, TwoWireLib, TwoWire, TLx493D_A1B6_e, TLx493D_I2C_e> TLx493D_A1B6;
 typedef TLx493D<S2GoTemplateArduino, TwoWireLib, TwoWire, TLx493D_A2B6_e, TLx493D_I2C_e> TLx493D_A2B6;
 typedef TLx493D<S2GoTemplateArduino, TwoWireLib, TwoWire, TLx493D_P2B6_e, TLx493D_I2C_e> TLx493D_P2B6;

@@ -12,7 +12,7 @@ extern "C" {
     void TLx493D_P2B6_needsSensor_suiteSetup() {
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_P2B6_init(&dut);
-        TLx493D_initCommunication(&dut, Wire);
+        tlx493d_initCommunication(&dut, Wire);
         TLx493D_P2B6_setDefaultConfig(&dut);
     }
     

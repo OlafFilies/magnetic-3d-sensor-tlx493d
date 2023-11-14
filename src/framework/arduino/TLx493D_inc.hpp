@@ -8,20 +8,21 @@
 // #include <Arduino.h>
 
 // project cpp includes
-#include "arduino_defines.h"
-#include "tlx493d.h"
-#include "Logger.h"
+#include "arduino_defines.hpp"
 #include "S2GoTemplateArduino.hpp"
 #include "SPI_SPI.hpp"
 #include "TLx493D.hpp"
 #include "TwoWire_I2C.hpp"
 
 
-#ifdef __cplusplus
+// #ifdef __cplusplus
 
 
-extern "C" {
+// extern "C" {
     // project c includes
+    #include "Logger.h"
+
+    #include "tlx493d.h"
     #include "tlx493d_types.h"
 
     #include "tlx493d_gen_2_common.h"
@@ -37,10 +38,10 @@ extern "C" {
 
     #include "TLx493D_P3B6.h"
     #include "TLx493D_P3I8.h"
-}
+// }
 
 
-#endif
+// #endif
 
 
 #endif // TLX493D_INCLUDES_HPP

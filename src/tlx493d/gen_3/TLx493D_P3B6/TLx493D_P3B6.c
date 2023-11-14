@@ -166,8 +166,8 @@ TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
 // TODO: add parameter IICAddress or ad function to set address.
 bool TLx493D_P3B6_init(TLx493D_t *sensor) {
     // TODO: use in TLx493D_initCommunication
-    // TLx493D_setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A0);
-    TLx493D_setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A1);
+    // tlx493d_setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A0);
+    tlx493d_setI2CParameters(sensor, GEN_3_STD_IIC_ADDR_WRITE_A1);
 
     return tlx493d_common_init(sensor, GEN_3_REG_MAP_SIZE, TLx493D_P3B6_regDef, &TLx493D_P3B6_commonFunctions, TLx493D_P3B6_e, TLx493D_I2C_e);
 }

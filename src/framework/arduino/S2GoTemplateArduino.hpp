@@ -24,7 +24,7 @@ typedef struct pinCtrl {
 template<> class S2GoTemplate<pinCtrl> {
    public:
 
-        S2GoTemplate() : constantPins{LED2, OUTPUT, HIGH, LOW}, switchedPins{} {
+        S2GoTemplate() : constantPins{ LED2, OUTPUT, HIGH, LOW}, switchedPins{} {
         }
 
         void init() {

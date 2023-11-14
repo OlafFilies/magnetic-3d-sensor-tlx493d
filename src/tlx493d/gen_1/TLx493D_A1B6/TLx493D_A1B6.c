@@ -171,7 +171,7 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
 bool TLx493D_A1B6_init(TLx493D_t *sensor) {
-    TLx493D_setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
+    tlx493d_setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
     return tlx493d_common_init(sensor, GEN_1_REG_MAP_SIZE, TLx493D_A1B6_regDef, &TLx493D_A1B6_commonFunctions, TLx493D_A1B6_e, TLx493D_I2C_e);
 
     // sensor->regMap            = (uint8_t *) malloc(sizeof(uint8_t) * GEN_1_REG_MAP_SIZE);
@@ -199,7 +199,7 @@ bool TLx493D_A1B6_init(TLx493D_t *sensor) {
 
     // memset(sensor->regMap, 0, sensor->regMapSize);
 
-    // TLx493D_setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
+    // tlx493d_setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
 
     // return true;
 }
@@ -303,7 +303,7 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
 }
 
 bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
-// bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_StandardIICAddresses_te addr) {
+// bool tlx493d_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_StandardIICAddresses_te addr) {
     uint8_t bitfieldValue = 0;
     uint8_t deviceAddress = 0;
 
@@ -336,7 +336,7 @@ bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr
     TLx493D_A1B6_calculateParity(sensor);
     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
 
-    TLx493D_setI2CParameters(sensor, deviceAddress);
+    tlx493d_setI2CParameters(sensor, deviceAddress);
 
     return ret;
 }

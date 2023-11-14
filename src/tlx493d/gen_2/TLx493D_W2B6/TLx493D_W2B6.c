@@ -145,7 +145,7 @@ TLx493D_CommonFunctions_t TLx493D_W2B6_commonFunctions = {
 
 // TODO: add parameter IICAddress or ad function to set address.
 bool TLx493D_W2B6_init(TLx493D_t *sensor) {
-    TLx493D_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
+    tlx493d_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
     
     return tlx493d_common_init(sensor, GEN_2_REG_MAP_SIZE, TLx493D_W2B6_regDef, &TLx493D_W2B6_commonFunctions, TLx493D_W2B6_e, TLx493D_I2C_e);
 }
@@ -298,7 +298,7 @@ bool TLx493D_W2B6_isWakeUpEnabled(TLx493D_t *sensor) {
 }
 
 bool TLx493D_W2B6_enableWakeUpMode(TLx493D_t *sensor) {
-    return tlx493d_gen_2_enableWakeUpMode(sensor, W2B6_T_e, W2B6_WU_e, W2B6_CP_e);
+    return tlx493d_gen_2_enableWakeUpMode(sensor, W2B6_TST_e, W2B6_WU_e, W2B6_CP_e);
 }
 
 bool TLx493D_W2B6_disableWakeUpMode(TLx493D_t *sensor) {
@@ -306,7 +306,7 @@ bool TLx493D_W2B6_disableWakeUpMode(TLx493D_t *sensor) {
 }
 
 bool TLx493D_W2B6_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-    return false;
+    return tlx493d_gen_2_setThreshold(sensor, W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, W2B6_CP_e, threshold);
 }
 
 bool TLx493D_W2B6_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {

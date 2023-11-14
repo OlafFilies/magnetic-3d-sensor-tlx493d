@@ -32,12 +32,6 @@ bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, u
 
 // functions related to the "Config" register
 bool tlx493d_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t meas);
-// or do it separately ? Like :
-// bool tlx493d_enableTemperatureMeasurement(TLx493D_t *sensor);
-// bool tlx493d_disableTemperatureMeasurement(TLx493D_t *sensor);
-// bool tlx493d_enableAngularMeasurement(TLx493D_t *sensor);
-// bool tlx493d_disableAngularMeasurement(TLx493D_t *sensor);
-
 bool tlx493d_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trigger);
 bool tlx493d_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t range);
 

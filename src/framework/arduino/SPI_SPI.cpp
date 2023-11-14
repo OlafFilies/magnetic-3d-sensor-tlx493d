@@ -12,11 +12,11 @@
 // sensor specific includes
 
 // project cpp includes
-#include "arduino_defines.h"
+#include "arduino_defines.hpp"
 #include "SPI_SPI.hpp"
 
 
-extern "C" bool TLx493D_initSPI(TLx493D_t *sensor) {
+extern "C" bool tlx493d_initSPI(TLx493D_t *sensor) {
     sensor->comLibObj.spi_obj->spi->init();
 
     sensor->comLibObj.spi_obj->spi->getComIF().setDataMode(SPI_MODE2);
@@ -27,21 +27,21 @@ extern "C" bool TLx493D_initSPI(TLx493D_t *sensor) {
 }
 
 
-extern "C" bool TLx493D_deinitSPI(TLx493D_t *sensor) {
+extern "C" bool tlx493d_deinitSPI(TLx493D_t *sensor) {
     sensor->comLibObj.spi_obj->spi->deinit();
     return true;
 }
 
 
-extern "C" bool TLx493D_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
+extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
     return sensor->comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
 }
 
 
 TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
-                                            .init     = { .spi_init     = TLx493D_initSPI },
-                                            .deinit   = { .spi_deinit   = TLx493D_deinitSPI },
-                                            .transfer = { .spi_transfer = TLx493D_transferSPI },
+                                            .init     = { .spi_init     = tlx493d_initSPI },
+                                            .deinit   = { .spi_deinit   = tlx493d_deinitSPI },
+                                            .transfer = { .spi_transfer = tlx493d_transferSPI },
                                        };
 
 
@@ -50,7 +50,7 @@ TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
 // }
 
 
-bool TLx493D_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi) {
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi) {
     if( sensor->comIFType != TLx493D_SPI_e ) {
         return false;
     }
@@ -67,7 +67,7 @@ bool TLx493D_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi) {
 
 
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
-bool TLx493D_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
     if( sensor->comIFType != TLx493D_SPI_e ) {
         return false;
     }

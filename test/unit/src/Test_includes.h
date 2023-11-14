@@ -9,6 +9,7 @@
 // common to all sensors
 #include "Logger.h"
 
+#include "tlx493d.h"
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"

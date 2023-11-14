@@ -20,9 +20,9 @@
 #include "tlx493d_types.h"
 
 
-extern "C" bool TLx493D_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
-bool TLx493D_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi);
-bool TLx493D_initCommunication(TLx493D_t *sensor, SPIClass &spi);
+extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi);
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi);
 
 
 #endif // TLX493D_SPI_SPI_HPP

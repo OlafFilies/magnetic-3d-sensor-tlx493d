@@ -24,6 +24,13 @@
 /** Sensor specific includes */
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 /**
  * @brief Initializes the XENSIV™ TLx493D-W2BW magnetic 3D sensor
  * It initializes the sensor structure and sets the I2C communication protocol
@@ -209,6 +216,13 @@ bool TLx493D_W2BW_enable1ByteMode(TLx493D_t *sensor);
 uint8_t TLx493D_W2BW_calculateConfigurationParityBit(TLx493D_t *sensor);
 
 void TLx493D_W2BW_setResetValues(TLx493D_t *sensor);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif /** TLX493D_W2BW_H */

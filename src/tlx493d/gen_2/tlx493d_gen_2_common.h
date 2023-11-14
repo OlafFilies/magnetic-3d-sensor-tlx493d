@@ -10,6 +10,13 @@
 #include "tlx493d_types.h"
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 void tlx493d_gen_2_calculateTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF);
 void tlx493d_gen_2_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z,
                                   uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF);
@@ -83,6 +90,13 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_t *sensor, uint8_t tBF) ;
 // uint8_t tlx493d_gen_2_getFrameCounter(TLx493D_t *sensor, uint8_t frmBF) ;
 // uint8_t tlx493d_gen_2_getType(TLx493D_t *sensor, uint8_t typeBF);
 // uint8_t tlx493d_gen_2_getHWV(TLx493D_t *sensor, uint8_t hwvBF);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLX493D_GEN_2_COMMON_H

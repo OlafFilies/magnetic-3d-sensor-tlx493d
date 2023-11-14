@@ -48,13 +48,13 @@ void setup() {
 
 
     // tlx493d_init(&dut, TLx493D_A1B6_e);
-    tlx493d_init(&dut, TLx493D_A2B6_e);
+    // tlx493d_init(&dut, TLx493D_A2B6_e);
     // tlx493d_init(&dut, TLx493D_P2B6_e);
-    // tlx493d_init(&dut, TLx493D_W2B6_e);
+    tlx493d_init(&dut, TLx493D_W2B6_e);
     // tlx493d_init(&dut, TLx493D_W2BW_e);
     // tlx493d_init(&dut, TLx493D_P3B6_e);
 
-    TLx493D_initCommunication(&dut, Wire);
+    tlx493d_initCommunication(&dut, Wire);
     tlx493d_setDefaultConfig(&dut);
 
 
@@ -65,14 +65,14 @@ void setup() {
     // tlx493d_init(&w2bw, TLx493D_W2BW_e);
     // tlx493d_init(&p3b6, TLx493D_P3B6_e);
 
-    // TLx493D_initCommunication(&a1b6, Wire);
-    // TLx493D_initCommunication(&a2b6, Wire);
+    // tlx493d_initCommunication(&a1b6, Wire);
+    // tlx493d_initCommunication(&a2b6, Wire);
     // tlx493d_setDefaultConfig(&a2b6);
-    // TLx493D_initCommunication(&p2b6, Wire);
-    // TLx493D_initCommunication(&w2b6, Wire);
+    // tlx493d_initCommunication(&p2b6, Wire);
+    // tlx493d_initCommunication(&w2b6, Wire);
     // tlx493d_setDefaultConfig(&w2b6);
-    // TLx493D_initCommunication(&w2bw, Wire);
-    // TLx493D_initCommunication(&p3b6, Wire);
+    // tlx493d_initCommunication(&w2bw, Wire);
+    // tlx493d_initCommunication(&p3b6, Wire);
 
 
 #else
@@ -86,11 +86,11 @@ void setup() {
     // digitalWrite(POWER_PIN_LOW, LOW);
 
     tlx493d_init(&dut, TLx493D_P3I8_e);
-    TLx493D_initCommunication(&dut, SPI);
+    tlx493d_initCommunication(&dut, SPI);
 
 
     tlx493d_init(&p3i8, TLx493D_P3I8_e);
-    TLx493D_initCommunication(&p3i8, SPI);
+    tlx493d_initCommunication(&p3i8, SPI);
 
 #endif
 

@@ -6,10 +6,9 @@
 #include <Arduino.h>
 
 
-extern "C" {
-    #include "Test_utils.h"
+#include "Test_utils.h"
 
-    
+extern "C" {  
     // Method used by Unity to output a single character 
     void putCharacter(char c) {
         Serial.print(c);

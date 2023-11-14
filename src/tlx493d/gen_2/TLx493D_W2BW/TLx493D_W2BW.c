@@ -183,7 +183,7 @@ bool TLx493D_W2BW_init(TLx493D_t *sensor) {
 
     // memset(sensor->regMap, 0, sensor->regMapSize);
 
-    TLx493D_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
+    tlx493d_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
 
     return tlx493d_common_init(sensor, GEN_2_REG_MAP_SIZE, TLx493D_W2BW_regDef, &TLx493D_W2BW_commonFunctions, TLx493D_W2BW_e, TLx493D_I2C_e);
 

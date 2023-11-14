@@ -17,6 +17,13 @@
 // sensor specific includes
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 bool TLx493D_W2B6_init(TLx493D_t *sensor);
 bool TLx493D_W2B6_deinit(TLx493D_t *sensor);
 
@@ -85,6 +92,13 @@ bool TLx493D_W2B6_hasValidBusParity(TLx493D_t *sensor);
 bool TLx493D_W2B6_hasValidConfigurationParity(TLx493D_t *sensor);
 
 void TLx493D_W2B6_setResetValues(TLx493D_t *sensor);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLX493D_W2B6_H
