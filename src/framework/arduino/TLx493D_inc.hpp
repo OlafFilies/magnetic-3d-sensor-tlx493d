@@ -8,11 +8,11 @@
 // #include <Arduino.h>
 
 // project cpp includes
-#include "arduino_defines.hpp"
+#include "types.hpp"
 #include "S2GoTemplateArduino.hpp"
-#include "SPI_SPI.hpp"
+#include "SPIUsingSPIClass.hpp"
 #include "TLx493D.hpp"
-#include "TwoWire_I2C.hpp"
+#include "IICUsingTwoWire.hpp"
 
 
 // #ifdef __cplusplus

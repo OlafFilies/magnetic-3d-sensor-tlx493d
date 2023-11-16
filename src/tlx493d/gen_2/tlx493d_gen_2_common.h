@@ -17,9 +17,13 @@ extern "C" {
 #endif
 
 
-void tlx493d_gen_2_calculateTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF);
-void tlx493d_gen_2_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z,
-                                  uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF);
+void tlx493d_gen_2_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, uint16_t *temperature);
+void tlx493d_gen_2_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                          uint8_t bzMSBBF, uint8_t bzLSBBF, uint16_t *x, uint16_t *y, uint16_t *z);
+
+void tlx493d_gen_2_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, double *temperature);
+void tlx493d_gen_2_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                          uint8_t bzMSBBF, uint8_t bzLSBBF, double *x, double *y, double *z);
 
 bool tlx493d_gen_2_setOneConfigBitfield(TLx493D_t *sensor, uint8_t firstBF, uint8_t cpBF, uint8_t first);
 bool tlx493d_gen_2_setTwoConfigBitfields(TLx493D_t *sensor, uint8_t firstBF, uint8_t secondBF, uint8_t cpBF, uint8_t first, uint8_t second);
@@ -90,6 +94,9 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_t *sensor, uint8_t tBF) ;
 // uint8_t tlx493d_gen_2_getFrameCounter(TLx493D_t *sensor, uint8_t frmBF) ;
 // uint8_t tlx493d_gen_2_getType(TLx493D_t *sensor, uint8_t typeBF);
 // uint8_t tlx493d_gen_2_getHWV(TLx493D_t *sensor, uint8_t hwvBF);
+
+
+void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 
 #ifdef __cplusplus

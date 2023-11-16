@@ -142,6 +142,15 @@ TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
 
     .readRegisters                  = TLx493D_P3I8_readRegisters, //tlx493d_gen_3_readRegistersSPI,
 
+    .calculateRawTemperature        = TLx493D_P3I8_calculateRawTemperature,
+    .getRawTemperature              = TLx493D_P3I8_getRawTemperature,
+
+    .calculateRawMagneticField      = TLx493D_P3I8_calculateRawMagneticField,
+    .getRawMagneticField            = TLx493D_P3I8_getRawMagneticField,
+
+    .calculateRawMagneticFieldAndTemperature = TLx493D_P3I8_calculateRawMagneticFieldAndTemperature,
+    .getRawMagneticFieldAndTemperature       = TLx493D_P3I8_getRawMagneticFieldAndTemperature,
+
     .calculateTemperature           = TLx493D_P3I8_calculateTemperature,
     .getTemperature                 = TLx493D_P3I8_getTemperature,
 
@@ -155,6 +164,10 @@ TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
     .setDefaultConfig               = TLx493D_P3I8_setDefaultConfig,
     
     .setResetValues                 = TLx493D_P3I8_setResetValues,
+
+    .calculateRawMagneticFieldAtTemperature = TLx493D_P3I8_calculateRawMagneticFieldAtTemperature,
+
+    .getSensitivityScaleFactor      = TLx493D_P3I8_getSensitivityScaleFactor,
 };
 
 
@@ -174,13 +187,39 @@ bool TLx493D_P3I8_readRegisters(TLx493D_t *sensor) {
 }
 
 
-void TLx493D_P3I8_calculateRawTemperature(TLx493D_t *sensor, double *temp) {
-    tlx493d_gen_3_calculateRawTemperature(sensor, temp, TEMP_MSBS, TEMP_LSBS);
+void TLx493D_P3I8_calculateRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+    tlx493d_gen_3_calculateRawTemperature(sensor, TEMP_MSBS, TEMP_LSBS, temperature);
+}
+
+
+bool TLx493D_P3I8_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+    return tlx493d_common_getRawTemperature(sensor, temperature);
+}
+
+
+void TLx493D_P3I8_calculateRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+    tlx493d_gen_3_calculateRawMagneticField(sensor, BX_MSBS, BX_LSBS, BY_MSBS, BY_LSBS, BZ_MSBS, BZ_LSBS, x, y, z);
+}
+
+
+bool TLx493D_P3I8_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+    return tlx493d_common_getRawMagneticField(sensor, x, y, z);
+}
+
+
+void TLx493D_P3I8_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+    TLx493D_P3I8_calculateRawMagneticField(sensor, x, y, z);
+    TLx493D_P3I8_calculateRawTemperature(sensor, temperature);
+}
+
+
+bool TLx493D_P3I8_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+    return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
 
 void TLx493D_P3I8_calculateTemperature(TLx493D_t *sensor, double *temp) {
-    tlx493d_gen_3_calculateTemperature(sensor, temp, TEMP_MSBS, TEMP_LSBS);
+    tlx493d_gen_3_calculateTemperature(sensor, TEMP_MSBS, TEMP_LSBS, temp);
 }
 
 
@@ -190,7 +229,7 @@ bool TLx493D_P3I8_getTemperature(TLx493D_t *sensor, double *temp) {
 
 
 void TLx493D_P3I8_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z) {
-    tlx493d_gen_3_calculateMagneticField(sensor, x, y, z, BX_MSBS, BX_LSBS, BY_MSBS, BY_LSBS, BZ_MSBS, BZ_LSBS, TEMP_MSBS, TEMP_LSBS);
+    tlx493d_gen_3_calculateMagneticField(sensor, BX_MSBS, BX_LSBS, BY_MSBS, BY_LSBS, BZ_MSBS, BZ_LSBS, TEMP_MSBS, TEMP_LSBS, x, y, z);
 }
 
 
@@ -245,4 +284,14 @@ void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x11] = 0x80;
     sensor->regMap[0x12] = 0xCC;
     sensor->regMap[0x13] = 0x2C;
+}
+
+
+void TLx493D_P3I8_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
+
+}
+
+
+void TLx493D_P3I8_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf) {
+    tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, SHORT_EN, XTR_SHORT_EN, sf);
 }

@@ -7,14 +7,12 @@
 #include <Arduino.h>
 
 // project cpp includes
-#include "arduino_defines.hpp"
+#include "types.hpp"
 
 
-// extern "C" {
-    // test includes
-    #include "Test_includes.h"
-    #include "Test_utils.h"
-// }
+// test includes
+#include "Test_includes.h"
+// #include "Test_utils.h"
 
 
 #endif // TEST_INCLUDES_HPP

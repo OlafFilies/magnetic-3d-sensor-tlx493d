@@ -10,8 +10,8 @@
 // sensor specific includes
 
 // project cpp includes
-#include "TwoWire_I2C.hpp"
-#include "SPI_SPI.hpp"
+#include "IICUsingTwoWire.hpp"
+#include "SPIUsingSPIClass.hpp"
 
 
 // extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);

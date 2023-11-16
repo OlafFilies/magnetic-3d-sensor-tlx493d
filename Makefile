@@ -1,5 +1,6 @@
 FQBN ?=
 PORT ?=
+TEST ?=
 
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
@@ -25,7 +26,7 @@ TESTS_NO_SENSOR=-DTEST_TLx493D_A1B6 \
                 -DTEST_TLx493D_A2B6 \
 				-DTEST_TLx493D_P2B6 \
 				-DTEST_TLx493D_W2B6 \
-			 	-DTEST_TLx493D_A2BW
+			 	-DTEST_TLx493D_W2BW
 				
 
 A1B6_needsSensor: TESTS=-DTEST_TLx493D_A1B6 -DTEST_TLx493D_A1B6_NEEDS_SENSOR
@@ -40,14 +41,14 @@ P2B6: TESTS=-DTEST_TLx493D_P2B6
 W2B6_needsSensor: TESTS=-DTEST_TLx493D_W2B6 -DTEST_TLx493D_W2B6_NEEDS_SENSOR
 W2B6: TESTS=-DTEST_TLx493D_W2B6
 
-A2BW_needsSensor: TESTS=-DTEST_TLx493D_W2BW -DTEST_TLx493D_W2BW_NEEDS_SENSOR
-A2BW: TESTS=-DTEST_TLx493D_W2BW
+W2BW_needsSensor: TESTS=-DTEST_TLx493D_W2BW -DTEST_TLx493D_W2BW_NEEDS_SENSOR
+W2BW: TESTS=-DTEST_TLx493D_W2BW
 
 A1B6_needsSensor A1B6 \
 A2B6_needsSensor A2B6 \
 P2B6_needsSensor P2B6 \
 W2B6_needsSensor W2B6 \
-A2BW_needsSensor W2BW : unity flash
+W2BW_needsSensor W2BW : unity flash
 
 
 # sensor_common_needsSensor: TESTS=$(TEST_COMMON_NEEDS_SENSOR)
@@ -86,19 +87,8 @@ unity: arduino
 	cp test/unit/src/Test_*.h build
 	cp test/unit/src/tlx493d/Test_*.h build
 	cp test/unit/src/framework/arduino/Test_*.[hc]* build
+	cp test/unit/src/framework/arduino/unity_ifx.cpp build
 	cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
-
-
-# For WSL and Windows :
-# download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
-prepare:
-	arduino-cli.exe core update-index
-	arduino-cli.exe core install Infineon:xmc
-	arduino-cli.exe core update-index
-	arduino-cli.exe core search Infineon
-	arduino-cli.exe core list
-	arduino-cli.exe board listall
-	arduino-cli.exe board listall Infineon
 
 
 compile:
@@ -134,6 +124,23 @@ ifeq ($(FQBN),)
 else
 	arduino-cli.exe monitor -c baudrate=115200 -p $(PORT) --fqbn $(FQBN)
 endif
+
+
+
+
+
+
+
+# For WSL and Windows :
+# download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
+prepare:
+	arduino-cli.exe core update-index
+	arduino-cli.exe core install Infineon:xmc
+	arduino-cli.exe core update-index
+	arduino-cli.exe core search Infineon
+	arduino-cli.exe core list
+	arduino-cli.exe board listall
+	arduino-cli.exe board listall Infineon
 
 
 # TODO: rework as for Arduino !

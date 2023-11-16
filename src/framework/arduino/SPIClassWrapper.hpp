@@ -9,14 +9,14 @@
 #include <SPI.h>
 
 
-template<typename ComIF> class SPILib {
+template<typename Protocol> class SPIClassWrapper {
 };
 
 
-template<> class SPILib<SPIClass> {
+template<> class SPIClassWrapper<SPIClass> {
    public:
 
-        SPILib(SPIClass &comif) : spi(comif) {
+        SPIClassWrapper(SPIClass &comif) : spi(comif) {
         }
 
 

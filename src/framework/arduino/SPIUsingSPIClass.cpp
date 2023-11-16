@@ -12,8 +12,8 @@
 // sensor specific includes
 
 // project cpp includes
-#include "arduino_defines.hpp"
-#include "SPI_SPI.hpp"
+#include "types.hpp"
+#include "SPIUsingSPIClass.hpp"
 
 
 extern "C" bool tlx493d_initSPI(TLx493D_t *sensor) {
@@ -50,7 +50,7 @@ TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
 // }
 
 
-bool tlx493d_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi) {
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper<SPIClass> &spi) {
     if( sensor->comIFType != TLx493D_SPI_e ) {
         return false;
     }
@@ -74,7 +74,7 @@ bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
 
     // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
     sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
-    sensor->comLibObj.spi_obj->spi = new SPILib<SPIClass>(spi);
+    sensor->comLibObj.spi_obj->spi = new SPIClassWrapper<SPIClass>(spi);
     sensor->comLibIF               = &comLibIF_spi;
 
     sensor->comLibIF->init.spi_init(sensor);

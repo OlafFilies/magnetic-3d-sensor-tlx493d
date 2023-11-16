@@ -43,6 +43,16 @@ bool tlx493d_common_writeRegister(TLx493D_t* sensor, uint8_t bitField);
 bool tlx493d_common_readRegisters(TLx493D_t *sensor);
 
 
+void tlx493d_common_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, uint16_t *temperature);
+bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature);
+
+void tlx493d_common_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                              uint8_t bzMSBBF, uint8_t bzLSBBF, uint16_t *x, uint16_t *y, uint16_t *z);
+bool tlx493d_common_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z);
+
+bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature);
+
+
 // /**
 //  * @brief Retrieves the temperature value of the XENSIV™ TLx493D-W2B6 magnetic 3D sensor
 //  * It reads out the required registers to calculate the temperature value.
@@ -52,7 +62,7 @@ bool tlx493d_common_readRegisters(TLx493D_t *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temp);
+bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temperature);
 
 
 // /**
@@ -80,7 +90,7 @@ bool tlx493d_common_getMagneticField(TLx493D_t *sensor, double *x, double *y, do
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
+bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temperature);
 
 
 // utilities
@@ -91,6 +101,10 @@ uint8_t tlx493d_common_getEvenParity(uint8_t parity);
 void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
 
 const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor);
+
+void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+
+void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF, double *sf);
 
 void warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
 void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);

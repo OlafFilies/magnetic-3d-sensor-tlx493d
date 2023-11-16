@@ -12,8 +12,8 @@
 // sensor specific includes
 
 // project cpp includes
-#include "arduino_defines.hpp"
-#include "TwoWire_I2C.hpp"
+#include "types.hpp"
+#include "IICUsingTwoWire.hpp"
 
 
 extern "C" bool tlx493d_initIIC(TLx493D_t *sensor) {
@@ -48,7 +48,7 @@ extern "C" void tlx493d_setI2CParameters(TLx493D_t *sensor, uint8_t addr) {
 }
 
 
-bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireLib<TwoWire> &tw) {
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper<TwoWire> &tw) {
     if( sensor->comIFType != TLx493D_I2C_e ) {
         return false;
     }
@@ -73,7 +73,7 @@ bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw) {
 
     // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
     sensor->comLibObj.i2c_obj       = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
-    sensor->comLibObj.i2c_obj->wire = new TwoWireLib<TwoWire>(tw);
+    sensor->comLibObj.i2c_obj->wire = new TwoWireWrapper<TwoWire>(tw);
     sensor->comLibIF                = &comLibIF_i2c;
 
     sensor->comLibIF->init.i2c_init(sensor);

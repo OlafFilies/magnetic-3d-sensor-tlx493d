@@ -208,6 +208,8 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkConfigTriggerFunctionality)
 
 TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkConfigSensitivityFunctionality)
 {
+    double sf;
+
     // unsupported
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) == false );
 
@@ -217,9 +219,16 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkConfigSensitivityFunctionality)
     while( tlx493d_common_readRegisters(&dut) == false ) ;
     TEST_ASSERT( (dut.regMap[W2B6_CONFIG_REG_e] & 0x08) == 0x08 );
 
+    dut.functions->getSensitivityScaleFactor(&dut, &sf);
+    TEST_ASSERT_EQUAL_FLOAT( 2.0, sf );
+    
+
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
     while( tlx493d_common_readRegisters(&dut) == false ) ;
     TEST_ASSERT( (dut.regMap[W2B6_CONFIG_REG_e] & 0x08) == 0x00 );
+
+    dut.functions->getSensitivityScaleFactor(&dut, &sf);
+    TEST_ASSERT_EQUAL_FLOAT( 1.0, sf );
 }
 
 

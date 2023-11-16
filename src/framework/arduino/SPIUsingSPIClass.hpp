@@ -1,5 +1,5 @@
-#ifndef TLX493D_SPI_SPI_HPP
-#define TLX493D_SPI_SPI_HPP
+#ifndef TLX493D_SPI_USING_SPICLASS_HPP
+#define TLX493D_SPI_USING_SPICLASS_HPP
 
 
 // std includes
@@ -13,7 +13,7 @@
 // #include <SPI.h>
 
 // project cpp includes
-#include "SPILib.hpp"
+#include "SPIClassWrapper.hpp"
 
 // project c includes
 // common to all sensors
@@ -21,8 +21,8 @@
 
 
 extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
-bool tlx493d_initCommunication(TLx493D_t *sensor, SPILib<SPIClass> &spi);
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper<SPIClass> &spi);
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi);
 
 
-#endif // TLX493D_SPI_SPI_HPP
+#endif // TLX493D_SPI_USING_SPICLASS_HPP

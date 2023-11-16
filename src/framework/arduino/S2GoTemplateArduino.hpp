@@ -9,7 +9,7 @@
 #include <Arduino.h>
 
 // project cpp includes
-// #include "arduino_defines.h"
+// #include "types.h"
 #include "S2GoTemplate.hpp"
 
 
@@ -68,9 +68,6 @@ template<> class S2GoTemplate<pinCtrl> {
         pinCtrl constantPins[1];
         pinCtrl switchedPins[0];
 };
-
-
-typedef S2GoTemplate<pinCtrl> S2GoTemplateArduino;
 
 
 #endif // TLX493D_S2GO_TEMPLATE_ARDUINO_HPP

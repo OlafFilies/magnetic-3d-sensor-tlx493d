@@ -92,6 +92,16 @@ typedef enum {
 } TLx493D_SensitivityType_t;
 
 
+/*
+  List of supported ranges.
+*/
+typedef enum {
+               TLx493D_HAS_X1_e = 0, 
+               TLx493D_HAS_X2_e, 
+               TLx493D_HAS_X4_e,
+} TLx493D_AvailableSensitivityType_t;
+
+
 typedef enum {
                LOW_POWER_MODE_e = 0,
                MASTER_CONTROLLED_MODE_e,
@@ -183,6 +193,15 @@ typedef bool (*TLx493D_DeinitFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_ReadRegistersFuncPtr)(TLx493D_t *);
 
+typedef void (*TLx493D_CalculateRawTemperatureFuncPtr)(TLx493D_t *, uint16_t *);
+typedef bool (*TLx493D_GetRawTemperatureFuncPtr)(TLx493D_t *, uint16_t *);
+
+typedef void (*TLx493D_CalculateRawMagneticFieldFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *);
+typedef bool (*TLx493D_GetRawMagneticFieldFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *);
+
+typedef void (*TLx493D_CalculateRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *);
+typedef bool (*TLx493D_GetRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *);
+
 typedef void (*TLx493D_CalculateTemperatureFuncPtr)(TLx493D_t *, double *);
 typedef bool (*TLx493D_GetTemperatureFuncPtr)(TLx493D_t *, double *);
 
@@ -265,6 +284,10 @@ typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_t *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_t *);
 
+typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(TLx493D_t *, int16_t *, TLx493D_SensitivityType_t , double , int16_t *);
+
+typedef void (*TLx493D_GetSensitivityScaleFactorFuncPtr)(TLx493D_t *, double *);
+
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
 typedef struct TLx493D_CommonFunctions_t {
@@ -272,6 +295,15 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_DeinitFuncPtr                       deinit;
 
     TLx493D_ReadRegistersFuncPtr                readRegisters;
+
+    TLx493D_CalculateRawTemperatureFuncPtr      calculateRawTemperature;
+    TLx493D_GetRawTemperatureFuncPtr            getRawTemperature;
+
+    TLx493D_CalculateRawMagneticFieldFuncPtr    calculateRawMagneticField;
+    TLx493D_GetRawMagneticFieldFuncPtr          getRawMagneticField;
+
+    TLx493D_CalculateRawMagneticFieldAndTemperatureFuncPtr  calculateRawMagneticFieldAndTemperature;
+    TLx493D_GetRawMagneticFieldAndTemperatureFuncPtr        getRawMagneticFieldAndTemperature;
 
     TLx493D_CalculateTemperatureFuncPtr         calculateTemperature;
     TLx493D_GetTemperatureFuncPtr               getTemperature;
@@ -351,6 +383,10 @@ typedef struct TLx493D_CommonFunctions_t {
     // TLx493D_HasValidPD3BitFuncPtr               hasValidPD3Bit;
     
     TLx493D_SetResetValuesFuncPtr               setResetValues;
+
+    TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr   calculateRawMagneticFieldAtTemperature;
+
+    TLx493D_GetSensitivityScaleFactorFuncPtr    getSensitivityScaleFactor;
 } TLx493D_CommonFunctions_t;
 
 

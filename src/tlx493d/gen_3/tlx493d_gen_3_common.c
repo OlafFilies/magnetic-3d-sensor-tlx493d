@@ -23,25 +23,28 @@ bool tlx493d_gen_3_readRegistersSPI(TLx493D_t *sensor) {
 }
 
 
-void tlx493d_gen_3_calculateRawTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
-    int16_t value = 0;
-
-    tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
-    *temp = (double) value;
+void tlx493d_gen_3_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, uint16_t *temperature) {
+    tlx493d_common_calculateRawTemperature(sensor, tempMSBBF, tempLSBBF, temperature);
 }
 
 
-void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
-    int16_t value = 0;
-
-    tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
-    *temp = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_MULT) + GEN_3_TEMP_REF;
+void tlx493d_gen_3_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                             uint8_t bzMSBBF, uint8_t bzLSBBF, uint16_t *x, uint16_t *y, uint16_t *z) {
+    tlx493d_common_calculateRawMagneticField(sensor, bxMSBBF, bxLSBBF, byMSBBF, byLSBBF, bzMSBBF, bzLSBBF, x, y, z);
 }
 
 
-void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z,
-                                          uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
-                                          uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF) {
+void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, double *temperature) {
+    int16_t value = 0;
+
+    tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
+    *temperature = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_MULT) + GEN_3_TEMP_REF;
+}
+
+
+void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                          uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF,
+                                          double *x, double *y, double *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
     tlx493d_common_concatBytes(sensor, bxMSBBF, bxLSBBF, &valueX);
@@ -51,11 +54,11 @@ void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, double *x, double *
 // // TODO: temp unten in LSB format; x,y,z dann auch in LSB format => mittels sensitivity umrechnen in mT !
 // // TODO: TLx493D_P3I8_calculateTemperatureRaw hinzufügen um die LSB Werte für Temp zu bekommen !
 double r    = 1.0; // TODO: get factor from registers : full, double, quadruple  ; r is range specific !
-// double temp = 0.0;
-double temp = 0.0;
 double sensitivity = GEN_3_FULL_RANGE_FIELD_SENSITIVITY; // TODO: r is range specific !
-    
-    tlx493d_gen_3_calculateRawTemperature(sensor, &temp, tempMSBBF, tempLSBBF);
+uint16_t rawTemp;
+
+    tlx493d_gen_3_calculateRawTemperature(sensor, tempMSBBF, tempLSBBF, &rawTemp);
+double temp = (double) rawTemp;
 
     *x = (r * (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + GEN_3_O3x * temp)))
           + ((double) valueX) * (GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + GEN_3_L3x * temp))))

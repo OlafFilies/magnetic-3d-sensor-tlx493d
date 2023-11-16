@@ -1,14 +1,15 @@
 #ifndef TLX493D_HPP
 #define TLX493D_HPP
 
+
 // std includes
 #include <stdbool.h>
 #include <stdint.h>
 
 // project cpp includes
-#include "arduino_defines.hpp"
-#include "SPI_SPI.hpp"
-#include "TwoWire_I2C.hpp"
+#include "types.hpp"
+#include "SPIUsingSPIClass.hpp"
+#include "IICUsingTwoWire.hpp"
 
 // project c includes
 // extern "C" {
@@ -214,6 +215,26 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
+        bool getRawTemperature(uint16_t *temperature) {
+            return ::tlx493d_getRawTemperature(&sensor, temperature);
+        }
+
+
+        bool getRawMagneticField(uint16_t *x, uint16_t *y, uint16_t *z) {
+            return ::tlx493d_getRawMagneticField(&sensor, x, y, z);
+        }
+
+
+        bool getRawMagneticFieldAndTemperature(uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temp) {
+            return ::tlx493d_getRawMagneticFieldAndTemperature(&sensor, x, y, z, temp);
+        }
+
+        
+        void calculateRawMagneticFieldAtTemperature(int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
+            return ::tlx493d_calculateRawMagneticFieldAtTemperature(&sensor, rawTemp, sens, mT, rawMF);
+        }
+
+
         // Attribute getters for TLx493D object
         TLx493D_t *getSensor() {
             return &sensor;
@@ -251,5 +272,6 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         ComLibraryIFType       comLIF;
         TLx493D_t             sensor;
 };
+
 
 #endif // TLX493D_HPP

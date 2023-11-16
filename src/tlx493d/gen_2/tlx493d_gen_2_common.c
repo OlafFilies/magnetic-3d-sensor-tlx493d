@@ -17,19 +17,29 @@
 #include "tlx493d_gen_2_common.h"
 
 
-void tlx493d_gen_2_calculateTemperature(TLx493D_t *sensor, double *temp, uint8_t tempMSBBF, uint8_t tempLSBBF) {
+void tlx493d_gen_2_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, uint16_t *temperature) {
+    tlx493d_common_calculateRawTemperature(sensor, tempMSBBF, tempLSBBF, temperature);
+}
+
+
+void tlx493d_gen_2_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                          uint8_t bzMSBBF, uint8_t bzLSBBF, uint16_t *x, uint16_t *y, uint16_t *z) {
+    tlx493d_common_calculateRawMagneticField(sensor, bxMSBBF, bxLSBBF, byMSBBF, byLSBBF, bzMSBBF, bzLSBBF, x, y, z);
+}
+
+
+void tlx493d_gen_2_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, double *temperature) {
     int16_t value = 0;
 
     tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
 
     value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
-    *temp = (((double) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
+    *temperature = (((double) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
 }
 
 
-void tlx493d_gen_2_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z,
-                                          uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
-                                          uint8_t bzMSBBF, uint8_t bzLSBBF) {
+void tlx493d_gen_2_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                          uint8_t bzMSBBF, uint8_t bzLSBBF, double *x, double *y, double *z) {
     int16_t valueX = 0, valueY = 0, valueZ = 0;
 
     tlx493d_common_concatBytes(sensor, bxMSBBF, bxLSBBF, &valueX);
