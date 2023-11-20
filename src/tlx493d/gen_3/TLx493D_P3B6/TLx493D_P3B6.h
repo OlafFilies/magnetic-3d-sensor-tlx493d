@@ -8,10 +8,8 @@
 // project c includes
 // common to all sensors
 #include "tlx493d_types.h"
-// #include "tlx493d_common.h"
 
 // common to same generation of sensors
-// #include "tlx493d_gen_3_common.h"
 
 // sensor specific includes
 
@@ -54,7 +52,9 @@ bool TLx493D_P3B6_enable1ByteMode(TLx493D_t *sensor);
 
 void TLx493D_P3B6_setResetValues(TLx493D_t *sensor);
 
-void TLx493D_P3B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+uint8_t TLx493D_P3B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
+
+void TLx493D_P3B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 void TLx493D_P3B6_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf);
 

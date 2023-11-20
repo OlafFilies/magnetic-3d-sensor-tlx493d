@@ -21,6 +21,10 @@ bool tlx493d_deinit(TLx493D_t *sensor);
 // functions related to the retrieval of data from the sensor
 bool tlx493d_readRegisters(TLx493D_t *sensor);
 
+bool tlx493d_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature);
+bool tlx493d_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z);
+bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature);
+
 bool tlx493d_getTemperature(TLx493D_t *sensor, double *temperature);
 bool tlx493d_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
 bool tlx493d_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temperature);
@@ -34,7 +38,7 @@ bool tlx493d_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t range);
 
 // functions related to the "Mod1" and "Mod2" registers
 bool tlx493d_setDefaultConfig(TLx493D_t *sensor);
-bool tlx493d_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr); // Gen. 1 and 2
+bool tlx493d_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
 bool tlx493d_enableCollisionAvoidance(TLx493D_t *sensor);
 bool tlx493d_disableCollisionAvoidance(TLx493D_t *sensor);
@@ -42,9 +46,8 @@ bool tlx493d_disableCollisionAvoidance(TLx493D_t *sensor);
 bool tlx493d_enableInterrupt(TLx493D_t *sensor);
 bool tlx493d_disableInterrupt(TLx493D_t *sensor);
 
-bool tlx493d_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode);  // value of mode is sensor / generation specific !
+bool tlx493d_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode);
 
-// value of update rate is sensor / generation specific !
 bool tlx493d_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t rate);
 
 
@@ -63,16 +66,15 @@ bool tlx493d_isWakeUpEnabled(TLx493D_t *sensor);
 bool tlx493d_enableWakeUpMode(TLx493D_t *sensor);
 bool tlx493d_disableWakeUpMode(TLx493D_t *sensor);
 
-bool tlx493d_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-bool tlx493d_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-bool tlx493d_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
+// bool tlx493d_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
+// bool tlx493d_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
+// bool tlx493d_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
 
-bool tlx493d_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-bool tlx493d_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-bool tlx493d_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
+// bool tlx493d_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
+// bool tlx493d_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
+// bool tlx493d_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
 
 bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
-// thesholds im mT, to be converted to proper format
 bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 
@@ -80,10 +82,7 @@ bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, d
 bool tlx493d_softReset(TLx493D_t *sensor);
 const char *tlx493d_getTypeAsString(TLx493D_t *sensor);
 
-bool tlx493d_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature);
-bool tlx493d_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z);
-bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature);
-void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 
 #ifdef __cplusplus

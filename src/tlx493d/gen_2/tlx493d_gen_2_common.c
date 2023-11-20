@@ -156,7 +156,7 @@ bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_
 
         sensor->functions->readRegisters(sensor);
 
-        if( tlx493d_common_returnBitfield(sensor, cpBF) == 0x01 ) {
+        if( tlx493d_common_returnBitfield(sensor, cpBF) == 0x01 && !sensor->functions->hasValidConfigurationParity(sensor) ) {
             tlx493d_common_setBitfield(sensor, cpBF, 0x00);
         }
         else {
@@ -205,7 +205,7 @@ bool tlx493d_gen_2_setIICAddress(TLx493D_t *sensor, uint8_t iicadrBF, uint8_t fp
     tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
 
     bool b = tlx493d_common_writeRegister(sensor, fpBF);
-    tlx493d_setI2CParameters(sensor, deviceAddress);
+    tlx493d_common_setIICAddress(sensor, deviceAddress);
 
     return b;
 }
@@ -297,7 +297,8 @@ bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF,
         case UPDATE_RATE_0_05_HZ_e : rate = 0b111;
                                      break;
 
-        default : return false;
+        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
+                  return false;
     }
 
     tlx493d_common_setBitfield(sensor, prdBF, rate);
@@ -379,8 +380,8 @@ bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
     uint8_t lower = thresh11Bits & (lsbs->mask >> lsbs->offset);
     uint8_t upper = (thresh11Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset);
 
-    print("threshold12Bits = %#X / %d   thresh11Bits = %#X / %d  upper = %#X / %d  lower = %#X / %d\n",
-          threshold12Bits, threshold12Bits, thresh11Bits, thresh11Bits, upper, upper, lower, lower);
+    // print("threshold12Bits = %#X / %d   thresh11Bits = %#X / %d  upper = %#X / %d  lower = %#X / %d\n",
+    //       threshold12Bits, threshold12Bits, thresh11Bits, thresh11Bits, upper, upper, lower, lower);
 
     tlx493d_common_setBitfield(sensor, msbsBF, upper);
     tlx493d_common_setBitfield(sensor, lsbsBF, lower);
@@ -552,3 +553,19 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_t *sensor, uint8_t tBF) {
 //     TLx493D_Register_t *hwv = &sensor->regDef[hwvBF];
 //     return (sensor->regMap[hwv->address] && hwv->mask) >> hwv->offset;
 // }
+
+
+uint8_t tlx493d_gen_2_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+    switch(addr) {
+        case TLx493D_IIC_ADDR_A0_e : return GEN_2_STD_IIC_ADDR_WRITE_A0;
+
+        case TLx493D_IIC_ADDR_A1_e : return GEN_2_STD_IIC_ADDR_WRITE_A1;
+
+        case TLx493D_IIC_ADDR_A2_e : return GEN_2_STD_IIC_ADDR_WRITE_A2;
+
+        case TLx493D_IIC_ADDR_A3_e : return GEN_2_STD_IIC_ADDR_WRITE_A3;
+
+        default : errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
+                  return 0;
+    }
+}

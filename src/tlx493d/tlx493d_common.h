@@ -102,13 +102,17 @@ void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t 
 
 const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor);
 
+void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr);
+
 void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF, double *sf);
 
+
 void warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
 void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);
 void errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t field);
+void errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func);
 void errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType);
 
 

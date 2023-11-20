@@ -96,7 +96,10 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_t *sensor, uint8_t tBF) ;
 // uint8_t tlx493d_gen_2_getHWV(TLx493D_t *sensor, uint8_t hwvBF);
 
 
-void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+uint8_t tlx493d_gen_2_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
+
+
+// void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 
 #ifdef __cplusplus

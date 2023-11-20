@@ -56,7 +56,7 @@ TLx493D_Register_t TLx493D_A2B6_regDef[] = {
     // { A2B6_PRD_e,       TLx493D_READ_WRITE_MODE_e, 0x13, 0xE0, 5, 3 },
     { A2B6_PRD_e,       TLx493D_READ_WRITE_MODE_e, 0x13, 0x80, 7, 1 },
     { A2B6_TYPE_e,      TLx493D_READ_MODE_e,       0x16, 0x30, 4, 2 },
-    { A2B6_HWV_e,       TLx493D_READ_MODE_e,       0x16, 0x0F, 0, 4 }
+    { A2B6_HWV_e,       TLx493D_READ_MODE_e,       0x16, 0x0F, 0, 4 },
 };
 
 
@@ -112,13 +112,13 @@ TLx493D_CommonFunctions_t TLx493D_A2B6_commonFunctions = {
     .enableWakeUpMode               = TLx493D_A2B6_enableWakeUpMode,
     .disableWakeUpMode              = TLx493D_A2B6_disableWakeUpMode,
 
-    .setLowerWakeUpThresholdX       = TLx493D_A2B6_setLowerWakeUpThresholdX,
-    .setLowerWakeUpThresholdY       = TLx493D_A2B6_setLowerWakeUpThresholdY,
-    .setLowerWakeUpThresholdZ       = TLx493D_A2B6_setLowerWakeUpThresholdZ,
+    // .setLowerWakeUpThresholdX       = TLx493D_A2B6_setLowerWakeUpThresholdX,
+    // .setLowerWakeUpThresholdY       = TLx493D_A2B6_setLowerWakeUpThresholdY,
+    // .setLowerWakeUpThresholdZ       = TLx493D_A2B6_setLowerWakeUpThresholdZ,
 
-    .setUpperWakeUpThresholdX       = TLx493D_A2B6_setUpperWakeUpThresholdX,
-    .setUpperWakeUpThresholdY       = TLx493D_A2B6_setUpperWakeUpThresholdY,
-    .setUpperWakeUpThresholdZ       = TLx493D_A2B6_setUpperWakeUpThresholdZ,
+    // .setUpperWakeUpThresholdX       = TLx493D_A2B6_setUpperWakeUpThresholdX,
+    // .setUpperWakeUpThresholdY       = TLx493D_A2B6_setUpperWakeUpThresholdY,
+    // .setUpperWakeUpThresholdZ       = TLx493D_A2B6_setUpperWakeUpThresholdZ,
 
     .setWakeUpThresholdsAsInteger   = TLx493D_A2B6_setWakeUpThresholdsAsInteger,
     .setWakeUpThresholds            = TLx493D_A2B6_setWakeUpThresholds,
@@ -137,6 +137,8 @@ TLx493D_CommonFunctions_t TLx493D_A2B6_commonFunctions = {
 
     .setResetValues                 = TLx493D_A2B6_setResetValues,
 
+    .selectIICAddress               = TLx493D_A2B6_selectIICAddress,
+
     .calculateRawMagneticFieldAtTemperature  = TLx493D_A2B6_calculateRawMagneticFieldAtTemperature,
 
     .getSensitivityScaleFactor      = TLx493D_A2B6_getSensitivityScaleFactor,
@@ -144,9 +146,6 @@ TLx493D_CommonFunctions_t TLx493D_A2B6_commonFunctions = {
 
 
 bool TLx493D_A2B6_init(TLx493D_t *sensor) {
-    // TODO: use in TLx493D_initCommunication
-    tlx493d_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
-
     return tlx493d_common_init(sensor, GEN_2_REG_MAP_SIZE, TLx493D_A2B6_regDef, &TLx493D_A2B6_commonFunctions, TLx493D_A2B6_e, TLx493D_I2C_e);
 }
 
@@ -418,35 +417,35 @@ bool TLx493D_A2B6_disableWakeUpMode(TLx493D_t *sensor) {
     return false;
 }
 
-bool TLx493D_A2B6_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-    warnFeatureNotAvailableForSensorType(sensor, "setLowerWakeUpThresholdX");
-    return false;
-}
+// bool TLx493D_A2B6_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
+//     warnFeatureNotAvailableForSensorType(sensor, "setLowerWakeUpThresholdX");
+//     return false;
+// }
 
-bool TLx493D_A2B6_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
-    warnFeatureNotAvailableForSensorType(sensor, "setLowerWakeUpThresholdY");
-    return false;
-}
+// bool TLx493D_A2B6_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
+//     warnFeatureNotAvailableForSensorType(sensor, "setLowerWakeUpThresholdY");
+//     return false;
+// }
 
-bool TLx493D_A2B6_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
-    warnFeatureNotAvailableForSensorType(sensor, "setLowerWakeUpThresholdZ");
-    return false;
-}
+// bool TLx493D_A2B6_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
+//     warnFeatureNotAvailableForSensorType(sensor, "setLowerWakeUpThresholdZ");
+//     return false;
+// }
 
-bool TLx493D_A2B6_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-    warnFeatureNotAvailableForSensorType(sensor, "setUpperWakeUpThresholdX");
-    return false;
-}
+// bool TLx493D_A2B6_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
+//     warnFeatureNotAvailableForSensorType(sensor, "setUpperWakeUpThresholdX");
+//     return false;
+// }
 
-bool TLx493D_A2B6_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
-    warnFeatureNotAvailableForSensorType(sensor, "setUpperWakeUpThresholdY");
-    return false;
-}
+// bool TLx493D_A2B6_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
+//     warnFeatureNotAvailableForSensorType(sensor, "setUpperWakeUpThresholdY");
+//     return false;
+// }
 
-bool TLx493D_A2B6_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
-    warnFeatureNotAvailableForSensorType(sensor, "setUpperWakeUpThresholdZ");
-    return false;
-}
+// bool TLx493D_A2B6_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
+//     warnFeatureNotAvailableForSensorType(sensor, "setUpperWakeUpThresholdZ");
+//     return false;
+// }
 
 
 bool TLx493D_A2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
@@ -454,7 +453,6 @@ bool TLx493D_A2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th,
     return false;
 }
 
-// thesholds im mT, to be converted to proper format
 bool TLx493D_A2B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
     warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
     return false;
@@ -534,7 +532,12 @@ void TLx493D_A2B6_setResetValues(TLx493D_t *sensor) {
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
+uint8_t TLx493D_A2B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+    return tlx493d_gen_2_selectIICAddress(sensor, addr);
+}
+
+
+void TLx493D_A2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
 
 }
 

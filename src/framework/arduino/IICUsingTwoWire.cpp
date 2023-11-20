@@ -7,13 +7,13 @@
 #include "tlx493d_types.h"
 
 // common to same generation of sensors
-#include "tlx493d_gen_2_common_defines.h"
 
 // sensor specific includes
 
 // project cpp includes
 #include "types.hpp"
 #include "IICUsingTwoWire.hpp"
+#include "Logger.h"
 
 
 extern "C" bool tlx493d_initIIC(TLx493D_t *sensor) {
@@ -30,7 +30,7 @@ extern "C" bool tlx493d_deinitIIC(TLx493D_t *sensor) {
 
 
 extern "C" bool tlx493d_transferIIC(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
-    return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address, txBuffer, txLen, rxBuffer, rxLen);
+    return sensor->comLibObj.i2c_obj->wire->transfer(sensor->comLibIFParams.i2c_params.address >> 1, txBuffer, txLen, rxBuffer, rxLen);
 }
 
 
@@ -41,40 +41,29 @@ TLx493D_ComLibraryFunctions_t  comLibIF_i2c = {
                                        };
 
 
-// TODO: change to use sensor as parameter to simplify the user interface across routines
-// extern "C" void tlx493d_setI2CParameters(TLx493D_ComLibraryParameters_t *params, uint8_t addr) {
-extern "C" void tlx493d_setI2CParameters(TLx493D_t *sensor, uint8_t addr) {
-    sensor->comLibIFParams.i2c_params.address = addr >> 1;
-}
+// // TODO: change to use sensor as parameter to simplify the user interface across routines
+// extern "C" void tlx493d_setI2CParameters(TLx493D_t *sensor, uint8_t addr) {
+//     sensor->comLibIFParams.i2c_params.address = addr >> 1;
+// }
 
 
-bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper<TwoWire> &tw) {
-    if( sensor->comIFType != TLx493D_I2C_e ) {
-        return false;
-    }
-
-    // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
-    sensor->comLibObj.i2c_obj       = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
-    sensor->comLibObj.i2c_obj->wire = &tw;
-    sensor->comLibIF                = &comLibIF_i2c;
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper<TwoWire> &tw, TLx493D_IICAddressType_t iicAdr) {
+    sensor->comLibObj.i2c_obj                 = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
+    sensor->comLibObj.i2c_obj->wire           = &tw;
+    sensor->comLibIF                          = &comLibIF_i2c;
+    sensor->comLibIFParams.i2c_params.address = sensor->functions->selectIICAddress(sensor, iicAdr);
 
     sensor->comLibIF->init.i2c_init(sensor);
-
     return true;
 }
 
 
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
-// extern "C" 
-bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw) {
-    if( sensor->comIFType != TLx493D_I2C_e ) {
-        return false;
-    }
-
-    // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
-    sensor->comLibObj.i2c_obj       = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
-    sensor->comLibObj.i2c_obj->wire = new TwoWireWrapper<TwoWire>(tw);
-    sensor->comLibIF                = &comLibIF_i2c;
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr) {
+    sensor->comLibObj.i2c_obj                 = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
+    sensor->comLibObj.i2c_obj->wire           = new TwoWireWrapper<TwoWire>(tw);
+    sensor->comLibIF                          = &comLibIF_i2c;
+    sensor->comLibIFParams.i2c_params.address = sensor->functions->selectIICAddress(sensor, iicAdr);
 
     sensor->comLibIF->init.i2c_init(sensor);
     return true;

@@ -23,6 +23,24 @@
 
 #define GEN_1_STD_IIC_ADDR                          0xBC 
 
+// A0
+#define GEN_1_STD_IIC_ADDR_WRITE_A0       0xBC
+// #define GEN_2_STD_IIC_ADDR_READ_A0        0xBD
+
+// TODO: verify addresses !
+// A1
+#define GEN_1_STD_IIC_ADDR_WRITE_A1       0xB4
+// #define GEN_2_STD_IIC_ADDR_READ_A1        0x
+
+// A2
+#define GEN_1_STD_IIC_ADDR_WRITE_A2       0x9C
+// #define GEN_2_STD_IIC_ADDR_READ_A2        0x
+
+// A3
+#define GEN_1_STD_IIC_ADDR_WRITE_A3       0x94
+// #define GEN_2_STD_IIC_ADDR_READ_A3        0x
+
+
 #define GEN_1_BITFIELDS_COUNT                       28
 
 

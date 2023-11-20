@@ -9,7 +9,6 @@
 #include <Arduino.h>
 
 // project cpp includes
-// #include "types.h"
 #include "S2GoTemplate.hpp"
 
 

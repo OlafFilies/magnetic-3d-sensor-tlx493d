@@ -9,10 +9,8 @@
 // project c includes
 // common to all sensors
 #include "tlx493d_types.h"
-// #include "tlx493d_common.h"
 
 // common to same generation of sensors
-// #include "tlx493d_gen_1_common.h"
 
 // sensor specicifc includes
 
@@ -23,14 +21,6 @@ extern "C" {
 
 #endif
 
-
-//enums
-// typedef enum {
-//     GEN_1_STD_IIC_ADDR_00 = 0,
-//     GEN_1_STD_IIC_ADDR_01,
-//     GEN_1_STD_IIC_ADDR_10,
-//     GEN_1_STD_IIC_ADDR_11
-// } TLx493D_StandardIICAddresses_te;
 
 typedef enum {
     TLx493D_A1B6_LOW_POWER_PERIOD_100MS_default,
@@ -76,7 +66,6 @@ bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor);
 bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
-// bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_StandardIICAddresses_te addr);
 
 bool TLx493D_A1B6_enableInterrupt(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableInterrupt(TLx493D_t *sensor);
@@ -109,6 +98,8 @@ void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBi
 bool TLx493D_A1B6_hasValidFuseParity(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidTBit(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor);
+
+uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
 
 #ifdef __cplusplus

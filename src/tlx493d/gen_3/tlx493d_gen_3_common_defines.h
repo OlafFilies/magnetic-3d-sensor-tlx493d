@@ -53,14 +53,14 @@
 #define GEN_3_STD_IIC_ADDR_READ_A3      0x8D
 
 
-// SPI
-#define GEN_3_SPI_READ_WRITE_BIT        0x80
-#define GEN_3_SPI_READ_BIT_ON           0x80
-#define GEN_3_SPI_WRITE_BIT_OFF         0x00
+// // SPI
+// #define GEN_3_SPI_READ_WRITE_BIT        0x80
+// #define GEN_3_SPI_READ_BIT_ON           0x80
+// #define GEN_3_SPI_WRITE_BIT_OFF         0x00
 
-#define GEN_3_SPI_AUTO_INC_BIT          0x60
-#define GEN_3_SPI_AUTO_INC_BIT_ON       0x60
-#define GEN_3_SPI_AUTO_INC_BIT_OFF      0x00
+// #define GEN_3_SPI_AUTO_INC_BIT          0x60
+// #define GEN_3_SPI_AUTO_INC_BIT_ON       0x60
+// #define GEN_3_SPI_AUTO_INC_BIT_OFF      0x00
 
 
 #define GEN_3_REG_MAP_SIZE              27

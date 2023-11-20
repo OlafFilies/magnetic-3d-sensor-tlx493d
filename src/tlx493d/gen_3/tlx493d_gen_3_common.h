@@ -27,6 +27,9 @@ void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, ui
 //                                                         uint8_t tempMSBBF, uint8_t tempLSBBF);                
 
 
+uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
+
+
 #ifdef __cplusplus
 
 }

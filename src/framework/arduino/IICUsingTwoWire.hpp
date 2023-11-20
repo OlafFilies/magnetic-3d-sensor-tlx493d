@@ -21,10 +21,10 @@
 
 
 extern "C" bool tlx493d_transferIIC(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
-extern "C" void tlx493d_setI2CParameters(TLx493D_t *sensor, uint8_t addr);
+// extern "C" void tlx493d_setI2CParameters(TLx493D_t *sensor, uint8_t addr);
 
-bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper<TwoWire> &tw);
-bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw);
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper<TwoWire> &tw, TLx493D_IICAddressType_t iicAdr);
+bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr);
 
 
 #endif // TLX493D_IIC_USING_TWOWIRE_HPP

@@ -16,10 +16,8 @@
 
 /** Common to all sensors */
 #include "tlx493d_types.h"
-// #include "tlx493d_common.h"
 
 /** Common to the same generation of senors */
-// #include "tlx493d_gen_2_common.h"
 
 /** Sensor specific includes */
 
@@ -176,13 +174,13 @@ bool TLx493D_W2BW_isWakeUpEnabled(TLx493D_t *sensor);
 bool TLx493D_W2BW_enableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_W2BW_disableWakeUpMode(TLx493D_t *sensor);
 
-bool TLx493D_W2BW_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-bool TLx493D_W2BW_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold); 
-bool TLx493D_W2BW_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
+// bool TLx493D_W2BW_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
+// bool TLx493D_W2BW_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold); 
+// bool TLx493D_W2BW_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
 
-bool TLx493D_W2BW_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-bool TLx493D_W2BW_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
+// bool TLx493D_W2BW_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
+// bool TLx493D_W2BW_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
+// bool TLx493D_W2BW_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
 
 bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th);
 // thesholds im mT, to be converted to proper format
@@ -226,7 +224,9 @@ uint8_t TLx493D_W2BW_calculateConfigurationParityBit(TLx493D_t *sensor);
 
 void TLx493D_W2BW_setResetValues(TLx493D_t *sensor);
 
-void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t *rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+uint8_t TLx493D_W2BW_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
+
+void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 void TLx493D_W2BW_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf);
 

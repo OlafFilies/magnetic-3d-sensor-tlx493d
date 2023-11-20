@@ -299,6 +299,11 @@ void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availab
 }
 
 
+void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr) {
+    sensor->comLibIFParams.i2c_params.address = addr;
+}
+
+
 void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
 }
 
@@ -318,6 +323,12 @@ void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t bf) {
 void errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t bf) {
     print("");
     error("Bitfield '%d' not writable for sensor type '%s' !", bf, tlx493d_common_getTypeAsString(sensor));
+}
+
+
+void errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func) {
+    print("");
+    error("Function '%s' not supported for sensor type '%s' !", func, tlx493d_common_getTypeAsString(sensor));
 }
 
 

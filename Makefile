@@ -77,8 +77,12 @@ plain_c: arduino
 	cp examples/framework/arduino/read_sensors_plain_c.ino build/build.ino
  
 
-cpp: arduino
-	cp examples/framework/arduino/read_sensors.ino build/build.ino
+spi: arduino
+	cp examples/framework/arduino/read_spi_sensor.ino build/build.ino
+ 
+
+iic: arduino
+	cp examples/framework/arduino/read_iic_sensor.ino build/build.ino
 
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 unity flash monitor

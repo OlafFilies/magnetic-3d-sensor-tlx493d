@@ -9,6 +9,16 @@
 #include <SPI.h>
 
 
+// SPI
+#define GEN_3_SPI_READ_WRITE_BIT        0x80
+#define GEN_3_SPI_READ_BIT_ON           0x80
+#define GEN_3_SPI_WRITE_BIT_OFF         0x00
+
+#define GEN_3_SPI_AUTO_INC_BIT          0x60
+#define GEN_3_SPI_AUTO_INC_BIT_ON       0x60
+#define GEN_3_SPI_AUTO_INC_BIT_OFF      0x00
+
+
 template<typename Protocol> class SPIClassWrapper {
 };
 
@@ -45,10 +55,10 @@ template<> class SPIClassWrapper<SPIClass> {
 
             if( (rxLen > 0)  && (rxBuffer != NULL) ) {
                 uint16_t bytesRead = 0;
-                spi.transfer(0x80);
+                spi.transfer(GEN_3_SPI_READ_BIT_ON);
 
                 for(; bytesRead < rxLen; ++bytesRead) {
-                    rxBuffer[bytesRead] = spi.transfer(0x80);
+                    rxBuffer[bytesRead] = spi.transfer(GEN_3_SPI_READ_BIT_ON);
                 }
 
                 if( bytesRead != rxLen ) {

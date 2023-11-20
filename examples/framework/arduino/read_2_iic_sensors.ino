@@ -7,19 +7,14 @@
 #include "TLx493D_inc.hpp"
 
 
-// SPI chip
-#define POWER_PIN_LOW 3
-
-
 // TLx493D_A1B6 dut(Wire);
 
 // TLx493D_A2B6 dut(Wire);
 // TLx493D_P2B6 dut(Wire);
-TLx493D_W2B6 dut(Wire);
+TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2BW dut(Wire);
 
 // TLx493D_P3B6 dut(Wire);
-// TLx493D_P3I8 dut(SPI);
 
 
 // TODO: if A1B6 instantiated program not working
@@ -31,13 +26,9 @@ TLx493D_W2B6 dut(Wire);
 // TLx493D_W2BW w2bw(Wire);
 
 // TLx493D_P3B6 p3b6(Wire);
-// TLx493D_P3I8 p3i8(SPI);
 
 
 void setup() {
-    // pinMode(POWER_PIN_LOW, OUTPUT);
-    // digitalWrite(POWER_PIN_LOW, HIGH);
-
     delay(3000);
     Serial.begin(115200);
     delay(100);
@@ -53,7 +44,6 @@ void setup() {
     // w2bw.begin();
 
     // p3b6.begin();
-    // p3i8.begin();
 
 
     delay(100);
@@ -65,17 +55,13 @@ void loop() {
     double temp = 0.0;
     double valX = 0, valY = 0, valZ = 0;
 
-    // digitalWrite(POWER_PIN_LOW, LOW);
     Serial.print(true == dut.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
-    // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    // digitalWrite(POWER_PIN_LOW, LOW);
     Serial.print(true == dut.getMagneticField(&valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
-    // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Value X is: ");
     Serial.print(valX);

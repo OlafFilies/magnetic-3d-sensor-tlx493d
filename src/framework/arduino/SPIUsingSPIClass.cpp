@@ -7,7 +7,6 @@
 #include "tlx493d_types.h"
 
 // common to same generation of sensors
-#include "tlx493d_gen_2_common_defines.h"
 
 // sensor specific includes
 
@@ -45,39 +44,22 @@ TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
                                        };
 
 
-// extern "C" void setSPIParameters(TLx493D_t *sensor, uint8_t addr) {
-//     sensor->comLibIFParams.spi_params.address = addr >> 1;
-// }
-
-
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper<SPIClass> &spi) {
-    if( sensor->comIFType != TLx493D_SPI_e ) {
-        return false;
-    }
-
-    // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
     sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
     sensor->comLibObj.spi_obj->spi = &spi;
     sensor->comLibIF               = &comLibIF_spi;
 
     sensor->comLibIF->init.spi_init(sensor);
-
     return true;
 }
 
 
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
-    if( sensor->comIFType != TLx493D_SPI_e ) {
-        return false;
-    }
-
-    // Need to dynamically allocate object, such that different sensor may use different TwoWire objects (Wire, Wire1, Wire2, ...)
     sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
     sensor->comLibObj.spi_obj->spi = new SPIClassWrapper<SPIClass>(spi);
     sensor->comLibIF               = &comLibIF_spi;
 
-    sensor->comLibIF->init.spi_init(sensor);
-    
+    sensor->comLibIF->init.spi_init(sensor);  
     return true;
 }

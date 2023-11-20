@@ -255,13 +255,13 @@ typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableWakeUpModeFuncPtr)(TLx493D_t *);
 
-typedef bool (*TLx493D_SetLowerWakeUpThresholdXFuncPtr)(TLx493D_t *, int16_t);
-typedef bool (*TLx493D_SetLowerWakeUpThresholdYFuncPtr)(TLx493D_t *, int16_t);
-typedef bool (*TLx493D_SetLowerWakeUpThresholdZFuncPtr)(TLx493D_t *, int16_t);
+// typedef bool (*TLx493D_SetLowerWakeUpThresholdXFuncPtr)(TLx493D_t *, int16_t);
+// typedef bool (*TLx493D_SetLowerWakeUpThresholdYFuncPtr)(TLx493D_t *, int16_t);
+// typedef bool (*TLx493D_SetLowerWakeUpThresholdZFuncPtr)(TLx493D_t *, int16_t);
 
-typedef bool (*TLx493D_SetUpperWakeUpThresholdXFuncPtr)(TLx493D_t *, int16_t);
-typedef bool (*TLx493D_SetUpperWakeUpThresholdYFuncPtr)(TLx493D_t *, int16_t);
-typedef bool (*TLx493D_SetUpperWakeUpThresholdZFuncPtr)(TLx493D_t *, int16_t);
+// typedef bool (*TLx493D_SetUpperWakeUpThresholdXFuncPtr)(TLx493D_t *, int16_t);
+// typedef bool (*TLx493D_SetUpperWakeUpThresholdYFuncPtr)(TLx493D_t *, int16_t);
+// typedef bool (*TLx493D_SetUpperWakeUpThresholdZFuncPtr)(TLx493D_t *, int16_t);
 
 typedef bool (*TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr)(TLx493D_t *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);
 typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, double, double, double, double);
@@ -284,9 +284,11 @@ typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_t *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_t *);
 
-typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(TLx493D_t *, int16_t *, TLx493D_SensitivityType_t , double , int16_t *);
+typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(TLx493D_t *, int16_t, TLx493D_SensitivityType_t , double , int16_t *);
 
 typedef void (*TLx493D_GetSensitivityScaleFactorFuncPtr)(TLx493D_t *, double *);
+
+typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(TLx493D_t *, TLx493D_IICAddressType_t);
 
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
@@ -355,13 +357,13 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_EnableWakeUpModeFuncPtr             enableWakeUpMode;
     TLx493D_DisableWakeUpModeFuncPtr            disableWakeUpMode;
 
-    TLx493D_SetLowerWakeUpThresholdXFuncPtr     setLowerWakeUpThresholdX;
-    TLx493D_SetLowerWakeUpThresholdYFuncPtr     setLowerWakeUpThresholdY; 
-    TLx493D_SetLowerWakeUpThresholdZFuncPtr     setLowerWakeUpThresholdZ;
+    // TLx493D_SetLowerWakeUpThresholdXFuncPtr     setLowerWakeUpThresholdX;
+    // TLx493D_SetLowerWakeUpThresholdYFuncPtr     setLowerWakeUpThresholdY; 
+    // TLx493D_SetLowerWakeUpThresholdZFuncPtr     setLowerWakeUpThresholdZ;
 
-    TLx493D_SetUpperWakeUpThresholdXFuncPtr     setUpperWakeUpThresholdX;
-    TLx493D_SetUpperWakeUpThresholdYFuncPtr     setUpperWakeUpThresholdY; 
-    TLx493D_SetUpperWakeUpThresholdZFuncPtr     setUpperWakeUpThresholdZ;
+    // TLx493D_SetUpperWakeUpThresholdXFuncPtr     setUpperWakeUpThresholdX;
+    // TLx493D_SetUpperWakeUpThresholdYFuncPtr     setUpperWakeUpThresholdY; 
+    // TLx493D_SetUpperWakeUpThresholdZFuncPtr     setUpperWakeUpThresholdZ;
 
     TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr setWakeUpThresholdsAsInteger;                
     TLx493D_SetWakeUpThresholdsFuncPtr          setWakeUpThresholds;                
@@ -387,6 +389,8 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr   calculateRawMagneticFieldAtTemperature;
 
     TLx493D_GetSensitivityScaleFactorFuncPtr    getSensitivityScaleFactor;
+
+    TLx493D_SelectIICAddressFuncPtr             selectIICAddress;
 } TLx493D_CommonFunctions_t;
 
 

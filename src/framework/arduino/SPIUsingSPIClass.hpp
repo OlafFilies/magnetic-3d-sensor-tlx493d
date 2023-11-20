@@ -10,7 +10,6 @@
 
 // Arduino includes
 #include <Arduino.h>
-// #include <SPI.h>
 
 // project cpp includes
 #include "SPIClassWrapper.hpp"

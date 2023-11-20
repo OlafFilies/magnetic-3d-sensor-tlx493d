@@ -42,6 +42,7 @@ void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, ui
 }
 
 
+// TODO: cleanup and check code for short and xtra short ranges 1
 void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
                                           uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF,
                                           double *x, double *y, double *z) {
@@ -53,24 +54,42 @@ void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, ui
 
 // // TODO: temp unten in LSB format; x,y,z dann auch in LSB format => mittels sensitivity umrechnen in mT !
 // // TODO: TLx493D_P3I8_calculateTemperatureRaw hinzufügen um die LSB Werte für Temp zu bekommen !
-double r    = 1.0; // TODO: get factor from registers : full, double, quadruple  ; r is range specific !
-double sensitivity = GEN_3_FULL_RANGE_FIELD_SENSITIVITY; // TODO: r is range specific !
+
+
+double sf;
+sensor->functions->getSensitivityScaleFactor(sensor, &sf);
+
+// double sensitivity = GEN_3_FULL_RANGE_FIELD_SENSITIVITY;
 uint16_t rawTemp;
 
     tlx493d_gen_3_calculateRawTemperature(sensor, tempMSBBF, tempLSBBF, &rawTemp);
 double temp = (double) rawTemp;
 
-    *x = (r * (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + GEN_3_O3x * temp)))
-          + ((double) valueX) * (GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + GEN_3_L3x * temp))))
-       / sensitivity;
+    *x = ((GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x)))
+          + ((double) valueX) * (GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))) / sf)
+       / GEN_3_FULL_RANGE_FIELD_SENSITIVITY;
 
-    *y = (r * (GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + GEN_3_O3y * temp)))
-          + ((double) valueY) * (GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + GEN_3_L3y * temp))))
-       / sensitivity;
+    *y = ((GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + temp * GEN_3_O3y)))
+          + ((double) valueY) * (GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + temp * GEN_3_L3y))) / sf)
+       / GEN_3_FULL_RANGE_FIELD_SENSITIVITY;
 
-    *z = (r * (GEN_3_O0z + temp * (GEN_3_O1z + temp * (GEN_3_O2z + GEN_3_O3z * temp)))
-          + ((double) valueZ) * (GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + GEN_3_L3z * temp))))
-       / sensitivity;
+    *z = ((GEN_3_O0z + temp * (GEN_3_O1z + temp * (GEN_3_O2z + temp * GEN_3_O3z)))
+          + ((double) valueZ) * (GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + temp * GEN_3_L3z))) / sf)
+       / GEN_3_FULL_RANGE_FIELD_SENSITIVITY;
+
+
+// double r    = 1.0; // TODO: get factor from registers : full, double, quadruple  ; r is range specific !
+    // *x = (r * (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x)))
+    //       + ((double) valueX) * (GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))))
+    //    / sensitivity;
+
+    // *y = (r * (GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + temp * GEN_3_O3y)))
+    //       + ((double) valueY) * (GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + temp * GEN_3_L3y))))
+    //    / sensitivity;
+
+    // *z = (r * (GEN_3_O0z + temp * (GEN_3_O1z + temp * (GEN_3_O2z + temp * GEN_3_O3z)))
+    //       + ((double) valueZ) * (GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + temp * GEN_3_L3z))))
+    //    / sensitivity;
 }
 
 // Calc. int from mT :
@@ -86,3 +105,19 @@ double temp = (double) rawTemp;
 //     tlx493d_gen_3_calculateMagneticField(sensor, x, y, z, bxMSBBF, bxLSBBF, byMSBBF, byLSBBF, bzMSBBF, bzLSBBF);
 //     tlx493d_gen_3_calculateTemperature(sensor, temp, tempMSBBF, tempLSBBF);
 // }
+
+
+uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+    switch(addr) {
+        case TLx493D_IIC_ADDR_A0_e : return GEN_3_STD_IIC_ADDR_WRITE_A0;
+
+        case TLx493D_IIC_ADDR_A1_e : return GEN_3_STD_IIC_ADDR_WRITE_A1;
+
+        case TLx493D_IIC_ADDR_A2_e : return GEN_3_STD_IIC_ADDR_WRITE_A2;
+
+        case TLx493D_IIC_ADDR_A3_e : return GEN_3_STD_IIC_ADDR_WRITE_A3;
+
+        default : errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
+                  return 0;
+    }
+}
