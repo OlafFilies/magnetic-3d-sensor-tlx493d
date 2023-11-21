@@ -50,7 +50,7 @@ template<> class TwoWireWrapper<TwoWire> {
                     rxBuffer[i] = i2c.read();
                 }
 
-                i2c.endTransmission(true);
+                // i2c.endTransmission(true);
 
                 if( bytesRead != rxLen ) {
                     return false;

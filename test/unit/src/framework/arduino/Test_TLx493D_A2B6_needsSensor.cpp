@@ -14,7 +14,7 @@ extern "C" {
 
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         TLx493D_A2B6_init(&dut);
-        tlx493d_initCommunication(&dut, Wire);
+        tlx493d_initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
         dut.functions->setDefaultConfig(&dut);
     }
     

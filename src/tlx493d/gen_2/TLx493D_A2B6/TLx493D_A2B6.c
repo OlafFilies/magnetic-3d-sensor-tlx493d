@@ -363,10 +363,10 @@ bool TLx493D_A2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
     uint8_t rate = 0;
 
     switch(val) {
-        case UPDATE_RATE_FAST_e : rate = 0;
+        case TLx493D_UPDATE_RATE_FAST_e : rate = 0;
                                   break;
 
-        case UPDATE_RATE_SLOW_e : rate = 1;
+        case TLx493D_UPDATE_RATE_SLOW_e : rate = 1;
                                   break;
 
         default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");

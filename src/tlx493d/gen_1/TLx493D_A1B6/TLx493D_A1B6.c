@@ -1,11 +1,12 @@
 // std includes
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 // project c includes
+#include "Logger.h"
+
 // common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"

@@ -385,10 +385,13 @@ bool TLx493D_W2BW_isWakeUpEnabled(TLx493D_t *sensor) {
 }
 
 bool TLx493D_W2BW_enableWakeUpMode(TLx493D_t *sensor) {
-    uint8_t bitFieldValue = 0;
-    tlx493d_common_getBitfield(sensor, W2BW_T_e, &bitFieldValue);
+    bool isTestMode = tlx493d_common_returnBitfield(sensor, W2BW_T_e) != 0x00;
 
-    if (!bitFieldValue) {
+    // uint8_t bitFieldValue = 0;
+    // tlx493d_common_getBitfield(sensor, W2BW_T_e, &bitFieldValue);
+
+    if( !isTestMode ) {
+    // if (!bitFieldValue) {
         tlx493d_common_setBitfield(sensor, W2BW_WU_e, 1);
         tlx493d_common_setBitfield(sensor, W2BW_CP_e, TLx493D_W2BW_calculateConfigurationParityBit(sensor));
 

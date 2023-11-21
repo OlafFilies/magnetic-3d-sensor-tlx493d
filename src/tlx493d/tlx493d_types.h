@@ -103,30 +103,30 @@ typedef enum {
 
 
 typedef enum {
-               LOW_POWER_MODE_e = 0,
-               MASTER_CONTROLLED_MODE_e,
-               FAST_MODE_e,
+               TLx493D_LOW_POWER_MODE_e = 0,
+               TLx493D_MASTER_CONTROLLED_MODE_e,
+               TLx493D_FAST_MODE_e,
 } TLx493D_PowerModeType_t;
 
 
 typedef enum {
                // Generation 2
-               UPDATE_RATE_FAST_e = 0,
-               UPDATE_RATE_SLOW_e,
-               UPDATE_RATE_770_HZ_e,
-               UPDATE_RATE_97_HZ_e,
-               UPDATE_RATE_24_HZ_e,
-               UPDATE_RATE_12_HZ_e,
-               UPDATE_RATE_6_HZ_e,
-               UPDATE_RATE_3_HZ_e,
-               UPDATE_RATE_0_4_HZ_e,
-               UPDATE_RATE_0_05_HZ_e,
+               TLx493D_UPDATE_RATE_FAST_e = 0,
+               TLx493D_UPDATE_RATE_SLOW_e,
+               TLx493D_UPDATE_RATE_770_HZ_e,
+               TLx493D_UPDATE_RATE_97_HZ_e,
+               TLx493D_UPDATE_RATE_24_HZ_e,
+               TLx493D_UPDATE_RATE_12_HZ_e,
+               TLx493D_UPDATE_RATE_6_HZ_e,
+               TLx493D_UPDATE_RATE_3_HZ_e,
+               TLx493D_UPDATE_RATE_0_4_HZ_e,
+               TLx493D_UPDATE_RATE_0_05_HZ_e,
 
                // Generation 3
-               UPDATE_RATE_1000_HZ_e,
-               UPDATE_RATE_125_HZ_e,
-               UPDATE_RATE_31_HZ_e,
-               UPDATE_RATE_16_HZ_e,
+               TLx493D_UPDATE_RATE_1000_HZ_e,
+               TLx493D_UPDATE_RATE_125_HZ_e,
+               TLx493D_UPDATE_RATE_31_HZ_e,
+               TLx493D_UPDATE_RATE_16_HZ_e,
 } TLx493D_UpdateRateType_t;
 
 

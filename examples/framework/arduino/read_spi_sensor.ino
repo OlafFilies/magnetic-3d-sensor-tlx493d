@@ -25,6 +25,7 @@ void setup() {
     Serial.begin(115200);
     delay(100);
 
+    // dut.addSelectPin(POWER_PIN_LOW, OUTPUT, LOW, HIGH);
     dut.begin();
 
     // p3i8.begin();

@@ -242,13 +242,13 @@ bool tlx493d_gen_2_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, uint8_t fpBF,
     uint8_t mode = 0;
 
     switch(val) {
-        case LOW_POWER_MODE_e : mode = 0b00;
+        case TLx493D_LOW_POWER_MODE_e : mode = 0b00;
                                 break;
 
-        case MASTER_CONTROLLED_MODE_e : mode = 0b01;
+        case TLx493D_MASTER_CONTROLLED_MODE_e : mode = 0b01;
                                         break;
 
-        case FAST_MODE_e : mode = 0b11;
+        case TLx493D_FAST_MODE_e : mode = 0b11;
                                   break;
 
         default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_PowerModeType_t");
@@ -273,28 +273,28 @@ bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF,
     uint8_t rate = 0;
 
     switch(val) {
-        case UPDATE_RATE_770_HZ_e : rate = 0b000;
+        case TLx493D_UPDATE_RATE_770_HZ_e : rate = 0b000;
                                     break;
 
-        case UPDATE_RATE_97_HZ_e : rate = 0b001;
+        case TLx493D_UPDATE_RATE_97_HZ_e : rate = 0b001;
                                    break;
 
-        case UPDATE_RATE_24_HZ_e : rate = 0b010;
+        case TLx493D_UPDATE_RATE_24_HZ_e : rate = 0b010;
                                    break;
 
-        case UPDATE_RATE_12_HZ_e : rate = 0b011;
+        case TLx493D_UPDATE_RATE_12_HZ_e : rate = 0b011;
                                    break;
 
-        case UPDATE_RATE_6_HZ_e : rate = 0b100;
+        case TLx493D_UPDATE_RATE_6_HZ_e : rate = 0b100;
                                   break;
 
-        case UPDATE_RATE_3_HZ_e : rate = 0b101;
+        case TLx493D_UPDATE_RATE_3_HZ_e : rate = 0b101;
                                   break;
 
-        case UPDATE_RATE_0_4_HZ_e : rate = 0b110;
+        case TLx493D_UPDATE_RATE_0_4_HZ_e : rate = 0b110;
                                     break;
 
-        case UPDATE_RATE_0_05_HZ_e : rate = 0b111;
+        case TLx493D_UPDATE_RATE_0_05_HZ_e : rate = 0b111;
                                      break;
 
         default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
@@ -338,20 +338,58 @@ bool tlx493d_gen_2_isWakeUpEnabled(TLx493D_t *sensor, uint8_t waBF) {
 }
 
 
-bool tlx493d_gen_2_enableWakeUpMode(TLx493D_t *sensor, uint8_t tstBF, uint8_t wuBF, uint8_t cpbBF) {
-    tlx493d_common_setBitfield(sensor, wuBF, 1);
-    tlx493d_common_setBitfield(sensor, tstBF, 0);
-    tlx493d_common_setBitfield(sensor, cpbBF, 1); // sensor->functions->calculateConfigurationParity(sensor));
+bool tlx493d_gen_2_writeConfigurationRegisters(TLx493D_t *sensor) {
+    uint8_t txBuffer[11] = {
+                               0x07,
+                               sensor->regMap[0x07],
+                               sensor->regMap[0x08],
+                               sensor->regMap[0x09],
+                               sensor->regMap[0x0A],
+                               sensor->regMap[0x0B],
+                               sensor->regMap[0x0C],
+                               sensor->regMap[0x0D],
+                               sensor->regMap[0x0E],
+                               sensor->regMap[0x0F],
+                               sensor->regMap[0x10]
+                           };
 
-    uint8_t txBuffer[5] = {
-                              sensor->regDef[wuBF].address,
-                              sensor->regMap[sensor->regDef[wuBF].address],
-                              sensor->regMap[sensor->regDef[wuBF].address + 1],
-                              sensor->regMap[sensor->regDef[wuBF].address + 2],
-                              sensor->regMap[sensor->regDef[wuBF].address + 3]
-                          };
-    
     return transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+}
+
+bool tlx493d_gen_2_enableWakeUpMode(TLx493D_t *sensor, uint8_t tstBF, uint8_t wuBF, uint8_t cpbBF) {
+    bool isTestMode = tlx493d_common_returnBitfield(sensor, tstBF) != 0;
+
+    if( !isTestMode ) {
+        tlx493d_common_setBitfield(sensor, tstBF, 0);
+        tlx493d_common_setBitfield(sensor, cpbBF, sensor->functions->calculateConfigurationParity(sensor));
+        
+        if( !tlx493d_gen_2_writeConfigurationRegisters(sensor) ) {
+            return false;
+        }
+    }
+
+    sensor->functions->readRegisters(sensor);
+    printRegisters(sensor);
+
+    tlx493d_common_setBitfield(sensor, wuBF, 1);
+    // tlx493d_common_setBitfield(sensor, cpbBF, 1);
+    tlx493d_common_setBitfield(sensor, cpbBF, sensor->functions->calculateConfigurationParity(sensor));
+
+    // uint8_t txBuffer[5] = {
+    //                           sensor->regDef[wuBF].address,
+    //                           sensor->regMap[sensor->regDef[wuBF].address],
+    //                           sensor->regMap[sensor->regDef[wuBF].address + 1],
+    //                           sensor->regMap[sensor->regDef[wuBF].address + 2],
+    //                           sensor->regMap[sensor->regDef[wuBF].address + 3]
+    //                       };
+    
+    // return transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+
+    tlx493d_gen_2_writeConfigurationRegisters(sensor);
+    sensor->functions->readRegisters(sensor);
+    printRegisters(sensor);
+return true;
+    // return tlx493d_gen_2_writeConfigurationRegisters(sensor);
 }
 
 
@@ -359,15 +397,17 @@ bool tlx493d_gen_2_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t cp
     tlx493d_common_setBitfield(sensor, wuBF, 0);
     tlx493d_common_setBitfield(sensor, cpbBF, sensor->functions->calculateConfigurationParity(sensor));
 
-    uint8_t txBuffer[5] = {
-                              sensor->regDef[wuBF].address,
-                              sensor->regMap[sensor->regDef[wuBF].address],
-                              sensor->regMap[sensor->regDef[wuBF].address + 1],
-                              sensor->regMap[sensor->regDef[wuBF].address + 2],
-                              sensor->regMap[sensor->regDef[wuBF].address + 3]
-                          };
+    // uint8_t txBuffer[5] = {
+    //                           sensor->regDef[wuBF].address,
+    //                           sensor->regMap[sensor->regDef[wuBF].address],
+    //                           sensor->regMap[sensor->regDef[wuBF].address + 1],
+    //                           sensor->regMap[sensor->regDef[wuBF].address + 2],
+    //                           sensor->regMap[sensor->regDef[wuBF].address + 3]
+    //                       };
     
-    return transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+    // return transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+    
+    return tlx493d_gen_2_writeConfigurationRegisters(sensor);
 }
 
 
@@ -406,6 +446,8 @@ bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
     //                        };
 
     // return transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+    
+    return tlx493d_gen_2_writeConfigurationRegisters(sensor);
 }
 
 // bool tlx493d_gen_2_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
@@ -465,9 +507,9 @@ uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint
         parity ^= sensor->regMap[i];
     }
 
-    parity ^= sensor->regMap[0x0D] & ~0x7F; // WA
-    parity ^= sensor->regMap[0x0E] & ~0x3F; // TST
-    parity ^= sensor->regMap[0x0F] & ~0x3F; // PH
+    parity ^= (sensor->regMap[0x0D] & 0x7F); // WA
+    parity ^= (sensor->regMap[0x0E] & 0x3F); // TST
+    parity ^= (sensor->regMap[0x0F] & 0x3F); // PH
 //     parity ^= (sensor->regMap[0x0D] & ~sensor->regDef[waBF].mask);
 //     parity ^= (sensor->regMap[0x0E] & ~sensor->regDef[tstBF].mask);
 //     parity ^= (sensor->regMap[0x0F] & ~sensor->regDef[phBF].mask);

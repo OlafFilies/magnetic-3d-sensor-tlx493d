@@ -12,7 +12,7 @@ extern "C" {
     void TLx493D_P3I8_needsSensor_suiteSetup() {
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_P3I8_init(&dut);
-        tlx493d_initCommunication(&dut, Wire);
+        tlx493d_initCommunication(&dut, SPI);
         TLx493D_P3I8_setDefaultConfig(&dut);
     }
     

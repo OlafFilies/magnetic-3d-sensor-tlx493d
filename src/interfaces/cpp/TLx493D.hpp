@@ -19,11 +19,11 @@
 /***
  * Base class.
 */
-class TLx493D_base {
+class TLx493DBase {
 
     public:
 
-        ~TLx493D_base() {
+        ~TLx493DBase() {
         }
 
 
@@ -230,7 +230,7 @@ class TLx493D_base {
 
     protected:
 
-        TLx493D_base() {
+        TLx493DBase() {
         }
 
         TLx493D_t  sensor;
@@ -250,7 +250,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 */
 template<typename BoardSupportClass,
          TLx493D_SupportedSensorType_t sensorType> class TLx493D<BoardSupportClass, TwoWireWrapper,
-                                                                 TwoWire, sensorType> : public TLx493D_base {
+                                                                 TwoWire, sensorType> : public TLx493DBase {
 
     public:
 
@@ -304,7 +304,7 @@ template<typename BoardSupportClass,
 */
 template<typename BoardSupportClass,
          TLx493D_SupportedSensorType_t sensorType> class TLx493D<BoardSupportClass, SPIClassWrapper,
-                                                                 SPIClass, sensorType> : public TLx493D_base {
+                                                                 SPIClass, sensorType> : public TLx493DBase {
 
     public:
 
