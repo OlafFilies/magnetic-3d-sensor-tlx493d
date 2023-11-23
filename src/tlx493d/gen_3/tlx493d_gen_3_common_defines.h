@@ -35,7 +35,7 @@
 #define GEN_3_TEMP_OFFSET               4200.0
 #define GEN_3_TEMP_REF                  25.0
 
-// I2C address
+// IIC address
 // A0
 #define GEN_3_STD_IIC_ADDR_WRITE_A0     0xBA
 #define GEN_3_STD_IIC_ADDR_READ_A0      0xBB
