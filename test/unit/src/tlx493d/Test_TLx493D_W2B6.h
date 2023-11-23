@@ -41,7 +41,7 @@ static TEST_TEAR_DOWN(TLx493D_W2B6_internal)
 
 TEST_IFX(TLx493D_W2B6_internal, checkUnsupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->softReset(&dut) == false );
+    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
 }
 
 

@@ -15,9 +15,6 @@
 #include "tlx493d_common.h"
 
 // common to same generation of sensors
-// #include "tlx493d_gen_1_common_defines.h"
-// #include "tlx493d_gen_1_common.h"
-
 #include "tlx493d_gen_2_common_defines.h"
 #include "tlx493d_gen_2_common.h"
 
@@ -26,6 +23,7 @@
 
 // sensor specicifc includes
 #include "TLx493D_A1B6_defines.h"
+#include "TLx493D_A1B6_enums.h"
 #include "TLx493D_A1B6.h"
 
 #include "TLx493D_A2B6_defines.h"
@@ -33,6 +31,7 @@
 #include "TLx493D_A2B6.h"
 
 #include "TLx493D_P2B6_defines.h"
+#include "TLx493D_P2B6_enums.h"
 #include "TLx493D_P2B6.h"
 
 #include "TLx493D_W2B6_defines.h"
@@ -40,12 +39,15 @@
 #include "TLx493D_W2B6.h"
 
 #include "TLx493D_W2BW_defines.h"
+#include "TLx493D_W2BW_enums.h"
 #include "TLx493D_W2BW.h"
 
 #include "TLx493D_P3B6_defines.h"
+#include "TLx493D_P3B6_enums.h"
 #include "TLx493D_P3B6.h"
 
 #include "TLx493D_P3I8_defines.h"
+#include "TLx493D_P3I8_enums.h"
 #include "TLx493D_P3I8.h"
 
 

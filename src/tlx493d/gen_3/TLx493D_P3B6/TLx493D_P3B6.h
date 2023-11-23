@@ -26,7 +26,6 @@ bool TLx493D_P3B6_deinit(TLx493D_t *sensor);
 
 bool TLx493D_P3B6_readRegisters(TLx493D_t *sensor);
 
-
 void TLx493D_P3B6_calculateRawTemperature(TLx493D_t *sensor, uint16_t *temperature);
 bool TLx493D_P3B6_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature);
 
@@ -45,10 +44,47 @@ bool TLx493D_P3B6_getMagneticField(TLx493D_t *sensor, double *x, double *y, doub
 void TLx493D_P3B6_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 bool TLx493D_P3B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 
+bool TLx493D_P3B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t mVals);
+bool TLx493D_P3B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trig);
+bool TLx493D_P3B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t sens);
 
 bool TLx493D_P3B6_setDefaultConfig(TLx493D_t *sensor);
+bool TLx493D_P3B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address);
+bool TLx493D_P3B6_enable1ByteReadMode(TLx493D_t *sensor);
 
-bool TLx493D_P3B6_enable1ByteMode(TLx493D_t *sensor);
+bool TLx493D_P3B6_enableCollisionAvoidance(TLx493D_t *sensor);
+bool TLx493D_P3B6_disableCollisionAvoidance(TLx493D_t *sensor);
+
+bool TLx493D_P3B6_enableInterrupt(TLx493D_t *sensor);
+bool TLx493D_P3B6_disableInterrupt(TLx493D_t *sensor);
+
+bool TLx493D_P3B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode);
+bool TLx493D_P3B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t rate);
+
+bool TLx493D_P3B6_hasValidData(TLx493D_t *sensor);
+bool TLx493D_P3B6_isFunctional(TLx493D_t *sensor);
+
+bool TLx493D_P3B6_hasWakeUp(TLx493D_t *sensor);
+bool TLx493D_P3B6_isWakeUpEnabled(TLx493D_t *sensor);
+bool TLx493D_P3B6_enableWakeUpMode(TLx493D_t *sensor);
+bool TLx493D_P3B6_disableWakeUpMode(TLx493D_t *sensor);
+bool TLx493D_P3B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
+bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+
+bool TLx493D_P3B6_softwareReset(TLx493D_t *sensor);
+
+
+// utilities
+uint8_t TLx493D_P3B6_calculateFuseParity(TLx493D_t *sensor);
+uint8_t TLx493D_P3B6_calculateBusParity(TLx493D_t *sensor);
+uint8_t TLx493D_P3B6_calculateConfigurationParity(TLx493D_t *sensor);
+
+bool TLx493D_P3B6_hasValidTBit(TLx493D_t *sensor);
+bool TLx493D_P3B6_hasValidIICadr(TLx493D_t *sensor);
+
+bool TLx493D_P3B6_hasValidFuseParity(TLx493D_t *sensor);
+bool TLx493D_P3B6_hasValidBusParity(TLx493D_t *sensor);
+bool TLx493D_P3B6_hasValidConfigurationParity(TLx493D_t *sensor);
 
 void TLx493D_P3B6_setResetValues(TLx493D_t *sensor);
 

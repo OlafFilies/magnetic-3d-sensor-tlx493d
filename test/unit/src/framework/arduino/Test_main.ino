@@ -83,6 +83,34 @@ extern "C" {
 
 #endif
 
+
+// TLx493D_P3B6
+#ifdef TEST_TLx493D_P3B6
+
+    RUN_TEST_GROUP(TLx493D_P3B6);
+
+#endif
+
+#ifdef TEST_TLx493D_P3B6_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLx493D_P3B6_needsSensor);
+
+#endif
+
+
+// TLx493D_P3B6
+#ifdef TEST_TLx493D_P3I8
+
+    RUN_TEST_GROUP(TLx493D_P3I8);
+
+#endif
+
+#ifdef TEST_TLx493D_P3I8_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLx493D_P3I8_needsSensor);
+
+#endif
+
     }
 }
 

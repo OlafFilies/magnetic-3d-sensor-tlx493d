@@ -33,15 +33,11 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
     sensor->sensorType        = sensorType;
     sensor->comIFType         = comIFType;
     sensor->comLibIF          = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
+    sensor->comLibObj.iic_obj = NULL;
 
     memset(sensor->regMap, 0, sensor->regMapSize);
 
     sensor->functions->setResetValues(sensor);
-
-    // TODO: set address in TLx493D_initCommunication !
-    // tlx493d_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
-    
     return true;
 }
 
@@ -51,10 +47,10 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
 */
 bool tlx493d_common_deinit(TLx493D_t *sensor) {
     free(sensor->regMap);
-    free(sensor->comLibObj.i2c_obj); // TODO: provide central function to deallocate SPI/IIC objects !
+    free(sensor->comLibObj.iic_obj); // TODO: provide central function to deallocate SPI/IIC objects !
 
     sensor->regMap            = NULL;
-    sensor->comLibObj.i2c_obj = NULL; // TODO: provide central function to set to null SPI/IIC objects !
+    sensor->comLibObj.iic_obj = NULL; // TODO: provide central function to set to null SPI/IIC objects !
     return true;
 }
 
@@ -80,8 +76,9 @@ bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) 
 }
 
 
-void tlx493d_common_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
-                                              uint8_t bzMSBBF, uint8_t bzLSBBF, uint16_t *x, uint16_t *y, uint16_t *z) {
+void tlx493d_common_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF,
+                                              uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF,
+                                              uint16_t *x, uint16_t *y, uint16_t *z) {
     tlx493d_common_concatBytes(sensor, bxMSBBF, bxLSBBF, x);
     tlx493d_common_concatBytes(sensor, byMSBBF, byLSBBF, y);
     tlx493d_common_concatBytes(sensor, bzMSBBF, bzLSBBF, z);
@@ -98,7 +95,8 @@ bool tlx493d_common_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t
 }
 
 
-bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z,
+                                                     uint16_t *temperature) {
     if( sensor->functions->readRegisters(sensor) ) {
         sensor->functions->calculateRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
         return true;
@@ -161,14 +159,6 @@ uint8_t tlx493d_common_returnBitfield(TLx493D_t *sensor, uint8_t bitField) {
 
 void tlx493d_common_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
     *bitFieldValue = tlx493d_common_returnBitfield(sensor, bitField);
-
-    // TLx493D_Register_t *bf = &sensor->regDef[bitField];
-
-    // if((bf->accessMode == TLx493D_READ_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
-    //     *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
-    // }
-
-    // errorBitfieldNotReadableForSensorType(sensor, bitField);
 }
 
 
@@ -223,26 +213,9 @@ uint8_t tlx493d_common_getEvenParity(uint8_t parity) {
 void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result) {
     TLx493D_Register_t *msb = &sensor->regDef[msbBitfield];
     TLx493D_Register_t *lsb = &sensor->regDef[lsbBitfield];
-    // print("\nmsb = %#x   %#x\n", sensor->regMap[msb->address] & msb->mask, (sensor->regMap[msb->address] & msb->mask) >> msb->offset);
-    // print("\nlsb = %#x   %#x\n", sensor->regMap[lsb->address] & lsb->mask, (sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset);
-
-    // print("\nmsb->numBits = %#x    mask : %#x\n", msb->numBits, msb->mask);
-    // print("\nlsb->numBits = %#x    mask : %#x\n", lsb->numBits, lsb->mask);
-
     *result   = ((sensor->regMap[msb->address] & msb->mask) << (16 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
-    // print("\nshift = %#x\n", 16 - msb->numBits - msb->offset);
-    // print("\nresult 0 = %#x\n", *result);
-    // print("\nresult >> 1 = %#x\n", *result >> 1);
-    // print("\nresult >> 2 = %#x\n", *result >> 2);
-    // print("\nresult >> 3 = %#x\n", *result >> 3);
-    // print("\nresult >> 4 = %#x\n", *result >> 4);
-    // print("\nresult >> 5 = %#x\n", *result >> 5);
-    // print("\nresult >> 6 = %#x\n", *result >> 6);
     *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
-    // print("\nshift = %#x\n", 16 - msb->numBits - lsb->numBits);
-    // print("\nresult 1 = %#x\n", *result);
     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
-    // print("\nresult 2 = %#x\n", *result);
 }
 
 
@@ -300,11 +273,12 @@ void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availab
 
 
 void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr) {
-    sensor->comLibIFParams.i2c_params.address = addr;
+    sensor->comLibIFParams.iic_params.address = addr;
 }
 
 
-void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
+void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+                                                           double mT, int16_t *rawMF) {
 }
 
 

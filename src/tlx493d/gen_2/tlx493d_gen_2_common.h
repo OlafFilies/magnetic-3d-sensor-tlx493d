@@ -55,20 +55,12 @@ bool tlx493d_gen_2_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t cp
 
 bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, uint8_t cpbBF, int16_t threshold12Bits);
 
-// bool tlx493d_gen_2_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_gen_2_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_gen_2_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
-
-// bool tlx493d_gen_2_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_gen_2_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_gen_2_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
-
 // bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
 // bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 
 // // utilities
-// bool tlx493d_gen_2_softReset(TLx493D_t *sensor);
+// bool tlx493d_gen_2_softwareReset(TLx493D_t *sensor);
 
 
 uint8_t tlx493d_gen_2_calculateFuseParity(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF);

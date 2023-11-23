@@ -1,5 +1,5 @@
-#ifndef TLX493D_HPP
-#define TLX493D_HPP
+#ifndef TLX493D_BASE_HPP
+#define TLX493D_BASE_HPP
 
 
 // std includes
@@ -8,8 +8,6 @@
 
 // project cpp includes
 #include "types.hpp"
-#include "SPIUsingSPIClass.hpp"
-#include "IICUsingTwoWire.hpp"
 
 // project c includes
 #include "tlx493d_types.h"
@@ -148,30 +146,6 @@ class TLx493DBase {
         bool disableWakeUpMode() {
             return ::tlx493d_disableWakeUpMode(&sensor);
         }
-        
-        // bool setLowerWakeUpThresholdX(int16_t threshold) {
-        //     return ::tlx493d_setLowerWakeUpThresholdX(&sensor, threshold);
-        // }
-
-        // bool setLowerWakeUpThresholdY(int16_t threshold) {
-        //     return ::tlx493d_setLowerWakeUpThresholdY(&sensor, threshold);
-        // }
-
-        // bool setLowerWakeUpThresholdZ(int16_t threshold) {
-        //     return ::tlx493d_setLowerWakeUpThresholdZ(&sensor, threshold);
-        // }
-
-        // bool setUpperWakeUpThresholdX(int16_t threshold) {
-        //     return ::tlx493d_setUpperWakeUpThresholdX(&sensor, threshold);
-        // }
-
-        // bool setUpperWakeUpThresholdY(int16_t threshold) {
-        //     return ::tlx493d_setUpperWakeUpThresholdY(&sensor, threshold);
-        // }
-
-        // bool setUpperWakeUpThresholdZ(int16_t threshold) {
-        //     return ::tlx493d_setUpperWakeUpThresholdZ(&sensor, threshold);
-        // }
 
         bool setWakeUpThresholdsAsInteger(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
             return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
@@ -241,7 +215,6 @@ class TLx493DBase {
  * Generic template class.
 */
 template<typename BoardSupportClass, typename BusWrapper, typename Bus,
-// template<typename BoardSupportClass, template<typename> typename BusWrapper, typename Bus,
          TLx493D_SupportedSensorType_t sensorType> class TLx493D : public TLx493DBase {
 
     private:
@@ -251,116 +224,4 @@ template<typename BoardSupportClass, typename BusWrapper, typename Bus,
 };
 
 
-/***
- * Specialization for IIC interface.
-*/
-template<typename BoardSupportClass,
-         TLx493D_SupportedSensorType_t sensorType> class TLx493D<BoardSupportClass, TwoWireWrapper,
-                                                                 TwoWire, sensorType> : public TLx493DBase {
-
-    public:
-
-        typedef BoardSupportClass  BoardSupportClassType;
-        // typedef TwoWireWrapper<TwoWire>   BusWrapperType;
-        typedef TwoWireWrapper     BusWrapperType;
-
- 
-        TLx493D(TwoWire &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
-            ::tlx493d_init(&sensor, sensorType);
-        }
-
-
-        ~TLx493D() {
-        }
-
-
-        void init() {
-            bsc.init();
-            tlx493d_initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
-            setDefaultConfig();
-        }
-
-
-        void begin() {
-            init();
-        }
-
-
-        void deinit() {
-            ::tlx493d_deinit(&sensor);
-            busWrapper.deinit();
-            bsc.deinit();
-        }
-
-
-        void end() {
-            deinit();
-        }
-
-
-    private:
-
-        TLx493D(TwoWire &bus);
-
-
-        BoardSupportClassType     bsc;
-        BusWrapperType            busWrapper;
-        TLx493D_IICAddressType_t  iicAddress;
-};
-
-
-/***
- * Specialization for SPI interface.
-*/
-template<typename BoardSupportClass,
-         TLx493D_SupportedSensorType_t sensorType> class TLx493D<BoardSupportClass, SPIClassWrapper,
-                                                                 SPIClass, sensorType> : public TLx493DBase {
-
-    public:
-
-        typedef BoardSupportClass  BoardSupportClassType;
-        typedef SPIClassWrapper    BusWrapperType;
-        // typedef SPIClassWrapper<SPIClass>  BusWrapperType;
-
- 
-        TLx493D(SPIClass &bus) : bsc(), busWrapper(bus) {
-            ::tlx493d_init(&sensor, sensorType);
-        }
-
-
-        ~TLx493D() {
-        }
-
-
-        void init() {
-            bsc.init();
-            tlx493d_initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
-            setDefaultConfig();
-        }
-
-
-        void begin() {
-            init();
-        }
-
-
-        void deinit() {
-            ::tlx493d_deinit(&sensor);
-            busWrapper.deinit();
-            bsc.deinit();
-        }
-
-
-        void end() {
-            deinit();
-        }
-
-
-    private:
-
-        BoardSupportClassType     bsc;
-        BusWrapperType            busWrapper;
-};
-
-
-#endif // TLX493D_HPP
+#endif // TLX493D_BASE_HPP

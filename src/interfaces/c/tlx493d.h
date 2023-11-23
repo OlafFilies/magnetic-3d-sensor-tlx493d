@@ -53,9 +53,6 @@ bool tlx493d_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t rate);
 
 // functions related to the "Diag" register
 bool tlx493d_hasValidData(TLx493D_t *sensor);
-// bool tlx493d_hasValidTemperatureData(TLx493D_t *sensor);
-// bool tlx493d_hasValidMagneticFieldData(TLx493D_t *sensor);
-
 bool tlx493d_isFunctional(TLx493D_t *sensor);
 
 
@@ -66,23 +63,18 @@ bool tlx493d_isWakeUpEnabled(TLx493D_t *sensor);
 bool tlx493d_enableWakeUpMode(TLx493D_t *sensor);
 bool tlx493d_disableWakeUpMode(TLx493D_t *sensor);
 
-// bool tlx493d_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
-
-// bool tlx493d_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-// bool tlx493d_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
-
-bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
-bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th,
+                                          int16_t zl_th, int16_t zh_th);
+bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh,
+                                 double zLow, double zHigh);
 
 
 // utilities
-bool tlx493d_softReset(TLx493D_t *sensor);
+bool tlx493d_softwareReset(TLx493D_t *sensor);
 const char *tlx493d_getTypeAsString(TLx493D_t *sensor);
 
-void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+                                                    double mT, int16_t *rawMF);
 
 
 #ifdef __cplusplus

@@ -5,11 +5,12 @@
 #include <string.h>
 
 // project c includes
+#include "Logger.h"
+
 // common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
-#include "Logger.h"
 
 // common to same generation of sensors
 #include "tlx493d_gen_3_common_defines.h"
@@ -97,8 +98,51 @@ TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
     .calculateMagneticFieldAndTemperature = TLx493D_P3I8_calculateMagneticFieldAndTemperature,
     .getMagneticFieldAndTemperature = TLx493D_P3I8_getMagneticFieldAndTemperature,
 
+    // functions related to the "Config" register
+    .setMeasurement                 = TLx493D_P3I8_setMeasurement,
+    .setTrigger                     = TLx493D_P3I8_setTrigger,
+    .setSensitivity                 = TLx493D_P3I8_setSensitivity,
 
+    // functions related to the "Mod1" and "Mod2" registers
     .setDefaultConfig               = TLx493D_P3I8_setDefaultConfig,
+    .setIICAddress                  = TLx493D_P3I8_setIICAddress,
+    .enable1ByteReadMode            = TLx493D_P3I8_enable1ByteReadMode,
+
+    .enableInterrupt                = TLx493D_P3I8_enableInterrupt,
+    .disableInterrupt               = TLx493D_P3I8_disableInterrupt,
+
+    .enableCollisionAvoidance       = TLx493D_P3I8_enableCollisionAvoidance,
+    .disableCollisionAvoidance      = TLx493D_P3I8_disableCollisionAvoidance,
+
+    .setPowerMode                   = TLx493D_P3I8_setPowerMode,
+    .setUpdateRate                  = TLx493D_P3I8_setUpdateRate,
+
+    // functions related to the "Diag" register
+    .hasValidData                   = TLx493D_P3I8_hasValidData,
+    .isFunctional                   = TLx493D_P3I8_isFunctional,
+
+    // functions available only to a subset of sensors with wake-up functionality
+    // functions related to the "WU" register
+    .hasWakeUp                      = TLx493D_P3I8_hasWakeUp,
+    .isWakeUpEnabled                = TLx493D_P3I8_isWakeUpEnabled,
+    .enableWakeUpMode               = TLx493D_P3I8_enableWakeUpMode,
+    .disableWakeUpMode              = TLx493D_P3I8_disableWakeUpMode,
+
+    .setWakeUpThresholdsAsInteger   = TLx493D_P3I8_setWakeUpThresholdsAsInteger,
+    .setWakeUpThresholds            = TLx493D_P3I8_setWakeUpThresholds,
+
+    .softwareReset                      = TLx493D_P3I8_softwareReset,
+
+    // functions used internally and not accessible through the common interface
+    .calculateFuseParity            = TLx493D_P3I8_calculateFuseParity,
+    .calculateBusParity             = TLx493D_P3I8_calculateBusParity,
+    .calculateConfigurationParity   = TLx493D_P3I8_calculateConfigurationParity,
+
+    .hasValidFuseParity             = TLx493D_P3I8_hasValidFuseParity,
+    .hasValidBusParity              = TLx493D_P3I8_hasValidBusParity,
+    .hasValidConfigurationParity    = TLx493D_P3I8_hasValidConfigurationParity,
+    
+    .hasValidTBit                   = TLx493D_P3I8_hasValidTBit,
     
     .setResetValues                 = TLx493D_P3I8_setResetValues,
 
@@ -187,6 +231,30 @@ bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 }
 
 
+bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
+    // return tlx493d_gen_2_setMeasurement(sensor, P3I8_DT_e, P3I8_AM_e, P3I8_CP_e, val);
+    return false;
+}
+
+
+bool TLx493D_P3I8_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
+    // return tlx493d_gen_2_setTrigger(sensor, P3I8_TRIG_e, P3I8_CP_e, val);
+    return false;
+}
+
+
+bool TLx493D_P3I8_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
+    // return tlx493d_gen_2_setSensitivity(sensor, P3I8_X2_e, P3I8_CP_e, val);
+    return false;
+}
+
+
+// bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
+//     return tlx493d_gen_2_setDefaultConfig(sensor, P3I8_CONFIG_REG_e, P3I8_MOD1_REG_e, P3I8_MOD2_REG_e, P3I8_CP_e, P3I8_CA_e, P3I8_INT_e);
+    // return false;
+// }
+
+
 // TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
     sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
@@ -203,6 +271,149 @@ bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
     // tlx493d_common_setBitfield(sensor, CHANNEL_SEL, 0);
 
     return true;
+}
+
+
+bool TLx493D_P3I8_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address) {
+    warnFeatureNotAvailableForSensorType(sensor, "setIICAddress");
+    return false;
+}
+
+
+bool TLx493D_P3I8_enable1ByteReadMode(TLx493D_t *sensor) {
+    warnFeatureNotAvailableForSensorType(sensor, "set1ByteReadMode");
+    return false;
+}
+
+
+bool TLx493D_P3I8_enableCollisionAvoidance(TLx493D_t *sensor) {
+    warnFeatureNotAvailableForSensorType(sensor, "enableCollisionAvoidance");
+    return false;
+}
+
+
+bool TLx493D_P3I8_disableCollisionAvoidance(TLx493D_t *sensor) {
+    warnFeatureNotAvailableForSensorType(sensor, "disableCollisionAvoidance");
+    return false;
+}
+
+
+bool TLx493D_P3I8_enableInterrupt(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_setInterrupt(sensor, P3I8_INT_e, P3I8_FP_e, P3I8_PRD_e, 0);
+    return false;
+}
+
+
+bool TLx493D_P3I8_disableInterrupt(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_setInterrupt(sensor, P3I8_INT_e, P3I8_FP_e, P3I8_PRD_e, 1);
+    return false;
+}
+
+
+bool TLx493D_P3I8_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) {
+    // return tlx493d_gen_2_setPowerMode(sensor, P3I8_MODE_e, P3I8_FP_e, mode);
+    return false;
+}
+
+
+bool TLx493D_P3I8_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
+    // return tlx493d_gen_2_setUpdateRate(sensor, P3I8_FP_e, P3I8_PRD_e, val);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasValidData(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_hasValidData(sensor);
+    return false;
+}
+
+
+bool TLx493D_P3I8_isFunctional(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_isFunctional(sensor);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasWakeUp(TLx493D_t *sensor) {
+    return true;
+}
+
+
+bool TLx493D_P3I8_isWakeUpEnabled(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_isWakeUpEnabled(sensor, P3I8_WA_e);
+    return false;
+}
+
+bool TLx493D_P3I8_enableWakeUpMode(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_enableWakeUpMode(sensor, P3I8_TST_e, P3I8_WU_e, P3I8_CP_e);
+    return false;
+}
+
+bool TLx493D_P3I8_disableWakeUpMode(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_disableWakeUpMode(sensor, P3I8_WU_e, P3I8_CP_e);
+    return false;
+}
+
+
+bool TLx493D_P3I8_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+    return false;
+}
+
+// thesholds im mT, to be converted to proper format
+bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+    return false;
+}
+
+bool TLx493D_P3I8_softwareReset(TLx493D_t *sensor) {
+    return false;
+}
+
+
+uint8_t TLx493D_P3I8_calculateFuseParity(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_calculateFuseParity(sensor, P3I8_FP_e, P3I8_PRD_e);
+    return false;
+}
+
+
+uint8_t TLx493D_P3I8_calculateBusParity(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_calculateBusParity(sensor, 5);
+    return false;
+}
+
+
+uint8_t TLx493D_P3I8_calculateConfigurationParity(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_calculateConfigurationParityWakeUp(sensor, P3I8_CP_e);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasValidFuseParity(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_hasValidFuseParity(sensor, P3I8_FF_e);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasValidBusParity(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_hasValidBusParity(sensor, P3I8_P_e);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasValidConfigurationParity(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_hasValidConfigurationParity(sensor, P3I8_CF_e);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasValidIICadr(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_hasValidIICadr(sensor, P3I8_ID_e, P3I8_IICADR_e);
+    return false;
+}
+
+
+bool TLx493D_P3I8_hasValidTBit(TLx493D_t *sensor) {
+    // return tlx493d_gen_2_hasValidTBit(sensor, P3I8_T_e);
+    return false;
 }
 
 
@@ -233,5 +444,5 @@ void TLx493D_P3I8_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 
 void TLx493D_P3I8_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf) {
-    tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, P3I8_SHORT_EN_e, P3I8_XTR_SHORT_EN_e, sf);
+    tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X4_e, P3I8_SHORT_EN_e, P3I8_XTR_SHORT_EN_e, sf);
 }

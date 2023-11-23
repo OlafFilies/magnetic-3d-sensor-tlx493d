@@ -7,25 +7,15 @@
 #include "TLx493D_inc.hpp"
 
 
-// TLx493D_A1B6 dut(Wire);
+TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
-// TLx493D_A2B6 dut(Wire);
-// TLx493D_P2B6 dut(Wire);
-TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_W2BW dut(Wire);
+// TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
-// TLx493D_P3B6 dut(Wire);
-
-
-// TODO: if A1B6 instantiated program not working
-// TLx493D_A1B6 a1b6(Wire);
-
-// TLx493D_A2B6 a2b6(Wire);
-// TLx493D_P2B6 p2b6(Wire);
-// TLx493D_W2B6 w2b6(Wire);
-// TLx493D_W2BW w2bw(Wire);
-
-// TLx493D_P3B6 p3b6(Wire);
+// TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
 
 
 void setup() {
@@ -34,17 +24,6 @@ void setup() {
     delay(100);
 
     dut.begin();
-
-
-    // a1b6.begin();
-
-    // a2b6.begin();
-    // p2b6.begin();
-    // w2b6.begin();
-    // w2bw.begin();
-
-    // p3b6.begin();
-
 
     delay(100);
     Serial.print("setup done.\n");

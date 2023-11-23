@@ -15,8 +15,6 @@ static TLx493D_t dut;
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
 #include "Test_tlx493d_common_needsSensor.h"
 #include "Test_tlx493d_common.h"
-#include "Test_tlx493d_gen_1_common_needsSensor.h"
-// #include "Test_tlx493d_gen_1_common.h"
 
 
 // define test group name

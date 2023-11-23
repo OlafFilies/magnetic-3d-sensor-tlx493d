@@ -51,9 +51,7 @@ bool TLx493D_W2B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t se
 
 bool TLx493D_W2B6_setDefaultConfig(TLx493D_t *sensor);
 bool TLx493D_W2B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address);
-
 bool TLx493D_W2B6_enable1ByteReadMode(TLx493D_t *sensor);
-// bool TLx493D_W2B6_disable1ByteReadMode(TLx493D_t *sensor);
 
 bool TLx493D_W2B6_enableCollisionAvoidance(TLx493D_t *sensor);
 bool TLx493D_W2B6_disableCollisionAvoidance(TLx493D_t *sensor);
@@ -71,19 +69,10 @@ bool TLx493D_W2B6_hasWakeUp(TLx493D_t *sensor);
 bool TLx493D_W2B6_isWakeUpEnabled(TLx493D_t *sensor);
 bool TLx493D_W2B6_enableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_W2B6_disableWakeUpMode(TLx493D_t *sensor);
-
-// bool TLx493D_W2B6_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-// bool TLx493D_W2B6_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-// bool TLx493D_W2B6_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
-
-// bool TLx493D_W2B6_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold);
-// bool TLx493D_W2B6_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold);
-// bool TLx493D_W2B6_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold);
-
 bool TLx493D_W2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th);
 bool TLx493D_W2B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
-bool TLx493D_W2B6_softReset(TLx493D_t *sensor);
+bool TLx493D_W2B6_softwareReset(TLx493D_t *sensor);
 
 
 // utilities

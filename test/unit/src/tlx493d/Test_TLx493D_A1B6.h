@@ -17,7 +17,6 @@ static TLx493D_t dut;
 
 // test includes that may require dut
 #include "Test_tlx493d_common.h"
-// #include "Test_tlx493d_gen_1_common.h"
 
 
 // define test group name
@@ -63,7 +62,6 @@ TEST(TLx493D_A1B6, calculateMagneticField)
 
 TEST(TLx493D_A1B6, setter_BitFields)
 {
-
     memset(dut.regMap,0,dut.regMapSize);
 
     // for gen1 setBitField is used to set values of WRITE registers (BitFields) only (due to a check for TLx493D_WRITE_MODE_e access)
@@ -80,7 +78,6 @@ TEST(TLx493D_A1B6, setter_BitFields)
 
 TEST(TLx493D_A1B6, getter_BitFields)
 {
-
     memset(dut.regMap,0,dut.regMapSize);
 
     // for gen1 returnBitField is used to get values of READ registers (BitFields) only (due to a check for TLx493D_READ_MODE_e access)
@@ -106,9 +103,14 @@ TEST_GROUP_RUNNER(TLx493D_A1B6)
     RUN_TEST_CASE(TLx493D_A1B6, setter_BitFields);
     RUN_TEST_CASE(TLx493D_A1B6, getter_BitFields);
 
-    // run gen 1 common functions tests
+
+#ifndef TEST_TLx493D_A1B6_NEEDS_SENSOR
+
+    // run common functions tests
     RUN_TEST_GROUP(SensorsCommon);
-    // RUN_TEST_GROUP(SensorsGen1Common);
+
+#endif
+
 
     TLx493D_A1B6_suiteTearDown();
 }

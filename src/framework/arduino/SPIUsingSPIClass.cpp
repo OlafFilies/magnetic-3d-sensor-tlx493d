@@ -43,8 +43,8 @@ TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
                                             .transfer = { .spi_transfer = tlx493d_transferSPI },
                                        };
 
-
-bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper<SPIClass> &spi) {
+ // TODO: provide central function to set to null SPI/IIC objects !
+bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi) {
     sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
     sensor->comLibObj.spi_obj->spi = &spi;
     sensor->comLibIF               = &comLibIF_spi;
@@ -57,7 +57,7 @@ bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper<SPIClass> &spi
 // TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
     sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
-    sensor->comLibObj.spi_obj->spi = new SPIClassWrapper<SPIClass>(spi);
+    sensor->comLibObj.spi_obj->spi = new SPIClassWrapper(spi);
     sensor->comLibIF               = &comLibIF_spi;
 
     sensor->comLibIF->init.spi_init(sensor);  

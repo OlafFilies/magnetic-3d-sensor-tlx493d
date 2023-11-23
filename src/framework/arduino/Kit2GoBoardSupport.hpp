@@ -1,6 +1,5 @@
-
-#ifndef TLX493D_S2GO_TEMPLATE_ARDUINO_HPP
-#define TLX493D_S2GO_TEMPLATE_ARDUINO_HPP
+#ifndef TLX493D_KIT2GO_BOARD_SUPPORT_HPP
+#define TLX493D_KIT2GO_BOARD_SUPPORT_HPP
 
 
 // std include
@@ -9,7 +8,7 @@
 #include <Arduino.h>
 
 // project cpp includes
-#include "S2GoTemplate.hpp"
+#include "Kit2GoBoardSupportTemplate.hpp"
 
 
 typedef struct pinCtrl {
@@ -20,10 +19,10 @@ typedef struct pinCtrl {
 } pinCtrl;
 
 
-template<> class S2GoTemplate<pinCtrl> {
+template<> class Kit2GoBoardSupport<pinCtrl> {
    public:
 
-        S2GoTemplate() : constantPins{ LED2, OUTPUT, HIGH, LOW }, switchedPins{} {
+        Kit2GoBoardSupport() : constantPins{ LED2, OUTPUT, HIGH, LOW }, switchedPins{} {
         }
 
         void init() {
@@ -69,4 +68,4 @@ template<> class S2GoTemplate<pinCtrl> {
 };
 
 
-#endif // TLX493D_S2GO_TEMPLATE_ARDUINO_HPP
+#endif // TLX493D_KIT2GO_BOARD_SUPPORT_HPP

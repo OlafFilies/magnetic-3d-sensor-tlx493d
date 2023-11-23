@@ -88,7 +88,7 @@ TEST_IFX(TLx493D_A2B6_internal, checkUnsupportedFunctionality)
     TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, xh, xl, yh, yl, zh, zl) == false );
 
 
-    TEST_ASSERT( dut.functions->softReset(&dut) == false );
+    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
 }
 
 

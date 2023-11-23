@@ -9,39 +9,14 @@
 // S2Go boards
 #define POWER_PIN_HIGH 15
 
-// SPI chip
-#define POWER_PIN_LOW 3
-
 
 TLx493D_t dut;
 
 
-TLx493D_t a1b6;
-
-TLx493D_t a2b6;
-TLx493D_t p2b6;
-TLx493D_t w2b6;
-TLx493D_t w2bw;
-
-TLx493D_t p3b6;
-TLx493D_t p3i8;
-
-
-#define USE_I2C  (1)
-
-
 void setup() {
-    // // required for S2Go
-    // pinMode(POWER_PIN_HIGH, OUTPUT);
-    // digitalWrite(POWER_PIN_HIGH, HIGH);
-
     Serial.begin(115200);
     delay(3000);
 
-
-#ifdef USE_I2C
-
-    // I2C
     // required for S2Go
     pinMode(POWER_PIN_HIGH, OUTPUT);
     digitalWrite(POWER_PIN_HIGH, HIGH);
@@ -49,63 +24,13 @@ void setup() {
 
     // tlx493d_init(&dut, TLx493D_A1B6_e);
     // tlx493d_init(&dut, TLx493D_A2B6_e);
-    // tlx493d_init(&dut, TLx493D_P2B6_e);
-    tlx493d_init(&dut, TLx493D_W2B6_e);
+    tlx493d_init(&dut, TLx493D_P2B6_e);
+    // tlx493d_init(&dut, TLx493D_W2B6_e);
     // tlx493d_init(&dut, TLx493D_W2BW_e);
     // tlx493d_init(&dut, TLx493D_P3B6_e);
 
-    tlx493d_initCommunication(&dut, Wire);
+    tlx493d_initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
     tlx493d_setDefaultConfig(&dut);
-
-
-    // tlx493d_init(&a1b6, TLx493D_A1B6_e);
-    // tlx493d_init(&a2b6, TLx493D_A2B6_e);
-    // tlx493d_init(&p2b6, TLx493D_P2B6_e);
-    // tlx493d_init(&w2b6, TLx493D_W2B6_e);
-    // tlx493d_init(&w2bw, TLx493D_W2BW_e);
-    // tlx493d_init(&p3b6, TLx493D_P3B6_e);
-
-    // tlx493d_initCommunication(&a1b6, Wire);
-    // tlx493d_initCommunication(&a2b6, Wire);
-    // tlx493d_setDefaultConfig(&a2b6);
-    // tlx493d_initCommunication(&p2b6, Wire);
-    // tlx493d_initCommunication(&w2b6, Wire);
-    // tlx493d_setDefaultConfig(&w2b6);
-    // tlx493d_initCommunication(&w2bw, Wire);
-    // tlx493d_initCommunication(&p3b6, Wire);
-
-
-#else
-
-    pinMode(POWER_PIN_LOW, OUTPUT);
-    digitalWrite(POWER_PIN_LOW, HIGH);
-
-    // SPI
-    // required for S2Go
-    // pinMode(POWER_PIN_LOW, OUTPUT);
-    // digitalWrite(POWER_PIN_LOW, LOW);
-
-    tlx493d_init(&dut, TLx493D_P3I8_e);
-    tlx493d_initCommunication(&dut, SPI);
-
-
-    tlx493d_init(&p3i8, TLx493D_P3I8_e);
-    tlx493d_initCommunication(&p3i8, SPI);
-
-#endif
-
-    digitalWrite(POWER_PIN_LOW, LOW);
-    // tlx493d_setDefaultConfig(&dut);
-    digitalWrite(POWER_PIN_LOW, HIGH);
-    
-
-    // Serial.println("setDefaultConfig done.");
-    // // frameworkReset(&dut);
-    // Serial.println("updateRegisterMap ...");
-    // readRegisters(&dut);
-    // Serial.println("updateRegisterMap done.");
-    // setDefaultConfig(&dut);
-    // Serial.println("2 setDefaultConfig done.");
 
     delay(100);
     Serial.println("setup done.");
@@ -117,17 +42,13 @@ void loop() {
     double valX = 0, valY = 0, valZ = 0;
     Serial.println("loop ...");
 
-    // digitalWrite(POWER_PIN_LOW, LOW);
     Serial.print(true == tlx493d_getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
-    // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Temperature is: ");
     Serial.print(temp);
     Serial.println("°C");
 
-    // digitalWrite(POWER_PIN_LOW, LOW);
     Serial.print(true == tlx493d_getMagneticField(&dut, &valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
-    // digitalWrite(POWER_PIN_LOW, HIGH);
 
     Serial.print("Value X is: ");
     Serial.print(valX);

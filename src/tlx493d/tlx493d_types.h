@@ -64,6 +64,7 @@ typedef enum {
 typedef enum {
     // 2nd generation
     TLx493D_BxByBz_e = 0,
+
     //  3rd generation
     TLx493D_BxByBzTemp_e,
     TLx493D_VHall_Bias_e,
@@ -160,30 +161,30 @@ typedef struct TLx493D_I2CParameters_t {
 typedef struct TLx493D_ComLibraryFunctions_t {
     union {
         TLx493D_OneParamsFuncPtr  spi_init;
-        TLx493D_OneParamsFuncPtr  i2c_init;
+        TLx493D_OneParamsFuncPtr  iic_init;
     } init;
 
     union {
         TLx493D_OneParamsFuncPtr  spi_deinit;
-        TLx493D_OneParamsFuncPtr  i2c_deinit;
+        TLx493D_OneParamsFuncPtr  iic_deinit;
     } deinit;
 
     union {
         TLx493D_TransferFuncPtr  spi_transfer;
-        TLx493D_TransferFuncPtr  i2c_transfer;
+        TLx493D_TransferFuncPtr  iic_transfer;
     } transfer;
 } TLx493D_ComLibraryFunctions_t;
 
 
 typedef union TLx493D_ComLibraryParameters_t {
     TLx493D_SPIParameters_t  spi_params;
-    TLx493D_I2CParameters_t  i2c_params;
+    TLx493D_I2CParameters_t  iic_params;
 } TLx493D_ComLibraryParameters_t;
 
 
 typedef union TLx493D_ComLibraryObject_t {
     TLx493D_SPIObject_t  *spi_obj;
-    TLx493D_I2CObject_t  *i2c_obj;
+    TLx493D_I2CObject_t  *iic_obj;
 } TLx493D_ComLibraryObject_t;
 
 
@@ -214,12 +215,6 @@ typedef bool (*TLx493D_GetMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, doubl
 
 // functions related to the "Config" register
 typedef bool (*TLx493D_SetMeasurementFuncPtr)(TLx493D_t *, TLx493D_MeasurementType_t);
-// typedef bool (*TLx493D_EnableTemperatureMeasurementFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_DisableTemperatureMeasurementFuncPtr)(TLx493D_t *);
-
-// typedef bool (*TLx493D_EnableAngularMeasurementFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_DisableAngularMeasurementFuncPtr)(TLx493D_t *);
-
 typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_t *, uint8_t);
 typedef bool (*TLx493D_SetSetSensitivityFuncPtr)(TLx493D_t *, TLx493D_SensitivityType_t);
 
@@ -228,7 +223,6 @@ typedef bool (*TLx493D_SetSetSensitivityFuncPtr)(TLx493D_t *, TLx493D_Sensitivit
 typedef bool (*TLx493D_SetDefaultConfigFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_SetIICAddressFuncPtr)(TLx493D_t *, TLx493D_IICAddressType_t);
 typedef bool (*TLx493D_Enable1ByteReadModeFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_Disable1ByteReadModeFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_EnableInterruptFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableInterruptFuncPtr)(TLx493D_t *);
@@ -237,14 +231,10 @@ typedef bool (*TLx493D_EnableCollisionAvoidanceFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableCollisionAvoidanceFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_SetPowerModeFuncPtr)(TLx493D_t *, TLx493D_PowerModeType_t);
-
 typedef bool (*TLx493D_SetUpdateRateFuncPtr)(TLx493D_t *, TLx493D_UpdateRateType_t);
 
 // functions related to the "Diag" register
 typedef bool (*TLx493D_HasValidDataFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_HasValidTemperatureDataFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_HasValidMagneticFieldDataFuncPtr)(TLx493D_t *);
-
 typedef bool (*TLx493D_IsFunctionalFuncPtr)(TLx493D_t *);
 
 
@@ -254,19 +244,10 @@ typedef bool (*TLx493D_HasWakeUpFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableWakeUpModeFuncPtr)(TLx493D_t *);
-
-// typedef bool (*TLx493D_SetLowerWakeUpThresholdXFuncPtr)(TLx493D_t *, int16_t);
-// typedef bool (*TLx493D_SetLowerWakeUpThresholdYFuncPtr)(TLx493D_t *, int16_t);
-// typedef bool (*TLx493D_SetLowerWakeUpThresholdZFuncPtr)(TLx493D_t *, int16_t);
-
-// typedef bool (*TLx493D_SetUpperWakeUpThresholdXFuncPtr)(TLx493D_t *, int16_t);
-// typedef bool (*TLx493D_SetUpperWakeUpThresholdYFuncPtr)(TLx493D_t *, int16_t);
-// typedef bool (*TLx493D_SetUpperWakeUpThresholdZFuncPtr)(TLx493D_t *, int16_t);
-
 typedef bool (*TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr)(TLx493D_t *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);
 typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, double, double, double, double);
 
-typedef bool (*TLx493D_SoftResetFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_SoftwareResetFuncPtr)(TLx493D_t *);
 
 
 // functions used internally and not accessible through the common interface
@@ -279,8 +260,6 @@ typedef bool (*TLx493D_HasValidBusParityFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_HasValidPD0BitFuncPtr)(TLx493D_t *);
-// typedef bool (*TLx493D_HasValidPD3BitFuncPtr)(TLx493D_t *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_t *);
 
@@ -318,12 +297,6 @@ typedef struct TLx493D_CommonFunctions_t {
 
     // functions related to the "Config" register
     TLx493D_SetMeasurementFuncPtr             setMeasurement;
-    // TLx493D_EnableTemperatureMeasurementFuncPtr   enableTemperatureMeasurement;
-    // TLx493D_DisableTemperatureMeasurementFuncPtr  disableTemperatureMeasurement;
-
-    // TLx493D_EnableAngularMeasurementFuncPtr     enableAngularMeasurement;
-    // TLx493D_DisableAngularMeasurementFuncPtr    disableAngularMeasurement;
-
     TLx493D_SetTriggerFuncPtr                   setTrigger;
     TLx493D_SetSetSensitivityFuncPtr            setSensitivity;
 
@@ -332,7 +305,6 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_SetDefaultConfigFuncPtr             setDefaultConfig;
     TLx493D_SetIICAddressFuncPtr                setIICAddress;
     TLx493D_Enable1ByteReadModeFuncPtr          enable1ByteReadMode;
-    // TLx493D_Disable1ByteReadModeFuncPtr         disable1ByteReadMode;
 
     TLx493D_EnableInterruptFuncPtr              enableInterrupt;
     TLx493D_DisableInterruptFuncPtr             disableInterrupt;
@@ -345,8 +317,6 @@ typedef struct TLx493D_CommonFunctions_t {
 
     // functions related to the "Diag" register
     TLx493D_HasValidDataFuncPtr                 hasValidData;
-    // TLx493D_HasValidTemperatureDataFuncPtr      hasValidTemperatureData;
-    // TLx493D_HasValidMagneticFieldDataFuncPtr    hasValidMagneticFieldData;
     TLx493D_IsFunctionalFuncPtr                 isFunctional;
 
 
@@ -357,18 +327,10 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_EnableWakeUpModeFuncPtr             enableWakeUpMode;
     TLx493D_DisableWakeUpModeFuncPtr            disableWakeUpMode;
 
-    // TLx493D_SetLowerWakeUpThresholdXFuncPtr     setLowerWakeUpThresholdX;
-    // TLx493D_SetLowerWakeUpThresholdYFuncPtr     setLowerWakeUpThresholdY; 
-    // TLx493D_SetLowerWakeUpThresholdZFuncPtr     setLowerWakeUpThresholdZ;
-
-    // TLx493D_SetUpperWakeUpThresholdXFuncPtr     setUpperWakeUpThresholdX;
-    // TLx493D_SetUpperWakeUpThresholdYFuncPtr     setUpperWakeUpThresholdY; 
-    // TLx493D_SetUpperWakeUpThresholdZFuncPtr     setUpperWakeUpThresholdZ;
-
     TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr setWakeUpThresholdsAsInteger;                
     TLx493D_SetWakeUpThresholdsFuncPtr          setWakeUpThresholds;                
 
-    TLx493D_SoftResetFuncPtr                    softReset;
+    TLx493D_SoftwareResetFuncPtr                softwareReset;
     
 
     // functions used internally and not accessible through the common interface
@@ -381,16 +343,14 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_HasValidConfigParityFuncPtr         hasValidConfigurationParity;
 
     TLx493D_HasValidTBitFuncPtr                 hasValidTBit;
-    // TLx493D_HasValidPD0BitFuncPtr               hasValidPD0Bit;
-    // TLx493D_HasValidPD3BitFuncPtr               hasValidPD3Bit;
     
     TLx493D_SetResetValuesFuncPtr               setResetValues;
+
+    TLx493D_SelectIICAddressFuncPtr             selectIICAddress;
 
     TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr   calculateRawMagneticFieldAtTemperature;
 
     TLx493D_GetSensitivityScaleFactorFuncPtr    getSensitivityScaleFactor;
-
-    TLx493D_SelectIICAddressFuncPtr             selectIICAddress;
 } TLx493D_CommonFunctions_t;
 
 

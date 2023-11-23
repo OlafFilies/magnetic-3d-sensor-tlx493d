@@ -14,9 +14,6 @@
 TLx493D_P3I8 dut(SPI);
 
 
-// TLx493D_P3I8 p3i8(SPI);
-
-
 void setup() {
     pinMode(POWER_PIN_LOW, OUTPUT);
     digitalWrite(POWER_PIN_LOW, HIGH);
@@ -27,8 +24,6 @@ void setup() {
 
     // dut.addSelectPin(POWER_PIN_LOW, OUTPUT, LOW, HIGH);
     dut.begin();
-
-    // p3i8.begin();
 
     delay(100);
     Serial.print("setup done.\n");

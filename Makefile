@@ -20,13 +20,19 @@ TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
                    -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_P2B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_W2B6_NEEDS_SENSOR \
-	               -DTEST_TLx493D_W2BW_NEEDS_SENSOR
+	               -DTEST_TLx493D_W2BW_NEEDS_SENSOR \
+				   -DTEST_TLx493D_P3B6_NEEDS_SENSOR \
+				   -DTEST_TLx493D_P3I8_NEEDS_SENSOR
+
 
 TESTS_NO_SENSOR=-DTEST_TLx493D_A1B6 \
                 -DTEST_TLx493D_A2B6 \
 				-DTEST_TLx493D_P2B6 \
 				-DTEST_TLx493D_W2B6 \
-			 	-DTEST_TLx493D_W2BW
+			 	-DTEST_TLx493D_W2BW \
+				-DTEST_TLx493D_P3B6 \
+				-DTEST_TLx493D_P3I8
+
 				
 
 A1B6_needsSensor: TESTS=-DTEST_TLx493D_A1B6 -DTEST_TLx493D_A1B6_NEEDS_SENSOR
@@ -44,11 +50,19 @@ W2B6: TESTS=-DTEST_TLx493D_W2B6
 W2BW_needsSensor: TESTS=-DTEST_TLx493D_W2BW -DTEST_TLx493D_W2BW_NEEDS_SENSOR
 W2BW: TESTS=-DTEST_TLx493D_W2BW
 
+P3B6_needsSensor: TESTS=-DTEST_TLx493D_P3B6 -DTEST_TLx493D_P3B6_NEEDS_SENSOR
+P3B6: TESTS=-DTEST_TLx493D_P3B6
+
+P3I8_needsSensor: TESTS=-DTEST_TLx493D_P3I8 -DTEST_TLx493D_P3I8_NEEDS_SENSOR
+P3I8: TESTS=-DTEST_TLx493D_P3I8
+
 A1B6_needsSensor A1B6 \
 A2B6_needsSensor A2B6 \
 P2B6_needsSensor P2B6 \
 W2B6_needsSensor W2B6 \
-W2BW_needsSensor W2BW : unity flash
+W2BW_needsSensor W2BW \
+P3B6_needsSensor P3B6 \
+P3I8_needsSensor P3I8: unity flash
 
 
 # sensor_common_needsSensor: TESTS=$(TEST_COMMON_NEEDS_SENSOR)
@@ -73,8 +87,8 @@ arduino: clean
 	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} build \;
 
 
-plain_c: arduino
-	cp examples/framework/arduino/read_sensors_plain_c.ino build/build.ino
+iic_plain_c: arduino
+	cp examples/framework/arduino/read_iic_sensor_plain_c.ino build/build.ino
  
 
 spi: arduino
@@ -83,6 +97,10 @@ spi: arduino
 
 iic: arduino
 	cp examples/framework/arduino/read_iic_sensor.ino build/build.ino
+ 
+
+2iic: arduino
+	cp examples/framework/arduino/read_2_iic_sensors.ino build/build.ino
 
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 unity flash monitor

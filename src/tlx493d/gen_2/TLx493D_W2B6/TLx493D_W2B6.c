@@ -106,11 +106,13 @@ TLx493D_CommonFunctions_t TLx493D_W2B6_commonFunctions = {
     .setDefaultConfig               = TLx493D_W2B6_setDefaultConfig,
     .setIICAddress                  = TLx493D_W2B6_setIICAddress,
     .enable1ByteReadMode            = TLx493D_W2B6_enable1ByteReadMode,
-    // .disable1ByteReadMode           = TLx493D_W2B6_disable1ByteReadMode,
+
     .enableInterrupt                = TLx493D_W2B6_enableInterrupt,
     .disableInterrupt               = TLx493D_W2B6_disableInterrupt,
+
     .enableCollisionAvoidance       = TLx493D_W2B6_enableCollisionAvoidance,
     .disableCollisionAvoidance      = TLx493D_W2B6_disableCollisionAvoidance,
+
     .setPowerMode                   = TLx493D_W2B6_setPowerMode,
     .setUpdateRate                  = TLx493D_W2B6_setUpdateRate,
 
@@ -125,18 +127,10 @@ TLx493D_CommonFunctions_t TLx493D_W2B6_commonFunctions = {
     .enableWakeUpMode               = TLx493D_W2B6_enableWakeUpMode,
     .disableWakeUpMode              = TLx493D_W2B6_disableWakeUpMode,
 
-    // .setLowerWakeUpThresholdX       = TLx493D_W2B6_setLowerWakeUpThresholdX,
-    // .setLowerWakeUpThresholdY       = TLx493D_W2B6_setLowerWakeUpThresholdY,
-    // .setLowerWakeUpThresholdZ       = TLx493D_W2B6_setLowerWakeUpThresholdZ,
-
-    // .setUpperWakeUpThresholdX       = TLx493D_W2B6_setUpperWakeUpThresholdX,
-    // .setUpperWakeUpThresholdY       = TLx493D_W2B6_setUpperWakeUpThresholdY,
-    // .setUpperWakeUpThresholdZ       = TLx493D_W2B6_setUpperWakeUpThresholdZ,
-
     .setWakeUpThresholdsAsInteger   = TLx493D_W2B6_setWakeUpThresholdsAsInteger,
     .setWakeUpThresholds            = TLx493D_W2B6_setWakeUpThresholds,
 
-    .softReset                      = TLx493D_W2B6_softReset,
+    .softwareReset                      = TLx493D_W2B6_softwareReset,
 
     // functions used internally and not accessible through the common interface
     .calculateFuseParity            = TLx493D_W2B6_calculateFuseParity,
@@ -146,6 +140,7 @@ TLx493D_CommonFunctions_t TLx493D_W2B6_commonFunctions = {
     .hasValidFuseParity             = TLx493D_W2B6_hasValidFuseParity,
     .hasValidBusParity              = TLx493D_W2B6_hasValidBusParity,
     .hasValidConfigurationParity    = TLx493D_W2B6_hasValidConfigurationParity,
+    
     .hasValidTBit                   = TLx493D_W2B6_hasValidTBit,
     
     .setResetValues                 = TLx493D_W2B6_setResetValues,
@@ -250,26 +245,6 @@ bool TLx493D_W2B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 }
 
 
-// bool TLx493D_W2B6_setTC0MagneticTemperatureCompensation(TLx493D_t *sensor) {
-//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, W2B6_TL_MAG_e, W2B6_CP_e, 0b00);
-// }
-
-
-// bool TLx493D_W2B6_setTC1MagneticTemperatureCompensation(TLx493D_t *sensor) {
-//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, W2B6_TL_MAG_e, W2B6_CP_e, 0b01);
-// }
-
-
-// bool TLx493D_W2B6_setTC2MagneticTemperatureCompensation(TLx493D_t *sensor) {
-//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, W2B6_TL_MAG_e, W2B6_CP_e, 0b10);
-// }
-
-
-// bool TLx493D_W2B6_setTC3MagneticTemperatureCompensation(TLx493D_t *sensor) {
-//     return tlx493d_gen_2_setMagneticTemperatureCompensation(sensor, W2B6_TL_MAG_e, W2B6_CP_e, 0b11);
-// }
-
-
 bool TLx493D_W2B6_setDefaultConfig(TLx493D_t *sensor) {
     return tlx493d_gen_2_setDefaultConfig(sensor, W2B6_CONFIG_REG_e, W2B6_MOD1_REG_e, W2B6_MOD2_REG_e, W2B6_CP_e, W2B6_CA_e, W2B6_INT_e);
 }
@@ -283,11 +258,6 @@ bool TLx493D_W2B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr
 bool TLx493D_W2B6_enable1ByteReadMode(TLx493D_t *sensor) {
     return tlx493d_gen_2_set1ByteReadMode(sensor, W2B6_PR_e, W2B6_FP_e, W2B6_PRD_e, 1);
 }
-
-
-// bool TLx493D_W2B6_disable1ByteReadMode(TLx493D_t *sensor) {
-//     return tlx493d_gen_2_set1ByteReadMode(sensor, W2B6_PR_e, W2B6_FP_e, W2B6_PRD_e, 0);
-// }
 
 
 bool TLx493D_W2B6_enableCollisionAvoidance(TLx493D_t *sensor) {
@@ -331,7 +301,6 @@ bool TLx493D_W2B6_isFunctional(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2B6_hasWakeUp(TLx493D_t *sensor) {
-    // return tlx493d_gen_2_hasWakeUp(sensor, W2B6_WA_e);
     return true;
 }
 
@@ -348,30 +317,6 @@ bool TLx493D_W2B6_disableWakeUpMode(TLx493D_t *sensor) {
     return tlx493d_gen_2_disableWakeUpMode(sensor, W2B6_WU_e, W2B6_CP_e);
 }
 
-// bool TLx493D_W2B6_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-//     return tlx493d_gen_2_setThreshold(sensor, W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, W2B6_CP_e, threshold);
-// }
-
-// bool TLx493D_W2B6_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
-//     return false;
-// }
-
-// bool TLx493D_W2B6_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
-//     return false;
-// }
-
-// bool TLx493D_W2B6_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-//     return false;
-// }
-
-// bool TLx493D_W2B6_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
-//     return false;
-// }
-
-// bool TLx493D_W2B6_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
-//     return false;
-// }
-
 
 bool TLx493D_W2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
     return false;
@@ -382,8 +327,8 @@ bool TLx493D_W2B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHi
     return false;
 }
 
-bool TLx493D_W2B6_softReset(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "softReset");
+bool TLx493D_W2B6_softwareReset(TLx493D_t *sensor) {
+    warnFeatureNotAvailableForSensorType(sensor, "softwareReset");
     return false;
 }
 
@@ -400,7 +345,6 @@ uint8_t TLx493D_W2B6_calculateBusParity(TLx493D_t *sensor) {
 
 uint8_t TLx493D_W2B6_calculateConfigurationParity(TLx493D_t *sensor) {
     return tlx493d_gen_2_calculateConfigurationParityWakeUp(sensor, W2B6_CP_e);
-    // return tlx493d_gen_2_calculateConfigurationParityWakeUp(sensor, W2B6_WA_e, W2B6_TST_e, W2B6_PH_e, W2B6_CP_e);
 }
 
 

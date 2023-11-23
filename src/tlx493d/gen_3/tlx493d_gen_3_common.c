@@ -18,7 +18,6 @@
 
 
 bool tlx493d_gen_3_readRegistersSPI(TLx493D_t *sensor) {
-    // sensor->regMap[0] = GEN_3_SPI_READ_BIT_ON | GEN_3_SPI_AUTO_INC_BIT_OFF;
     return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
@@ -96,15 +95,6 @@ double temp = (double) rawTemp;
 // valueX = x * sensitivity;
 // valueY = y * sensitivity;
 // valueZ = z * sensitivity;
-
-
-// void tlx493d_gen_3_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp,
-//                                                         uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
-//                                                         uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF) {
-
-//     tlx493d_gen_3_calculateMagneticField(sensor, x, y, z, bxMSBBF, bxLSBBF, byMSBBF, byLSBBF, bzMSBBF, bzLSBBF);
-//     tlx493d_gen_3_calculateTemperature(sensor, temp, tempMSBBF, tempLSBBF);
-// }
 
 
 uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {

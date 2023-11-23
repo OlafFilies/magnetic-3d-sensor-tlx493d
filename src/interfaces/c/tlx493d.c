@@ -57,9 +57,6 @@ bool tlx493d_deinit(TLx493D_t *sensor) {
 }
 
 
-/***
- * 
-*/
 bool tlx493d_readRegisters(TLx493D_t *sensor) {
    return sensor->functions->readRegisters(sensor);
 }
@@ -80,29 +77,17 @@ bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, u
 }
 
 
-/***
- * 
-*/
 bool tlx493d_getTemperature(TLx493D_t *sensor, double *temperature) {
-   // tlx493d_common_getTemperature(sensor, temp);
    return sensor->functions->getTemperature(sensor, temperature);
 }
 
 
-/***
- * 
-*/
 bool tlx493d_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z ) {
-   // tlx493d_common_getMagneticField(sensor, x, y, z);
    return sensor->functions->getMagneticField(sensor, x, y, z);
 }
 
 
-/***
- * 
-*/
 bool tlx493d_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temperature) {
-   // tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
    return sensor->functions->getMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
@@ -166,13 +151,6 @@ bool tlx493d_hasValidData(TLx493D_t *sensor) {
    return sensor->functions->hasValidData(sensor);
 }
 
-// bool tlx493d_hasValidTemperatureData(TLx493D_t *sensor) {
-//    return sensor->functions->hasValidTemperatureData(sensor);
-// }
-
-// bool tlx493d_hasValidMagneticFieldData(TLx493D_t *sensor) {
-//    return sensor->functions->hasValidMagneticFieldData(sensor);
-// }
 
 bool tlx493d_isFunctional(TLx493D_t *sensor) {
    return sensor->functions->isFunctional(sensor);
@@ -196,42 +174,20 @@ bool tlx493d_disableWakeUpMode(TLx493D_t *sensor) {
    return sensor->functions->disableWakeUpMode(sensor);
 }
 
-// bool tlx493d_setUpperWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-//    return sensor->functions->setUpperWakeUpThresholdX(sensor, threshold);
-// }
 
-// bool tlx493d_setUpperWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
-//    return sensor->functions->setUpperWakeUpThresholdY(sensor, threshold);
-// }
-
-// bool tlx493d_setUpperWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
-//    return sensor->functions->setUpperWakeUpThresholdZ(sensor, threshold);
-// }
-
-// bool tlx493d_setLowerWakeUpThresholdX(TLx493D_t *sensor, int16_t threshold) {
-//    return sensor->functions->setLowerWakeUpThresholdX(sensor, threshold);
-// }
-
-// bool tlx493d_setLowerWakeUpThresholdY(TLx493D_t *sensor, int16_t threshold) {
-//    return sensor->functions->setLowerWakeUpThresholdY(sensor, threshold);
-// }
-
-// bool tlx493d_setLowerWakeUpThresholdZ(TLx493D_t *sensor, int16_t threshold) {
-//    return sensor->functions->setLowerWakeUpThresholdZ(sensor, threshold);
-// }
-
-bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, 
+                                        int16_t zl_th, int16_t zh_th) {
    return sensor->functions->setWakeUpThresholdsAsInteger(sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
 }
 
-bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh,
+                                 double zLow, double zHigh) {
    return sensor->functions->setWakeUpThresholds(sensor, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
 
-bool tlx493d_softReset(TLx493D_t *sensor) {
-   return false;
-//    return sensor->functions->reset(sensor);
+bool tlx493d_softwareReset(TLx493D_t *sensor) {
+   return sensor->functions->softwareReset(sensor);
 }
 
 
@@ -240,6 +196,7 @@ const char *tlx493d_getTypeAsString(TLx493D_t *sensor) {
 }
 
 
-void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
+void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+                                                    double mT, int16_t *rawMF) {
    sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, rawTemp, sens, mT, rawMF);
 }

@@ -1,5 +1,5 @@
-#ifndef TLX493D_SPI_LIB_HPP
-#define TLX493D_SPI_LIB_HPP
+#ifndef TLX493D_SPICLASS_WRAPPER_HPP
+#define TLX493D_SPICLASS_WRAPPER_HPP
 
 
 // std includes
@@ -19,14 +19,11 @@
 #define GEN_3_SPI_AUTO_INC_BIT_OFF      0x00
 
 
-template<typename Protocol> class SPIClassWrapper {
-};
+class SPIClassWrapper {
 
+    public:
 
-template<> class SPIClassWrapper<SPIClass> {
-   public:
-
-        SPIClassWrapper(SPIClass &comif) : spi(comif) {
+        SPIClassWrapper(SPIClass &bus) : spi(bus) {
         }
 
 
@@ -81,4 +78,4 @@ template<> class SPIClassWrapper<SPIClass> {
 };
 
 
-#endif // TLX493D_SPI_LIB_HPP
+#endif // TLX493D_SPICLASS_WRAPPER_HPP
