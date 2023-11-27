@@ -35,7 +35,7 @@
 #define GEN_3_TEMP_OFFSET               4200.0
 #define GEN_3_TEMP_REF                  25.0
 
-// I2C
+// IIC address
 // A0
 #define GEN_3_STD_IIC_ADDR_WRITE_A0     0xBA
 #define GEN_3_STD_IIC_ADDR_READ_A0      0xBB
@@ -51,16 +51,6 @@
 // A3
 #define GEN_3_STD_IIC_ADDR_WRITE_A3     0x8C
 #define GEN_3_STD_IIC_ADDR_READ_A3      0x8D
-
-
-// SPI
-#define GEN_3_SPI_READ_WRITE_BIT        0x80
-#define GEN_3_SPI_READ_BIT_ON           0x80
-#define GEN_3_SPI_WRITE_BIT_OFF         0x00
-
-#define GEN_3_SPI_AUTO_INC_BIT          0x60
-#define GEN_3_SPI_AUTO_INC_BIT_ON       0x60
-#define GEN_3_SPI_AUTO_INC_BIT_OFF      0x00
 
 
 #define GEN_3_REG_MAP_SIZE              27

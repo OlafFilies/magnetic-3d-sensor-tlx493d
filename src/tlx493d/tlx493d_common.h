@@ -6,6 +6,13 @@
 #include "tlx493d_types.h"
 
 
+#ifdef __cplusplus
+
+extern "C" {
+
+#endif
+
+
 // /**
 //  * @brief Initializes the XENSIV™ TLx493D-W2B6 magnetic 3D sensor
 //  * It initializes the sensor structure and sets the I2C communication protocol
@@ -14,7 +21,7 @@
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_init(TLx493D_ts *sensor, uint8_t regMapSize, TLx493D_Register_ts *regDef, TLx493D_CommonFunctions_ts *commonFuncs, TLx493D_SupportedSensorType_te sensorType, TLx493D_SupportedComLibraryInterfaceType_te comIFType);
+bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register_t *regDef, TLx493D_CommonFunctions_t *commonFuncs, TLx493D_SupportedSensorType_t sensorType, TLx493D_SupportedComLibraryInterfaceType_t comIFType);
 
 
 // /**
@@ -25,14 +32,25 @@ bool tlx493d_common_init(TLx493D_ts *sensor, uint8_t regMapSize, TLx493D_Registe
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_deinit(TLx493D_ts *sensor);
+bool tlx493d_common_deinit(TLx493D_t *sensor);
 
 
-void tlx493d_common_getBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t *bitFieldValue);
-void tlx493d_common_setBitfield(TLx493D_ts *sensor, uint8_t bitField, uint8_t newBitFieldValue);
+void    tlx493d_common_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
+uint8_t tlx493d_common_returnBitfield(TLx493D_t *sensor, uint8_t bitField);
+void    tlx493d_common_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBitFieldValue);
 
-bool tlx493d_common_writeRegister(TLx493D_ts* sensor, uint8_t bitField);
-bool tlx493d_common_readRegisters(TLx493D_ts *sensor);
+bool tlx493d_common_writeRegister(TLx493D_t* sensor, uint8_t bitField);
+bool tlx493d_common_readRegisters(TLx493D_t *sensor);
+
+
+void tlx493d_common_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, uint16_t *temperature);
+bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature);
+
+void tlx493d_common_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
+                                              uint8_t bzMSBBF, uint8_t bzLSBBF, uint16_t *x, uint16_t *y, uint16_t *z);
+bool tlx493d_common_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z);
+
+bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature);
 
 
 // /**
@@ -44,7 +62,7 @@ bool tlx493d_common_readRegisters(TLx493D_ts *sensor);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getTemperature(TLx493D_ts *sensor, double *temp);
+bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temperature);
 
 
 // /**
@@ -58,7 +76,7 @@ bool tlx493d_common_getTemperature(TLx493D_ts *sensor, double *temp);
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z);
+bool tlx493d_common_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z);
 
 
 // /**
@@ -72,7 +90,7 @@ bool tlx493d_common_getMagneticField(TLx493D_ts *sensor, double *x, double *y, d
 //  * @return true - If successful
 //  * @return false - If unsuccessful
 //  */
-bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp);
+bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temperature);
 
 
 // utilities
@@ -80,7 +98,29 @@ uint8_t tlx493d_common_calculateParity(uint8_t data);
 uint8_t tlx493d_common_getOddParity(uint8_t parity);
 uint8_t tlx493d_common_getEvenParity(uint8_t parity);
 
-void tlx493d_common_concatBytes(TLx493D_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
+void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
+
+const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor);
+
+void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr);
+
+void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
+
+void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF, double *sf);
+
+
+void warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
+void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);
+void errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t field);
+void errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func);
+void errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType);
+
+
+#ifdef __cplusplus
+
+}
+
+#endif
 
 
 #endif // TLX493D_COMMON_H

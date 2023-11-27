@@ -1,34 +1,36 @@
-#ifndef TLx493D_HPP
-#define TLx493D_HPP
+#ifndef TLX493D_HPP
+#define TLX493D_HPP
 
 // std includes
 #include <stdbool.h>
 #include <stdint.h>
 
 // project cpp includes
-#include "arduino_defines.h"
+#include "types.hpp"
+#include "IICUsingTwoWire.hpp"
+#include "SPIUsingSPIClass.hpp"
+#include "TLx493DBase.hpp"
 
 // project c includes
-extern "C" {
-    #include "tlx493d_types.h"
-    #include "cInterface.h"
-}
+#include "tlx493d_types.h"
+#include "tlx493d.h"
 
 
-// keyword "export" not supported by current Arduino C++ compiler, therefore definitions must go here. Update C++ compiler to newer version ???
-// export
-template<typename BoardSupportClass, template<typename> typename ComLibrary, typename ComIF,
-         TLx493D_SupportedSensorType_te sensorType,
-         TLx493D_SupportedComLibraryInterfaceType_te comLibIFType = TLx493D_I2C_e> class TLx493D {
+/***
+ * Specialization for IIC interface.
+*/
+template<typename BoardSupportClass,
+         TLx493D_SupportedSensorType_t sensorType> class TLx493D<BoardSupportClass, TwoWireWrapper,
+                                                                 TwoWire, sensorType> : public TLx493DBase {
+
     public:
-        typedef BoardSupportClass   BoardSupportClassType;
-        typedef ComLibrary<ComIF>   ComLibraryIFType;
-        typedef ComIF               ComIFType;
+
+        typedef BoardSupportClass  BoardSupportClassType;
+        typedef TwoWireWrapper     BusWrapperType;
 
  
-        TLx493D(ComIF &comIF) : bsc(), comLIF(comIF), sensor() {
+        TLx493D(TwoWire &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
             ::tlx493d_init(&sensor, sensorType);
-            sensor.comIFType = comLibIFType;
         }
 
 
@@ -38,7 +40,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
         void init() {
             bsc.init();
-            TLx493D_initCommunication(&sensor, comLIF); // includes call to comLIF.init();
+            tlx493d_initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
             setDefaultConfig();
         }
 
@@ -50,7 +52,7 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
 
         void deinit() {
             ::tlx493d_deinit(&sensor);
-            comLIF.deinit();
+            busWrapper.deinit();
             bsc.deinit();
         }
 
@@ -60,168 +62,68 @@ template<typename BoardSupportClass, template<typename> typename ComLibrary, typ
         }
 
 
-        bool setDefaultConfig() {
-            return ::tlx493d_setDefaultConfig(&sensor);
+    private:
+
+        TLx493D(TwoWire &bus);
+
+
+        BoardSupportClassType     bsc;
+        BusWrapperType            busWrapper;
+        TLx493D_IICAddressType_t  iicAddress;
+};
+
+
+/***
+ * Specialization for SPI interface.
+*/
+template<typename BoardSupportClass,
+         TLx493D_SupportedSensorType_t sensorType> class TLx493D<BoardSupportClass, SPIClassWrapper,
+                                                                 SPIClass, sensorType> : public TLx493DBase {
+
+    public:
+
+        typedef BoardSupportClass  BoardSupportClassType;
+        typedef SPIClassWrapper    BusWrapperType;
+
+ 
+        TLx493D(SPIClass &bus) : bsc(), busWrapper(bus) {
+            ::tlx493d_init(&sensor, sensorType);
         }
 
 
-        bool getTemperature(double *temperature) {
-            return ::tlx493d_getTemperature(&sensor, temperature);
+        ~TLx493D() {
         }
 
 
-        bool getMagneticField(double *x, double *y, double *z) {
-            return ::tlx493d_getMagneticField(&sensor, x, y, z);
+        void init() {
+            bsc.init();
+            tlx493d_initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
+            setDefaultConfig();
         }
 
 
-        // bool enableTemperatureMeasurement() {
-        //     return ::tlx493d_enableTemperatureMeasurement(&sensor);
-        // }
-
-
-        // bool disableTdisableTemperatureMeasurementemperature() {
-        //     return ::tlx493d_disableTemperatureMeasurement(&sensor);
-        // }
-
-
-        bool enableInterrupt() {
-            return ::tlx493d_enableInterrupt(&sensor);
+        void begin() {
+            init();
         }
 
 
-        bool disableInterrupt() {
-            return ::tlx493d_disableInterrupt(&sensor);
+        void deinit() {
+            ::tlx493d_deinit(&sensor);
+            busWrapper.deinit();
+            bsc.deinit();
         }
 
 
-        bool enableCollisionAvoidance() {
-            return ::tlx493d_enableCollisionAvoidance(&sensor);
-        }
-
-
-        bool disableCollisionAvoidance() {
-            return ::tlx493d_disableCollisionAvoidance(&sensor);
-        }
-
-
-        bool setPowerMode(TLx493D_PowerModeType_te mode) {
-            return ::tlx493d_setPowerMode(&sensor, mode);
-        }
-
-        
-        bool setIICAddress(uint8_t addr) {
-            return ::tlx493d_setIICAddress(&sensor, addr);
-        }
-
-        
-        // bool enableAngularMeasurement() {
-        //     return ::tlx493d_enableAngularMeasurement(&sensor);
-        // }
-
-
-        // bool disableAngularMeasurement() {
-        //     return ::tlx493d_disableAngularMeasurement(&sensor);
-        // }
-
-
-        bool setTrigger(uint8_t bits) {
-            return ::tlx493d_setTrigger(&sensor, bits);
-        }
-
-        
-        bool setUpdateRate(uint8_t bit) {
-            return ::tlx493d_setUpdateRate(&sensor, bit);
-        }
-
-        
-        bool setSensitivity(TLx493D_SensitivityType_te range) {
-            return ::tlx493d_setSensitivity(&sensor, range);
-        }
-
-
-        bool isWakeUpActive() {
-            return ::tlx493d_isWakeUpActive(&sensor);
-        }
-
-
-        bool enableWakeUpMode() {
-            return ::tlx493d_enableWakeUpMode(&sensor);
-        }
-
-
-        bool disableWakeUpMode() {
-            return ::tlx493d_disableWakeUpMode(&sensor);
-        }
-        
-        bool setLowerWakeUpThresholdX(int16_t threshold) {
-            return ::tlx493d_setLowerWakeUpThresholdX(&sensor, threshold);
-        }
-
-        bool setLowerWakeUpThresholdY(int16_t threshold) {
-            return ::tlx493d_setLowerWakeUpThresholdY(&sensor, threshold);
-        }
-
-        bool setLowerWakeUpThresholdZ(int16_t threshold) {
-            return ::tlx493d_setLowerWakeUpThresholdZ(&sensor, threshold);
-        }
-
-        bool setUpperWakeUpThresholdX(int16_t threshold) {
-            return ::tlx493d_setUpperWakeUpThresholdX(&sensor, threshold);
-        }
-
-        bool setUpperWakeUpThresholdY(int16_t threshold) {
-            return ::tlx493d_setUpperWakeUpThresholdY(&sensor, threshold);
-        }
-
-        bool setUpperWakeUpThresholdZ(int16_t threshold) {
-            return ::tlx493d_setUpperWakeUpThresholdZ(&sensor, threshold);
-        }
-
-        bool setWakeUpThresholdsAsInteger(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
-            return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
-        }
-
-        bool setWakeUpThresholds(double xl_th, double xh_th, double yl_th, double yh_th, double zl_th, double zh_th) {
-            return ::tlx493d_setWakeUpThresholds(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
-        }
-
-
-        TLx493D_ts *getSensor() {
-            return &sensor;
-        }
-
-
-        TLx493D_SupportedSensorType_te getSensorType() {
-            return sensor.sensorType;
-        }
-
-
-        TLx493D_SupportedComLibraryInterfaceType_te getComLibIFType() {
-            return sensor.comIFType;
-        }
-
-
-        uint8_t *getRegisterMap() {
-            return sensor.regMap;
-        }
-
-
-        uint8_t getRegisterMapSize() {
-            return sensor.regMapSize;
-        }
-
-
-        uint8_t getI2CAddress() {
-            return sensor.comLibIFParams.i2c_params.address;
+        void end() {
+            deinit();
         }
 
 
     private:
 
-        BoardSupportClassType  bsc;
-        ComLibraryIFType       comLIF;
-        TLx493D_ts              sensor;
+        BoardSupportClassType     bsc;
+        BusWrapperType            busWrapper;
 };
 
-#endif // TLx493D_HPP
+
+#endif // TLX493D_HPP

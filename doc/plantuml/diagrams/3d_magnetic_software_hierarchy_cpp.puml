@@ -7,54 +7,65 @@
     System_Boundary(ecosystem, "XENSIV<sup><size:10>TM</size></sup> magnetic position sensor ecosystem software hierarchy") {
 
         System_Boundary(cppIF, "C++ interface") {
-            Container(sensorTemp, "Sensor wrapper class", "C++ template container class")
+            Container(sensorTemp, "TLx493D class", "C++ template container class")
 
             System_Boundary(frameworkIF, "Interfaces") {
-               Container(bscIF, "Board support interface", "Interface for shield / interface specific settings", "[C++]")
-               Container(comLibIF, "Communication library interface", "Interface to set of communication functions", "[C++]")
+               Container(bscIF, "Board support interface", "Interface for shield, kit or device specific supply settings", "[C++]")
+               Container(comLibIF, "Communication library interface", "Interface to a set of communication functions", "[C++]")
 
                bscIF -[hidden]down- comLibIF
             }
             
-
-            Container(sensorIF, "Sensor interface", "Core library interface", "[C++]")
-
             Rel(sensorTemp, bscIF, "has")
             Rel(sensorTemp, comLibIF, "has")
-            Rel(sensorTemp, sensorIF, "has")
         }
 
         System_Boundary(cIF, "C core library") {
-            Container(cIFFiles, "C interface", "sensors_common.[hc], sensor_types.h", "Forward declaration of framework specific types, function pointer definition, interface functions")
+            Container(cIFFiles, "C interface", "Delegate task to specific device", "[C]")
 
             System_Boundary(sensorBlock, "Sensor specific implementations") {
-                Container(a1b6, "TLE493D_A1B6", "Sensor related function definitions, function pointer assignment")
-                Container(a2b6, "TLE493D_A2B6", "Sensor related function definitions, function pointer assignment")
-                Container(p2b6, "TLE493D_P2B6", "Sensor related function definitions, function pointer assignment")
-                Container(w2b6, "TLE493D_W2B6", "Sensor related function definitions, function pointer assignment")
-                Container(etc, "...", "Sensor related functions")
+                Container(p2b6, "TLE493D_P2B6", "Sensor related function definitions and register setup", "[C]")
+                Container(w2b6, "TLE493D_W2B6", "Sensor related function definitions and register setup", "[C]")
+                Container(etc, "...", "Sensor related function definitions and register setup", "[C]")
+                Container(a1b6, "TLE493D_A1B6", "Sensor related function definitions and register setup", "[C]")
+                Container(a2b6, "TLE493D_A2B6", "Sensor related function definitions and register setup", "[C]")
 
-                BiRel(cIFFiles, a1b6, "uses")
-                BiRel(cIFFiles, a2b6, "uses")
-                BiRel(cIFFiles, p2b6, "uses")
-                BiRel(cIFFiles, w2b6, "uses")
-                BiRel(cIFFiles, etc, "uses")
+                Rel(cIFFiles, a1b6, "delegates to")
+                Rel(cIFFiles, a2b6, "delegates to")
+                Rel(cIFFiles, p2b6, "delegates to")
+                Rel(cIFFiles, w2b6, "delegates to")
+                Rel(cIFFiles, etc, "delegates to")
             }
+
+            System_Boundary(common_code, "Common code") {
+                Container(gen2, "Gen. 2 common code", "Define code common to generation 2", "[C]")
+                Container(gen3, "Gen. 3 common code", "Define code common to generation 3", "[C]")
+                Container(common, "Generic common code", "Define code common to all generations", "[C]")
+
+                Rel(gen2, common, "uses")
+                Rel(gen3, common, "uses")
+            }
+
+        
+
+            Rel(sensorBlock, common_code, "uses")
+
+            p2b6 -[hidden]down- common_code
         }
 
-        Rel(sensorIF, cIFFiles, "uses")
+        Rel(sensorTemp, cIFFiles, "delegates to")
 
         System_Boundary(framework, "Framework specific implementations\n[selected by build process]") {
-            Container(bsc, "Board support implementation", "Define forward declared types and functionality", "[C++]")
-            Container(comLib, "Communication library implementation", "Define forward declared types and functionality", "[C++]")
+            Container(bsc, "Board support implementation", "Power on/off boards, handle chip select", "[C/C++]")
+            Container(comLib, "Communication library implementation", "Protocols IIC, SPI, ...", "[C/C++]")
             bsc -[hidden]down- comLib
         }
 
         Rel_R(bsc, bscIF, "implements")
         Rel_R(comLib, comLibIF, "implements")
 
-        BiRel_R(bscIF, cIFFiles, "uses (tbd)", $tags="async")
-        BiRel_R(comLibIF, cIFFiles, "uses")
+        Rel_R(sensorBlock, bscIF, "uses (tbd)", $tags="async")
+        Rel_R(sensorBlock, comLibIF, "uses")
     }
 
 @enduml

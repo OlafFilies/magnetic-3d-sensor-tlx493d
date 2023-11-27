@@ -1,19 +1,12 @@
-/**
- * @file        TLV493D_P2B6.c
- * @author      Infineon Technologies AG
- * @brief       Contains the implementation of the complete sensor functionality
- * @copyright   Copyright (c) 2023
- *
- * SPDX-License-Identifier: MIT
- */
-
+// std includes
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 // project c includes
+#include "Logger.h"
+
 // common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
@@ -25,323 +18,430 @@
 
 // sensor specific includes
 #include "TLx493D_P2B6_defines.h"
+#include "TLx493D_P2B6_enums.h"
 #include "TLx493D_P2B6.h"
 
 
-/*
-  Listing of all register names for this sensor.
-  Used to index "TLx493D_P2B6_regDef" defined below, so index values must match !
-*/
-typedef enum {
-               BX_MSB = 0,
-               BY_MSB,
-               BZ_MSB,
-               TEMP_MSB,
-               BX_LSB,
-               BY_LSB,
-               TEMP_LSB,
-               ID,
-               BZ_LSB,
-               P,
-               FF,
-               CF,
-               T,
-               PD3,
-               PD0,
-               FRM,
-               XL,
-               XH,
-               YL,
-               YH,
-               ZL,
-               ZH,
-               WA,
-               WU,
-               XH_LSB,
-               XL_LSB,
-               TST,
-               YH_LSB,
-               YL_LSB,
-               PH,
-               ZH_LSB,
-               ZL_LSB,
-               DT,
-               AM,
-               TRIG,
-               X2,
-               TL_MAG,
-               CP,
-               FP,
-               IICADR,
-               PR,
-               CA,
-               INT,
-               MODE,
-               PRD,
-               TYPE,
-               HWV } TLx493D_P2B6_registerNames_te;
-
-
-TLx493D_Register_ts TLx493D_P2B6_regDef[] = {
-    {BX_MSB,    TLx493D_READ_MODE_e,       0x00, 0xFF, 0, 8},
-    {BY_MSB,    TLx493D_READ_MODE_e,       0x01, 0xFF, 0, 8},
-    {BZ_MSB,    TLx493D_READ_MODE_e,       0x02, 0xFF, 0, 8},
-    {TEMP_MSB,  TLx493D_READ_MODE_e,       0x03, 0xFF, 0, 8},
-    {BX_LSB,    TLx493D_READ_MODE_e,       0x04, 0xF0, 4, 4},
-    {BY_LSB,    TLx493D_READ_MODE_e,       0x04, 0x0F, 0, 4},
-    {TEMP_LSB,  TLx493D_READ_MODE_e,       0x05, 0xC0, 6, 2},
-    {ID,        TLx493D_READ_MODE_e,       0x05, 0x30, 4, 2},
-    {BZ_LSB,    TLx493D_READ_MODE_e,       0x05, 0x0F, 0, 4},
-    {P,         TLx493D_READ_MODE_e,       0x06, 0x80, 7, 1},
-    {FF,        TLx493D_READ_MODE_e,       0x06, 0x40, 6, 1},
-    {CF,        TLx493D_READ_MODE_e,       0x06, 0x20, 5, 1},
-    {T,         TLx493D_READ_MODE_e,       0x06, 0x10, 4, 1},
-    {PD3,       TLx493D_READ_MODE_e,       0x06, 0x08, 3, 1},
-    {PD0,       TLx493D_READ_MODE_e,       0x06, 0x04, 2, 1},
-    {FRM,       TLx493D_READ_MODE_e,       0x06, 0x03, 0, 2},
-    {XL,        TLx493D_READ_WRITE_MODE_e, 0x07, 0xFF, 0, 8},
-    {XH,        TLx493D_READ_WRITE_MODE_e, 0x08, 0xFF, 0, 8},
-    {YL,        TLx493D_READ_WRITE_MODE_e, 0x09, 0xFF, 0, 8},
-    {YH,        TLx493D_READ_WRITE_MODE_e, 0x0A, 0xFF, 0, 8},
-    {ZL,        TLx493D_READ_WRITE_MODE_e, 0x0B, 0xFF, 0, 8},
-    {ZH,        TLx493D_READ_WRITE_MODE_e, 0x0C, 0xFF, 0, 8},
-    {WA,        TLx493D_READ_MODE_e,       0x0D, 0x80, 7, 1},
-    {WU,        TLx493D_READ_WRITE_MODE_e, 0x0D, 0x40, 6, 1},
-    {XH_LSB,    TLx493D_READ_WRITE_MODE_e, 0x0D, 0x38, 3, 3},
-    {XL_LSB,    TLx493D_READ_WRITE_MODE_e, 0x0D, 0x07, 0, 3},
-    {TST,       TLx493D_READ_WRITE_MODE_e, 0x0E, 0xC0, 6, 2},
-    {YH_LSB,    TLx493D_READ_WRITE_MODE_e, 0x0E, 0x38, 3, 3},  
-    {YL_LSB,    TLx493D_READ_WRITE_MODE_e, 0x0E, 0x07, 0, 3},
-    {PH,        TLx493D_READ_WRITE_MODE_e, 0x0F, 0xC0, 6, 2},
-    {ZH_LSB,    TLx493D_READ_WRITE_MODE_e, 0x0F, 0x38, 3, 3},
-    {ZL_LSB,    TLx493D_READ_WRITE_MODE_e, 0x0F, 0x07, 0, 3},
-    {DT,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x80, 7, 1},
-    {AM,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x40, 6, 1},
-    {TRIG,      TLx493D_READ_WRITE_MODE_e, 0x10, 0x30, 4, 2},
-    {X2,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x08, 3, 1},
-    {TL_MAG,    TLx493D_READ_WRITE_MODE_e, 0x10, 0x06, 1, 2},
-    {CP,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x01, 0, 1},
-    {FP,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x80, 7, 1},
-    {IICADR,    TLx493D_READ_WRITE_MODE_e, 0x11, 0x60, 5, 2},
-    {PR,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x10, 4, 1},
-    {CA,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x08, 3, 1},
-    {INT,       TLx493D_READ_WRITE_MODE_e, 0x11, 0x04, 2, 1},
-    {MODE,      TLx493D_READ_WRITE_MODE_e, 0x11, 0x03, 0, 2},
-    {PRD,       TLx493D_READ_WRITE_MODE_e, 0x13, 0xE0, 5, 3},
-    {TYPE,      TLx493D_READ_MODE_e,       0x16, 0x30, 4, 2},
-    {HWV,       TLx493D_READ_MODE_e,       0x16, 0x0F, 0, 4}
+TLx493D_Register_t TLx493D_P2B6_regDef[] = {
+    { P2B6_BX_MSBS_e,    TLx493D_READ_MODE_e,       0x00, 0xFF, 0, 8 },
+    { P2B6_BY_MSBS_e,    TLx493D_READ_MODE_e,       0x01, 0xFF, 0, 8 },
+    { P2B6_BZ_MSBS_e,    TLx493D_READ_MODE_e,       0x02, 0xFF, 0, 8 },
+    { P2B6_TEMP_MSBS_e,  TLx493D_READ_MODE_e,       0x03, 0xFF, 0, 8 },
+    { P2B6_BX_LSBS_e,    TLx493D_READ_MODE_e,       0x04, 0xF0, 4, 4 },
+    { P2B6_BY_LSBS_e,    TLx493D_READ_MODE_e,       0x04, 0x0F, 0, 4 },
+    { P2B6_TEMP_LSBS_e,  TLx493D_READ_MODE_e,       0x05, 0xC0, 6, 2 },
+    { P2B6_ID_e,         TLx493D_READ_MODE_e,       0x05, 0x30, 4, 2 },
+    { P2B6_BZ_LSBS_e,    TLx493D_READ_MODE_e,       0x05, 0x0F, 0, 4 },
+    { P2B6_P_e,          TLx493D_READ_MODE_e,       0x06, 0x80, 7, 1 },
+    { P2B6_FF_e,         TLx493D_READ_MODE_e,       0x06, 0x40, 6, 1 },
+    { P2B6_CF_e,         TLx493D_READ_MODE_e,       0x06, 0x20, 5, 1 },
+    { P2B6_T_e,          TLx493D_READ_MODE_e,       0x06, 0x10, 4, 1 },
+    { P2B6_PD3_e,        TLx493D_READ_MODE_e,       0x06, 0x08, 3, 1 },
+    { P2B6_PD0_e,        TLx493D_READ_MODE_e,       0x06, 0x04, 2, 1 },
+    { P2B6_FRM_e,        TLx493D_READ_MODE_e,       0x06, 0x03, 0, 2 },
+    { P2B6_XL_e,         TLx493D_READ_WRITE_MODE_e, 0x07, 0xFF, 0, 8 },
+    { P2B6_XH_e,         TLx493D_READ_WRITE_MODE_e, 0x08, 0xFF, 0, 8 },
+    { P2B6_YL_e,         TLx493D_READ_WRITE_MODE_e, 0x09, 0xFF, 0, 8 },
+    { P2B6_YH_e,         TLx493D_READ_WRITE_MODE_e, 0x0A, 0xFF, 0, 8 },
+    { P2B6_ZL_e,         TLx493D_READ_WRITE_MODE_e, 0x0B, 0xFF, 0, 8 },
+    { P2B6_ZH_e,         TLx493D_READ_WRITE_MODE_e, 0x0C, 0xFF, 0, 8 },
+    { P2B6_WA_e,         TLx493D_READ_MODE_e,       0x0D, 0x80, 7, 1 },
+    { P2B6_WU_e,         TLx493D_READ_WRITE_MODE_e, 0x0D, 0x40, 6, 1 },
+    { P2B6_XH_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0D, 0x38, 3, 3 },
+    { P2B6_XL_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0D, 0x07, 0, 3 },
+    { P2B6_TST_e,        TLx493D_READ_WRITE_MODE_e, 0x0E, 0xC0, 6, 2 },
+    { P2B6_YH_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0E, 0x38, 3, 3 },  
+    { P2B6_YL_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0E, 0x07, 0, 3 },
+    { P2B6_PH_e,         TLx493D_READ_WRITE_MODE_e, 0x0F, 0xC0, 6, 2 },
+    { P2B6_ZH_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0F, 0x38, 3, 3 },
+    { P2B6_ZL_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0F, 0x07, 0, 3 },
+    { P2B6_DT_e,         TLx493D_READ_WRITE_MODE_e, 0x10, 0x80, 7, 1 },
+    { P2B6_AM_e,         TLx493D_READ_WRITE_MODE_e, 0x10, 0x40, 6, 1 },
+    { P2B6_TRIG_e,       TLx493D_READ_WRITE_MODE_e, 0x10, 0x30, 4, 2 },
+    { P2B6_X2_e,         TLx493D_READ_WRITE_MODE_e, 0x10, 0x08, 3, 1 },
+    { P2B6_TL_MAG_e,     TLx493D_READ_WRITE_MODE_e, 0x10, 0x06, 1, 2 },
+    { P2B6_CP_e,         TLx493D_READ_WRITE_MODE_e, 0x10, 0x01, 0, 1 },
+    { P2B6_FP_e,         TLx493D_READ_WRITE_MODE_e, 0x11, 0x80, 7, 1 },
+    { P2B6_IICADR_e,     TLx493D_READ_WRITE_MODE_e, 0x11, 0x60, 5, 2 },
+    { P2B6_PR_e,         TLx493D_READ_WRITE_MODE_e, 0x11, 0x10, 4, 1 },
+    { P2B6_CA_e,         TLx493D_READ_WRITE_MODE_e, 0x11, 0x08, 3, 1 },
+    { P2B6_INT_e,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x04, 2, 1 },
+    { P2B6_MODE_e,       TLx493D_READ_WRITE_MODE_e, 0x11, 0x03, 0, 2 },
+    { P2B6_PRD_e,        TLx493D_READ_WRITE_MODE_e, 0x13, 0xE0, 5, 3 },
+    { P2B6_TYPE_e,       TLx493D_READ_MODE_e,       0x16, 0x30, 4, 2 },
+    { P2B6_HWV_e,        TLx493D_READ_MODE_e,       0x16, 0x0F, 0, 4 },
 };
 
 
-/***
- * 
-*/
-// typedef enum {
-//                LOW_POWER_MODE         = 0x00,
-//                MASTER_CONTROLLED_MODE = 0x01,
-//                RESERVED_MODE          = 0x10,
-//                FAST_MODE              = 0x11 } TLx493D_P2B6_modes_te;
+TLx493D_CommonFunctions_t TLx493D_P2B6_commonFunctions = {
+    .init                           = TLx493D_P2B6_init,
+    .deinit                         = TLx493D_P2B6_deinit,
 
+    .readRegisters                  = TLx493D_P2B6_readRegisters,
 
-/***
- * 
-*/
-typedef enum { 
-               TEMP2_REG  = 0x05,
-               DIAG_REG   = 0x06,
-               CONFIG_REG = 0x10,
-               MOD1_REG   = 0x11,
-               MOD2_REG   = 0x13,
-               VER_REG    = 0x16 } SpecialRegisters_te;
+    .calculateRawTemperature        = TLx493D_P2B6_calculateRawTemperature,
+    .getRawTemperature              = TLx493D_P2B6_getRawTemperature,
 
+    .calculateRawMagneticField      = TLx493D_P2B6_calculateRawMagneticField,
+    .getRawMagneticField            = TLx493D_P2B6_getRawMagneticField,
 
-TLx493D_CommonFunctions_ts TLx493D_P2B6_commonFunctions = {
-                                .init                 = TLx493D_P2B6_init,
-                                .deinit               = TLx493D_P2B6_deinit,
+    .calculateRawMagneticFieldAndTemperature = TLx493D_P2B6_calculateRawMagneticFieldAndTemperature,
+    .getRawMagneticFieldAndTemperature       = TLx493D_P2B6_getRawMagneticFieldAndTemperature,
 
-                                // .getTemperature       = TLx493D_P2B6_getTemperature,
+    .calculateTemperature           = TLx493D_P2B6_calculateTemperature,
+    .getTemperature                 = TLx493D_P2B6_getTemperature,
 
-                                .calculateMagneticField = TLx493D_P2B6_calculateMagneticField,
-                                // .getMagneticFieldValues       = TLx493D_P2B6_getFieldValues,
+    .calculateMagneticField         = TLx493D_P2B6_calculateMagneticField,
+    .getMagneticField               = TLx493D_P2B6_getMagneticField,
 
-                                .setDefaultConfig     = TLx493D_P2B6_setDefaultConfig,
-                                .readRegisters        = tlx493d_common_readRegisters,
+    .calculateMagneticFieldAndTemperature = TLx493D_P2B6_calculateMagneticFieldAndTemperature,
+    .getMagneticFieldAndTemperature = TLx493D_P2B6_getMagneticFieldAndTemperature,
+
+    // functions related to the "Config" register
+    .setMeasurement                 = TLx493D_P2B6_setMeasurement,
+    .setTrigger                     = TLx493D_P2B6_setTrigger,
+    .setSensitivity                 = TLx493D_P2B6_setSensitivity,
+    
+    // functions related to the "Mod1" and "Mod2" registers
+    .setDefaultConfig               = TLx493D_P2B6_setDefaultConfig,
+    .setIICAddress                  = TLx493D_P2B6_setIICAddress,
+    .enable1ByteReadMode            = TLx493D_P2B6_enable1ByteReadMode,
+
+    .enableInterrupt                = TLx493D_P2B6_enableInterrupt,
+    .disableInterrupt               = TLx493D_P2B6_disableInterrupt,
+
+    .enableCollisionAvoidance       = TLx493D_P2B6_enableCollisionAvoidance,
+    .disableCollisionAvoidance      = TLx493D_P2B6_disableCollisionAvoidance,
+
+    .setPowerMode                   = TLx493D_P2B6_setPowerMode,
+    .setUpdateRate                  = TLx493D_P2B6_setUpdateRate,
+
+    // functions related to the "Diag" register
+    .hasValidData                   = TLx493D_P2B6_hasValidData,
+    .isFunctional                   = TLx493D_P2B6_isFunctional,
+
+    // functions available only to a subset of sensors with wake-up functionality
+    // functions related to the "WU" register
+    .hasWakeUp                      = TLx493D_P2B6_hasWakeUp,
+    .isWakeUpEnabled                = TLx493D_P2B6_isWakeUpEnabled,
+    .enableWakeUpMode               = TLx493D_P2B6_enableWakeUpMode,
+    .disableWakeUpMode              = TLx493D_P2B6_disableWakeUpMode,
+
+    .setWakeUpThresholdsAsInteger   = TLx493D_P2B6_setWakeUpThresholdsAsInteger,
+    .setWakeUpThresholds            = TLx493D_P2B6_setWakeUpThresholds,
+
+    .softwareReset                  = TLx493D_P2B6_softwareReset,
+
+    // functions used internally and not accessible through the common interface
+    .calculateFuseParity            = TLx493D_P2B6_calculateFuseParity,
+    .calculateBusParity             = TLx493D_P2B6_calculateBusParity,
+    .calculateConfigurationParity   = TLx493D_P2B6_calculateConfigurationParity,
+
+    .hasValidFuseParity             = TLx493D_P2B6_hasValidFuseParity,
+    .hasValidBusParity              = TLx493D_P2B6_hasValidBusParity,
+    .hasValidConfigurationParity    = TLx493D_P2B6_hasValidConfigurationParity,
+    
+    .hasValidTBit                   = TLx493D_P2B6_hasValidTBit,
+
+    .setResetValues                 = TLx493D_P2B6_setResetValues,
+
+    .selectIICAddress               = TLx493D_P2B6_selectIICAddress,
+
+    .calculateRawMagneticFieldAtTemperature  = TLx493D_P2B6_calculateRawMagneticFieldAtTemperature,
+
+    .getSensitivityScaleFactor      = TLx493D_P2B6_getSensitivityScaleFactor,
 };
 
 
-/***
- * TODO: add parameter IICAddress or ad function to set address.
-*/
-bool TLx493D_P2B6_init(TLx493D_ts *sensor) {
-    // regMap must be sensor specific, not sensor type specific, therefore malloc.
-    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
-    sensor->regDef            = TLx493D_P2B6_regDef;
-    // sensor->commonBitfields   = (CommonBitfields_ts) { .CP = CP, .FP = FP, .ID = ID, .P = P, .FF = FF, .CF = CF, .T = T, .PD3 = PD3, .PD0 = PD0, .FRM = FRM, .PRD = PRD, .TYPE = TYPE, .HWV = HWV,
-    //                                                    .DT = DT, .AM = AM, .TRIG = TRIG, .X2 = X2, .TL_MAG = TL_MAG, .IICADR = IICADR, .PR = PR, .CA = CA, .INT = INT, .MODE = MODE,
-    //                                                    .BX_MSB = BX_MSB, .BY_MSB = BY_MSB, .BZ_MSB = BZ_MSB, .TEMP_MSB = TEMP_MSB,
-    //                                                    .BX_LSB = BX_LSB, .BY_LSB = BY_LSB, .TEMP_LSB = TEMP_LSB, .BZ_LSB = BZ_LSB, .TEMP2 = TEMP2_REG,
-    //                                                  };
-    // sensor->commonRegisters   = (CommonRegisters_ts) { .DIAG = DIAG_REG, .CONFIG = CONFIG_REG, .MOD1 = MOD1_REG, .MOD2 = MOD2_REG, .VER = VER_REG };
-    sensor->functions         = &TLx493D_P2B6_commonFunctions;
-    sensor->regMapSize        = GEN_2_REG_MAP_SIZE;
-    sensor->sensorType        = TLx493D_P2B6_e;
-    sensor->comIFType         = TLx493D_I2C_e;
-    sensor->comLibIF          = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
+bool TLx493D_P2B6_init(TLx493D_t *sensor) {
+    return tlx493d_common_init(sensor, GEN_2_REG_MAP_SIZE, TLx493D_P2B6_regDef, &TLx493D_P2B6_commonFunctions, TLx493D_P2B6_e, TLx493D_I2C_e);
+}
 
-    memset(sensor->regMap, 0, sensor->regMapSize);
-    
-    TLx493D_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
-    
+
+bool TLx493D_P2B6_deinit(TLx493D_t *sensor) {
+    return tlx493d_common_deinit(sensor);
+}
+
+
+bool TLx493D_P2B6_readRegisters(TLx493D_t *sensor) {
+    return tlx493d_common_readRegisters(sensor);
+}
+
+
+void TLx493D_P2B6_calculateRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+    tlx493d_gen_2_calculateRawTemperature(sensor, P2B6_TEMP_MSBS_e, P2B6_TEMP_LSBS_e, temperature);
+}
+
+
+bool TLx493D_P2B6_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+    return tlx493d_common_getRawTemperature(sensor, temperature);
+}
+
+
+void TLx493D_P2B6_calculateRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+    tlx493d_gen_2_calculateRawMagneticField(sensor, P2B6_BX_MSBS_e, P2B6_BX_LSBS_e, P2B6_BY_MSBS_e, P2B6_BY_LSBS_e, P2B6_BZ_MSBS_e, P2B6_BZ_LSBS_e, x, y, z);
+}
+
+
+bool TLx493D_P2B6_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+    return tlx493d_common_getRawMagneticField(sensor, x, y, z);
+}
+
+
+void TLx493D_P2B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+    TLx493D_P2B6_calculateRawMagneticField(sensor, x, y, z);
+    TLx493D_P2B6_calculateRawTemperature(sensor, temperature);
+}
+
+
+bool TLx493D_P2B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+    return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
+}
+
+
+void TLx493D_P2B6_calculateTemperature(TLx493D_t *sensor, double *temp) {
+    tlx493d_gen_2_calculateTemperature(sensor, P2B6_TEMP_MSBS_e, P2B6_TEMP_LSBS_e, temp);
+}
+
+
+bool TLx493D_P2B6_getTemperature(TLx493D_t *sensor, double *temp) {
+    return tlx493d_common_getTemperature(sensor, temp);
+}
+
+
+void TLx493D_P2B6_calculateMagneticField(TLx493D_t *sensor, double *x, double *y, double *z) {
+    tlx493d_gen_2_calculateMagneticField(sensor, P2B6_BX_MSBS_e, P2B6_BX_LSBS_e, P2B6_BY_MSBS_e, P2B6_BY_LSBS_e, P2B6_BZ_MSBS_e, P2B6_BZ_LSBS_e, x, y, z);
+}
+
+
+bool TLx493D_P2B6_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z) {
+    return tlx493d_common_getMagneticField(sensor, x, y, z);
+}
+
+
+void TLx493D_P2B6_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp) {
+    TLx493D_P2B6_calculateMagneticField(sensor, x, y, z);
+    TLx493D_P2B6_calculateTemperature(sensor, temp);
+}
+
+
+bool TLx493D_P2B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp) {
+    return tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
+}
+
+
+bool TLx493D_P2B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
+    return tlx493d_gen_2_setMeasurement(sensor, P2B6_DT_e, P2B6_AM_e, P2B6_CP_e, val);
+}
+
+
+//  // This option depends on PR and MODE.
+bool TLx493D_P2B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
+    return tlx493d_gen_2_setTrigger(sensor, P2B6_TRIG_e, P2B6_CP_e, val);
+}
+
+
+bool TLx493D_P2B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
+    return tlx493d_gen_2_setSensitivity(sensor, P2B6_X2_e, P2B6_CP_e, val);
+}
+
+
+bool TLx493D_P2B6_setDefaultConfig(TLx493D_t *sensor) {
+    return tlx493d_gen_2_setDefaultConfig(sensor, P2B6_CONFIG_REG_e, P2B6_MOD1_REG_e, P2B6_MOD2_REG_e, P2B6_CP_e, P2B6_CA_e, P2B6_INT_e);
+}
+
+
+// // TODO: set all options that must be set, eg MODE ?, reset all bits to defaults !
+// bool TLx493D_P2B6_setDefaultConfig(TLx493D_t *sensor) {
+//     sensor->regMap[P2B6_CONFIG_REG_e] = 0x00;
+//     sensor->regMap[P2B6_MOD1_REG_e]   = 0x00;
+//     sensor->regMap[P2B6_MOD2_REG_e]   = 0x00;;
+
+//     // MOD1 register
+//     tlx493d_common_setBitfield(sensor, P2B6_CA_e, 0);
+//     tlx493d_common_setBitfield(sensor, P2B6_INT_e, 1);
+
+//     if( TLx493D_P2B6_enable1ByteMode(sensor) ) {
+//         // return tlx493d_gen_2_readRegisters(sensor);
+//         return true;
+//     }
+
+//     return false;
+// }
+
+
+bool TLx493D_P2B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address) {
+    return tlx493d_gen_2_setIICAddress(sensor, P2B6_IICADR_e, P2B6_FP_e, address);
+}
+
+
+bool TLx493D_P2B6_enable1ByteReadMode(TLx493D_t *sensor) {
+    return tlx493d_gen_2_set1ByteReadMode(sensor, P2B6_PR_e, P2B6_FP_e, P2B6_PRD_e, 1);
+}
+
+
+bool TLx493D_P2B6_enableCollisionAvoidance(TLx493D_t *sensor) {
+    return tlx493d_gen_2_setCollisionAvoidance(sensor, P2B6_CA_e, P2B6_FP_e, P2B6_PRD_e, 0);
+}
+
+
+bool TLx493D_P2B6_disableCollisionAvoidance(TLx493D_t *sensor) {
+    return tlx493d_gen_2_setCollisionAvoidance(sensor, P2B6_CA_e, P2B6_FP_e, P2B6_PRD_e, 1);
+}
+
+
+bool TLx493D_P2B6_enableInterrupt(TLx493D_t *sensor) {
+    return tlx493d_gen_2_setInterrupt(sensor, P2B6_INT_e, P2B6_FP_e, P2B6_PRD_e, 0);
+}
+
+
+bool TLx493D_P2B6_disableInterrupt(TLx493D_t *sensor) {
+    return tlx493d_gen_2_setInterrupt(sensor, P2B6_INT_e, P2B6_FP_e, P2B6_PRD_e, 1);
+}
+
+
+bool TLx493D_P2B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) {
+    return tlx493d_gen_2_setPowerMode(sensor, P2B6_MODE_e, P2B6_FP_e, mode);
+}
+
+
+bool TLx493D_P2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
+    uint8_t mod1 = P2B6_MOD1_REG_e;
+    uint8_t rate = 0;
+
+    switch(val) {
+        case TLx493D_UPDATE_RATE_FAST_e : rate = 0;
+                                  break;
+
+        case TLx493D_UPDATE_RATE_SLOW_e : rate = 1;
+                                  break;
+
+        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
+                  return false;
+    }
+
+    tlx493d_common_setBitfield(sensor, P2B6_PRD_e, rate);
+    tlx493d_common_setBitfield(sensor, P2B6_FP_e, tlx493d_gen_2_calculateFuseParity(sensor, P2B6_FP_e, P2B6_PRD_e));
+
+    uint8_t buf[4] = { mod1,
+                       sensor->regMap[mod1],     // MOD1 register
+                       sensor->regMap[mod1 + 1], // reserved register must have been read once in setDefaultConfig to get factory settings !
+                       sensor->regMap[mod1 + 2]  // MOD2 register
+                     };
+
+    return transfer(sensor, buf, sizeof(buf), NULL, 0);
+}
+
+
+bool TLx493D_P2B6_hasValidData(TLx493D_t *sensor) {
+    return tlx493d_gen_2_hasValidData(sensor);
+}
+
+
+bool TLx493D_P2B6_isFunctional(TLx493D_t *sensor) {
+    return tlx493d_gen_2_isFunctional(sensor);
+}
+
+
+bool TLx493D_P2B6_hasWakeUp(TLx493D_t *sensor) {
     return true;
 }
 
 
-/***
- * 
-*/
-bool TLx493D_P2B6_deinit(TLx493D_ts *sensor) {
-    free(sensor->regMap);
-    free(sensor->comLibObj.i2c_obj);
+bool TLx493D_P2B6_isWakeUpEnabled(TLx493D_t *sensor) {
+    return tlx493d_gen_2_isWakeUpEnabled(sensor, P2B6_WA_e);
+}
 
-    sensor->regMap            = NULL;
-    sensor->comLibObj.i2c_obj = NULL;
-    return true;
+bool TLx493D_P2B6_enableWakeUpMode(TLx493D_t *sensor) {
+    return tlx493d_gen_2_enableWakeUpMode(sensor, P2B6_TST_e, P2B6_WU_e, P2B6_CP_e);
+}
+
+bool TLx493D_P2B6_disableWakeUpMode(TLx493D_t *sensor) {
+    return tlx493d_gen_2_disableWakeUpMode(sensor, P2B6_WU_e, P2B6_CP_e);
 }
 
 
-/***
- * 
-*/
-void TLx493D_P2B6_calculateTemperature(TLx493D_ts *sensor, double *temp) {
-    int16_t value = 0;
-
-    tlx493d_common_concatBytes(sensor, TEMP_MSB, TEMP_LSB, &value);
-
-    value <<= 2; // least significant 2 bits are implicit, therefore shift by 2 !
-    *temp = (((double) value - GEN_2_TEMP_OFFSET) * GEN_2_TEMP_MULT) + GEN_2_TEMP_REF;
+bool TLx493D_P2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+    return false;
 }
 
+bool TLx493D_P2B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+    return false;
+}
 
-/***
- * 
-*/
-bool TLx493D_P2B6_getTemperature(TLx493D_ts *sensor, double *temp) {
-    if( tlx493d_common_readRegisters(sensor) ) {
-        TLx493D_P2B6_calculateTemperature(sensor, temp);
-        return true;
-    }
-
+bool TLx493D_P2B6_softwareReset(TLx493D_t *sensor) {
+    warnFeatureNotAvailableForSensorType(sensor, "softwareReset");
     return false;
 }
 
 
-/***
- * 
-*/
-void TLx493D_P2B6_calculateMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z) {
-    int16_t valueX = 0, valueY = 0, valueZ = 0;
 
-    tlx493d_common_concatBytes(sensor, BX_MSB, BX_LSB, &valueX);
-    tlx493d_common_concatBytes(sensor, BY_MSB, BY_LSB, &valueY);
-    tlx493d_common_concatBytes(sensor, BZ_MSB, BZ_LSB, &valueZ);
-
-    *x = ((double) valueX) * GEN_2_MAG_FIELD_MULT;
-    *y = ((double) valueY) * GEN_2_MAG_FIELD_MULT;
-    *z = ((double) valueZ) * GEN_2_MAG_FIELD_MULT;
+uint8_t TLx493D_P2B6_calculateFuseParity(TLx493D_t *sensor) {
+    return tlx493d_gen_2_calculateFuseParity(sensor, P2B6_FP_e, P2B6_PRD_e);
 }
 
 
-/***
- * 
-*/
-bool TLx493D_P2B6_getFieldValues(TLx493D_ts *sensor, double *x, double *y, double *z) {
-    if( tlx493d_common_readRegisters(sensor) ) {
-        TLx493D_P2B6_calculateMagneticField(sensor, x, y, z);
-        return true;
-    }
-
-    return false;
+uint8_t TLx493D_P2B6_calculateBusParity(TLx493D_t *sensor) {
+    return tlx493d_gen_2_calculateBusParity(sensor, 5);
 }
 
 
-/***
- * Must be regs 0x07 - 0x10
-*/
-uint8_t TLx493D_P2B6_calculateConfigurationParity(TLx493D_ts *sensor) {
-	uint8_t parity = tlx493d_common_calculateParity(sensor->regMap[CONFIG_REG] & ~sensor->regDef[CP].mask);
-	return tlx493d_common_getEvenParity(parity);
-}
-
-/***
- * 
-*/
-bool TLx493D_P2B6_setDisableTemperatureMeasurements(TLx493D_ts *sensor, uint8_t dt) {
-    // uint8_t config = sensor->commonRegisters.CONFIG;
-
-    // CONFIG register
-    tlx493d_common_setBitfield(sensor, DT, dt);
-    tlx493d_common_setBitfield(sensor, CP, TLx493D_P2B6_calculateConfigurationParity(sensor));
-
-    tlx493d_common_writeRegister(sensor, DT);
+uint8_t TLx493D_P2B6_calculateConfigurationParity(TLx493D_t *sensor) {
+    return tlx493d_gen_2_calculateConfigurationParity(sensor, P2B6_CP_e);
 }
 
 
-bool TLx493D_P2B6_enableTemperatureMeasurements(TLx493D_ts *sensor) {
-    return TLx493D_P2B6_setDisableTemperatureMeasurements(sensor, 0);
+bool TLx493D_P2B6_hasValidFuseParity(TLx493D_t *sensor) {
+    return tlx493d_gen_2_hasValidFuseParity(sensor, P2B6_FF_e);
 }
 
 
-bool TLx493D_P2B6_disableTemperatureMeasurements(TLx493D_ts *sensor) {
-    return TLx493D_P2B6_setDisableTemperatureMeasurements(sensor, 1);
+bool TLx493D_P2B6_hasValidBusParity(TLx493D_t *sensor) {
+    return tlx493d_gen_2_hasValidBusParity(sensor, P2B6_P_e);
 }
 
 
-/***
- * 
-*/
-bool TLx493D_P2B6_set1ByteReadMode(TLx493D_ts *sensor, uint8_t pr) {
-    // uint8_t mod1 = sensor->commonRegisters.MOD1;
-
-    tlx493d_common_setBitfield(sensor, PR, pr);
-    tlx493d_common_setBitfield(sensor, FP, tlx493d_gen_2_calculateFuseParity(sensor, FP, PRD));
-
-    tlx493d_common_writeRegister(sensor, PR);
+bool TLx493D_P2B6_hasValidConfigurationParity(TLx493D_t *sensor) {
+    return tlx493d_gen_2_hasValidConfigurationParity(sensor, P2B6_CF_e);
 }
 
 
-bool TLx493D_P2B6_enable1ByteMode(TLx493D_ts *sensor) {
-     return TLx493D_P2B6_set1ByteReadMode(sensor, 1);
+bool TLx493D_P2B6_hasValidIICadr(TLx493D_t *sensor) {
+    return tlx493d_gen_2_hasValidIICadr(sensor, P2B6_ID_e, P2B6_IICADR_e);
 }
 
 
-bool TLx493D_P2B6_disable1ByteMode(TLx493D_ts *sensor) {
-     return TLx493D_P2B6_set1ByteReadMode(sensor, 0);
+bool TLx493D_P2B6_hasValidTBit(TLx493D_t *sensor) {
+    return tlx493d_gen_2_hasValidTBit(sensor, P2B6_T_e);
 }
 
 
-/***
- * TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
-*/
-bool TLx493D_P2B6_setDefaultConfig(TLx493D_ts *sensor) {
-    sensor->regMap[CONFIG_REG] = 0x00;
-    sensor->regMap[MOD1_REG]   = 0x00;
-    sensor->regMap[MOD2_REG]   = 0x00;;
+void TLx493D_P2B6_setResetValues(TLx493D_t *sensor) {
+    sensor->regMap[0x07] = 0x80;
+    sensor->regMap[0x08] = 0x7F;
+    sensor->regMap[0x09] = 0x80;
+    sensor->regMap[0x0A] = 0x7F;
+    sensor->regMap[0x0B] = 0x80;
+    sensor->regMap[0x0C] = 0x7F;
+    sensor->regMap[0x0D] = 0x38;
+    sensor->regMap[0x0E] = 0x38;
+    sensor->regMap[0x0F] = 0x38;  
+    sensor->regMap[0x10] = 0x01; // CONFIG
+    sensor->regMap[0x11] = 0x80; // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
+    sensor->regMap[0x13] = 0x00; // MOD2
+}
 
-    // MOD1 register
-    tlx493d_common_setBitfield(sensor, CA, 0);
-    tlx493d_common_setBitfield(sensor, INT, 1);
 
-    if( TLx493D_P2B6_enable1ByteMode(sensor) ) {
-        if( TLx493D_P2B6_enableTemperatureMeasurements(sensor) ) {
-            // Read registers in order to retrieve values in reserved register at 0x12 and in MOD2 in order to make sure we are not 
-            // accidentally changing a preset values to 0.
-            // if( tlx493d_gen_2_readRegisters(sensor) )
-            //     return TLx493D_P2B6_setLowUpdateRate(sensor);
+uint8_t TLx493D_P2B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+    return tlx493d_gen_2_selectIICAddress(sensor, addr);
+}
 
-            return true;
-        }
-    }
 
-    return false;
+void TLx493D_P2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
+
+}
+
+
+void TLx493D_P2B6_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf) {
+    tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, P2B6_X2_e, 0, sf);
 }
