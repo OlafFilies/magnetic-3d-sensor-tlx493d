@@ -1,4 +1,3 @@
-
 // std includes
 
 // Arduino includes
@@ -72,8 +71,6 @@ void loop() {
     Serial.print("Value Z is: ");
     Serial.print(valZ);
     Serial.println(" mT");
-
-    // Serial.print(true == dut.isWakeUpActive() ? "isWakeUpActive ok\n" : "isWakeUpActive error\n");
 
     printRegisters(dut.getSensor());
     Serial.print("\n");

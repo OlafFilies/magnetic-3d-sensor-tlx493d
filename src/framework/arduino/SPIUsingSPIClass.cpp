@@ -16,50 +16,53 @@
 
 
 extern "C" bool tlx493d_initSPI(TLx493D_t *sensor) {
-    sensor->comLibObj.spi_obj->spi->init();
+    sensor->comInterface.comLibObj.spi_obj->spi->init();
 
-    sensor->comLibObj.spi_obj->spi->getComIF().setDataMode(SPI_MODE2);
-    sensor->comLibObj.spi_obj->spi->getComIF().setClockDivider(SPI_CLOCK_DIV8);
-    sensor->comLibObj.spi_obj->spi->getComIF().setBitOrder(MSBFIRST);
+    sensor->comInterface.comLibObj.spi_obj->spi->getBus().setDataMode(SPI_MODE2);
+    sensor->comInterface.comLibObj.spi_obj->spi->getBus().setClockDivider(SPI_CLOCK_DIV8);
+    sensor->comInterface.comLibObj.spi_obj->spi->getBus().setBitOrder(MSBFIRST);
 
     return true;
 }
 
 
 extern "C" bool tlx493d_deinitSPI(TLx493D_t *sensor) {
-    sensor->comLibObj.spi_obj->spi->deinit();
+    sensor->comInterface.comLibObj.spi_obj->spi->deinit();
     return true;
 }
 
 
 extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
-    return sensor->comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
+
+    return sensor->comInterface.comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
+
 }
 
 
-TLx493D_ComLibraryFunctions_t  comLibIF_spi = {
+TLx493D_ComLibraryFunctions_t  comLibFuncs_spi = {
                                             .init     = { .spi_init     = tlx493d_initSPI },
                                             .deinit   = { .spi_deinit   = tlx493d_deinitSPI },
                                             .transfer = { .spi_transfer = tlx493d_transferSPI },
                                        };
 
- // TODO: provide central function to set to null SPI/IIC objects !
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi) {
-    sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
-    sensor->comLibObj.spi_obj->spi = &spi;
-    sensor->comLibIF               = &comLibIF_spi;
+    sensor->comInterface.comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
+    sensor->comInterface.comLibObj.spi_obj->spi = &spi;
+    sensor->comInterface.isToBeDeleted          = false;
+    sensor->comInterface.comLibFuncs            = &comLibFuncs_spi;
 
-    sensor->comLibIF->init.spi_init(sensor);
+    sensor->comInterface.comLibFuncs->init.spi_init(sensor);
     return true;
 }
 
 
-// TODO: Provide function to delete TwoWire_Lib object from C in case it has been allocated explicitly by the following routine.
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
-    sensor->comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
-    sensor->comLibObj.spi_obj->spi = new SPIClassWrapper(spi);
-    sensor->comLibIF               = &comLibIF_spi;
+    sensor->comInterface.comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
+    sensor->comInterface.comLibObj.spi_obj->spi = new SPIClassWrapper(spi);
+    sensor->comInterface.isToBeDeleted          = true;
 
-    sensor->comLibIF->init.spi_init(sensor);  
+    sensor->comInterface.comLibFuncs            = &comLibFuncs_spi;
+
+    sensor->comInterface.comLibFuncs->init.spi_init(sensor);  
     return true;
 }

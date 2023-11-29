@@ -109,11 +109,11 @@ void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, in
 void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF, double *sf);
 
 
-void warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
-void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);
-void errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t field);
-void errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func);
-void errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType);
+void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
+void tlx493d_errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);
+void tlx493d_errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t field);
+void tlx493d_errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func);
+void tlx493d_errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType);
 
 
 #ifdef __cplusplus

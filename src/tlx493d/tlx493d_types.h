@@ -40,7 +40,7 @@ typedef enum {
 typedef enum {
                TLx493D_I2C_e = 0,
                TLx493D_SPI_e,
-               TLx493D_I2C_OR_SPI_e,
+              //  TLx493D_I2C_OR_SPI_e,
 } TLx493D_SupportedComLibraryInterfaceType_t;
 
 
@@ -135,7 +135,7 @@ typedef enum {
   Structure to store name, access mode, address, mask and offset of registers.
 */
 typedef struct TLx493D_Register_t {
-    uint8_t                           name;
+    // uint8_t                           name;
     TLx493D_RegisterAccessModeType_t  accessMode;
     uint8_t                           address;
     uint8_t                           mask;
@@ -186,6 +186,16 @@ typedef union TLx493D_ComLibraryObject_t {
     TLx493D_SPIObject_t  *spi_obj;
     TLx493D_I2CObject_t  *iic_obj;
 } TLx493D_ComLibraryObject_t;
+
+
+typedef struct TLx493D_CommunicationInterface_t {
+    TLx493D_ComLibraryFunctions_t   *comLibFuncs;
+    TLx493D_ComLibraryParameters_t   comLibParams;
+    TLx493D_ComLibraryObject_t       comLibObj;
+    bool                             isToBeDeleted;
+} TLx493D_CommunicationInterface_t;
+
+
 
 
 // Functions common to all sensors
@@ -362,9 +372,11 @@ typedef struct TLx493D_t {
     TLx493D_Register_t              *regDef;
     TLx493D_CommonFunctions_t       *functions;
 
-    TLx493D_ComLibraryFunctions_t  *comLibIF;
-    TLx493D_ComLibraryParameters_t  comLibIFParams;
-    TLx493D_ComLibraryObject_t      comLibObj;
+    // TLx493D_ComLibraryFunctions_t  *comLibIF;
+    // TLx493D_ComLibraryParameters_t  comLibIFParams;
+    // TLx493D_ComLibraryObject_t      comLibObj;
+
+    TLx493D_CommunicationInterface_t  comInterface;
 
     uint8_t                                     regMapSize;
     TLx493D_SupportedSensorType_t               sensorType;

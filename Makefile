@@ -149,10 +149,6 @@ endif
 
 
 
-
-
-
-
 # For WSL and Windows :
 # download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
 prepare:
@@ -165,7 +161,8 @@ prepare:
 	arduino-cli.exe board listall Infineon
 
 
-# TODO: rework as for Arduino !
+
+# TODO: rework similar to Arduino !
 ### MTB targets
 # ifeq ($(WIN_USER),)
 

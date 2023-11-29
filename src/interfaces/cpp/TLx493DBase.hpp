@@ -147,20 +147,23 @@ class TLx493DBase {
             return ::tlx493d_disableWakeUpMode(&sensor);
         }
 
+
         bool setWakeUpThresholdsAsInteger(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
             return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
         }
+
 
         bool setWakeUpThresholds(double xl_th, double xh_th, double yl_th, double yh_th, double zl_th, double zh_th) {
             return ::tlx493d_setWakeUpThresholds(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
         }
 
 
-        // utilities
         bool softwareReset() {
             return ::tlx493d_softwareReset(&sensor);
         }
 
+
+        // utilities
         const char *getTypeAsString() {
             return ::tlx493d_getTypeAsString(&sensor);
         }
@@ -198,7 +201,7 @@ class TLx493DBase {
 
 
         uint8_t getI2CAddress() {
-            return sensor.comLibIFParams.iic_params.address;
+            return sensor.comInterface.comLibParams.iic_params.address;
         }
 
 
@@ -214,13 +217,16 @@ class TLx493DBase {
 /***
  * Generic template class.
 */
-template<typename BoardSupportClass, typename BusWrapper, typename Bus,
-         TLx493D_SupportedSensorType_t sensorType> class TLx493D : public TLx493DBase {
+template<typename BoardSupportClass, typename BusWrapper, TLx493D_SupportedSensorType_t sensorType>
+    class TLx493D : public TLx493DBase {
 
     private:
 
+        typedef typename BusWrapper::BusType  BusType;
+        
+
         TLx493D();
-        TLx493D(Bus &c);
+        TLx493D(BusType &c);
 };
 
 

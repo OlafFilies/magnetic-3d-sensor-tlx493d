@@ -46,7 +46,7 @@ void tlx493d_gen_2_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, ui
     tlx493d_common_concatBytes(sensor, byMSBBF, byLSBBF, &valueY);
     tlx493d_common_concatBytes(sensor, bzMSBBF, bzLSBBF, &valueZ);
 
-    *x = ((double) valueX) * GEN_2_MAG_FIELD_MULT;  // TODO: get factor from registers : full, double, quadruple 
+    *x = ((double) valueX) * GEN_2_MAG_FIELD_MULT;  // TODO: get scale factor from registers : full, double, quadruple 
     *y = ((double) valueY) * GEN_2_MAG_FIELD_MULT;
     *z = ((double) valueZ) * GEN_2_MAG_FIELD_MULT;                           
 }
@@ -86,7 +86,7 @@ bool tlx493d_gen_2_setMeasurement(TLx493D_t *sensor, uint8_t dtBF, uint8_t amBF,
                               am = 1;
                               break;
         
-        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_MeasurementType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_MeasurementType_t");
                   return false;
     }
 
@@ -108,7 +108,7 @@ bool tlx493d_gen_2_setTrigger(TLx493D_t *sensor, uint8_t trigBF, uint8_t cpBF, T
         case TLx493D_ADC_ON_READ_AFTER_REG_05_e : trig = 2;
                                                   break;
         
-        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_TriggerType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_TriggerType_t");
                   return false;
     }
 
@@ -126,7 +126,7 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, uint8_t x2BF, uint8_t cpBF,
         case TLx493D_SHORT_RANGE_e : sens = 1;
                                      break;
         
-        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_t");
                   return false;
     }
 
@@ -142,7 +142,6 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, uint8_t x2BF, uint8_t cpBF,
 // }
 
 
-// TODO: Differentiate first call after power-up/reset and subsequent calls ! For subsequent calls the regMap values must be considered as they may be different from reset values !
 bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
     tlx493d_common_setBitfield(sensor, caBF, 0);
     tlx493d_common_setBitfield(sensor, intBF, 1);
@@ -243,7 +242,7 @@ bool tlx493d_gen_2_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, uint8_t fpBF,
         case TLx493D_FAST_MODE_e : mode = 0b11;
                                   break;
 
-        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_PowerModeType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_PowerModeType_t");
                   return false;
     }
 
@@ -256,7 +255,7 @@ bool tlx493d_gen_2_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, uint8_t fpBF,
                        sensor->regMap[mod1 + 2]
                      };
 
-    return transfer(sensor, buf, sizeof(buf), NULL, 0);
+    return tlx493d_transfer(sensor, buf, sizeof(buf), NULL, 0);
 }
 
 
@@ -289,7 +288,7 @@ bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF,
         case TLx493D_UPDATE_RATE_0_05_HZ_e : rate = 0b111;
                                      break;
 
-        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
                   return false;
     }
 
@@ -302,7 +301,7 @@ bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF,
                        sensor->regMap[mod1 + 2]
                      };
 
-    return transfer(sensor, buf, sizeof(buf), NULL, 0);
+    return tlx493d_transfer(sensor, buf, sizeof(buf), NULL, 0);
 }
 
 
@@ -342,7 +341,7 @@ bool tlx493d_gen_2_writeConfigurationRegisters(TLx493D_t *sensor) {
                                sensor->regMap[0x10]
                            };
 
-    return transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+    return tlx493d_transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
 }
 
 bool tlx493d_gen_2_enableWakeUpMode(TLx493D_t *sensor, uint8_t tstBF, uint8_t wuBF, uint8_t cpbBF) {
@@ -438,7 +437,6 @@ uint8_t tlx493d_gen_2_calculateConfigurationParity(TLx493D_t *sensor, uint8_t cp
 }
 
 
-// TODO: Always regs 0x07 - 0x10 ?
 uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint8_t cpBF) {
 // uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint8_t waBF, uint8_t tstBF, uint8_t phBF, uint8_t cpBF) {
 // uint8_t tlx493d_gen_2_calculateConfigurationParityWakeup(TLx493D_t *sensor, uint8_t cpBF, uint8_t from, uint8_t to) {
@@ -550,7 +548,7 @@ uint8_t tlx493d_gen_2_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType
 
         case TLx493D_IIC_ADDR_A3_e : return GEN_2_STD_IIC_ADDR_WRITE_A3;
 
-        default : errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
                   return 0;
     }
 }

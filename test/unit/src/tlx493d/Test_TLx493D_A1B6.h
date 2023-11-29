@@ -19,12 +19,18 @@ static TLx493D_t dut;
 #include "Test_tlx493d_common.h"
 
 
+// static double  x, y, z, t;
+static double  xl, xh, yl, yh, zl, zh;
+static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
+
+
 // define test group name
 TEST_GROUP(TLx493D_A1B6);
+TEST_GROUP(TLx493D_A1B6_internal);
 
 
 // Setup method called before every individual test defined for this test group
-TEST_SETUP(TLx493D_A1B6)
+static TEST_SETUP(TLx493D_A1B6_internal)
 {
     (void) TLx493D_A1B6_init(&dut);
 
@@ -32,26 +38,113 @@ TEST_SETUP(TLx493D_A1B6)
     // so to ensure that the static (noSensor) unit tests pass, memset() is used to 
     // initialize to 0.
     memset(dut.regMap, 0, dut.regMapSize);
+
+    // x = 0.0;
+    // y = 0.0;
+    // z = 0.0;
+    // t = 0.0;
+
+    // xl = 0.0;
+    // xh = 0.0;
+    // yl = 0.0;
+    // yh = 0.0;
+    // zl = 0.0;
+    // zh = 0.0;
+
+    // xl_i = 0;
+    // xh_i = 0;
+    // yl_i = 0;
+    // yh_i = 0;
+    // zl_i = 0;
+    // zh_i = 0;
 }
 
 
 // Tear down method called before every individual test defined for this test group
-TEST_TEAR_DOWN(TLx493D_A1B6)
+static TEST_TEAR_DOWN(TLx493D_A1B6_internal)
 {
+    // dut.functions->deinit(&dut);
     (void) TLx493D_A1B6_deinit(&dut);
+}
+
+
+/**
+ * Define tests for unsupported common functionality
+ */
+TEST_IFX(TLx493D_A1B6_internal, checkUnsupportedFunctionality)
+{
+    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == false );
+    TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
+    TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == false );
+    TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == false );
+
+    TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) == false );
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, xh, xl, yh, yl, zh, zl) == false );
+
+
+    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
+}
+
+
+/**
+ * Define tests for supported common functionality.
+ * Requires that the registers have been read once, in setDefaultConfig.
+ */
+TEST_IFX(TLx493D_A1B6_internal, checkSupportedFunctionality)
+{
+    // TEST_ASSERT( dut.functions->init(&dut) == true );
+    // TEST_ASSERT( dut.functions->deinit(&dut) == true );
+}
+
+
+TEST_IFX(TLx493D_A1B6_internal, checkResetValues)
+{
+    // for(uint8_t i = 0; i < dut.regMapSize; ++i) {
+    //     TEST_ASSERT( dut.regMap[i] == 0 );
+    // }
+
+    // dut.functions->setResetValues(&dut);
+
+    // TEST_ASSERT( dut.regMap[0x10] == 0x00 ); // CONFIG
+    // TEST_ASSERT( dut.regMap[0x11] == 0x00 ); // MOD1
+    // TEST_ASSERT( dut.regMap[0x13] == 0x00 ); // MOD2
+}
+
+
+TEST_IFX(TLx493D_A1B6_internal, checkCalculateMagneticFieldAndTemperature)
+{
+    // double temperature = 0.0;
+    // dut.functions->calculateTemperature(&dut, &temperature);
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, -GEN_2_TEMP_OFFSET * GEN_2_TEMP_MULT + GEN_2_TEMP_REF, temperature );
+
+    // double x = 0.0, y = 0.0, z = 0.0;
+    // dut.functions->calculateMagneticField(&dut, &x, &y, &z);
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
+
+    // temperature = 0.0;
+    // x = 0.0;
+    // y = 0.0;
+    // z = 0.0;
+    // dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &temperature);
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, -GEN_2_TEMP_OFFSET * GEN_2_TEMP_MULT + GEN_2_TEMP_REF, temperature );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
 }
 
 
 // Define all relevant tests for the sensor device
 
-TEST(TLx493D_A1B6, calculateTemperature)
+TEST_IFX(TLx493D_A1B6_internal, calculateTemperature)
 {
     double temperature = 0.0;
     TLx493D_A1B6_calculateTemperature(&dut, &temperature);
-    TEST_ASSERT_FLOAT_WITHIN( 0, (0.0-GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT, temperature );
+    TEST_ASSERT_FLOAT_WITHIN( 0, (0.0 - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT, temperature );
 }
 
-TEST(TLx493D_A1B6, calculateMagneticField)
+TEST_IFX(TLx493D_A1B6_internal, calculateMagneticField)
 {
     double x = 0.0, y = 0.0, z = 0.0;
     TLx493D_A1B6_calculateMagneticField(&dut, &x, &y, &z);
@@ -60,7 +153,7 @@ TEST(TLx493D_A1B6, calculateMagneticField)
     TEST_ASSERT_FLOAT_WITHIN( 0, 0.0 * GEN_1_MAG_FIELD_MULT, z );
 }
 
-TEST(TLx493D_A1B6, setter_BitFields)
+TEST_IFX(TLx493D_A1B6_internal, setter_BitFields)
 {
     memset(dut.regMap,0,dut.regMapSize);
 
@@ -76,7 +169,7 @@ TEST(TLx493D_A1B6, setter_BitFields)
     }
 }
 
-TEST(TLx493D_A1B6, getter_BitFields)
+TEST_IFX(TLx493D_A1B6_internal, getter_BitFields)
 {
     memset(dut.regMap,0,dut.regMapSize);
 
@@ -93,15 +186,30 @@ TEST(TLx493D_A1B6, getter_BitFields)
     }
 }
 
+
+// Bundle all tests to be executed for this test group
+static TEST_GROUP_RUNNER(TLx493D_A1B6_internal)
+{
+    RUN_TEST_CASE(TLx493D_A1B6_internal, checkUnsupportedFunctionality);
+    RUN_TEST_CASE(TLx493D_A1B6_internal, checkSupportedFunctionality);
+
+    RUN_TEST_CASE(TLx493D_A1B6_internal, checkResetValues);
+    RUN_TEST_CASE(TLx493D_A1B6_internal, checkCalculateMagneticFieldAndTemperature);
+
+
+    RUN_TEST_CASE(TLx493D_A1B6_internal, calculateTemperature);
+    RUN_TEST_CASE(TLx493D_A1B6_internal, calculateMagneticField);
+    RUN_TEST_CASE(TLx493D_A1B6_internal, setter_BitFields);
+    RUN_TEST_CASE(TLx493D_A1B6_internal, getter_BitFields);
+}
+
+
 // Bundle all tests to be executed for this test group
 TEST_GROUP_RUNNER(TLx493D_A1B6)
 {
     TLx493D_A1B6_suiteSetUp();
 
-    RUN_TEST_CASE(TLx493D_A1B6, calculateTemperature);
-    RUN_TEST_CASE(TLx493D_A1B6, calculateMagneticField);
-    RUN_TEST_CASE(TLx493D_A1B6, setter_BitFields);
-    RUN_TEST_CASE(TLx493D_A1B6, getter_BitFields);
+    RUN_TEST_GROUP(TLx493D_A1B6_internal);
 
 
 #ifndef TEST_TLx493D_A1B6_NEEDS_SENSOR

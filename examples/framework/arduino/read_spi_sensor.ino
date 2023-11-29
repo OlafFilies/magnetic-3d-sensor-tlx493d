@@ -56,8 +56,6 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    // Serial.print(true == dut.isWakeUpActive() ? "isWakeUpActive ok\n" : "isWakeUpActive error\n");
-
     printRegisters(dut.getSensor());
     Serial.print("\n");
 

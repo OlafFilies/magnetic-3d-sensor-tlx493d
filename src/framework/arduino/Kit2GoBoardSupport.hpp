@@ -8,7 +8,6 @@
 #include <Arduino.h>
 
 // project cpp includes
-#include "Kit2GoBoardSupportTemplate.hpp"
 
 
 typedef struct pinCtrl {
@@ -19,7 +18,7 @@ typedef struct pinCtrl {
 } pinCtrl;
 
 
-template<> class Kit2GoBoardSupport<pinCtrl> {
+class Kit2GoBoardSupport {
    public:
 
         Kit2GoBoardSupport() : constantPins{ LED2, OUTPUT, HIGH, LOW }, switchedPins{} {

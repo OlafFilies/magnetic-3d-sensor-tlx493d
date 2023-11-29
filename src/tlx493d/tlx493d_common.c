@@ -32,8 +32,12 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
     sensor->regMapSize        = regMapSize;
     sensor->sensorType        = sensorType;
     sensor->comIFType         = comIFType;
-    sensor->comLibIF          = NULL;
-    sensor->comLibObj.iic_obj = NULL;
+
+    // sensor->comInterface.comLibFuncs       = NULL;
+    // sensor->comInterface.comLibObj.iic_obj = NULL;
+
+    // sensor->comLibIF          = NULL;
+    // sensor->comLibObj.iic_obj = NULL;
 
     memset(sensor->regMap, 0, sensor->regMapSize);
 
@@ -47,10 +51,14 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
 */
 bool tlx493d_common_deinit(TLx493D_t *sensor) {
     free(sensor->regMap);
-    free(sensor->comLibObj.iic_obj); // TODO: provide central function to deallocate SPI/IIC objects !
 
     sensor->regMap            = NULL;
-    sensor->comLibObj.iic_obj = NULL; // TODO: provide central function to set to null SPI/IIC objects !
+
+    // free(sensor->comInterface.comLibObj.iic_obj);
+
+    // sensor->comInterface.comLibFuncs       = NULL;
+    // sensor->comInterface.comLibObj.iic_obj = NULL;
+    
     return true;
 }
 
@@ -59,7 +67,7 @@ bool tlx493d_common_deinit(TLx493D_t *sensor) {
 //  * Generations 2 and 3, not 1.
 // */
 bool tlx493d_common_readRegisters(TLx493D_t *sensor) {
-    return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
 
@@ -152,7 +160,7 @@ uint8_t tlx493d_common_returnBitfield(TLx493D_t *sensor, uint8_t bitField) {
         return (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
     }
     
-    errorBitfieldNotReadableForSensorType(sensor, bitField);
+    tlx493d_errorBitfieldNotReadableForSensorType(sensor, bitField);
     return 0;
 }
 
@@ -169,7 +177,7 @@ void tlx493d_common_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t new
         sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask);
     }
     else {
-        errorBitfieldNotWritableForSensorType(sensor, bitField);
+        tlx493d_errorBitfieldNotWritableForSensorType(sensor, bitField);
     }
 }
 
@@ -180,7 +188,7 @@ bool tlx493d_common_writeRegister(TLx493D_t* sensor, uint8_t bitField) {
     if((bf->accessMode == TLx493D_WRITE_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
         uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
 
-        return transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
+        return tlx493d_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
 
     return false;
@@ -267,13 +275,13 @@ void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availab
                                     return;
         }
     
-        default : errorSelectionNotSupportedForSensorType(sensor, sens, "TLx493D_AvailableSensitivityType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, sens, "TLx493D_AvailableSensitivityType_t");
     }
 }
 
 
 void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr) {
-    sensor->comLibIFParams.iic_params.address = addr;
+    sensor->comInterface.comLibParams.iic_params.address = addr;
 }
 
 
@@ -282,31 +290,31 @@ void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, in
 }
 
 
-void warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName) {
+void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName) {
     print("");
     warn("Feature '%s' not available for sensor type '%s' !", featureName, tlx493d_common_getTypeAsString(sensor));
 }
 
 
-void errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t bf) {
+void tlx493d_errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t bf) {
     print("");
     error("Bitfield '%d' not readable for sensor type '%s' !", bf, tlx493d_common_getTypeAsString(sensor));
 }
 
 
-void errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t bf) {
+void tlx493d_errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t bf) {
     print("");
     error("Bitfield '%d' not writable for sensor type '%s' !", bf, tlx493d_common_getTypeAsString(sensor));
 }
 
 
-void errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func) {
+void tlx493d_errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func) {
     print("");
     error("Function '%s' not supported for sensor type '%s' !", func, tlx493d_common_getTypeAsString(sensor));
 }
 
 
-void errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType) {
+void tlx493d_errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType) {
     print("");
     error("Selection '%d' for type '%s' not supported for sensor type '%s' !", sel, selType, tlx493d_common_getTypeAsString(sensor));
 }

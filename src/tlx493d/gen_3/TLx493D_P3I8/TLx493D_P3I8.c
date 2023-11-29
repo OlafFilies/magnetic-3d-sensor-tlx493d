@@ -23,54 +23,54 @@
 
 
 TLx493D_Register_t TLx493D_P3I8_regDef[] = {
-    { P3I8_BX_MSBS_e,       TLx493D_READ_MODE_e,       0x00, 0xFF, 0, 8 },
-    { P3I8_BX_LSBS_e,       TLx493D_READ_MODE_e,       0x01, 0x3F, 0, 6 },
-    { P3I8_BY_MSBS_e,       TLx493D_READ_MODE_e,       0x02, 0xFF, 0, 8 },
-    { P3I8_BY_LSBS_e,       TLx493D_READ_MODE_e,       0x03, 0x3F, 0, 6 },
-    { P3I8_BZ_MSBS_e,       TLx493D_READ_MODE_e,       0x04, 0xFF, 0, 8 },
-    { P3I8_BZ_LSBS_e,       TLx493D_READ_MODE_e,       0x05, 0x3F, 0, 6 },
-    { P3I8_TEMP_MSBS_e,     TLx493D_READ_MODE_e,       0x06, 0xFF, 0, 8 },
-    { P3I8_TEMP_LSBS_e,     TLx493D_READ_MODE_e,       0x07, 0x3F, 0, 6 },
-    { P3I8_CRC_e,           TLx493D_READ_MODE_e,       0x08, 0xFF, 0, 8 },
-    { P3I8_MEAS_FLG_e,      TLx493D_READ_MODE_e,       0x09, 0x80, 7, 1 },
-    { P3I8_TEST_FLG_e,      TLx493D_READ_MODE_e,       0x09, 0x40, 6, 1 },
-    { P3I8_FRAME_COUNTER_e, TLx493D_READ_MODE_e,       0x09, 0x30, 4, 2 },
-    { P3I8_RST_FLG_e,       TLx493D_READ_MODE_e,       0x09, 0x08, 3, 1 },
-    { P3I8_WU_PAR_FLG_e,    TLx493D_READ_MODE_e,       0x09, 0x04, 2, 1 },
-    { P3I8_CRC_WR_FLG_e,    TLx493D_READ_MODE_e,       0x09, 0x02, 1, 1 },
-    { P3I8_FUSE_PAR_FLG_e,  TLx493D_READ_MODE_e,       0x09, 0x01, 0, 1 },
-    { P3I8_MODE_SEL_e,      TLx493D_READ_WRITE_MODE_e, 0x0A, 0x80, 7, 1 },
-    { P3I8_INT_DIS_e,       TLx493D_READ_WRITE_MODE_e, 0x0A, 0x40, 6, 1 },
-    { P3I8_WU_EN_e,         TLx493D_READ_WRITE_MODE_e, 0x0A, 0x10, 4, 1 },
-    { P3I8_TRIGGER_SEL_e,   TLx493D_READ_WRITE_MODE_e, 0x0A, 0x0C, 2, 2 },
-    { P3I8_CRC_WR_EN_e,     TLx493D_READ_WRITE_MODE_e, 0x0A, 0x01, 0, 1 },
-    { P3I8_CHANNEL_SEL_e,   TLx493D_READ_WRITE_MODE_e, 0x0B, 0xF0, 4, 4 },
-    { P3I8_F_UPDATE_SEL_e,  TLx493D_READ_WRITE_MODE_e, 0x0B, 0x0C, 2, 2 },
-    { P3I8_XTR_SHORT_EN_e,  TLx493D_READ_WRITE_MODE_e, 0x0B, 0x02, 1, 1 },
-    { P3I8_SHORT_EN_e,      TLx493D_READ_WRITE_MODE_e, 0x0B, 0x01, 0, 1 },
-    { P3I8_WU_XH_MSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0C, 0xFF, 0, 8 },
-    { P3I8_WU_XL_MSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0D, 0xFF, 0, 8 },
-    { P3I8_WU_YH_MSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0E, 0xFF, 0, 8 },
-    { P3I8_WU_YL_MSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x0F, 0xFF, 0, 8 },
-    { P3I8_WU_ZH_MSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x10, 0xFF, 0, 8 },
-    { P3I8_WU_ZL_MSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x11, 0xFF, 0, 8 },
-    { P3I8_WU_XH_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x12, 0xC0, 6, 2 },
-    { P3I8_WU_XL_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x12, 0x30, 4, 2 },
-    { P3I8_WU_YH_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x12, 0x0C, 2, 2 },
-    { P3I8_WU_YL_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x12, 0x03, 0, 2 },
-    { P3I8_WU_PAR_e,        TLx493D_READ_WRITE_MODE_e, 0x13, 0x20, 5, 1 },
-    { P3I8_WU_EN_CP_e,      TLx493D_WRITE_MODE_e,      0x13, 0x10, 4, 1 },
-    { P3I8_WU_ZH_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x13, 0x0C, 2, 2 },
-    { P3I8_WU_ZL_LSBS_e,    TLx493D_READ_WRITE_MODE_e, 0x13, 0x03, 0, 2 },
-    { P3I8_RST_FLG_CLR_e,   TLx493D_WRITE_MODE_e,      0x14, 0x02, 1, 1 },
-    { P3I8_SOFT_RST_e,      TLx493D_WRITE_MODE_e,      0x14, 0x01, 0, 1 },
-    { P3I8_CHIP_ID_0_e,     TLx493D_READ_MODE_e,       0x15, 0xFF, 0, 8 },
-    { P3I8_CHIP_ID_1_e,     TLx493D_READ_MODE_e,       0x16, 0xFF, 0, 8 },
-    { P3I8_CHIP_ID_2_e,     TLx493D_READ_MODE_e,       0x17, 0xFF, 0, 8 },
-    { P3I8_CHIP_ID_3_e,     TLx493D_READ_MODE_e,       0x18, 0xFF, 0, 8 },
-    { P3I8_CHIP_ID_4_e,     TLx493D_READ_MODE_e,       0x19, 0xFF, 0, 8 },
-    { P3I8_ID_PAR_e,        TLx493D_READ_MODE_e,       0x1A, 0x40, 6, 1 },
-    { P3I8_CHIP_ID_5_e,     TLx493D_READ_MODE_e,       0x1A, 0x3F, 0, 6 },
+    { /* P3I8_BX_MSBS_e, */       TLx493D_READ_MODE_e,        0x00, 0xFF, 0, 8 },
+    { /* P3I8_BX_LSBS_e, */       TLx493D_READ_MODE_e,        0x01, 0x3F, 0, 6 },
+    { /* P3I8_BY_MSBS_e, */       TLx493D_READ_MODE_e,        0x02, 0xFF, 0, 8 },
+    { /* P3I8_BY_LSBS_e, */       TLx493D_READ_MODE_e,        0x03, 0x3F, 0, 6 },
+    { /* P3I8_BZ_MSBS_e, */       TLx493D_READ_MODE_e,        0x04, 0xFF, 0, 8 },
+    { /* P3I8_BZ_LSBS_e, */       TLx493D_READ_MODE_e,        0x05, 0x3F, 0, 6 },
+    { /* P3I8_TEMP_MSBS_e, */     TLx493D_READ_MODE_e,        0x06, 0xFF, 0, 8 },
+    { /* P3I8_TEMP_LSBS_e, */     TLx493D_READ_MODE_e,        0x07, 0x3F, 0, 6 },
+    { /* P3I8_CRC_e, */           TLx493D_READ_MODE_e,        0x08, 0xFF, 0, 8 },
+    { /* P3I8_MEAS_FLG_e, */      TLx493D_READ_MODE_e,        0x09, 0x80, 7, 1 },
+    { /* P3I8_TEST_FLG_e, */      TLx493D_READ_MODE_e,        0x09, 0x40, 6, 1 },
+    { /* P3I8_FRAME_COUNTER_e, */ TLx493D_READ_MODE_e,        0x09, 0x30, 4, 2 },
+    { /* P3I8_RST_FLG_e, */       TLx493D_READ_MODE_e,        0x09, 0x08, 3, 1 },
+    { /* P3I8_WU_PAR_FLG_e, */    TLx493D_READ_MODE_e,        0x09, 0x04, 2, 1 },
+    { /* P3I8_CRC_WR_FLG_e, */    TLx493D_READ_MODE_e,        0x09, 0x02, 1, 1 },
+    { /* P3I8_FUSE_PAR_FLG_e, */  TLx493D_READ_MODE_e,        0x09, 0x01, 0, 1 },
+    { /* P3I8_MODE_SEL_e, */      TLx493D_READ_WRITE_MODE_e,  0x0A, 0x80, 7, 1 },
+    { /* P3I8_INT_DIS_e, */       TLx493D_READ_WRITE_MODE_e,  0x0A, 0x40, 6, 1 },
+    { /* P3I8_WU_EN_e, */         TLx493D_READ_WRITE_MODE_e,  0x0A, 0x10, 4, 1 },
+    { /* P3I8_TRIGGER_SEL_e, */   TLx493D_READ_WRITE_MODE_e,  0x0A, 0x0C, 2, 2 },
+    { /* P3I8_CRC_WR_EN_e, */     TLx493D_READ_WRITE_MODE_e,  0x0A, 0x01, 0, 1 },
+    { /* P3I8_CHANNEL_SEL_e, */   TLx493D_READ_WRITE_MODE_e,  0x0B, 0xF0, 4, 4 },
+    { /* P3I8_F_UPDATE_SEL_e, */  TLx493D_READ_WRITE_MODE_e,  0x0B, 0x0C, 2, 2 },
+    { /* P3I8_XTR_SHORT_EN_e, */  TLx493D_READ_WRITE_MODE_e,  0x0B, 0x02, 1, 1 },
+    { /* P3I8_SHORT_EN_e, */      TLx493D_READ_WRITE_MODE_e,  0x0B, 0x01, 0, 1 },
+    { /* P3I8_WU_XH_MSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x0C, 0xFF, 0, 8 },
+    { /* P3I8_WU_XL_MSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x0D, 0xFF, 0, 8 },
+    { /* P3I8_WU_YH_MSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x0E, 0xFF, 0, 8 },
+    { /* P3I8_WU_YL_MSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x0F, 0xFF, 0, 8 },
+    { /* P3I8_WU_ZH_MSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x10, 0xFF, 0, 8 },
+    { /* P3I8_WU_ZL_MSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x11, 0xFF, 0, 8 },
+    { /* P3I8_WU_XH_LSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x12, 0xC0, 6, 2 },
+    { /* P3I8_WU_XL_LSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x12, 0x30, 4, 2 },
+    { /* P3I8_WU_YH_LSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x12, 0x0C, 2, 2 },
+    { /* P3I8_WU_YL_LSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x12, 0x03, 0, 2 },
+    { /* P3I8_WU_PAR_e, */        TLx493D_READ_WRITE_MODE_e,  0x13, 0x20, 5, 1 },
+    { /* P3I8_WU_EN_CP_e, */      TLx493D_WRITE_MODE_e,       0x13, 0x10, 4, 1 },
+    { /* P3I8_WU_ZH_LSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x13, 0x0C, 2, 2 },
+    { /* P3I8_WU_ZL_LSBS_e, */    TLx493D_READ_WRITE_MODE_e,  0x13, 0x03, 0, 2 },
+    { /* P3I8_RST_FLG_CLR_e, */   TLx493D_WRITE_MODE_e,       0x14, 0x02, 1, 1 },
+    { /* P3I8_SOFT_RST_e, */      TLx493D_WRITE_MODE_e,       0x14, 0x01, 0, 1 },
+    { /* P3I8_CHIP_ID_0_e, */     TLx493D_READ_MODE_e,        0x15, 0xFF, 0, 8 },
+    { /* P3I8_CHIP_ID_1_e, */     TLx493D_READ_MODE_e,        0x16, 0xFF, 0, 8 },
+    { /* P3I8_CHIP_ID_2_e, */     TLx493D_READ_MODE_e,        0x17, 0xFF, 0, 8 },
+    { /* P3I8_CHIP_ID_3_e, */     TLx493D_READ_MODE_e,        0x18, 0xFF, 0, 8 },
+    { /* P3I8_CHIP_ID_4_e, */     TLx493D_READ_MODE_e,        0x19, 0xFF, 0, 8 },
+    { /* P3I8_ID_PAR_e, */        TLx493D_READ_MODE_e,        0x1A, 0x40, 6, 1 },
+    { /* P3I8_CHIP_ID_5_e, */     TLx493D_READ_MODE_e,        0x1A, 0x3F, 0, 6 },
 };
 
 
@@ -255,7 +255,6 @@ bool TLx493D_P3I8_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 // }
 
 
-// TODO: set all options that must be set, eg MODE ?, reset all bits to defaults ?
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
     sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
 
@@ -275,25 +274,25 @@ bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3I8_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address) {
-    warnFeatureNotAvailableForSensorType(sensor, "setIICAddress");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setIICAddress");
     return false;
 }
 
 
 bool TLx493D_P3I8_enable1ByteReadMode(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "set1ByteReadMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "set1ByteReadMode");
     return false;
 }
 
 
 bool TLx493D_P3I8_enableCollisionAvoidance(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "enableCollisionAvoidance");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enableCollisionAvoidance");
     return false;
 }
 
 
 bool TLx493D_P3I8_disableCollisionAvoidance(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "disableCollisionAvoidance");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "disableCollisionAvoidance");
     return false;
 }
 
@@ -434,7 +433,7 @@ void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
 
 
 uint8_t TLx493D_P3I8_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
-    errorFunctionNotSupportedForSensorType(sensor, "selectIICAddress");
+    tlx493d_errorFunctionNotSupportedForSensorType(sensor, "selectIICAddress");
     return 0;
 }
 

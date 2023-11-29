@@ -18,7 +18,7 @@
 
 
 bool tlx493d_gen_3_readRegistersSPI(TLx493D_t *sensor) {
-    return transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
 
@@ -51,10 +51,6 @@ void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, ui
     tlx493d_common_concatBytes(sensor, byMSBBF, byLSBBF, &valueY);
     tlx493d_common_concatBytes(sensor, bzMSBBF, bzLSBBF, &valueZ);
 
-// // TODO: temp unten in LSB format; x,y,z dann auch in LSB format => mittels sensitivity umrechnen in mT !
-// // TODO: TLx493D_P3I8_calculateTemperatureRaw hinzufügen um die LSB Werte für Temp zu bekommen !
-
-
 double sf;
 sensor->functions->getSensitivityScaleFactor(sensor, &sf);
 
@@ -77,7 +73,7 @@ double temp = (double) rawTemp;
        / GEN_3_FULL_RANGE_FIELD_SENSITIVITY;
 
 
-// double r    = 1.0; // TODO: get factor from registers : full, double, quadruple  ; r is range specific !
+// double r    = 1.0;
     // *x = (r * (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x)))
     //       + ((double) valueX) * (GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))))
     //    / sensitivity;
@@ -107,7 +103,7 @@ uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType
 
         case TLx493D_IIC_ADDR_A3_e : return GEN_3_STD_IIC_ADDR_WRITE_A3;
 
-        default : errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
                   return 0;
     }
 }
