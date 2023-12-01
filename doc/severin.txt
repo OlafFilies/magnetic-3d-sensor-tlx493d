@@ -1,0 +1,150 @@
+1. Scenarios to show how to
+    - initialize the sensors for standard use cases (eg CA on, INT off, PR on, DT off, low update rate, low power mode on, ...)
+        -> CA on, INT off, PR on => rest in reset mode
+
+    - functionality other than reading temperature and field values xyz (eg switching between modes)
+        -> switch address and rerun
+
+    - combinations of sensors (SPI, I2C, number) used concurrently and how ?
+        -> use IIC with A0 plus SPI at the same time
+
+
+2. Interface for bits that have to be switched together (eg CA and INT to avoid hangups) ? What should it look like ?
+    -> at user risk
+
+
+3. How many sensors should be connectable in terms of memory consumption ? Is this an issue at all ?
+   => Use macros instead of regDef ? No
+    -> 1 IIC plus 1 SPI is sufficient
+
+
+4. Should Trigger Bits be supported in MCM mode ? How ? => Become part of register address !
+    -> separate function : write 0 Bytes to register 0 -> only set trigger bits
+
+
+5. Name all sensor related files "TLx493D_<...>" because differences only exist in board / connections, but not in registers and functionality ?
+    -> name all versions TLx !
+
+
+6. No further sensor in Gen 1 ? => no common parts to be considered ? yes
+
+
+7. Reset by power down / up instead of I2C ? Drive board VDD by output pin always ? No, too much current drawn at startup
+
+
+8. Arduino library delivery only contains gen 1 and 2 as no board are officially available (A1B6, A2B6, W2BW, P2B6, W2B6).
+   Severin gets also 3rd gen code (P3B6, P3I8).
+    -> Agreed
+
+
+9. Examples planned :
+    - single I2C sensor
+    - two I2C sensor -> 1 in LPM and 1 in MCM
+    - single SPI sensor
+    - 1 SPI and 1 I2C sensor concurrently (P3B6) => entfällt !
+
+
+10. Are we supposed to implement test mode settings / evaluation ?
+    -> no support needed !
+
+
+11. Sensors to be supported :
+    - Arduino delivery :
+        - TLV A1B6
+        - TLE A2B6
+        - TLE P2B6
+        - TLE W2B6
+        - TLI W2BW
+
+    - Not in Arduino delivery because official boards are not yet available, but included in internal delivery to Severin
+    - TLE P3B6 (if the board works)
+    - TLE P8I8
+        -> Agreed
+
+
+12. Interface : 2 versions of getTemperature and getFieldValues : 1 for raw/LSB values, one for converted values ?
+    -> Severin to answer. Both.
+
+
+13. Which flags need to excluded for W2B6 to compute configuration parity ? TST, PH, WA ?, CP ?
+
+14. A function that allows to add thresholds based on mT values depends on the current temperature to compute temperature compensation.
+    This is undesirable. How to fix ? Provide functions to 
+    - add functions to get the current raw values of temperature and magnetic field
+    - set thresholds based on integer raw values
+    - use only sensitivity and not temperature dependent factors to compute thesholds from mT values.
+    - ?? Provide function getRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, Sensitivity_t sens, double mT, int16_t *rawMF)
+      to compute the raw magnetic field value given a certain raw temperature and a sensitivity. This value could be used to compute thesholds
+      values for different conditions and use the best suitable value.
+
+15. Start customer acceptance test with delivery in December. Severin will provide library to other users for testing and provide feedback
+    before providing library publicly for Arduino on github. Test phase will end E/01 or B/02 of 2024.
+
+16. Observed issues :
+    - multiple quick readRegisters may lead to a failed reading
+    - after changing the IICAddr : read registers fails regularly
+    - ADC_ON_READ_BEFORE_FIRST_MSB als Trigger (TRIG bits) im MCM fails always
+
+    => IIC interface very slow leading to failures at times ? No : using bug fix in requestFrom in XMC-for-Arduino (summer 2023) it works more stable.
+
+17.
+
+
+
+
+1. Interface functions available for all sensors
+
+bool init(TLx493D_t *sensor, TLx493D_SupportedSensorType_t sensorType);
+bool deinit(TLx493D_t *sensor);
+
+bool setDefaultConfig(TLx493D_t *sensor);
+
+bool getTemperature(TLx493D_t *sensor, double *temp);
+bool getFieldValues(TLx493D_t *sensor, double *x, double *y, double *z);
+bool getFieldAndTemperatureValues(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
+
+bool setSensorRange(TLx493D_t *sensor, enum <possible combinations> range); // full, short, extreme short : whatever is supported
+
+bool selectMeasuredValues(TLx493D_t *sensor, enum <possible combinations> mVals); // Bx/By/Bz, Bx/By, Bx/By/Temp, ...
+// or do it separately ? Like :
+// bool enableTemperatureMeasurements(TLx493D_t *sensor);
+// bool disableTemperatureMeasurements(TLx493D_t *sensor);
+
+bool readRegisters(TLx493D_t *sensor);
+
+bool setInterruptAndCollisionAvoidance(TLx493D_t *sensor, enum <possible combinations> eVal);
+// bool enableInterrupt(TLx493D_t *sensor);
+// bool disableInterrupt(TLx493D_t *sensor);
+
+// bool enableCollisionAvoidance(TLx493D_t *sensor);
+// bool disableCollisionAvoidance(TLx493D_t *sensor);
+
+bool enableWakeup(TLx493D_t *sensor);
+bool disableWakeup(TLx493D_t *sensor);
+// thesholds im mT, to be converted to proper format
+bool setWakeupThesholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+
+bool setPowerMode(TLx493D_t *sensor, enum <possible combinations> mode);  // value of mode is sensor / generation specific !
+
+// value of update rate is sensor / generation specific !
+bool setUpdateRate(TLx493D_t *sensor, enum <possible combinations> rate);
+
+bool setIICAddress(TLx493D_t *sensor, enum <possible combinations> addr); // Gen. 1 and 2
+
+// diagnosis
+bool hasValidData(TLx493D_t *sensor);
+bool hasValidTemperatureData(TLx493D_t *sensor);
+bool hasValidFieldValueData(TLx493D_t *sensor);
+
+bool isFunctional(TLx493D_t *sensor);
+
+bool softwareReset(TLx493D_t *sensor);
+
+
+// Severin : nice to have
+// trigger bits shall be ORed to register address always by shifting left by 5 -> default is 0b000
+void setTriggerBits(TLx493D_t *sensor, uint8_t triggerBits);
+
+// Severin : nice to have, set proper defaults
+// register bits
+ void setTrigger(TLx493D_t *sensor, uint8_t trigger);

@@ -1,0 +1,14 @@
+all:
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 iic compile
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 spi compile
+
+
+	
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 A1B6_needsSensor
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 A2B6_needsSensor
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 P2B6_needsSensor
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 W2B6_needsSensor
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 W2BW_needsSensor
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 P3B6_needsSensor
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 P3I8_needsSensor
+ 
