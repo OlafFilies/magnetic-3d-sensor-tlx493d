@@ -22,8 +22,9 @@ void setup() {
     Serial.begin(115200);
     delay(100);
 
-    // dut.addSelectPin(POWER_PIN_LOW, OUTPUT, LOW, HIGH);
-    dut.begin();
+    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
+    dut.begin(true);
+    // dut.enablePower();
 
     delay(100);
     Serial.print("setup done.\n");

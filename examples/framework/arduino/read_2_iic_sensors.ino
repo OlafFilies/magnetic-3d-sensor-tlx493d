@@ -32,7 +32,9 @@ void setup() {
     Serial.begin(115200);
     delay(100);
 
-    dut.begin();
+    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
+    dut.begin(true);
+    // dut.enablePower();
 
 
     // a1b6.begin();
