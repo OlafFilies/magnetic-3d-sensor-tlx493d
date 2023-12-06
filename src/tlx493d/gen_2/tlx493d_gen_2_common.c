@@ -145,6 +145,7 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, uint8_t x2BF, uint8_t cpBF,
 bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
     tlx493d_common_setBitfield(sensor, caBF, 0);
     tlx493d_common_setBitfield(sensor, intBF, 1);
+    // tlx493d_common_setBitfield(sensor, intBF, 0); // TODO: Change back, only for Demo !
 
     if( sensor->functions->enable1ByteReadMode(sensor) ) {
         sensor->functions->readRegisters(sensor);
@@ -394,7 +395,7 @@ bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
     tlx493d_common_setBitfield(sensor, lsbsBF, lower);
 
     printRegisters(sensor);
-    return true;
+    // return true;
     
     return tlx493d_gen_2_writeConfigurationRegisters(sensor);
 }

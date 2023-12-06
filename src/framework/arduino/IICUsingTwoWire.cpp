@@ -40,10 +40,12 @@ TLx493D_ComLibraryFunctions_t  comLibFuncs_iic = {
                                             .transfer = { .iic_transfer = tlx493d_transferIIC },
                                        };
 
+
 bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper &tw, TLx493D_IICAddressType_t iicAdr) {
     sensor->comInterface.comLibObj.iic_obj               = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
     sensor->comInterface.comLibObj.iic_obj->wire         = &tw;
-    sensor->comInterface.isToBeDeleted                   = false;
+    sensor->comInterface.comLibObj.iic_obj->isToBeDeleted                   = false;
+    // sensor->comInterface.isToBeDeleted                   = false;
 
     sensor->comInterface.comLibFuncs                     = &comLibFuncs_iic;
     sensor->comInterface.comLibParams.iic_params.address = sensor->functions->selectIICAddress(sensor, iicAdr);
@@ -56,7 +58,8 @@ bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWireWrapper &tw, TLx493D_II
 bool tlx493d_initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr) {
     sensor->comInterface.comLibObj.iic_obj               = (TLx493D_I2CObject_t *) malloc(sizeof(TLx493D_I2CObject_t));
     sensor->comInterface.comLibObj.iic_obj->wire         = new TwoWireWrapper(tw);
-    sensor->comInterface.isToBeDeleted                   = true;
+    sensor->comInterface.comLibObj.iic_obj->isToBeDeleted                   = true;
+    // sensor->comInterface.isToBeDeleted                   = true;
 
     sensor->comInterface.comLibFuncs                     = &comLibFuncs_iic;
     sensor->comInterface.comLibParams.iic_params.address = sensor->functions->selectIICAddress(sensor, iicAdr);

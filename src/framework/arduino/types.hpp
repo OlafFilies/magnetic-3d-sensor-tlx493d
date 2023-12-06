@@ -30,6 +30,11 @@ typedef struct TLx493D_SPIObject_t {
 } TLx493D_SPIObject_t;
 
 
+typedef struct TLx493D_BoardSupportObject_t {
+    Kit2GoBoardSupport  *bsc;
+} TLx493D_BoardSupportObject_t;
+
+
 typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A1B6_e>  TLx493D_A1B6;
 typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A2B6_e>  TLx493D_A2B6;
 typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_P2B6_e>  TLx493D_P2B6;

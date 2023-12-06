@@ -29,7 +29,7 @@ void tlx493d_deinitCommunication(TLx493D_t *sensor) {
         // sensor->comInterface.comLibObj.iic_obj->wire->deinit();
         sensor->comInterface.comLibFuncs->deinit.iic_deinit(sensor);
 
-        if( sensor->comInterface.isToBeDeleted ) {
+        if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
             delete sensor->comInterface.comLibObj.iic_obj->wire;
         }
 
@@ -40,7 +40,7 @@ void tlx493d_deinitCommunication(TLx493D_t *sensor) {
         // sensor->comInterface.comLibObj.spi_obj->spi->deinit();
         sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
 
-        if( sensor->comInterface.isToBeDeleted ) {
+        if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
             delete sensor->comInterface.comLibObj.spi_obj->spi;
         }
 

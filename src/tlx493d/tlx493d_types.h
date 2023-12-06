@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 
-typedef struct TLx493D_t  TLx493D_t;
+// typedef struct TLx493D_t  TLx493D_t;
 
 
 /*
@@ -192,10 +192,21 @@ typedef struct TLx493D_CommunicationInterface_t {
     TLx493D_ComLibraryFunctions_t   *comLibFuncs;
     TLx493D_ComLibraryParameters_t   comLibParams;
     TLx493D_ComLibraryObject_t       comLibObj;
-    bool                             isToBeDeleted;
+    // bool                             isToBeDeleted;
 } TLx493D_CommunicationInterface_t;
 
 
+// typedef struct TLx493D_BoardSupportObject_t {
+//     TLx493D_I2CObject_t  *bsc_obj;
+// } TLx493D_BoardSupportObject_t;
+
+
+typedef struct TLx493D_BoardSupportInterface_t {
+    // TLx493D_BoardSupportFunctions_t   *boardSupportFuncs;
+    // TLx493D_BoardSupportParameters_t   boardSupportParams;
+    TLx493D_BoardSupportObject_t       *boardSupportObj;
+    bool                                isToBeDeleted;
+} TLx493D_BoardSupportInterface_t;
 
 
 // Functions common to all sensors
@@ -377,6 +388,8 @@ typedef struct TLx493D_t {
     // TLx493D_ComLibraryObject_t      comLibObj;
 
     TLx493D_CommunicationInterface_t  comInterface;
+
+    TLx493D_BoardSupportInterface_t   boardSupportInterface;
 
     uint8_t                                     regMapSize;
     TLx493D_SupportedSensorType_t               sensorType;

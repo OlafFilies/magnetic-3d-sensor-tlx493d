@@ -23,7 +23,7 @@ void setup() {
     // delay(100);
 
     dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
-    dut.begin(true);
+    dut.begin();
     // dut.enablePower();
 
     // double temp = 0.0;

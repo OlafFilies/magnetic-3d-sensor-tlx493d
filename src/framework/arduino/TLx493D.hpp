@@ -39,15 +39,15 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         }
 
 
-        void init(bool enablePower = true) {
-            bsc.init(enablePower);
+        void init() {
+            bsc.init(true);
             tlx493d_initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
             setDefaultConfig();
         }
 
 
-        void begin(bool enablePower = true) {
-            init(enablePower);
+        void begin() {
+            init();
         }
 
 
@@ -86,22 +86,22 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
 
 
         void enablePower() {
-            bsc.enablePower();
+            bsc.controlPower(true);
         }
 
 
         void disablePower() {
-            bsc.disablePower();
+            bsc.controlPower(false);
         }
 
 
         void enableSelect() {
-            bsc.enableSelect();
+            bsc.controlSelect(true);
         }
 
 
         void disableSelect() {
-            bsc.disableSelect();
+            bsc.controlSelect(false);
         }
 
 
@@ -138,15 +138,15 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         }
 
 
-        void init(bool enablePower = true) {
-            bsc.init(enablePower);
+        void init() {
+            bsc.init(true);
             tlx493d_initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
             setDefaultConfig();
         }
 
 
-        void begin(bool enablePower = true) {
-            init(enablePower);
+        void begin() {
+            init();
         }
 
 
@@ -185,22 +185,22 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
 
 
         void enablePower() {
-            bsc.enablePower();
+            bsc.controlPower(true);
         }
 
 
         void disablePower() {
-            bsc.disablePower();
+            bsc.controlPower(false);
         }
 
 
         void enableSelect() {
-            bsc.enableSelect();
+            bsc.controlSelect(true);
         }
 
 
         void disableSelect() {
-            bsc.disableSelect();
+            bsc.controlSelect(false);
         }
 
 

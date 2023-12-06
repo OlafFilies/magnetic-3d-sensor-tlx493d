@@ -33,9 +33,7 @@ extern "C" bool tlx493d_deinitSPI(TLx493D_t *sensor) {
 
 
 extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
-
     return sensor->comInterface.comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
-
 }
 
 
@@ -45,10 +43,12 @@ TLx493D_ComLibraryFunctions_t  comLibFuncs_spi = {
                                             .transfer = { .spi_transfer = tlx493d_transferSPI },
                                        };
 
+
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi) {
     sensor->comInterface.comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
     sensor->comInterface.comLibObj.spi_obj->spi = &spi;
-    sensor->comInterface.isToBeDeleted          = false;
+    sensor->comInterface.comLibObj.spi_obj->isToBeDeleted          = false;
+    // sensor->comInterface.isToBeDeleted          = false;
     sensor->comInterface.comLibFuncs            = &comLibFuncs_spi;
 
     sensor->comInterface.comLibFuncs->init.spi_init(sensor);
@@ -59,7 +59,8 @@ bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi) {
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi) {
     sensor->comInterface.comLibObj.spi_obj      = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
     sensor->comInterface.comLibObj.spi_obj->spi = new SPIClassWrapper(spi);
-    sensor->comInterface.isToBeDeleted          = true;
+    sensor->comInterface.comLibObj.spi_obj->isToBeDeleted          = true;
+    // sensor->comInterface.isToBeDeleted          = true;
 
     sensor->comInterface.comLibFuncs            = &comLibFuncs_spi;
 

@@ -48,6 +48,7 @@ bool tlx493d_gen_2_hasValidData(TLx493D_t *sensor);
 bool tlx493d_gen_2_isFunctional(TLx493D_t *sensor);
 
 
+bool tlx493d_gen_2_writeConfigurationRegisters(TLx493D_t *sensor);
 // bool tlx493d_gen_2_hasWakeUp(TLx493D_t *sensor, uint8_t typeBF);
 bool tlx493d_gen_2_isWakeUpEnabled(TLx493D_t *sensor, uint8_t waBF);
 bool tlx493d_gen_2_enableWakeUpMode(TLx493D_t *sensor, uint8_t tBF, uint8_t wuBF, uint8_t cpbBF);

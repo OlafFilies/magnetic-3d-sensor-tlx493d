@@ -104,6 +104,7 @@ class Kit2GoBoardSupport {
         void controlPin(const pinCtrl &p, bool enable) {
             if( p.isSet ) {
                 digitalWrite(p.pinNumber, enable ? p.enableValue : p.disableValue);
+                // print("Setting select pin %d to %d\n", p.pinNumber, enable ? p.enableValue : p.disableValue);
                 delay(enable ? p.delayAfterEnable : p.delayAfterDisable);
             }
         }
