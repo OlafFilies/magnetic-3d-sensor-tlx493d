@@ -5,6 +5,13 @@ TEST ?=
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
 
+# #################################
+# # WSL setup with windows compile
+# ARDUINOCLI = arduino-cli.exe
+
+# #################################
+# # Linux LabPC setup
+ARDUINOCLI = arduino-cli
 
 # TEST_COMMON=-DTEST_SENSORS_COMMON \
 # 			-DTEST_SENSORS_GEN_1_COMMON \
@@ -14,26 +21,26 @@ $(info PORT : $(PORT))
 # TEST_COMMON_NEEDS_SENSOR=-DTEST_SENSORS_COMMON_NEEDS_SENSOR \
 # 						 -DTEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR \
 # 						 -DTEST_SENSORS_GEN_2_COMMON_NEEDS_SENSOR \
-# 			 			 -DTEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
+# 						 -DTEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
 
 TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
-                   -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
+				   -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_P2B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_W2B6_NEEDS_SENSOR \
-	               -DTEST_TLx493D_W2BW_NEEDS_SENSOR \
+				   -DTEST_TLx493D_W2BW_NEEDS_SENSOR \
 				   -DTEST_TLx493D_P3B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_P3I8_NEEDS_SENSOR
 
 
 TESTS_NO_SENSOR=-DTEST_TLx493D_A1B6 \
-                -DTEST_TLx493D_A2B6 \
+				-DTEST_TLx493D_A2B6 \
 				-DTEST_TLx493D_P2B6 \
 				-DTEST_TLx493D_W2B6 \
-			 	-DTEST_TLx493D_W2BW \
+				-DTEST_TLx493D_W2BW \
 				-DTEST_TLx493D_P3B6 \
 				-DTEST_TLx493D_P3I8
 
-				
+
 
 A1B6_needsSensor: TESTS=-DTEST_TLx493D_A1B6 -DTEST_TLx493D_A1B6_NEEDS_SENSOR
 A1B6: TESTS=-DTEST_TLx493D_A1B6
@@ -89,15 +96,15 @@ arduino: clean
 
 iic_plain_c: arduino
 	cp examples/framework/arduino/read_iic_sensor_plain_c.ino build/build.ino
- 
+
 
 spi: arduino
 	cp examples/framework/arduino/read_spi_sensor.ino build/build.ino
- 
+
 
 iic: arduino
 	cp examples/framework/arduino/read_iic_sensor.ino build/build.ino
- 
+
 
 2iic: arduino
 	cp examples/framework/arduino/read_2_iic_sensors.ino build/build.ino
@@ -118,19 +125,19 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
-                                    		             --build-property compiler.cpp.extra_flags="$(TESTS)" build
+	$(ARDUINOCLI) compile --clean --log --warnings all --fqbn $(FQBN) --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
+														 --build-property compiler.cpp.extra_flags="$(TESTS)" build
 endif
 
 
-upload:	
+upload:
 ifeq ($(PORT),)
 	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
 endif
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
 else
-	arduino-cli.exe upload -p $(PORT) --fqbn $(FQBN) build
+	$(ARDUINOCLI) upload -p $(PORT) --fqbn $(FQBN) build
 endif
 
 
@@ -144,21 +151,21 @@ endif
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
 else
-	arduino-cli.exe monitor -c baudrate=115200 -p $(PORT) --fqbn $(FQBN)
+	$(ARDUINOCLI) monitor -c baudrate=115200 -p $(PORT) --fqbn $(FQBN)
 endif
 
 
 
 # For WSL and Windows :
-# download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
+# download $(ARDUINOCLI) from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
 prepare:
-	arduino-cli.exe core update-index
-	arduino-cli.exe core install Infineon:xmc
-	arduino-cli.exe core update-index
-	arduino-cli.exe core search Infineon
-	arduino-cli.exe core list
-	arduino-cli.exe board listall
-	arduino-cli.exe board listall Infineon
+	$(ARDUINOCLI) core update-index
+	$(ARDUINOCLI) core install Infineon:xmc
+	$(ARDUINOCLI) core update-index
+	$(ARDUINOCLI) core search Infineon
+	$(ARDUINOCLI) core list
+	$(ARDUINOCLI) board listall
+	$(ARDUINOCLI) board listall Infineon
 
 
 
