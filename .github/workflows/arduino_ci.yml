@@ -102,7 +102,7 @@ jobs:
         echo "Repo name extracted: " $REPO
         echo "Build HEX name:      " $HEXNAME
         echo "Board type name:     " $TYPE
-        echo "Sensor name          " $SENSOR
+        echo "Sensor name          " $SENSOR[1]
         echo "Port Serial Num:     " $SERIAL_NUM
         echo "Port found:          " $PORT
         echo "Flash device:        " $DEVICE
