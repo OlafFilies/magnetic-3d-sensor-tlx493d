@@ -58,27 +58,6 @@ jobs:
     - name: Setup Arduino CLI
       uses: arduino/setup-arduino-cli@master
 
-    # prepare the runner for the repo data
-    # setup links inside the self hosted runner for correct directory setup
-    # REPO is the base name of the library which is linked to the right directory structure
-    # check wether the .arduino15 packages dir is available
-    - name: Set and check environment, install repos
-      run: |
-        export REPO="$(basename "$GITHUB_REPOSITORY")"
-        mkdir -p ~/.arduino15/packages/
-        ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
-        mkdir -p "$HOME/Arduino/libraries"
-        ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/$REPO
-
-    # Update the arduino code. Attention this does not setup XMC packages as this are set inside the self hosted runner
-    # the arduino board support packages can be updated automatically
-    # the XMC board support package is only linked inside the self hosted runner, which allows
-    # to use none official and beta versions
-    - name: Install/Update Arduino Platform
-      run: |
-        arduino-cli core update-index
-        arduino-cli core install ${{ matrix.platform }}
-
       # Flashes the compiled HEX file onto the selected MCU
       # REPO: the name of the repository which is also the link name
       # HEXNAME: the board depended name of the HEX files
@@ -108,6 +87,15 @@ jobs:
         echo "Flash device:        " $DEVICE
 
         if [ "${{ matrix.example }}" = "$TYPE" ]; then
+
+          mkdir -p ~/.arduino15/packages/
+          ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+          mkdir -p "$HOME/Arduino/libraries"
+          ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/$REPO
+
+          arduino-cli core update-index
+          arduino-cli core install ${{ matrix.platform }}
+ 
           cd $HOME/Arduino/libraries/$REPO
           make FQBN=${{ matrix.fqbn }} PORT=$PORT $SENSOR_needsSensor
         else
