@@ -96,7 +96,7 @@ jobs:
         export DEVICE=`cat ./board2port.yaml | shyaml get-value $HEXNAME.$REPO.${{ matrix.device}}`
         export PORT=`./find_usb.sh $SERIAL_NUM`
 
-        export TYPE=`cat ./board2port.yaml | shyaml get-value $HEXNAME.$REPO.'type`
+        export TYPE=`cat ./board2port.yaml | shyaml get-value $HEXNAME.$REPO.type`
 
         echo "Repo name extracted: " $REPO
         echo "Build HEX name:      " $HEXNAME
