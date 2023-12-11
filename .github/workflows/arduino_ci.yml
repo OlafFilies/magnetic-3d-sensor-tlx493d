@@ -102,14 +102,14 @@ jobs:
         echo "Repo name extracted: " $REPO
         echo "Build HEX name:      " $HEXNAME
         echo "Board type name:     " $TYPE
-        echo "Sensor name          " §SENSOR
+        echo "Sensor name          " $SENSOR
         echo "Port Serial Num:     " $SERIAL_NUM
         echo "Port found:          " $PORT
         echo "Flash device:        " $DEVICE
 
         if [ "${{ matrix.example }}" = "$TYPE" ]; then
           cd $HOME/Arduino/libraries/$REPO
-          make FQBN=$HEXNAME PORT=$PORT W2B6_needsSensor
+          make FQBN=${{ matrix.fqbn }} PORT=$PORT W2B6_needsSensor
         else
           echo "No"
         fi
