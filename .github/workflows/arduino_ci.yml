@@ -43,8 +43,10 @@ jobs:
         ]
 
         include:
-        - fqbn:     "Infineon:xmc:XMC1100_XMC2GO"
-          platform: "infineon:xmc"
+          - fqbn:      "Infineon:xmc:XMC1100_XMC2GO"
+            platform:  "infineon:xmc"
+            port_name: "port_serial.0"
+            device:    "device.0"
 
     # These are the steps which should run for each combination of fqbn and example code
     steps:
@@ -76,6 +78,37 @@ jobs:
       run: |
         arduino-cli core update-index
         arduino-cli core install ${{ matrix.platform }}
+
+      # Flashes the compiled HEX file onto the selected MCU
+      # REPO: the name of the repository which is also the link name
+      # HEXNAME: the board depended name of the HEX files
+      # SERIAL_NUM: the unique serial number of the hardware board according the board2port.yaml
+      # DEVICE: the flashing device according the board2port.yaml
+      # PORT: real PORT name of the attached hardware based on the SERIAL_NUM
+      # use the python based XMC flasher
+    - name: Flash
+      run: |
+        cd /opt/runner_support/
+        export REPO="$(basename "$GITHUB_REPOSITORY")"
+        export HEXNAME=`tr ':' '.' <<<"${{ matrix.fqbn }}"`
+
+        export SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value $HEXNAME.$REPO.${{ matrix.port_name}}`
+        export DEVICE=`cat ./board2port.yaml | shyaml get-value $HEXNAME.$REPO.${{ matrix.device}}`
+        export PORT=`./find_usb.sh $SERIAL_NUM`
+
+        export TYPE=`cat ./board2port.yaml | shyaml get-value $HEXNAME.$REPO.'type`
+
+        echo "Repo name extracted: " $REPO
+        echo "Build HEX name:      " $HEXNAME
+        echo "Board type name:     " $TYPE
+        echo "Port Serial Num:     " $SERIAL_NUM
+        echo "Port found:          " $PORT
+        echo "Flash device:        " $DEVICE
+
+  #         cd $HOME
+  #         python $HOME/.arduino15/packages/Infineon/hardware/xmc/3.0.0/tools/xmc-flasher.py upload -d $DEVICE -p $PORT -f $HOME/Arduino/libraries/$REPO/${{ matrix.example }}/build/$HEXNAME/*.hex
+
+
 
     # # Compile the sample code for the selected board and board support package with the arduino compiler
     # - name: Compile Sketch
