@@ -30,9 +30,10 @@ typedef struct TLx493D_SPIObject_t {
 } TLx493D_SPIObject_t;
 
 
-typedef struct TLx493D_BoardSupportObject_t {
-    Kit2GoBoardSupport  *bsc;
-} TLx493D_BoardSupportObject_t;
+typedef struct TLx493D_Kit2GoBoardSupportObject_t {
+    Kit2GoBoardSupport  *k2go;
+    bool                 isToBeDeleted;
+} TLx493D_Kit2GoBoardSupportObject_t;
 
 
 typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A1B6_e>  TLx493D_A1B6;

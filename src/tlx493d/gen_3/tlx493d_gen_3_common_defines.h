@@ -28,10 +28,11 @@
 #define GEN_3_L3z	2.61297188837947e-11
 
 #define GEN_3_FULL_RANGE_FIELD_SENSITIVITY         30.5
-#define GEN_3_SHORT_RANGE_FIELD_SENSITIVITY        61.0
-#define GEN_3_EXTRA_SHORT_RANGE_FIELD_SENSITIVITY  122.0
+// #define GEN_3_SHORT_RANGE_FIELD_SENSITIVITY        61.0
+// #define GEN_3_EXTRA_SHORT_RANGE_FIELD_SENSITIVITY  122.0
 
-#define GEN_3_TEMP_MULT                 15.2
+// #define GEN_3_TEMP_MULT                 15.2
+#define GEN_3_TEMP_SENSITIVITY          15.2
 #define GEN_3_TEMP_OFFSET               4200.0
 #define GEN_3_TEMP_REF                  25.0
 

@@ -196,16 +196,16 @@ typedef struct TLx493D_CommunicationInterface_t {
 } TLx493D_CommunicationInterface_t;
 
 
-// typedef struct TLx493D_BoardSupportObject_t {
-//     TLx493D_I2CObject_t  *bsc_obj;
-// } TLx493D_BoardSupportObject_t;
+typedef union TLx493D_BoardSupportObject_t {
+    TLx493D_Kit2GoBoardSupportObject_t  *k2go_obj;
+} TLx493D_BoardSupportObject_t;
 
 
 typedef struct TLx493D_BoardSupportInterface_t {
     // TLx493D_BoardSupportFunctions_t   *boardSupportFuncs;
     // TLx493D_BoardSupportParameters_t   boardSupportParams;
-    TLx493D_BoardSupportObject_t       *boardSupportObj;
-    bool                                isToBeDeleted;
+    TLx493D_BoardSupportObject_t       boardSupportObj;
+    // bool                               isToBeDeleted;
 } TLx493D_BoardSupportInterface_t;
 
 
@@ -215,14 +215,14 @@ typedef bool (*TLx493D_DeinitFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_ReadRegistersFuncPtr)(TLx493D_t *);
 
-typedef void (*TLx493D_CalculateRawTemperatureFuncPtr)(TLx493D_t *, uint16_t *);
-typedef bool (*TLx493D_GetRawTemperatureFuncPtr)(TLx493D_t *, uint16_t *);
+typedef void (*TLx493D_CalculateRawTemperatureFuncPtr)(TLx493D_t *, int16_t *);
+typedef bool (*TLx493D_GetRawTemperatureFuncPtr)(TLx493D_t *, int16_t *);
 
-typedef void (*TLx493D_CalculateRawMagneticFieldFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *);
-typedef bool (*TLx493D_GetRawMagneticFieldFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *);
+typedef void (*TLx493D_CalculateRawMagneticFieldFuncPtr)(TLx493D_t *, int16_t *, int16_t *, int16_t *);
+typedef bool (*TLx493D_GetRawMagneticFieldFuncPtr)(TLx493D_t *, int16_t *, int16_t *, int16_t *);
 
-typedef void (*TLx493D_CalculateRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *);
-typedef bool (*TLx493D_GetRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *);
+typedef void (*TLx493D_CalculateRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, int16_t *, int16_t *, int16_t *, int16_t *);
+typedef bool (*TLx493D_GetRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, int16_t *, int16_t *, int16_t *, int16_t *);
 
 typedef void (*TLx493D_CalculateTemperatureFuncPtr)(TLx493D_t *, double *);
 typedef bool (*TLx493D_GetTemperatureFuncPtr)(TLx493D_t *, double *);
@@ -284,9 +284,11 @@ typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_t *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_t *);
 
-typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(TLx493D_t *, int16_t, TLx493D_SensitivityType_t , double , int16_t *);
+typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(TLx493D_t *, int16_t, TLx493D_SensitivityType_t,
+                                                                      double, double, double,
+                                                                      int16_t *, int16_t *, int16_t *);
 
-typedef void (*TLx493D_GetSensitivityScaleFactorFuncPtr)(TLx493D_t *, double *);
+typedef double (*TLx493D_GetSensitivityScaleFactorFuncPtr)(TLx493D_t *);
 
 typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(TLx493D_t *, TLx493D_IICAddressType_t);
 

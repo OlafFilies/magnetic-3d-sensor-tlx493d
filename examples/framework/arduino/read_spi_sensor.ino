@@ -15,26 +15,13 @@ TLx493D_P3I8 dut(SPI);
 
 
 void setup() {
-    // pinMode(POWER_PIN_LOW, OUTPUT);
-    // digitalWrite(POWER_PIN_LOW, HIGH);
-    // // digitalWrite(POWER_PIN_LOW, LOW);
-
     delay(3000);
     Serial.begin(115200);
-    delay(100);
 
-    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 200, 200);
-    dut.setSelectPin(POWER_PIN_LOW, OUTPUT, LOW, HIGH, 150, 150);
+    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
+    dut.setSelectPin(POWER_PIN_LOW, OUTPUT, LOW, HIGH, 50, 50);
     dut.begin();
 
-    // dut.disablePower();
-    // dut.enablePower();
-
-    // dut.disableSelect();
-    // dut.enableSelect();
-// print("LOW = %d   HIGH = %d\n", LOW, HIGH);
-
-    delay(100);
     Serial.print("setup done.\n");
 }
 
@@ -42,22 +29,28 @@ void setup() {
 void loop() {
     double temp = 0.0;
     double valX = 0, valY = 0, valZ = 0;
+    int16_t tempRaw = 0;
 
-    dut.enableSelect();
-    // digitalWrite(POWER_PIN_LOW, LOW);
+    // dut.enableSelect();
     Serial.print(true == dut.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
-    // digitalWrite(POWER_PIN_LOW, HIGH);
-    dut.disableSelect();
+    // dut.disableSelect();
 
     Serial.print("Temperature is: ");
     Serial.print(temp);
-    Serial.println("°C");
+    Serial.println(" °C");
 
-    dut.enableSelect();
-    // digitalWrite(POWER_PIN_LOW, LOW);
+
+    // dut.enableSelect();
+    dut.getRawTemperature(&tempRaw);
+    // dut.disableSelect();
+
+    Serial.print("Raw temperature is: ");
+    Serial.print(tempRaw);
+    Serial.println(" LSB");
+
+    // dut.enableSelect();
     Serial.print(true == dut.getMagneticField(&valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
-    // digitalWrite(POWER_PIN_LOW, HIGH);
-    dut.disableSelect();
+    // dut.disableSelect();
 
     Serial.print("Value X is: ");
     Serial.print(valX);

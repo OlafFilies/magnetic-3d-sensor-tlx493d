@@ -33,7 +33,19 @@ extern "C" bool tlx493d_deinitSPI(TLx493D_t *sensor) {
 
 
 extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
-    return sensor->comInterface.comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
+    if( sensor->boardSupportInterface.boardSupportObj.k2go_obj != nullptr ) {
+        sensor->boardSupportInterface.boardSupportObj.k2go_obj->k2go->controlSelect(true);
+    }
+
+    bool b = sensor->comInterface.comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
+
+    if( sensor->boardSupportInterface.boardSupportObj.k2go_obj != nullptr ) {
+        sensor->boardSupportInterface.boardSupportObj.k2go_obj->k2go->controlSelect(false);
+    }
+
+    return b;
+
+    // return sensor->comInterface.comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen);
 }
 
 

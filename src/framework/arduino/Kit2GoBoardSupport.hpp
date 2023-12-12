@@ -8,7 +8,7 @@
 #include <Arduino.h>
 
 // project cpp includes
-#include "Logger.h"
+// #include "Logger.h"
 
 
 class Kit2GoBoardSupport {

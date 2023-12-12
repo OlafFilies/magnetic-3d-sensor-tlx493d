@@ -2,6 +2,9 @@
 #include "Test_includes.hpp"
 
 
+#define POWER_PIN_LOW 3
+
+
 extern "C" {
     // project includes
     #include "Test_TLx493D_P3I8_needsSensor.h"
@@ -12,6 +15,13 @@ extern "C" {
     void TLx493D_P3I8_needsSensor_suiteSetup() {
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_P3I8_init(&dut);
+
+        Kit2GoBoardSupport bsc;
+        // bsc.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50); // done in main !
+        bsc.setSelectPin(POWER_PIN_LOW, OUTPUT, LOW, HIGH, 50, 50);
+        bsc.begin();
+        tlx493d_initBoardSupport(&dut, bsc);
+        
         tlx493d_initCommunication(&dut, SPI);
         TLx493D_P3I8_setDefaultConfig(&dut);
     }

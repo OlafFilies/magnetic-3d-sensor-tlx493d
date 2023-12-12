@@ -71,12 +71,12 @@ bool tlx493d_common_readRegisters(TLx493D_t *sensor) {
 }
 
 
-void tlx493d_common_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, uint16_t *temperature) {
+void tlx493d_common_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, int16_t *temperature) {
     tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, temperature);
 }
 
 
-bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
     if( sensor->functions->readRegisters(sensor) ) {
         sensor->functions->calculateRawTemperature(sensor, temperature);
         return true;
@@ -86,14 +86,14 @@ bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) 
 
 void tlx493d_common_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF,
                                               uint8_t byMSBBF, uint8_t byLSBBF, uint8_t bzMSBBF, uint8_t bzLSBBF,
-                                              uint16_t *x, uint16_t *y, uint16_t *z) {
+                                              int16_t *x, int16_t *y, int16_t *z) {
     tlx493d_common_concatBytes(sensor, bxMSBBF, bxLSBBF, x);
     tlx493d_common_concatBytes(sensor, byMSBBF, byLSBBF, y);
     tlx493d_common_concatBytes(sensor, bzMSBBF, bzLSBBF, z);
 }
 
 
-bool tlx493d_common_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+bool tlx493d_common_getRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
     if( sensor->functions->readRegisters(sensor) ) {
         sensor->functions->calculateRawMagneticField(sensor, x, y, z);
         return true;
@@ -103,8 +103,8 @@ bool tlx493d_common_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t
 }
 
 
-bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z,
-                                                     uint16_t *temperature) {
+bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z,
+                                                     int16_t *temperature) {
     if( sensor->functions->readRegisters(sensor) ) {
         sensor->functions->calculateRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
         return true;
@@ -256,26 +256,29 @@ const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor) {
 }
 
 
-void tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF, double *sf) {
+// TODO: move to gen 2 
+double tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF) {
     switch(sens) {
-        case TLx493D_HAS_X1_e : *sf = 1.0;
-                                return;
+        case TLx493D_HAS_X1_e : // *sf = 1.0;
+                                return 1.0;
     
         case TLx493D_HAS_X2_e : {
                                     TLx493D_Register_t *x2 = &sensor->regDef[x2BF];
-                                    *sf = (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0 : 2.0;
-                                    return;
+                                    // *sf = (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0 : 2.0;
+                                    return (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0 : 2.0;
         }
     
         case TLx493D_HAS_X4_e : {
                                     TLx493D_Register_t *x2 = &sensor->regDef[x2BF];
                                     TLx493D_Register_t *x4 = &sensor->regDef[x4BF];
-                                    *sf = (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0
-                                                                                        : (sensor->regMap[x4->address] & x4->mask) == 0 ? 2.0 : 4.0;
-                                    return;
+                                    // *sf = (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0
+                                    //                                                     : (sensor->regMap[x4->address] & x4->mask) == 0 ? 2.0 : 4.0;
+                                    return (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0
+                                                                                         : (sensor->regMap[x4->address] & x4->mask) == 0 ? 2.0 : 4.0;;
         }
     
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, sens, "TLx493D_AvailableSensitivityType_t");
+                  return 0.0;
     }
 }
 
@@ -285,9 +288,9 @@ void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr) {
 }
 
 
-void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
-                                                           double mT, int16_t *rawMF) {
-}
+// void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+//                                                            double mT, int16_t *rawMF) {
+// }
 
 
 void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName) {

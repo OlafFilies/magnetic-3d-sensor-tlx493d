@@ -156,33 +156,33 @@ bool TLx493D_A2B6_readRegisters(TLx493D_t *sensor) {
 }
 
 
-void TLx493D_A2B6_calculateRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+void TLx493D_A2B6_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
     tlx493d_gen_2_calculateRawTemperature(sensor, A2B6_TEMP_MSBS_e, A2B6_TEMP_LSBS_e, temperature);
 }
 
 
-bool TLx493D_A2B6_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+bool TLx493D_A2B6_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
     return tlx493d_common_getRawTemperature(sensor, temperature);
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+void TLx493D_A2B6_calculateRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
     tlx493d_gen_2_calculateRawMagneticField(sensor, A2B6_BX_MSBS_e, A2B6_BX_LSBS_e, A2B6_BY_MSBS_e, A2B6_BY_LSBS_e, A2B6_BZ_MSBS_e, A2B6_BZ_LSBS_e, x, y, z);
 }
 
 
-bool TLx493D_A2B6_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+bool TLx493D_A2B6_getRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
     return tlx493d_common_getRawMagneticField(sensor, x, y, z);
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+void TLx493D_A2B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
     TLx493D_A2B6_calculateRawMagneticField(sensor, x, y, z);
     TLx493D_A2B6_calculateRawTemperature(sensor, temperature);
 }
 
 
-bool TLx493D_A2B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+bool TLx493D_A2B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
     return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
@@ -359,7 +359,7 @@ bool TLx493D_A2B6_disableWakeUpMode(TLx493D_t *sensor) {
 }
 
 
-bool TLx493D_A2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
+bool TLx493D_A2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholdsAsInteger");
     return false;
 }
@@ -447,11 +447,13 @@ uint8_t TLx493D_A2B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
-
+void TLx493D_A2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+                                                         double xInmT, double yInmT, double zInmT,
+                                                         int16_t *x, int16_t *y, int16_t *z) {
+    tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(sensor, rawTemp, sens, xInmT, yInmT, zInmT, x, y, z);
 }
 
 
-void TLx493D_A2B6_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf) {
-    tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, A2B6_X2_e, 0, sf);
+double TLx493D_A2B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
+    return tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, A2B6_X2_e, 0);
 }

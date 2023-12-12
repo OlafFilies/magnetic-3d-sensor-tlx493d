@@ -8,6 +8,7 @@
 
 // project cpp includes
 #include "types.hpp"
+#include "BoardSupportUsingKit2Go.hpp"
 #include "IICUsingTwoWire.hpp"
 #include "SPIUsingSPIClass.hpp"
 #include "TLx493DBase.hpp"
@@ -41,6 +42,7 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
 
         void init() {
             bsc.init(true);
+            tlx493d_initBoardSupport(&sensor, bsc);
             tlx493d_initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
             setDefaultConfig();
         }
@@ -140,6 +142,7 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
 
         void init() {
             bsc.init(true);
+            tlx493d_initBoardSupport(&sensor, bsc);
             tlx493d_initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
             setDefaultConfig();
         }
