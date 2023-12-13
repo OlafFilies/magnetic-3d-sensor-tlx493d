@@ -91,8 +91,6 @@ bool TLx493D_A1B6_enableInterrupt(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableInterrupt(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode);
-bool TLx493D_A1B6_setPowerMode_int(TLx493D_t *sensor, TLx493D_A1B6_PowerMode_t mode);
-// bool TLx493D_A1B6_setLowPowerPeriod(TLx493D_t *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t lp_period);
 bool TLx493D_A1B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t rate);
 
 

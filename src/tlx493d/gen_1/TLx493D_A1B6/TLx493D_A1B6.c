@@ -328,7 +328,7 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
     ret &= TLx493D_A1B6_enableParityTest(sensor);
 
     // set to MASTERCONTROLLEDMODE to start measurement
-    TLx493D_A1B6_setPowerMode_int(sensor, MASTERCONTROLLEDMODE);
+    TLx493D_A1B6_setPowerMode(sensor, MASTERCONTROLLEDMODE);
 
     // calculate parity
     TLx493D_A1B6_calculateParity(sensor);
@@ -389,13 +389,13 @@ bool TLx493D_A1B6_enable1ByteReadMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_A1B6_enableCollisionAvoidance(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enable1ByteReadMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enableCollisionAvoidance");
     return false;
 }
 
 
 bool TLx493D_A1B6_disableCollisionAvoidance(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enable1ByteReadMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "disableCollisionAvoidance");
     return false;
 }
 
@@ -416,32 +416,13 @@ bool TLx493D_A1B6_disableInterrupt(TLx493D_t *sensor) {
 
 
 bool TLx493D_A1B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) {
-    // return tlx493d_gen_2_setPowerMode(sensor, A2B6_MODE_e, A2B6_FP_e, mode);
-    return false;
-}
-
-// TODO: renamed ; sync with common function TLx493D_A1B6_setPowerMode
-bool TLx493D_A1B6_setPowerMode_int(TLx493D_t *sensor, TLx493D_A1B6_PowerMode_t mode){
     TLx493D_A1B6_setBitfield(sensor, A1B6_FAST_e, TLx493D_A1B6_PowerModeCombinations[mode].FAST);
     TLx493D_A1B6_setBitfield(sensor, A1B6_LOW_POWER_e, TLx493D_A1B6_PowerModeCombinations[mode].LOW_POWER);
     TLx493D_A1B6_setBitfield(sensor, A1B6_LP_e, TLx493D_A1B6_PowerModeCombinations[mode].LP);
     TLx493D_A1B6_calculateParity(sensor);
-    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
 
-    return ret;
+    return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
-
-
-// TODO: Not yet used anywhere ?!
-// bool TLx493D_A1B6_setLowPowerPeriod(TLx493D_t *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t lp_period){
-
-//     TLx493D_A1B6_setBitfield(sensor, LP, lp_period);
-//     TLx493D_A1B6_calculateParity(sensor);
-//     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
-    
-//     return ret;                                                 
-// }
-
 
 // TODO: anything meaningful available to use here ?
 bool TLx493D_A1B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
@@ -489,7 +470,6 @@ bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHi
     return false;
 }
 
-// note: make sure that the init function is called at reset to make sure the write default values are in sync.
 bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "softwareReset");
     return false;
@@ -497,19 +477,19 @@ bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor) {
 
 
 uint8_t TLx493D_A1B6_calculateFuseParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "calculateFuseParity");
     return false;
 }
 
 
 uint8_t TLx493D_A1B6_calculateBusParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "calculateBusParity");
     return false;
 }
 
 
 uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "calculateConfigurationParity");
     return false;
 }
 
@@ -538,19 +518,19 @@ bool TLx493D_A1B6_hasValidFuseParity(TLx493D_t *sensor){
 
 
 bool TLx493D_A1B6_hasValidBusParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidBusParity");
     return false;
 }
 
 
 bool TLx493D_A1B6_hasValidConfigurationParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidConfigurationParity");
     return false;
 }
 
 
 bool TLx493D_A1B6_hasValidIICadr(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidIICadr");
     return false;
 }
 
