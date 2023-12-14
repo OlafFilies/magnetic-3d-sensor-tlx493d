@@ -358,11 +358,6 @@ uint8_t TLx493D_W2BW_calculateBusParity(TLx493D_t *sensor) {
     return tlx493d_gen_2_calculateBusParity(sensor, 5);
 }
 
-//     uint8_t tx_buffer[4] = { W2BW_MOD1_REG_e,
-//                              sensor->regMap[W2BW_MOD1_REG_e],
-//                              sensor->regMap[W2BW_MOD1_REG_e + 1],
-//                              sensor->regMap[W2BW_MOD1_REG_e + 2] 
-//                             };
 
 uint8_t TLx493D_W2BW_calculateConfigurationParity(TLx493D_t *sensor) {
     return tlx493d_gen_2_calculateConfigurationParityWakeUp(sensor, W2BW_CP_e);

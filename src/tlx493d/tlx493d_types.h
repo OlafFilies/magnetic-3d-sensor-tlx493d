@@ -32,7 +32,6 @@ typedef enum {
                TLx493D_P3B6_e,
                TLx493D_P3I8_e,
 } TLx493D_SupportedSensorType_t;
-} TLx493D_SupportedSensorType_t;
 
 
 /*
@@ -209,8 +208,6 @@ typedef struct TLx493D_BoardSupportInterface_t {
     // bool                               isToBeDeleted;
 } TLx493D_BoardSupportInterface_t;
 
-typedef void (*TLx493D_CalculateRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *);
-typedef bool (*TLx493D_GetRawMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, uint16_t *, uint16_t *, uint16_t *, uint16_t *);
 
 // Functions common to all sensors
 typedef bool (*TLx493D_InitFuncPtr)(TLx493D_t *);

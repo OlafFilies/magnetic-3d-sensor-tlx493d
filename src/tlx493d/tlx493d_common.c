@@ -38,12 +38,10 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
 
     sensor->boardSupportInterface.boardSupportObj.k2go_obj = NULL;
 
-   memset(sensor->regMap, 0, sensor->regMapSize);
-    
-   // TODO: set address in TLx493D_initCommunication !
-   // TLx493D_setI2CParameters(sensor, GEN_2_STD_IIC_ADDR_WRITE_A0);
-    
-   return true;
+    memset(sensor->regMap, 0, sensor->regMapSize);
+
+    sensor->functions->setResetValues(sensor);
+    return true;
 }
 
 
@@ -118,39 +116,39 @@ bool tlx493d_common_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t
 /***
  * 
 */
-bool tlx493d_common_getTemperature(TLx493D_ts *sensor, double *temp) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateTemperature(sensor, temp);
-     return true;
-   }
+bool tlx493d_common_getTemperature(TLx493D_t *sensor, double *temperature) {
+    if( sensor->functions->readRegisters(sensor) ) {
+        sensor->functions->calculateTemperature(sensor, temperature);
+        return true;
+    }
 
-   return false;
+    return false;
 }
 
 
 /***
  * 
 */
-bool tlx493d_common_getMagneticField(TLx493D_ts *sensor, double *x, double *y, double *z ) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateMagneticField(sensor, x, y, z);
-      return true;
-   }
+bool tlx493d_common_getMagneticField(TLx493D_t *sensor, double *x, double *y, double *z ) {
+    if( sensor->functions->readRegisters(sensor) ) {
+        sensor->functions->calculateMagneticField(sensor, x, y, z);
+        return true;
+    }
 
-   return false;
+    return false;
 }
 
 
 /***
  * 
 */
-bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_ts *sensor, double *x, double *y, double *z, double *temp) {
-   if( sensor->functions->readRegisters(sensor) ) {
-      sensor->functions->calculateMagneticFieldAndTemperature(sensor, x, y, z, temp);
-      return true;
-   }
+bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temperature) {
+    if( sensor->functions->readRegisters(sensor) ) {
+        sensor->functions->calculateMagneticFieldAndTemperature(sensor, x, y, z, temperature);
+        return true;
+    }
 
-   return false;
+    return false;
 }
 
 
@@ -219,11 +217,10 @@ uint8_t tlx493d_common_getEvenParity(uint8_t parity) {
  * Assumptions :
  *    - registers are 8 bits wide
 */
-void tlx493d_common_concatBytes(TLx493D_ts *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result) {
-    TLx493D_Register_ts *msb = &sensor->regDef[msbBitfield];
-    TLx493D_Register_ts *lsb = &sensor->regDef[lsbBitfield];
-
-    *result   = ((sensor->regMap[msb->address] & msb->mask) << (8 + 8 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
+void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result) {
+    TLx493D_Register_t *msb = &sensor->regDef[msbBitfield];
+    TLx493D_Register_t *lsb = &sensor->regDef[lsbBitfield];
+    *result   = ((sensor->regMap[msb->address] & msb->mask) << (16 - msb->numBits - msb->offset)); // Set minus flag if highest bit is set
     *result >>= (16 - msb->numBits - lsb->numBits); // shift back and make space for LSB
     *result  |= ((sensor->regMap[lsb->address] & lsb->mask) >> lsb->offset); // OR with LSB
 }
