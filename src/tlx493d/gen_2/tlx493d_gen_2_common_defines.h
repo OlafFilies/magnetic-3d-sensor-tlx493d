@@ -4,9 +4,14 @@
 // std includes
 
 // General defines
-#define GEN_2_MAG_FIELD_MULT            0.13
+// #define GEN_2_MAG_FIELD_MULT            0.13
 
-#define GEN_2_TEMP_MULT                 0.24
+#define GEN_2_FULL_RANGE_FIELD_SENSITIVITY         7.7
+#define GEN_2_SHORT_RANGE_FIELD_SENSITIVITY        15.4
+#define GEN_2_EXTRA_SHORT_RANGE_FIELD_SENSITIVITY  30.8
+
+// #define GEN_2_TEMP_MULT                 0.24
+#define GEN_2_TEMP_RESOLUTION           0.24
 #define GEN_2_TEMP_OFFSET               1180.0
 #define GEN_2_TEMP_REF                  25.0
 

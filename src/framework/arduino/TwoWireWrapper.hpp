@@ -13,6 +13,8 @@ class TwoWireWrapper {
 
     public:
 
+        typedef TwoWire BusType;
+
         TwoWireWrapper(TwoWire &bus) : iic(bus) {
         }
 

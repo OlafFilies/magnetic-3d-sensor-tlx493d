@@ -10,18 +10,20 @@
 
 
 // SPI
-#define GEN_3_SPI_READ_WRITE_BIT        0x80
-#define GEN_3_SPI_READ_BIT_ON           0x80
-#define GEN_3_SPI_WRITE_BIT_OFF         0x00
+#define TLX493D_SPI_READ_WRITE_BIT        0x80
+#define TLX493D_SPI_READ_BIT_ON           0x80
+#define TLX493D_SPI_WRITE_BIT_OFF         0x00
 
-#define GEN_3_SPI_AUTO_INC_BIT          0x60
-#define GEN_3_SPI_AUTO_INC_BIT_ON       0x60
-#define GEN_3_SPI_AUTO_INC_BIT_OFF      0x00
+#define TLX493D_SPI_AUTO_INC_BIT          0x60
+#define TLX493D_SPI_AUTO_INC_BIT_ON       0x60
+#define TLX493D_SPI_AUTO_INC_BIT_OFF      0x00
 
 
 class SPIClassWrapper {
 
     public:
+
+        typedef SPIClass BusType;
 
         SPIClassWrapper(SPIClass &bus) : spi(bus) {
         }
@@ -52,10 +54,10 @@ class SPIClassWrapper {
 
             if( (rxLen > 0)  && (rxBuffer != NULL) ) {
                 uint16_t bytesRead = 0;
-                spi.transfer(GEN_3_SPI_READ_BIT_ON);
+                spi.transfer(TLX493D_SPI_READ_BIT_ON);
 
                 for(; bytesRead < rxLen; ++bytesRead) {
-                    rxBuffer[bytesRead] = spi.transfer(GEN_3_SPI_READ_BIT_ON);
+                    rxBuffer[bytesRead] = spi.transfer(TLX493D_SPI_READ_BIT_ON);
                 }
 
                 if( bytesRead != rxLen ) {
@@ -67,7 +69,7 @@ class SPIClassWrapper {
         }
 
 
-        SPIClass &getComIF() {
+        SPIClass &getBus() {
             return spi;
         }
 

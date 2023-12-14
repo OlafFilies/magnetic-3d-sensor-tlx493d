@@ -8,63 +8,116 @@
 #include <Arduino.h>
 
 // project cpp includes
-#include "Kit2GoBoardSupportTemplate.hpp"
+// #include "Logger.h"
 
 
-typedef struct pinCtrl {
-    uint8_t pinNumber;
-    uint8_t direction;
-    uint8_t enableValue;
-    uint8_t disableValue;
-} pinCtrl;
+class Kit2GoBoardSupport {
 
+    public:
 
-template<> class Kit2GoBoardSupport<pinCtrl> {
-   public:
-
-        Kit2GoBoardSupport() : constantPins{ LED2, OUTPUT, HIGH, LOW }, switchedPins{} {
+        Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0} {
         }
 
-        void init() {
-            for(auto &p : constantPins) {
-                pinMode(p.pinNumber, p.direction);
-                digitalWrite(p.pinNumber, p.enableValue);
+
+        void init(bool enablePower = true, bool enableSelect = false) {
+            for(auto &p : powerPins) {
+                initPin(p, enablePower);
             }
 
-            for(auto &p : switchedPins) {
-                pinMode(p.pinNumber, p.direction);
-                digitalWrite(p.pinNumber, p.disableValue);
+            for(auto &p : selectPins) {
+                initPin(p, enableSelect ? true : false);
             }
+        }
+
+
+        void begin(bool enablePower = true, bool enableSelect = false) {
+            init(enablePower, enableSelect);
         }
 
 
         void deinit() {
-            for(auto &p : constantPins) {
-                digitalWrite(p.pinNumber, p.disableValue);
+            for(auto &p : powerPins) {
+                controlPin(p, false);
             }
 
-            disable();
-        }
-
-
-        void enable() {
-            for(auto &p : switchedPins) {
-                digitalWrite(p.pinNumber, p.enableValue);
+            for(auto &p : selectPins) {
+                controlPin(p, false);
             }
         }
 
 
-        void disable() {
-            for(auto &p : switchedPins) {
-                digitalWrite(p.pinNumber, p.disableValue);
+        void end() {
+            deinit();
+        }
+
+
+        void setPowerPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
+                         uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
+            powerPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable };
+        }
+
+
+        void unsetPowerPin() {
+            powerPins[0].isSet = false;
+        }
+
+
+        void setSelectPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
+                          uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
+            selectPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable };
+        }
+
+
+        void unsetSelectPin() {
+            selectPins[0].isSet = false;
+        }
+
+
+
+        void controlPower(bool enable) {
+            for(auto &p : powerPins) {
+                controlPin(p, enable);
+            }
+        }
+
+
+        void controlSelect(bool enable) {
+            for(auto &p : selectPins) {
+                controlPin(p, enable);
             }
         }
 
 
     private:
 
-        pinCtrl constantPins[1];
-        pinCtrl switchedPins[0];
+        typedef struct pinCtrl {
+            bool     isSet;
+            uint8_t  pinNumber;
+            uint8_t  direction;
+            uint8_t  enableValue;
+            uint8_t  disableValue;
+            uint8_t  delayAfterDisable;
+            uint8_t  delayAfterEnable;
+        } pinCtrl;
+
+
+        void controlPin(const pinCtrl &p, bool enable) {
+            if( p.isSet ) {
+                digitalWrite(p.pinNumber, enable ? p.enableValue : p.disableValue);
+                // print("Setting select pin %d to %d\n", p.pinNumber, enable ? p.enableValue : p.disableValue);
+                delay(enable ? p.delayAfterEnable : p.delayAfterDisable);
+            }
+        }
+
+
+        void initPin(const pinCtrl &p, bool enable) {
+            pinMode(p.pinNumber, p.direction);
+            controlPin(p, enable);
+        }
+    
+
+        pinCtrl powerPins[1];
+        pinCtrl selectPins[1];
 };
 
 

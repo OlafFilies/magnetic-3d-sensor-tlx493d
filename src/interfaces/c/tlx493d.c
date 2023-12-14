@@ -62,17 +62,17 @@ bool tlx493d_readRegisters(TLx493D_t *sensor) {
 }
 
 
-bool tlx493d_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+bool tlx493d_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
    return sensor->functions->getRawTemperature(sensor, temperature);
 }
 
 
-bool tlx493d_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+bool tlx493d_getRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
    return sensor->functions->getRawMagneticField(sensor, x, y, z);
 }
 
 
-bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+bool tlx493d_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
    return sensor->functions->getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
@@ -197,6 +197,7 @@ const char *tlx493d_getTypeAsString(TLx493D_t *sensor) {
 
 
 void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
-                                                    double mT, int16_t *rawMF) {
-   sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, rawTemp, sens, mT, rawMF);
+                                                    double xInmT, double yInmT, double zInmT,
+                                                    int16_t *x, int16_t *y, int16_t *z) {
+   sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, rawTemp, sens, xInmT, yInmT, zInmT, x, y, z);
 }

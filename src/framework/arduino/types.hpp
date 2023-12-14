@@ -20,25 +20,30 @@
 
 typedef struct TLx493D_I2CObject_t {
     TwoWireWrapper *wire;
+    bool            isToBeDeleted;
 } TLx493D_I2CObject_t;
 
 
 typedef struct TLx493D_SPIObject_t {
     SPIClassWrapper *spi;
+    bool             isToBeDeleted;
 } TLx493D_SPIObject_t;
 
 
-typedef Kit2GoBoardSupport<pinCtrl>  Kit2GoTemplate;
+typedef struct TLx493D_Kit2GoBoardSupportObject_t {
+    Kit2GoBoardSupport  *k2go;
+    bool                 isToBeDeleted;
+} TLx493D_Kit2GoBoardSupportObject_t;
 
 
-typedef TLx493D<Kit2GoTemplate, TwoWireWrapper, TwoWire, TLx493D_A1B6_e> TLx493D_A1B6;
-typedef TLx493D<Kit2GoTemplate, TwoWireWrapper, TwoWire, TLx493D_A2B6_e> TLx493D_A2B6;
-typedef TLx493D<Kit2GoTemplate, TwoWireWrapper, TwoWire, TLx493D_P2B6_e> TLx493D_P2B6;
-typedef TLx493D<Kit2GoTemplate, TwoWireWrapper, TwoWire, TLx493D_W2B6_e> TLx493D_W2B6;
-typedef TLx493D<Kit2GoTemplate, TwoWireWrapper, TwoWire, TLx493D_W2BW_e> TLx493D_W2BW;
-typedef TLx493D<Kit2GoTemplate, TwoWireWrapper, TwoWire, TLx493D_P3B6_e> TLx493D_P3B6;
+typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A1B6_e>  TLx493D_A1B6;
+typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A2B6_e>  TLx493D_A2B6;
+typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_P2B6_e>  TLx493D_P2B6;
+typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_W2B6_e>  TLx493D_W2B6;
+typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_W2BW_e>  TLx493D_W2BW;
+typedef TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_P3B6_e>  TLx493D_P3B6;
 
-typedef TLx493D<Kit2GoTemplate, SPIClassWrapper, SPIClass, TLx493D_P3I8_e> TLx493D_P3I8;
+typedef TLx493D<Kit2GoBoardSupport, SPIClassWrapper, TLx493D_P3I8_e> TLx493D_P3I8;
 
 
 #endif // TLX493D_ARDUINO_TYPES_H

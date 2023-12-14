@@ -97,7 +97,10 @@ spi: arduino
 
 iic: arduino
 	cp examples/framework/arduino/read_iic_sensor.ino build/build.ino
- 
+
+iic_with_wakeup: arduino
+	cp examples/framework/arduino/read_iic_sensor_with_wakeup.ino build/build.ino
+
 
 2iic: arduino
 	cp examples/framework/arduino/read_2_iic_sensors.ino build/build.ino
@@ -149,10 +152,6 @@ endif
 
 
 
-
-
-
-
 # For WSL and Windows :
 # download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
 prepare:
@@ -165,7 +164,8 @@ prepare:
 	arduino-cli.exe board listall Infineon
 
 
-# TODO: rework as for Arduino !
+
+# TODO: rework similar to Arduino !
 ### MTB targets
 # ifeq ($(WIN_USER),)
 

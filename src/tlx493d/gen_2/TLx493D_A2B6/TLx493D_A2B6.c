@@ -23,40 +23,40 @@
 
 
 TLx493D_Register_t TLx493D_A2B6_regDef[] = {
-    { A2B6_BX_MSBS_e,   TLx493D_READ_MODE_e,       0x00, 0xFF, 0, 8 },
-    { A2B6_BY_MSBS_e,   TLx493D_READ_MODE_e,       0x01, 0xFF, 0, 8 },
-    { A2B6_BZ_MSBS_e,   TLx493D_READ_MODE_e,       0x02, 0xFF, 0, 8 }, 
-    { A2B6_TEMP_MSBS_e, TLx493D_READ_MODE_e,       0x03, 0xFF, 0, 8 },
-    { A2B6_BX_LSBS_e,   TLx493D_READ_MODE_e,       0x04, 0xF0, 4, 4 },
-    { A2B6_BY_LSBS_e,   TLx493D_READ_MODE_e,       0x04, 0x0F, 0, 4 },
-    { A2B6_TEMP_LSBS_e, TLx493D_READ_MODE_e,       0x05, 0xC0, 6, 2 },
-    { A2B6_ID_e,        TLx493D_READ_MODE_e,       0x05, 0x30, 4, 2 },
-    { A2B6_BZ_LSBS_e,   TLx493D_READ_MODE_e,       0x05, 0x0F, 0, 4 },
-    { A2B6_P_e,         TLx493D_READ_MODE_e,       0x06, 0x80, 7, 1 },
-    { A2B6_FF_e,        TLx493D_READ_MODE_e,       0x06, 0x40, 6, 1 },
-    { A2B6_CF_e,        TLx493D_READ_MODE_e,       0x06, 0x20, 5, 1 },
-    { A2B6_T_e,         TLx493D_READ_MODE_e,       0x06, 0x10, 4, 1 },
-    { A2B6_PD3_e,       TLx493D_READ_MODE_e,       0x06, 0x08, 3, 1 },
-    { A2B6_PD0_e,       TLx493D_READ_MODE_e,       0x06, 0x04, 2, 1 },
-    { A2B6_FRM_e,       TLx493D_READ_MODE_e,       0x06, 0x03, 0, 2 },
-    { A2B6_DT_e,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x80, 7, 1 },
-    { A2B6_AM_e,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x40, 6, 1 },
-    { A2B6_TRIG_e,      TLx493D_READ_WRITE_MODE_e, 0x10, 0x30, 4, 2 },
-    { A2B6_X2_e,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x08, 3, 1 },
-    { A2B6_TL_MAG_e,    TLx493D_READ_WRITE_MODE_e, 0x10, 0x06, 1, 2 },
-    { A2B6_CP_e,        TLx493D_READ_WRITE_MODE_e, 0x10, 0x01, 0, 1 },
-    { A2B6_FP_e,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x80, 7, 1 },
-    { A2B6_IICADR_e,    TLx493D_READ_WRITE_MODE_e, 0x11, 0x60, 5, 2 },
-    { A2B6_PR_e,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x10, 4, 1 },
-    { A2B6_CA_e,        TLx493D_READ_WRITE_MODE_e, 0x11, 0x08, 3, 1 },
-    { A2B6_INT_e,       TLx493D_READ_WRITE_MODE_e, 0x11, 0x04, 2, 1 },
-    { A2B6_MODE_e,      TLx493D_READ_WRITE_MODE_e, 0x11, 0x03, 0, 2 },
+    { /* A2B6_BX_MSBS_e, */   TLx493D_READ_MODE_e,        0x00, 0xFF, 0, 8 },
+    { /* A2B6_BY_MSBS_e, */   TLx493D_READ_MODE_e,        0x01, 0xFF, 0, 8 },
+    { /* A2B6_BZ_MSBS_e, */   TLx493D_READ_MODE_e,        0x02, 0xFF, 0, 8 }, 
+    { /* A2B6_TEMP_MSBS_e, */ TLx493D_READ_MODE_e,        0x03, 0xFF, 0, 8 },
+    { /* A2B6_BX_LSBS_e, */   TLx493D_READ_MODE_e,        0x04, 0xF0, 4, 4 },
+    { /* A2B6_BY_LSBS_e, */   TLx493D_READ_MODE_e,        0x04, 0x0F, 0, 4 },
+    { /* A2B6_TEMP_LSBS_e, */ TLx493D_READ_MODE_e,        0x05, 0xC0, 6, 2 },
+    { /* A2B6_ID_e, */        TLx493D_READ_MODE_e,        0x05, 0x30, 4, 2 },
+    { /* A2B6_BZ_LSBS_e, */   TLx493D_READ_MODE_e,        0x05, 0x0F, 0, 4 },
+    { /* A2B6_P_e, */         TLx493D_READ_MODE_e,        0x06, 0x80, 7, 1 },
+    { /* A2B6_FF_e, */        TLx493D_READ_MODE_e,        0x06, 0x40, 6, 1 },
+    { /* A2B6_CF_e, */        TLx493D_READ_MODE_e,        0x06, 0x20, 5, 1 },
+    { /* A2B6_T_e, */         TLx493D_READ_MODE_e,        0x06, 0x10, 4, 1 },
+    { /* A2B6_PD3_e, */       TLx493D_READ_MODE_e,        0x06, 0x08, 3, 1 },
+    { /* A2B6_PD0_e, */       TLx493D_READ_MODE_e,        0x06, 0x04, 2, 1 },
+    { /* A2B6_FRM_e, */       TLx493D_READ_MODE_e,        0x06, 0x03, 0, 2 },
+    { /* A2B6_DT_e, */        TLx493D_READ_WRITE_MODE_e,  0x10, 0x80, 7, 1 },
+    { /* A2B6_AM_e, */        TLx493D_READ_WRITE_MODE_e,  0x10, 0x40, 6, 1 },
+    { /* A2B6_TRIG_e, */      TLx493D_READ_WRITE_MODE_e,  0x10, 0x30, 4, 2 },
+    { /* A2B6_X2_e, */        TLx493D_READ_WRITE_MODE_e,  0x10, 0x08, 3, 1 },
+    { /* A2B6_TL_MAG_e, */    TLx493D_READ_WRITE_MODE_e,  0x10, 0x06, 1, 2 },
+    { /* A2B6_CP_e, */        TLx493D_READ_WRITE_MODE_e,  0x10, 0x01, 0, 1 },
+    { /* A2B6_FP_e, */        TLx493D_READ_WRITE_MODE_e,  0x11, 0x80, 7, 1 },
+    { /* A2B6_IICADR_e, */    TLx493D_READ_WRITE_MODE_e,  0x11, 0x60, 5, 2 },
+    { /* A2B6_PR_e, */        TLx493D_READ_WRITE_MODE_e,  0x11, 0x10, 4, 1 },
+    { /* A2B6_CA_e, */        TLx493D_READ_WRITE_MODE_e,  0x11, 0x08, 3, 1 },
+    { /* A2B6_INT_e, */       TLx493D_READ_WRITE_MODE_e,  0x11, 0x04, 2, 1 },
+    { /* A2B6_MODE_e, */      TLx493D_READ_WRITE_MODE_e,  0x11, 0x03, 0, 2 },
     // Does not match register overview in manual, but fits and default value
-    // textual description of register PRD ! Confirmed by Severin.
-    // { A2B6_PRD_e,       TLx493D_READ_WRITE_MODE_e, 0x13, 0xE0, 5, 3 },
-    { A2B6_PRD_e,       TLx493D_READ_WRITE_MODE_e, 0x13, 0x80, 7, 1 },
-    { A2B6_TYPE_e,      TLx493D_READ_MODE_e,       0x16, 0x30, 4, 2 },
-    { A2B6_HWV_e,       TLx493D_READ_MODE_e,       0x16, 0x0F, 0, 4 },
+    // textual description of register PRD !
+    // { /* A2B6_PRD_e, */       TLx493D_READ_WRITE_MODE_e,  0x13, 0xE0, 5, 3 },
+    { /* A2B6_PRD_e, */       TLx493D_READ_WRITE_MODE_e,  0x13, 0x80, 7, 1 },
+    { /* A2B6_TYPE_e, */      TLx493D_READ_MODE_e,        0x16, 0x30, 4, 2 },
+    { /* A2B6_HWV_e, */       TLx493D_READ_MODE_e,        0x16, 0x0F, 0, 4 },
 };
 
 
@@ -156,33 +156,33 @@ bool TLx493D_A2B6_readRegisters(TLx493D_t *sensor) {
 }
 
 
-void TLx493D_A2B6_calculateRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+void TLx493D_A2B6_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
     tlx493d_gen_2_calculateRawTemperature(sensor, A2B6_TEMP_MSBS_e, A2B6_TEMP_LSBS_e, temperature);
 }
 
 
-bool TLx493D_A2B6_getRawTemperature(TLx493D_t *sensor, uint16_t *temperature) {
+bool TLx493D_A2B6_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
     return tlx493d_common_getRawTemperature(sensor, temperature);
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+void TLx493D_A2B6_calculateRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
     tlx493d_gen_2_calculateRawMagneticField(sensor, A2B6_BX_MSBS_e, A2B6_BX_LSBS_e, A2B6_BY_MSBS_e, A2B6_BY_LSBS_e, A2B6_BZ_MSBS_e, A2B6_BZ_LSBS_e, x, y, z);
 }
 
 
-bool TLx493D_A2B6_getRawMagneticField(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z) {
+bool TLx493D_A2B6_getRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
     return tlx493d_common_getRawMagneticField(sensor, x, y, z);
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+void TLx493D_A2B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
     TLx493D_A2B6_calculateRawMagneticField(sensor, x, y, z);
     TLx493D_A2B6_calculateRawTemperature(sensor, temperature);
 }
 
 
-bool TLx493D_A2B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, uint16_t *x, uint16_t *y, uint16_t *z, uint16_t *temperature) {
+bool TLx493D_A2B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
     return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
@@ -310,7 +310,7 @@ bool TLx493D_A2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
         case TLx493D_UPDATE_RATE_SLOW_e : rate = 1;
                                   break;
 
-        default : errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
                   return false;
     }
 
@@ -323,7 +323,7 @@ bool TLx493D_A2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
                        sensor->regMap[mod1 + 2]  // MOD2 register
                      };
 
-    return transfer(sensor, buf, sizeof(buf), NULL, 0);
+    return tlx493d_transfer(sensor, buf, sizeof(buf), NULL, 0);
 }
 
 
@@ -344,33 +344,33 @@ bool TLx493D_A2B6_hasWakeUp(TLx493D_t *sensor) {
 
 
 bool TLx493D_A2B6_isWakeUpEnabled(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "isWakeUpEnabled");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "isWakeUpEnabled");
     return false;
 }
 
 bool TLx493D_A2B6_enableWakeUpMode(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "enableWakeUpMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enableWakeUpMode");
     return false;
 }
 
 bool TLx493D_A2B6_disableWakeUpMode(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "disableWakeUpMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "disableWakeUpMode");
     return false;
 }
 
 
-bool TLx493D_A2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
-    warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholdsAsInteger");
+bool TLx493D_A2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholdsAsInteger");
     return false;
 }
 
 bool TLx493D_A2B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
     return false;
 }
 
 bool TLx493D_A2B6_softwareReset(TLx493D_t *sensor) {
-    warnFeatureNotAvailableForSensorType(sensor, "softwareReset");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "softwareReset");
     return false;
 }
 
@@ -447,11 +447,13 @@ uint8_t TLx493D_A2B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_
 }
 
 
-void TLx493D_A2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF) {
-
+void TLx493D_A2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+                                                         double xInmT, double yInmT, double zInmT,
+                                                         int16_t *x, int16_t *y, int16_t *z) {
+    tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(sensor, rawTemp, sens, xInmT, yInmT, zInmT, x, y, z);
 }
 
 
-void TLx493D_A2B6_getSensitivityScaleFactor(TLx493D_t *sensor, double *sf) {
-    tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, A2B6_X2_e, 0, sf);
+double TLx493D_A2B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
+    return tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, A2B6_X2_e, 0);
 }

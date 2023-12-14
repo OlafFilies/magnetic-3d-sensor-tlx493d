@@ -19,11 +19,6 @@ static TLx493D_t dut;
 #include "Test_tlx493d_gen_2_common.h"
 
 
-static double  x, y, z, t;
-static double  xl, xh, yl, yh, zl, zh;
-static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
-
-
 // define test group name
 TEST_GROUP(TLx493D_A2B6);
 TEST_GROUP(TLx493D_A2B6_internal);
@@ -36,25 +31,6 @@ static TEST_SETUP(TLx493D_A2B6_internal)
     TLx493D_A2B6_init(&dut);
 
     memset(dut.regMap, 0, dut.regMapSize);
-
-    x = 0.0;
-    y = 0.0;
-    z = 0.0;
-    t = 0.0;
-
-    xl = 0.0;
-    xh = 0.0;
-    yl = 0.0;
-    yh = 0.0;
-    zl = 0.0;
-    zh = 0.0;
-
-    xl_i = 0;
-    xh_i = 0;
-    yl_i = 0;
-    yh_i = 0;
-    zl_i = 0;
-    zh_i = 0;
 }
 
 
@@ -71,18 +47,14 @@ static TEST_TEAR_DOWN(TLx493D_A2B6_internal)
  */
 TEST_IFX(TLx493D_A2B6_internal, checkUnsupportedFunctionality)
 {
+    static double  xl, xh, yl, yh, zl, zh;
+    static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
+
+
     TEST_ASSERT( dut.functions->hasWakeUp(&dut) == false );
     TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
     TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == false );
     TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == false );
-
-    // TEST_ASSERT( dut.functions->setLowerWakeUpThresholdX(&dut, xl_i) == false );
-    // TEST_ASSERT( dut.functions->setLowerWakeUpThresholdY(&dut, yl_i) == false );
-    // TEST_ASSERT( dut.functions->setLowerWakeUpThresholdZ(&dut, zl_i) == false );
-
-    // TEST_ASSERT( dut.functions->setUpperWakeUpThresholdX(&dut, xh_i) == false );
-    // TEST_ASSERT( dut.functions->setUpperWakeUpThresholdY(&dut, yh_i) == false );
-    // TEST_ASSERT( dut.functions->setUpperWakeUpThresholdZ(&dut, zh_i) == false );
 
     TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) == false );
     TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, xh, xl, yh, yl, zh, zl) == false );
@@ -121,7 +93,7 @@ TEST_IFX(TLx493D_A2B6_internal, checkCalculateMagneticFieldAndTemperature)
 {
     double temperature = 0.0;
     dut.functions->calculateTemperature(&dut, &temperature);
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, -GEN_2_TEMP_OFFSET * GEN_2_TEMP_MULT + GEN_2_TEMP_REF, temperature );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, -GEN_2_TEMP_OFFSET * GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_REF, temperature );
 
     double x = 0.0, y = 0.0, z = 0.0;
     dut.functions->calculateMagneticField(&dut, &x, &y, &z);
@@ -134,7 +106,7 @@ TEST_IFX(TLx493D_A2B6_internal, checkCalculateMagneticFieldAndTemperature)
     y = 0.0;
     z = 0.0;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &temperature);
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, -GEN_2_TEMP_OFFSET * GEN_2_TEMP_MULT + GEN_2_TEMP_REF, temperature );
+    TEST_ASSERT_FLOAT_WITHIN( 1.0, -GEN_2_TEMP_OFFSET * GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_REF, temperature );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );

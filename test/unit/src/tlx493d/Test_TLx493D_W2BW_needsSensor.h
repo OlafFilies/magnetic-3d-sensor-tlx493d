@@ -24,8 +24,6 @@ TEST_GROUP(TLx493D_W2BW_needsSensorInternal);
 
 
 static double  x, y, z, t;
-// static double  xl, xh, yl, yh, zl, zh;
-// static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
 
 
 // Setup method called before every individual test defined for this test group
@@ -35,20 +33,6 @@ static TEST_SETUP(TLx493D_W2BW_needsSensorInternal)
     y = 0.0;
     z = 0.0;
     t = 0.0;
-
-    // xl = 0.0;
-    // xh = 0.0;
-    // yl = 0.0;
-    // yh = 0.0;
-    // zl = 0.0;
-    // zh = 0.0;
-
-    // xl_i = 0;
-    // xh_i = 0;
-    // yl_i = 0;
-    // yh_i = 0;
-    // zl_i = 0;
-    // zh_i = 0;
 }
 
 
@@ -71,7 +55,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkUnsupportedFunctionality)
 
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkSupportedFunctionality)
 {
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     // printRegisters(&dut);
  
     // TEST_ASSERT( dut.functions->hasValidData(&dut) == true ); // fails sometimes
@@ -110,7 +94,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkBasicFunctionality)
 {
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
 }
 
 
@@ -133,7 +117,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigMeasurementFunctionality)
     // // Supported
     // // TLx493D_BxBy_e
     // TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) == true );
-    // TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    // TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
 
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & dt->mask) == dt->mask ); // DT
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & am->mask) == am->mask ); // AM
@@ -145,7 +129,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigMeasurementFunctionality)
 
     // // TLx493D_BxByBz_e
     // TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e) == true );
-    // TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    // TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & dt->mask) == dt->mask ); // DT
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & am->mask) == 0x00 ); // AM is 0x00
 
@@ -155,7 +139,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigMeasurementFunctionality)
 
     // // TLx493D_BxByBzTemp_e
     // TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) == true );
-    // TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    // TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x80) == 0x00 ); // DT
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x40) == 0x00 ); // AM
 }
@@ -165,38 +149,38 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigTriggerFunctionality)
 {
     // switch to LPM
     TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) == 0x00 );
 
     // Low-power mode only supports this trigger
     TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_NO_ADC_ON_READ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x00 );
 
 
     // MCM supports other modes, so enable MCM first
     TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) == 0x01 );
 
     // try triggers
     TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_AFTER_REG_05_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( ((dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x20) || ((dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x30) );
 
     // Not to be used with our default config CA = 0, INT = 1 !
     // TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e) == true );
-    // // while( tlx493d_common_readRegisters(&dut) == false ) ;
+    // // while( dut.functions->readRegisters(&dut) == false ) ;
     // TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x10 );
 
     TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_NO_ADC_ON_READ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x00 );
 
 
     // switch back to LPM
     TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) == 0x00 );
 }
 
@@ -205,24 +189,29 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigSensitivityFunctionality)
 {
     double sf;
 
-    // unsupported
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) == true );
-
-
     // supported
+    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) == true );
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
+    TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x08) == 0x08 );
+    TEST_ASSERT( (dut.regMap[W2BW_CONFIG2_REG_e] & 0x01) == 0x01 );
+
+    sf = dut.functions->getSensitivityScaleFactor(&dut);
+    TEST_ASSERT_EQUAL_FLOAT( 4.0, sf );
+
+
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x08) == 0x08 );
 
-    dut.functions->getSensitivityScaleFactor(&dut, &sf);
+    sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 2.0, sf );
     
 
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_CONFIG_REG_e] & 0x08) == 0x00 );
 
-    dut.functions->getSensitivityScaleFactor(&dut, &sf);
+    sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 1.0, sf );
 }
 
@@ -230,7 +219,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigSensitivityFunctionality)
 // Check if setDefaultConfig worked properly and data can be read and expected values are set.
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeDefaultConfigFunctionality)
 {
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     printRegisters(&dut);
 
     TEST_ASSERT_EQUAL_HEX( dut.regMap[W2BW_CONFIG_REG_e], 0x00 );
@@ -269,11 +258,11 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeIICAddressFunctionality)
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeCollisionAvoidanceFunctionality)
 {
     TEST_ASSERT( dut.functions->disableCollisionAvoidance(&dut) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x08) == 0x08 );
 
     TEST_ASSERT( dut.functions->enableCollisionAvoidance(&dut) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x08) == 0x00 );
     TEST_ASSERT( dut.functions->enableCollisionAvoidance(&dut) == true );
 }
@@ -285,7 +274,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeInterruptFunctionality)
     // TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x04) == 0x00 );
 
     TEST_ASSERT( dut.functions->disableInterrupt(&dut) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x04) == 0x04 );
 }
 
@@ -293,18 +282,18 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeInterruptFunctionality)
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModePowerModeFunctionality)
 {
     TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_FAST_MODE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) == 0x03 );
 
     TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) == 0x01 );
 
     // forbidden
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) != 0x10 );
 
     TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD1_REG_e] & 0x03) == 0x00 );
 }
 
@@ -313,42 +302,42 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeUpdateRateFunctionality)
 {
     // Supported
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_97_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0x20 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_24_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0x40 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_12_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0x60 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_6_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0x80 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_3_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0xA0 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_0_4_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0xC0 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_0_05_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0xE0 );
 
 
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_770_HZ_e) == true );
-    TEST_ASSERT( tlx493d_common_readRegisters(&dut) == true);
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2BW_MOD2_REG_e] & 0xE0) == 0x00 );
 
 

@@ -70,6 +70,8 @@ void loop() {
     // Serial.print(true == tlx493d_hasWakeUp(&dut) ? "hasWakeup\n" : "NOT hasWakeup\n");
 
 
+    // Serial.print(true == dut.isWakeUpActive() ? "isWakeUpActive ok\n" : "isWakeUpActive error\n");
+
     // tlx493d_setIICAddress(&dut, GEN_2_STD_IIC_ADDR_A1);
     // Serial.print(dut.comLibIFParams.i2c_params.address << 1);
     // Serial.print(true == TLx493D_A2B6_hasValidIICadr(&dut) ? "TLx493D_A2B6_hasValidIICadr\n" : "NOT TLx493D_A2B6_hasValidIICadr\n");

@@ -19,10 +19,13 @@ extern "C" {
 
 typedef union TLx493D_ComLibraryParameters_t TLx493D_ComLibraryParameters_t;
 
-typedef struct TLx493D_I2CObject_t  TLx493D_I2CObject_t;
-typedef struct TLx493D_SPIObject_t  TLx493D_SPIObject_t;
+typedef struct TLx493D_I2CObject_t           TLx493D_I2CObject_t;
+typedef struct TLx493D_SPIObject_t           TLx493D_SPIObject_t;
 
-typedef struct TLx493D_t            TLx493D_t;
+
+typedef struct TLx493D_Kit2GoBoardSupportObject_t  TLx493D_Kit2GoBoardSupportObject_t;
+
+typedef struct TLx493D_t                     TLx493D_t;
 
 
 #ifdef __cplusplus

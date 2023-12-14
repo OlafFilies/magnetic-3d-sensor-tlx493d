@@ -20,14 +20,14 @@ TEST_GROUP(SensorsCommon);
 // Setup method called before every individual test defined for this test group
 static TEST_SETUP(SensorsCommon)
 {
-    dut.functions->init(&dut);
+    // dut.functions->init(&dut);
 }
 
 
 // Tear down method called before every individual test defined for this test group
 static TEST_TEAR_DOWN(SensorsCommon)
 {
-    dut.functions->deinit(&dut);
+    // dut.functions->deinit(&dut);
 }
 
 
@@ -128,19 +128,22 @@ TEST_IFX(SensorsCommon, checkConcatBytes)
 
 
     TLx493D_Register_t regDef[] = {
-        { MSB0,  TLx493D_READ_MODE_e,  0x00, 0xFF, 0, 8 },
-        { MSB1,  TLx493D_READ_MODE_e,  0x01, 0x0F, 0, 4 },
-        { MSB2,  TLx493D_READ_MODE_e,  0x02, 0x3F, 0, 6 }, 
-        { MSB3,  TLx493D_READ_MODE_e,  0x03, 0xF6, 1, 7 },
+        { /* MSB0, */  TLx493D_READ_MODE_e,  0x00, 0xFF, 0, 8 },
+        { /* MSB1, */  TLx493D_READ_MODE_e,  0x01, 0x0F, 0, 4 },
+        { /* MSB2, */  TLx493D_READ_MODE_e,  0x02, 0x3F, 0, 6 }, 
+        { /* MSB3, */  TLx493D_READ_MODE_e,  0x03, 0xF6, 1, 7 },
 
-        { LSB0,  TLx493D_READ_MODE_e,  0x04, 0xFF, 0, 8 },
-        { LSB1,  TLx493D_READ_MODE_e,  0x05, 0x0F, 0, 4 },
-        { LSB2,  TLx493D_READ_MODE_e,  0x06, 0xC0, 6, 2 },
-        { LSB3,  TLx493D_READ_MODE_e,  0x07, 0x0F, 0, 4 },
+        { /* LSB0, */  TLx493D_READ_MODE_e,  0x04, 0xFF, 0, 8 },
+        { /* LSB1, */  TLx493D_READ_MODE_e,  0x05, 0x0F, 0, 4 },
+        { /* LSB2, */  TLx493D_READ_MODE_e,  0x06, 0xC0, 6, 2 },
+        { /* LSB3, */  TLx493D_READ_MODE_e,  0x07, 0x0F, 0, 4 },
     };
 
-
+    TLx493D_Register_t *regDefSave = dut.regDef;
     dut.regDef = regDef;
+
+    uint8_t saveRegs[8];
+    memcpy(saveRegs, dut.regMap, 8);
 
     dut.regMap[0x00] = 0x11;
     dut.regMap[0x01] = 0x33;
@@ -169,11 +172,16 @@ TEST_IFX(SensorsCommon, checkConcatBytes)
     tlx493d_common_concatBytes(&dut, MSB3, LSB3, &result);
     // print("\nresult = %#x\n", result);
     TEST_ASSERT( result == 0xFFFFFFBF );
+
+    dut.regDef = regDefSave;
+    memcpy(dut.regMap, saveRegs, 8);
 }
 
 
 TEST_IFX(SensorsCommon, checkGetTypeAsString)
 {
+    TLx493D_SupportedSensorType_t sensorType = dut.sensorType;
+
     dut.sensorType = TLx493D_A2B6_e;
     TEST_ASSERT( tlx493d_common_getTypeAsString(&dut) == "TLx493D_A2B6" );
 
@@ -181,7 +189,8 @@ TEST_IFX(SensorsCommon, checkGetTypeAsString)
 
     dut.sensorType = (TLx493D_SupportedSensorType_t) 0x19;
     TEST_ASSERT( tlx493d_common_getTypeAsString(&dut) == "ERROR : Unknown sensorType !" );
-    // dut.sensorType = TLx493D_A2B6_e;
+
+    dut.sensorType = sensorType;
 }
 
 
