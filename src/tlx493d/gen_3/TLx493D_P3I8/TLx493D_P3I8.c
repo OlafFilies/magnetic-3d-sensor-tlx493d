@@ -141,9 +141,12 @@ TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
     .hasValidFuseParity             = TLx493D_P3I8_hasValidFuseParity,
     .hasValidBusParity              = TLx493D_P3I8_hasValidBusParity,
     .hasValidConfigurationParity    = TLx493D_P3I8_hasValidConfigurationParity,
-    
+
+    .hasValidWakeUpParity           = TLx493D_P3I8_hasValidWakeUpParity,
+    .isInTestMode                   = TLx493D_P3I8_isInTestMode,
+
     .hasValidTBit                   = TLx493D_P3I8_hasValidTBit,
-    
+
     .setResetValues                 = TLx493D_P3I8_setResetValues,
 
     .selectIICAddress               = TLx493D_P3I8_selectIICAddress,
@@ -248,20 +251,16 @@ bool TLx493D_P3I8_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
-    sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
+    // sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
 
-    tlx493d_common_setBitfield(sensor, P3I8_MODE_SEL_e, 0);
+    // tlx493d_common_setBitfield(sensor, P3I8_MODE_SEL_e, 0);
     tlx493d_common_setBitfield(sensor, P3I8_INT_DIS_e, 1);
-    tlx493d_common_setBitfield(sensor, P3I8_WU_EN_e, 0);
-    tlx493d_common_setBitfield(sensor, P3I8_CRC_WR_EN_e, 0);
+    // tlx493d_common_setBitfield(sensor, P3I8_WU_EN_e, 0);
+    // tlx493d_common_setBitfield(sensor, P3I8_CRC_WR_EN_e, 0);
 
-    tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
+    bool b = tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
 
-    // return tlx493d_gen_3_readRegistersSPI(sensor);
- 
-    // tlx493d_common_setBitfield(sensor, CHANNEL_SEL, 0);
-
-    return true;
+    return b && tlx493d_gen_3_readRegistersSPI(sensor);
 }
 
 
@@ -290,39 +289,32 @@ bool TLx493D_P3I8_disableCollisionAvoidance(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3I8_enableInterrupt(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_setInterrupt(sensor, P3I8_INT_e, P3I8_FP_e, P3I8_PRD_e, 0);
-    return false;
+    return tlx493d_gen_3_setInterrupt(sensor, P3I8_INT_DIS_e, 0);
 }
 
 
 bool TLx493D_P3I8_disableInterrupt(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_setInterrupt(sensor, P3I8_INT_e, P3I8_FP_e, P3I8_PRD_e, 1);
-    return false;
+    return tlx493d_gen_3_setInterrupt(sensor, P3I8_INT_DIS_e, 1);
 }
 
 
 bool TLx493D_P3I8_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) {
-    // return tlx493d_gen_3_setPowerMode(sensor, P3I8_MODE_e, P3I8_FP_e, mode);
-    return false;
+    return tlx493d_gen_3_setPowerMode(sensor, P3I8_MODE_SEL_e, mode);
 }
 
 
 bool TLx493D_P3I8_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
-    // return tlx493d_gen_3_setUpdateRate(sensor, P3I8_FP_e, P3I8_PRD_e, val);
-    return false;
+    return tlx493d_gen_3_setUpdateRate(sensor, P3I8_F_UPDATE_SEL_e, val);
 }
 
 
 bool TLx493D_P3I8_hasValidData(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_hasValidData(sensor);
-    return false;
+    return tlx493d_gen_3_hasValidData(sensor, P3I8_MEAS_FLG_e);
 }
 
 
 bool TLx493D_P3I8_isFunctional(TLx493D_t *sensor) {
-    // TODO: implement
-    // return tlx493d_gen_3_isFunctional(sensor);
-    return true;
+    return tlx493d_gen_3_isFunctional(sensor);
 }
 
 
@@ -332,18 +324,15 @@ bool TLx493D_P3I8_hasWakeUp(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3I8_isWakeUpEnabled(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_isWakeUpEnabled(sensor, P3I8_WA_e);
-    return false;
+    return tlx493d_gen_3_isWakeUpEnabled(sensor, P3I8_WU_EN_e);
 }
 
 bool TLx493D_P3I8_enableWakeUpMode(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_enableWakeUpMode(sensor, P3I8_TST_e, P3I8_WU_e, P3I8_CP_e);
-    return false;
+    return tlx493d_gen_3_enableWakeUpMode(sensor, P3I8_WU_EN_e);
 }
 
 bool TLx493D_P3I8_disableWakeUpMode(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_disableWakeUpMode(sensor, P3I8_WU_e, P3I8_CP_e);
-    return false;
+    return tlx493d_gen_3_disableWakeUpMode(sensor, P3I8_WU_EN_e);
 }
 
 
@@ -359,11 +348,11 @@ bool TLx493D_P3I8_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
 
 // thesholds im mT, to be converted to proper format
 bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    return false;
+    return tlx493d_gen_3_setWakeUpThresholds(sensor, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
 bool TLx493D_P3I8_softwareReset(TLx493D_t *sensor) {
-    return false;
+    return tlx493d_gen_3_softwareReset(sensor, P3I8_SOFT_RST_e);
 }
 
 
@@ -402,8 +391,19 @@ bool TLx493D_P3I8_hasValidConfigurationParity(TLx493D_t *sensor) {
 }
 
 
+bool TLx493D_P3I8_hasValidWakeUpParity(TLx493D_t *sensor) {
+    return tlx493d_gen_3_hasValidWakeUpParity(sensor, P3I8_WU_PAR_FLG_e );
+}
+
+
+bool TLx493D_P3I8_isInTestMode(TLx493D_t *sensor) {
+    return tlx493d_gen_3_isInTestMode(sensor, P3I8_TEST_FLG_e );
+}
+
+
+
 bool TLx493D_P3I8_hasValidIICadr(TLx493D_t *sensor) {
-    // return tlx493d_gen_3_hasValidIICadr(sensor, P3I8_ID_e, P3I8_IICADR_e);
+    tlx493d_errorFunctionNotSupportedForSensorType(sensor, "hasValidIICadr");
     return false;
 }
 

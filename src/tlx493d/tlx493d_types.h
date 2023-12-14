@@ -279,8 +279,10 @@ typedef uint8_t (*TLx493D_CalculateConfigParityFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_HasValidFuseParityFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_HasValidBusParityFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_HasValidWakeUpParityFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_isInTestModeFuncPtr)(TLx493D_t *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_t *);
 
@@ -364,14 +366,17 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_HasValidFuseParityFuncPtr           hasValidFuseParity;
     TLx493D_HasValidBusParityFuncPtr            hasValidBusParity;
     TLx493D_HasValidConfigParityFuncPtr         hasValidConfigurationParity;
+   
+    TLx493D_HasValidWakeUpParityFuncPtr         hasValidWakeUpParity;
+    TLx493D_isInTestModeFuncPtr                 isInTestMode;
 
     TLx493D_HasValidTBitFuncPtr                 hasValidTBit;
-    
+ 
     TLx493D_SetResetValuesFuncPtr               setResetValues;
 
     TLx493D_SelectIICAddressFuncPtr             selectIICAddress;
 
-    TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr   calculateRawMagneticFieldAtTemperature;
+    TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr  calculateRawMagneticFieldAtTemperature;
 
     TLx493D_GetSensitivityScaleFactorFuncPtr    getSensitivityScaleFactor;
 } TLx493D_CommonFunctions_t;
@@ -384,10 +389,6 @@ typedef struct TLx493D_t {
     uint8_t                         *regMap;
     TLx493D_Register_t              *regDef;
     TLx493D_CommonFunctions_t       *functions;
-
-    // TLx493D_ComLibraryFunctions_t  *comLibIF;
-    // TLx493D_ComLibraryParameters_t  comLibIFParams;
-    // TLx493D_ComLibraryObject_t      comLibObj;
 
     TLx493D_CommunicationInterface_t  comInterface;
 
