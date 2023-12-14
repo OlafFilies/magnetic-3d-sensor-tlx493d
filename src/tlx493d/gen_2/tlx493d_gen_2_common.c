@@ -268,6 +268,7 @@ bool tlx493d_gen_2_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, uint8_t fpBF,
 bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_t val) {
     uint8_t mod1 = sensor->regDef[fpBF].address;
     uint8_t rate = 0;
+    uint8_t rate = 0;
 
     switch(val) {
         case TLx493D_UPDATE_RATE_770_HZ_e : rate = 0b000;
@@ -391,6 +392,8 @@ bool tlx493d_gen_2_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t cp
     // return tlx493d_gen_2_writeConfigurationRegisters(sensor);
 }
 
+    // print("threshold12Bits = %#X / %d   thresh11Bits = %#X / %d  upper = %#X / %d  lower = %#X / %d\n",
+    //       threshold12Bits, threshold12Bits, thresh11Bits, thresh11Bits, upper, upper, lower, lower);
 
 bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold12Bits) {
     TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
@@ -489,6 +492,7 @@ uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint
     parity ^= sensor->regMap[0x10] & ~cp->mask;
 
 	return tlx493d_common_getOddParity(tlx493d_common_calculateParity(parity));
+	return tlx493d_common_getOddParity(tlx493d_common_calculateParity(parity));
 }
 
 
@@ -578,6 +582,7 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_t *sensor, uint8_t tBF) {
 //     return (sensor->regMap[hwv->address] && hwv->mask) >> hwv->offset;
 // }
 
+        case TLx493D_IIC_ADDR_A1_e : return GEN_2_STD_IIC_ADDR_WRITE_A1;
 
 uint8_t tlx493d_gen_2_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     switch(addr) {
@@ -594,6 +599,7 @@ uint8_t tlx493d_gen_2_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType
     }
 }
 
+        case TLx493D_IIC_ADDR_A3_e : return GEN_2_STD_IIC_ADDR_WRITE_A3;
 
 void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,

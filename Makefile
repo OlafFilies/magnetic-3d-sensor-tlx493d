@@ -98,7 +98,6 @@ spi: arduino
 iic: arduino
 	cp examples/framework/arduino/read_iic_sensor.ino build/build.ino
 
-
 iic_with_wakeup: arduino
 	cp examples/framework/arduino/read_iic_sensor_with_wakeup.ino build/build.ino
 
