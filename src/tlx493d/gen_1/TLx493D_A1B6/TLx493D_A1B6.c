@@ -231,7 +231,7 @@ void TLx493D_A1B6_calculateTemperature(TLx493D_t *sensor, double *temp) {
     int16_t value = 0;
     tlx493d_common_concatBytes(sensor, A1B6_TEMP_MSB_e, A1B6_TEMP_LSB_e, &value);
     
-    *temp = ((double) value - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT;
+    *temp = (((double) value - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT) + GEN_1_REF_TEMP;
 }
 
 bool TLx493D_A1B6_getTemperature(TLx493D_t *sensor, double *temp) {

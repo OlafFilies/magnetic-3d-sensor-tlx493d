@@ -17,7 +17,8 @@
 
 // General defines
 #define GEN_1_TEMP_MULT                             1.10
-#define GEN_1_TEMP_OFFSET                           315.0  // TODO: should be 340 ! And offset is 25 !
+#define GEN_1_TEMP_OFFSET                           340.0
+#define GEN_1_REF_TEMP                              25.0
 
 #define GEN_1_MAG_FIELD_MULT                        0.098
 
