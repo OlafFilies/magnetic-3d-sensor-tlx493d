@@ -127,9 +127,6 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
     // functions related to the "Config" register
     .setMeasurement                 = TLx493D_A1B6_setMeasurement,
-    // TODO: Jens : use tlx493d_setMeasurement
-    // .enableTemperatureMeasurement     = TLx493D_A1B6_enableTemperatureMeasurement,
-    // .disableTemperatureMeasurement    = TLx493D_A1B6_disableTemperatureMeasurement,
     .setTrigger                     = TLx493D_A1B6_setTrigger,
     .setSensitivity                 = TLx493D_A1B6_setSensitivity,
     
@@ -186,7 +183,6 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
 bool TLx493D_A1B6_init(TLx493D_t *sensor) {
-    // tlx493d_setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
     return tlx493d_common_init(sensor, GEN_1_REG_MAP_SIZE, TLx493D_A1B6_regDef, &TLx493D_A1B6_commonFunctions, TLx493D_A1B6_e, TLx493D_I2C_e);
 }
 
@@ -201,36 +197,33 @@ bool TLx493D_A1B6_readRegisters(TLx493D_t *sensor) {
 
 
 void TLx493D_A1B6_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
-    // tlx493d_gen_2_calculateRawTemperature(sensor, A1B6_TEMP_MSBS_e, A1B6_TEMP_LSBS_e, temperature);
+    tlx493d_common_calculateRawTemperature(sensor, A1B6_TEMP_MSB_e, A1B6_TEMP_LSB_e, temperature);
 }
 
 
 bool TLx493D_A1B6_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
-    // return tlx493d_common_getRawTemperature(sensor, temperature);
-    return false;
+    return tlx493d_common_getRawTemperature(sensor, temperature);
 }
 
 
 void TLx493D_A1B6_calculateRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
-    // tlx493d_gen_2_calculateRawMagneticField(sensor, A1B6_BX_MSBS_e, A1B6_BX_LSBS_e, A1B6_BY_MSBS_e, A1B6_BY_LSBS_e, A1B6_BZ_MSBS_e, A1B6_BZ_LSBS_e, x, y, z);
+    tlx493d_common_calculateRawMagneticField(sensor, A1B6_BX_MSB_e, A1B6_BX_LSB_e, A1B6_BY_MSB_e, A1B6_BY_LSB_e, A1B6_BZ_MSB_e, A1B6_BZ_LSB_e, x, y, z);
 }
 
 
 bool TLx493D_A1B6_getRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
-    // return tlx493d_common_getRawMagneticField(sensor, x, y, z);
-    return false;
+    return tlx493d_common_getRawMagneticField(sensor, x, y, z);
 }
 
 
 void TLx493D_A1B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
-    // TLx493D_A1B6_calculateRawMagneticField(sensor, x, y, z);
-    // TLx493D_A1B6_calculateRawTemperature(sensor, temperature);
+    TLx493D_A1B6_calculateRawMagneticField(sensor, x, y, z);
+    TLx493D_A1B6_calculateRawTemperature(sensor, temperature);
 }
 
 
 bool TLx493D_A1B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
-    // return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
-    return false;
+    return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
 
