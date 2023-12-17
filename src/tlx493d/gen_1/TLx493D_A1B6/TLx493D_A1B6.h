@@ -72,8 +72,8 @@ bool TLx493D_A1B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 
 bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t mVals);
 // TODO: replace next 2 functions withe the one above !
-bool TLx493D_A1B6_enableTemperatureMeasurement(TLx493D_t *sensor);
-bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor);
+// bool TLx493D_A1B6_enableTemperatureMeasurement(TLx493D_t *sensor);
+// bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trig);
 bool TLx493D_A1B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t sens);
@@ -142,7 +142,7 @@ bool TLx493D_A1B6_enableParityTest(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableParityTest(TLx493D_t *sensor);
 
 
-void TLx493D_A1B6_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
+// void TLx493D_A1B6_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
 uint8_t TLx493D_A1B6_returnBitfield(TLx493D_t *sensor, uint8_t bitField);
 void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBitFieldValue);
 

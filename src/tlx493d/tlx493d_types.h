@@ -62,11 +62,13 @@ typedef enum {
 
 
 typedef enum {
-    // 2nd generation
+    // 1st and 2nd generation
     TLx493D_BxByBz_e = 0,
-
-    //  3rd generation
+    
+    //  1st and 3rd generation
     TLx493D_BxByBzTemp_e,
+
+    // 3rd generation
     TLx493D_VHall_Bias_e,
     TLx493D_Spintest_e,
     TLx493D_SAT_test_e,
