@@ -333,7 +333,6 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkModeUpdateRateFunctionality)
     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2B6_MOD2_REG_e] & 0xE0) == 0xE0 );
 
-
     TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_770_HZ_e) == true );
     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( (dut.regMap[W2B6_MOD2_REG_e] & 0xE0) == 0x00 );

@@ -79,12 +79,15 @@ uint8_t TLx493D_P3I8_calculateFuseParity(TLx493D_t *sensor);
 uint8_t TLx493D_P3I8_calculateBusParity(TLx493D_t *sensor);
 uint8_t TLx493D_P3I8_calculateConfigurationParity(TLx493D_t *sensor);
 
-bool TLx493D_P3I8_hasValidTBit(TLx493D_t *sensor);
-bool TLx493D_P3I8_hasValidIICadr(TLx493D_t *sensor);
-
 bool TLx493D_P3I8_hasValidFuseParity(TLx493D_t *sensor);
 bool TLx493D_P3I8_hasValidBusParity(TLx493D_t *sensor);
 bool TLx493D_P3I8_hasValidConfigurationParity(TLx493D_t *sensor);
+
+bool TLx493D_P3I8_hasValidWakeUpParity(TLx493D_t *sensor);
+bool TLx493D_P3I8_isInTestMode(TLx493D_t *sensor);
+
+bool TLx493D_P3I8_hasValidTBit(TLx493D_t *sensor);
+bool TLx493D_P3I8_hasValidIICadr(TLx493D_t *sensor);
 
 void TLx493D_P3I8_setResetValues(TLx493D_t *sensor);
 

@@ -15,23 +15,23 @@ class Kit2GoBoardSupport {
 
     public:
 
-        Kit2GoBoardSupport() : powerPins{}, selectPins{} {
+        Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0} {
         }
 
 
-        void init(bool enablePower = true) {
+        void init(bool enablePower = true, bool enableSelect = false) {
             for(auto &p : powerPins) {
                 initPin(p, enablePower);
             }
 
             for(auto &p : selectPins) {
-                initPin(p, false);
+                initPin(p, enableSelect ? true : false);
             }
         }
 
 
-        void begin(bool enablePower = true) {
-            init(enablePower);
+        void begin(bool enablePower = true, bool enableSelect = false) {
+            init(enablePower, enableSelect);
         }
 
 

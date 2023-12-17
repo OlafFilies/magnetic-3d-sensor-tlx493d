@@ -33,11 +33,10 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
     sensor->sensorType        = sensorType;
     sensor->comIFType         = comIFType;
 
-    // sensor->comInterface.comLibFuncs       = NULL;
-    // sensor->comInterface.comLibObj.iic_obj = NULL;
+    sensor->comInterface.comLibFuncs       = NULL;
+    sensor->comInterface.comLibObj.iic_obj = NULL;
 
-    // sensor->comLibIF          = NULL;
-    // sensor->comLibObj.iic_obj = NULL;
+    sensor->boardSupportInterface.boardSupportObj.k2go_obj = NULL;
 
     memset(sensor->regMap, 0, sensor->regMapSize);
 
