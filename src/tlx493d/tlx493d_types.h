@@ -58,6 +58,10 @@ typedef enum {
     TLx493D_IIC_ADDR_A1_e,
     TLx493D_IIC_ADDR_A2_e,
     TLx493D_IIC_ADDR_A3_e,
+    TLx493D_IIC_ADDR_A4_e,
+    TLx493D_IIC_ADDR_A5_e,
+    TLx493D_IIC_ADDR_A6_e,
+    TLx493D_IIC_ADDR_A7_e,
 } TLx493D_IICAddressType_t;
 
 

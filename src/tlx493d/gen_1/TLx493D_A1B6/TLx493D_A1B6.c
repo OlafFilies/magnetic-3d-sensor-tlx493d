@@ -283,26 +283,6 @@ bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t va
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
 
-
-// bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor) {
-    
-//     TLx493D_A1B6_setBitfield(sensor, A1B6_Temp_NEN_e, TLx493D_A1B6_Temp_DISABLE);
-//     TLx493D_A1B6_calculateParity(sensor);
-//     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
-    
-//     return ret;                                                           
-// }
-
-// bool TLx493D_A1B6_enableTemperatureMeasurement(TLx493D_t *sensor) {
-
-//     TLx493D_A1B6_setBitfield(sensor, A1B6_Temp_NEN_e, TLx493D_A1B6_Temp_ENABLE_default);
-//     TLx493D_A1B6_calculateParity(sensor);
-//     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
-
-//     return ret; 
-// }
-
-
 //  // This option depends on PR and MODE.
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setTrigger");
@@ -346,8 +326,10 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
     return ret;  
 }
 
+// Addresses for Gen 1 
+// (A0-A3 - for SDA/ADDR high at power-up)
+// (A4-A7 - for SDA/ADDR low at power-up)
 bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
-// bool tlx493d_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_StandardIICAddresses_te addr) {
     uint8_t bitfieldValue = 0;
     uint8_t deviceAddress = 0;
 
@@ -371,7 +353,27 @@ bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr
             bitfieldValue = 0b11;
             deviceAddress = 0x94;
             break;
-        
+
+        case TLx493D_IIC_ADDR_A4_e:
+            bitfieldValue = 0b00;
+            deviceAddress = 0x3E;
+            break;
+
+        case TLx493D_IIC_ADDR_A5_e:
+            bitfieldValue = 0b01;
+            deviceAddress = 0x36;
+            break;
+
+        case TLx493D_IIC_ADDR_A6_e:
+            bitfieldValue = 0b10;
+            deviceAddress = 0x1E;
+            break;
+
+        case TLx493D_IIC_ADDR_A7_e:
+            bitfieldValue = 0b11;
+            deviceAddress = 0x16;
+            break;        
+
         default:
             return false;
     }
@@ -555,6 +557,9 @@ void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_W_RES_3_e, TLx493D_A1B6_returnBitfield(sensor, A1B6_R_RES_3_e));
 }
 
+// Addresses for Gen 1 
+// (A0-A3 - for SDA/ADDR high at power-up)
+// (A4-A7 - for SDA/ADDR low at power-up)
 
 uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     switch(addr) {
@@ -566,11 +571,18 @@ uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_
 
         case TLx493D_IIC_ADDR_A3_e : return GEN_1_STD_IIC_ADDR_WRITE_A3;
 
+        case TLx493D_IIC_ADDR_A4_e : return GEN_1_STD_IIC_ADDR_WRITE_A4;
+
+        case TLx493D_IIC_ADDR_A5_e : return GEN_1_STD_IIC_ADDR_WRITE_A5;
+
+        case TLx493D_IIC_ADDR_A6_e : return GEN_1_STD_IIC_ADDR_WRITE_A6;
+
+        case TLx493D_IIC_ADDR_A7_e : return GEN_1_STD_IIC_ADDR_WRITE_A7;
+
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
                   return 0;
     }
 }
-
 
 void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double xInmT, double yInmT, double zInmT, int16_t *x, int16_t *y, int16_t *z) {
     *x = xInmT / GEN_1_MAG_FIELD_MULT;
@@ -596,17 +608,6 @@ bool TLx493D_A1B6_disableParityTest(TLx493D_t *sensor) {
     TLx493D_A1B6_calculateParity(sensor);
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
-
-// //todo: remove if not used. Note: So far not used 
-// void TLx493D_A1B6_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
-//     TLx493D_Register_t *bf = &sensor->regDef[bitField];
-
-//     if(bf->accessMode == TLx493D_READ_MODE_e) {
-//         *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
-//     }
-
-//     // TODO: catch condition and output error message ! assert(bf->accessMode == TLx493D_READ_MODE_e);
-// }
 
 uint8_t TLx493D_A1B6_returnBitfield(TLx493D_t *sensor, uint8_t bitField) {
     TLx493D_Register_t *bf = &sensor->regDef[bitField];

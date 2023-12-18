@@ -69,11 +69,7 @@ bool TLx493D_A1B6_getMagneticField(TLx493D_t *sensor, double *x, double *y, doub
 void TLx493D_A1B6_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 bool TLx493D_A1B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 
-
 bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t mVals);
-// TODO: replace next 2 functions withe the one above !
-// bool TLx493D_A1B6_enableTemperatureMeasurement(TLx493D_t *sensor);
-// bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trig);
 bool TLx493D_A1B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t sens);
@@ -135,17 +131,14 @@ double TLx493D_A1B6_getSensitivityScaleFactor(TLx493D_t *sensor);
 
 
 // TODO : the following function may be replaced by one of the above common functions if appropriate
-bool TLx493D_A1B6_writeRegister(TLx493D_t* sensor, uint8_t bitField);
+bool TLx493D_A1B6_writeRegister(TLx493D_t* sensor, uint8_t bitField); //TODO: can be removed
 bool TLx493D_A1B6_transferWriteRegisters(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_enableParityTest(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableParityTest(TLx493D_t *sensor);
 
-
-// void TLx493D_A1B6_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
 uint8_t TLx493D_A1B6_returnBitfield(TLx493D_t *sensor, uint8_t bitField);
 void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBitFieldValue);
-
 
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor);
 
