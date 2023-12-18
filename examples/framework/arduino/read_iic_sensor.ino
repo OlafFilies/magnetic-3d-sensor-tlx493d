@@ -10,11 +10,11 @@
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
+TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
 
 
 void setup() {

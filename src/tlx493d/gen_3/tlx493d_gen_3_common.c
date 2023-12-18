@@ -1,6 +1,7 @@
 // std includes
 #include <stdbool.h>
 #include <stddef.h>
+#include <string.h>
 
 // project c includes
 // common to all sensors
@@ -14,8 +15,42 @@
 #include "tlx493d_gen_3_common.h"
 
 
-bool tlx493d_gen_3_readRegistersSPI(TLx493D_t *sensor) {
-    return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+bool tlx493d_gen_3_readRegisters(TLx493D_t *sensor, uint8_t channelBF) {
+    return tlx493d_common_readRegisters(sensor);
+
+    // bool b = tlx493d_common_readRegisters(sensor);
+    // tlx493d_gen_3_correctDataInRegisters(sensor, channelBF);
+    // return b;
+}
+
+
+void tlx493d_gen_3_copyRegisters(TLx493D_t *sensor, uint8_t toIndex) {
+    for(uint8_t i = sensor->regMapSize; i >= toIndex; --i) {
+        sensor->regMap[i] = sensor->regMap[i - 4];
+    }
+}
+
+void tlx493d_gen_3_correctDataInRegisters(TLx493D_t *sensor, uint8_t channelBF) {
+    uint8_t channel = (sensor->regMap[7] && 0xF0) >> 4;
+    // tlx493d_common_returnBitfield(sensor, channelBF);
+print("channel : %x\n", channel);
+
+    switch(channel) {
+        // TLx493D_BxTemp_e
+        case 0b1100 : tlx493d_gen_3_copyRegisters(sensor, 6);
+                      return;
+
+        // TLx493D_BxBy_e
+        case 0b1101 : tlx493d_gen_3_copyRegisters(sensor, 8);
+                      return;
+        
+        // TLx493D_BzTemp_e
+        case 0b1110 : tlx493d_gen_3_copyRegisters(sensor, 4);
+                      return;
+        
+        default : return;
+    }
+
 }
 
 
@@ -91,34 +126,29 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, TLx493D_
         case TLx493D_BxByBzTemp_e : channel = 0b0000;
                                     break;
 
-        // case TLx493D_VHall_Bias_e : channel = 0b0001;
-        //                             break;
+        case TLx493D_VHall_Bias_e : channel = 0b0001;
+                                    break;
         
-        // case TLx493D_Spintest_e : channel = 0b0010;
-        //                           break;
+        case TLx493D_Spintest_e : channel = 0b0010;
+                                  break;
 
-        // case TLx493D_SAT_test_e : channel = 0b1000;
-        //                           break;
+        case TLx493D_SAT_test_e : channel = 0b1000;
+                                  break;
         
-        // case TLx493D_BxTemp_e : channel = 0b1100;
-        //                         break;
+        case TLx493D_BxTemp_e : channel = 0b1100;
+                                break;
 
-        // case TLx493D_BxBy_e : channel = 0b1101;
-        //                       break;
+        case TLx493D_BxBy_e : channel = 0b1101;
+                              break;
         
-        // case TLx493D_BzTemp_e : channel = 0b1110;
-        //                         break;
+        case TLx493D_BzTemp_e : channel = 0b1110;
+                                break;
         
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_MeasurementType_t");
                   return false;
     }
 
     tlx493d_common_setBitfield(sensor, channelBF, channel);
-// tlx493d_common_writeRegister(sensor, channelBF);
-// sensor->functions->readRegisters(sensor);
-// printRegisters(sensor);
-// return true;
-
     return tlx493d_common_writeRegister(sensor, channelBF);
 }
 
@@ -173,68 +203,31 @@ bool tlx493d_gen_3_setSensitivity(TLx493D_t *sensor, uint8_t shortBF, uint8_t xt
 }
 
 
-bool tlx493d_gen_3_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
-return false;
+bool tlx493d_gen_3_setDefaultConfig(TLx493D_t *sensor, uint8_t caBF, uint8_t intBF) {
+    tlx493d_common_setBitfield(sensor, caBF, 0);
+    tlx493d_common_setBitfield(sensor, intBF, 1);
+    return sensor->functions->enable1ByteReadMode(sensor);
+
+    // return sensor->functions->enable1ByteReadMode(sensor) ? tlx493d_common_readRegisters(sensor)
+    //                                                       : false;
 }
 
 
-bool tlx493d_gen_3_setIICAddress(TLx493D_t *sensor, uint8_t iicadrBF, uint8_t fpBF, TLx493D_IICAddressType_t addr) {
-    // uint8_t bitfieldValue = 0;
-    // uint8_t deviceAddress = 0;
-
-    // switch (addr) {
-    //     case TLx493D_IIC_ADDR_A0_e:
-    //         bitfieldValue = 0b00;
-    //         deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A0;
-    //         break;
-
-    //     case TLx493D_IIC_ADDR_A1_e:
-    //         bitfieldValue = 0b01;
-    //         deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A1;
-    //         break;
-
-    //     case TLx493D_IIC_ADDR_A2_e:
-    //         bitfieldValue = 0b10;
-    //         deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A2;
-    //         break;
-
-    //     case TLx493D_IIC_ADDR_A3_e:
-    //         bitfieldValue = 0b11;
-    //         deviceAddress = GEN_2_STD_IIC_ADDR_WRITE_A3;
-    //         break;
-        
-    //     default:
-    //         return false;
-    // }
-
-    // tlx493d_common_setBitfield(sensor, iicadrBF, bitfieldValue);
-    // tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
-
-    // bool b = tlx493d_common_writeRegister(sensor, fpBF);
-    // tlx493d_common_setIICAddress(sensor, deviceAddress);
-
-    // return b;
+bool tlx493d_gen_3_setIICAddress(TLx493D_t *sensor, uint8_t iicadrBF, TLx493D_IICAddressType_t addr) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setIICAddress");
     return false;
 }
 
 
-bool tlx493d_gen_3_set1ByteReadMode(TLx493D_t *sensor, uint8_t prBF, uint8_t fpBF, uint8_t prdBF, uint8_t pr) {
-    // tlx493d_common_setBitfield(sensor, prBF, pr);
-    // tlx493d_common_setBitfield(sensor, fpBF, tlx493d_gen_3_calculateFuseParity(sensor, fpBF, prdBF));
-
-    // return tlx493d_common_writeRegister(sensor, prBF);
-
-    return false;
+bool tlx493d_gen_3_set1ByteReadMode(TLx493D_t *sensor, uint8_t prBF, uint8_t pr) {
+    tlx493d_common_setBitfield(sensor, prBF, pr);
+    return tlx493d_common_writeRegister(sensor, prBF);
 }
 
 
-bool tlx493d_gen_3_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca) {
-    // tlx493d_common_setBitfield(sensor, caBF, ca);
-    // tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
-
-    // return tlx493d_common_writeRegister(sensor, caBF);
-
-return false;
+bool tlx493d_gen_3_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t ca) {
+    tlx493d_common_setBitfield(sensor, caBF, ca);
+    return tlx493d_common_writeRegister(sensor, caBF);
 }
 
 

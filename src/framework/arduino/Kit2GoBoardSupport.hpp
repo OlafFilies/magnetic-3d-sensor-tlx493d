@@ -25,7 +25,7 @@ class Kit2GoBoardSupport {
             }
 
             for(auto &p : selectPins) {
-                initPin(p, enableSelect ? true : false);
+                initPin(p, enableSelect);
             }
         }
 
