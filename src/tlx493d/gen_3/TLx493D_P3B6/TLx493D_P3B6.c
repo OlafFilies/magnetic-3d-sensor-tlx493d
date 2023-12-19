@@ -348,8 +348,14 @@ bool TLx493D_P3B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
 }
 
 // thesholds im mT, to be converted to proper format
-bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    return tlx493d_gen_3_setWakeUpThresholds(sensor, xLow, xHigh, yLow, yHigh, zLow, zHigh);
+bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
+                                      double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+    return tlx493d_gen_3_setWakeUpThresholds(sensor,
+                                             P3B6_WU_XL_MSBS_e, P3B6_WU_XL_LSBS_e, P3B6_WU_XH_MSBS_e, P3B6_WU_XH_LSBS_e,
+                                             P3B6_WU_YL_MSBS_e, P3B6_WU_YL_LSBS_e, P3B6_WU_YH_MSBS_e, P3B6_WU_YH_LSBS_e,
+                                             P3B6_WU_ZL_MSBS_e, P3B6_WU_ZL_LSBS_e, P3B6_WU_ZH_MSBS_e, P3B6_WU_ZH_LSBS_e,
+                                             P3B6_SHORT_EN_e, P3B6_XTR_SHORT_EN_e,
+                                             temperature, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
 bool TLx493D_P3B6_softwareReset(TLx493D_t *sensor) {

@@ -51,7 +51,12 @@ bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
                                                 uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
                                                 int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh);
 
-bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor,
+                                       uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
+                                       uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
+                                       uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
+                                       uint8_t x2BF, uint8_t x4BF,
+                                       double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 bool tlx493d_gen_3_softwareReset(TLx493D_t *sensor, uint8_t resetBF);
 
@@ -66,13 +71,17 @@ void tlx493d_gen_3_correctDataInRegisters(TLx493D_t *sensor, uint8_t channelBF);
 
 // bool tlx493d_gen_3_hasValidIICadr(TLx493D_t *sensor, uint8_t idBF, uint8_t iicAdrBF);
 
-double tlx493d_gen_3_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF);
-
 uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
+
+double tlx493d_gen_3_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF);
 
 void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,
                                                           int16_t *x, int16_t *y, int16_t *z);
+
+void tlx493d_gen_3_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature);
+
+TLx493D_SensitivityType_t tlx493d_gen_3_getSensitivityType(TLx493D_t *sensor, uint8_t x2BF, uint8_t x4BF);
 
 
 #ifdef __cplusplus

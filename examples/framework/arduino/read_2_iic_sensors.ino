@@ -16,7 +16,6 @@ TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P3B6 dut(Wire);
 
 
-// TODO: if A1B6 instantiated program not working
 // TLx493D_A1B6 a1b6(Wire);
 
 // TLx493D_A2B6 a2b6(Wire);
@@ -30,11 +29,9 @@ TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 void setup() {
     delay(3000);
     Serial.begin(115200);
-    delay(100);
 
     dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
     dut.begin();
-    // dut.enablePower();
 
 
     // a1b6.begin();
@@ -46,8 +43,6 @@ void setup() {
 
     // p3b6.begin();
 
-
-    delay(100);
     Serial.print("setup done.\n");
 }
 

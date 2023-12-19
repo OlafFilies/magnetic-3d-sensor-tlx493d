@@ -185,7 +185,7 @@ bool TLx493D_W2BW_enableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_W2BW_disableWakeUpMode(TLx493D_t *sensor);
 
 bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xhTh, int16_t xlTh, int16_t yhTh, int16_t ylTh, int16_t zhTh, int16_t zlTh);
-bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor, double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 bool TLx493D_W2BW_softwareReset(TLx493D_t *sensor);
 
@@ -193,12 +193,15 @@ uint8_t TLx493D_W2BW_calculateFuseParity(TLx493D_t *sensor);
 uint8_t TLx493D_W2BW_calculateBusParity(TLx493D_t *sensor);
 uint8_t TLx493D_W2BW_calculateConfigurationParity(TLx493D_t *sensor);
 
-bool TLx493D_W2BW_hasValidTBit(TLx493D_t *sensor);
-bool TLx493D_W2BW_hasValidIICadr(TLx493D_t *sensor);
-
 bool TLx493D_W2BW_hasValidFuseParity(TLx493D_t *sensor);
 bool TLx493D_W2BW_hasValidBusParity(TLx493D_t *sensor);
 bool TLx493D_W2BW_hasValidConfigurationParity(TLx493D_t *sensor);
+
+bool TLx493D_W2BW_hasValidWakeUpParity(TLx493D_t *sensor);
+bool TLx493D_W2BW_isInTestMode(TLx493D_t *sensor);
+
+bool TLx493D_W2BW_hasValidTBit(TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidIICadr(TLx493D_t *sensor);
 
 void TLx493D_W2BW_setResetValues(TLx493D_t *sensor);
 
