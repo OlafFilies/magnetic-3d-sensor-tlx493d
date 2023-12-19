@@ -40,16 +40,16 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         }
 
 
-        void init() {
-            bsc.init(true);
+        void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddr = false) {
+            bsc.init(enablePower, enableSelect, enableExtendedAddr);
             tlx493d_initBoardSupport(&sensor, bsc);
             tlx493d_initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
             setDefaultConfig();
         }
 
 
-        void begin() {
-            init();
+        void begin(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddr = false) {
+            init(enablePower, enableSelect, enableExtendedAddr);
         }
 
 
@@ -81,11 +81,18 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
             bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
         }
 
-
         void unsetSelectPin() {
             bsc.unsetSelectPin();
         }
 
+        void setAddrPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
+                         uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
+            bsc.setAddrPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
+        }
+
+        void unsetAddrPin() {
+            bsc.unsetAddrPin();
+        }
 
         void enablePower() {
             bsc.controlPower(true);
@@ -104,6 +111,16 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
 
         void disableSelect() {
             bsc.controlSelect(false);
+        }
+
+
+        void enableAddr() {
+            bsc.controlAddr(true);
+        }
+
+
+        void disableAddr() {
+            bsc.controlAddr(false);
         }
 
 
