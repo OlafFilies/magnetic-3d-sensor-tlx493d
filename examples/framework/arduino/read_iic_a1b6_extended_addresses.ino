@@ -5,7 +5,7 @@
 // project cpp includes
 #include "TLx493D_inc.hpp"
 
-
+// address 0x3E when SDA/ADDR held low at power up
 TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A4_e);
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -27,7 +27,7 @@ void setup() {
     // set pin used to drive SDA/ADDR pin before power up
     dut.setAddrPin(7, OUTPUT, LOW, HIGH, 1, 1);
     
-    dut.begin();
+    dut.begin(true, false, true);
     //dut.disableSelect();
     // dut.enablePower();
 
