@@ -1,12 +1,11 @@
 #ifndef TLx493D_A1B6_DEFINES_H
 #define TLx493D_A1B6_DEFINES_H
 
-#define TLx493D_A1B6_WRITE_REGISTERS_MAX_COUNT      4
-#define TLx493D_A1B6_WRITE_REGISTERS_OFFSET         10 //TODO: keep one of this or line 11
+#define GEN_1_WRITE_REGISTERS_MAX_COUNT             4
 
 #define GEN_1_REG_MAP_SIZE                          14
 
-#define TLx493D_A1B6_READ_REGISTERS_MAX_COUNT       10 
+#define GEN_1_READ_REGISTERS_MAX_COUNT              10 
 
 #define GEN_1_WRITE_REGISTERS_OFFSET                10
 

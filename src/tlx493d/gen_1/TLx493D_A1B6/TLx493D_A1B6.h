@@ -104,8 +104,6 @@ bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHi
 bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor);
 
 // utilities
-void TLx493D_A1B6_calculateParity(TLx493D_t *sensor);
-// TODO: TLx493D_A1B6_calculateParity to be replaced by appropriate one of the next 3 !
 uint8_t TLx493D_A1B6_calculateFuseParity(TLx493D_t *sensor);
 uint8_t TLx493D_A1B6_calculateBusParity(TLx493D_t *sensor);
 uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor);
@@ -118,8 +116,7 @@ bool TLx493D_A1B6_hasValidBusParity(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidConfigurationParity(TLx493D_t *sensor);
 
 void TLx493D_A1B6_setResetValues(TLx493D_t *sensor);
-// TODO: maybe replace the following function by the one above if appropriate
-void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *senor);
+void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *sensor);
 
 uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
@@ -129,9 +126,6 @@ void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_A1B6_getSensitivityScaleFactor(TLx493D_t *sensor);
 
-
-// TODO : the following function may be replaced by one of the above common functions if appropriate
-bool TLx493D_A1B6_writeRegister(TLx493D_t* sensor, uint8_t bitField); //TODO: can be removed
 bool TLx493D_A1B6_transferWriteRegisters(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_enableParityTest(TLx493D_t *sensor);
