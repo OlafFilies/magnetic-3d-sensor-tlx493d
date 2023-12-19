@@ -62,8 +62,6 @@ TEST_GROUP(TLx493D_A1B6_TempDisable);
 // Setup method called before every individual test defined for this test group
 TEST_SETUP(TLx493D_A1B6_TempDisable)
 {
-    //TLx493D_A1B6_disableTemperatureMeasurement(&dut);
-    // dut.functions->disableTemperatureMeasurement(&dut);
     dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e);
 }
 
@@ -72,13 +70,12 @@ TEST_SETUP(TLx493D_A1B6_TempDisable)
 TEST_TEAR_DOWN(TLx493D_A1B6_TempDisable)
 {
     dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e);
-    // dut.functions->enableTemperatureMeasurement(&dut);
 }
 
 TEST(TLx493D_A1B6_TempDisable, TempDisable)
 {
     // CH cannot be 0b11 when temperature measurement is disabled
-    // TEST_ASSERT_NOT_EQUAL ( 0x3, ( dut.regMap[dut.commonBitfields.CH] & dut.regDef[dut.commonBitfields.CH].mask) >> dut.regDef[dut.commonBitfields.CH].offset );
+    TEST_ASSERT_NOT_EQUAL ( 0x3, ( dut.regMap[A1B6_CH_e] & dut.regDef[A1B6_CH_e].mask) >> dut.regDef[A1B6_CH_e].offset );
     
     double temperature = 0.0;
     TEST_ASSERT_EQUAL( true, TLx493D_A1B6_getTemperature(&dut, &temperature));
@@ -109,38 +106,37 @@ TEST_SETUP(TLx493D_A1B6_ParityCheck)
 // Tear down method called before every individual test defined for this test group
 TEST_TEAR_DOWN(TLx493D_A1B6_ParityCheck)
 {
-    //TLx493D_A1B6_enableParityTest(dut);
 }
 
 TEST(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckDisabled)
 {
-    // // first, disable Parity check.
-    // TEST_ASSERT_EQUAL( true, TLx493D_A1B6_disableParityTest(&dut) );
+    // first, disable Parity check.
+    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_disableParityTest(&dut) );
     
-    // // here, changine a Write Register bitField and not recalculating parity and not setting
-    // // it in the bitField.P, should give an error
-    // TLx493D_A1B6_setBitfield(&dut, dut.commonBitfields.Temp_NEN,1);
-    // TEST_ASSERT_EQUAL( true, TLx493D_A1B6_transferWriteRegisters(&dut));
+    // here, changine a Write Register bitField and not recalculating parity and not setting
+    // it in the bitField.P, should give an error
+    TLx493D_A1B6_setBitfield(&dut, A1B6_Temp_NEN_e, 1);
+    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_transferWriteRegisters(&dut));
 
-    // // the readRegisters() throws NO error due to wrong parity
-    // TEST_ASSERT_EQUAL( true, TLx493D_A1B6_readRegisters(&dut) );
+    // the readRegisters() throws NO error due to wrong parity
+    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_readRegisters(&dut) );
     
-    // // enable partity check at the end, to restore default state for other tests
-    // TEST_ASSERT_EQUAL( true, TLx493D_A1B6_enableParityTest(&dut) );
+    // enable partity check at the end, to restore default state for other tests
+    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_enableParityTest(&dut) );
 }
 
+// Note: this test will hang up the sensor beyond recovery. Recovery only by power cycle.
 TEST(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckEnabled)
 {
-    // TODO: setup anew
-    // // parity check is enabled, by default
+    // parity check is enabled, by default
     
-    // // here, changine a Write Register bitField and not recalculating parity and not setting
-    // // it in the bitField.P, should give an error
-    // TLx493D_A1B6_setBitfield(&dut, dut.commonBitfields.Temp_NEN,0);
-    // TEST_ASSERT_EQUAL( true, TLx493D_A1B6_transferWriteRegisters(&dut) );
+    // here, changine a Write Register bitField and not recalculating parity and not setting
+    // it in the bitField.P, should give an error
+    TLx493D_A1B6_setBitfield(&dut, A1B6_Temp_NEN_e, 0);
+    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_transferWriteRegisters(&dut) );
 
-    // // the readRegisters() throws error due to wrong parity
-    // TEST_ASSERT_EQUAL( false, TLx493D_A1B6_readRegisters(&dut) );
+    // the readRegisters() throws error due to wrong parity
+    TEST_ASSERT_EQUAL( false, TLx493D_A1B6_readRegisters(&dut) );
 }
 
 
@@ -162,27 +158,25 @@ TEST_TEAR_DOWN(TLx493D_A1B6_atReset)
 
 TEST(TLx493D_A1B6_atReset, regMapatReset_MeasurementBitfields)
 {
-    // TODO: setup anew
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[dut.commonBitfields.BX_MSB] & dut.regDef[dut.commonBitfields.BX_MSB].mask) >> dut.regDef[dut.commonBitfields.BX_MSB].offset  );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[dut.commonBitfields.BY_MSB] & dut.regDef[dut.commonBitfields.BY_MSB].mask) >> dut.regDef[dut.commonBitfields.BY_MSB].offset  );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x00, (dut.regMap[dut.commonBitfields.BZ_MSB] & dut.regDef[dut.commonBitfields.BZ_MSB].mask) >> dut.regDef[dut.commonBitfields.BZ_MSB].offset  );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x01, (dut.regMap[dut.commonBitfields.TEMP_MSB] & dut.regDef[dut.commonBitfields.TEMP_MSB].mask) >> dut.regDef[dut.commonBitfields.TEMP_MSB].offset );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[A1B6_BX_MSB_e] & dut.regDef[A1B6_BX_MSB_e].mask) >> dut.regDef[A1B6_BX_MSB_e].offset  );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[A1B6_BY_MSB_e] & dut.regDef[A1B6_BY_MSB_e].mask) >> dut.regDef[A1B6_BY_MSB_e].offset  );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x00, (dut.regMap[A1B6_BZ_MSB_e] & dut.regDef[A1B6_BZ_MSB_e].mask) >> dut.regDef[A1B6_BZ_MSB_e].offset  );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x01, (dut.regMap[A1B6_TEMP_MSB_e] & dut.regDef[A1B6_TEMP_MSB_e].mask) >> dut.regDef[A1B6_TEMP_MSB_e].offset );
     
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x5, ( dut.regMap[dut.commonBitfields.BX_LSB] & dut.regDef[dut.commonBitfields.BX_LSB].mask) >> dut.regDef[dut.commonBitfields.BX_LSB].offset );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x3, ( dut.regMap[dut.commonBitfields.BY_LSB] & dut.regDef[dut.commonBitfields.BY_LSB].mask) >> dut.regDef[dut.commonBitfields.BY_LSB].offset );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x5, ( dut.regMap[A1B6_BX_LSB_e] & dut.regDef[A1B6_BX_LSB_e].mask) >> dut.regDef[A1B6_BX_LSB_e].offset );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x3, ( dut.regMap[A1B6_BY_LSB_e] & dut.regDef[A1B6_BY_LSB_e].mask) >> dut.regDef[A1B6_BY_LSB_e].offset );
 
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x3 , ( dut.regMap[dut.commonBitfields.BZ_LSB] & dut.regDef[dut.commonBitfields.BZ_LSB].mask) >> dut.regDef[dut.commonBitfields.BZ_LSB].offset );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x0 , ( dut.regMap[dut.commonBitfields.TEMP_LSB] & dut.regDef[dut.commonBitfields.TEMP_LSB].mask) >> dut.regDef[dut.commonBitfields.TEMP_LSB].offset );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x3 , ( dut.regMap[A1B6_BZ_LSB_e] & dut.regDef[A1B6_BZ_LSB_e].mask) >> dut.regDef[A1B6_BZ_LSB_e].offset );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x0 , ( dut.regMap[A1B6_TEMP_LSB_e] & dut.regDef[A1B6_TEMP_LSB_e].mask) >> dut.regDef[A1B6_TEMP_LSB_e].offset );
 }
 
 TEST(TLx493D_A1B6_atReset, regMapatReset_nonMeasurementBitfields)
 {
-    // TODO: setup anew
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x0, ( dut.regMap[dut.commonBitfields.FRM] & dut.regDef[dut.commonBitfields.FRM].mask) >> dut.regDef[dut.commonBitfields.FRM].offset );
-    // TEST_ASSERT_UINT8_WITHIN ( 0x3, 0x0, ( dut.regMap[dut.commonBitfields.CH] & dut.regDef[dut.commonBitfields.CH].mask) >> dut.regDef[dut.commonBitfields.CH].offset );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x0, ( dut.regMap[dut.commonBitfields.T] & dut.regDef[dut.commonBitfields.T].mask) >> dut.regDef[dut.commonBitfields.T].offset );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x1, ( dut.regMap[dut.commonBitfields.FF] & dut.regDef[dut.commonBitfields.FF].mask) >> dut.regDef[dut.commonBitfields.FF].offset );
-    // TEST_ASSERT_EQUAL_UINT8 ( 0x0, ( dut.regMap[dut.commonBitfields.PD] & dut.regDef[dut.commonBitfields.PD].mask) >> dut.regDef[dut.commonBitfields.PD].offset );
+    TEST_ASSERT_EQUAL_UINT8  ( 0x0, ( dut.regMap[A1B6_FRM_e] & dut.regDef[A1B6_FRM_e].mask) >> dut.regDef[A1B6_FRM_e].offset );
+    TEST_ASSERT_UINT8_WITHIN ( 0x3, 0x0, ( dut.regMap[A1B6_CH_e] & dut.regDef[A1B6_CH_e].mask) >> dut.regDef[A1B6_CH_e].offset );
+    TEST_ASSERT_EQUAL_UINT8  ( 0x0, ( dut.regMap[A1B6_T_e] & dut.regDef[A1B6_T_e].mask) >> dut.regDef[A1B6_T_e].offset );
+    TEST_ASSERT_EQUAL_UINT8  ( 0x1, ( dut.regMap[A1B6_FF_e] & dut.regDef[A1B6_FF_e].mask) >> dut.regDef[A1B6_FF_e].offset );
+    TEST_ASSERT_EQUAL_UINT8  ( 0x0, ( dut.regMap[A1B6_PD_e] & dut.regDef[A1B6_PD_e].mask) >> dut.regDef[A1B6_PD_e].offset );
 }
 
 // Bundle all tests to be executed for this test group
@@ -194,10 +188,8 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     RUN_TEST_CASE(TLx493D_A1B6_needsSensor, getTemperature);
     RUN_TEST_CASE(TLx493D_A1B6_needsSensor, getMagneticField);
 
-    //RUN_TEST_GROUP(TLx493D_A1B6_TempDisable);
     RUN_TEST_CASE(TLx493D_A1B6_TempDisable, TempDisable);
     RUN_TEST_CASE(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckDisabled);
-    
     
     
     // run common functions tests
@@ -206,8 +198,6 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     // run gen 1 common functions tests
     RUN_TEST_GROUP(SensorsCommon);
     RUN_TEST_GROUP(SensorsCommon_needsSensor);
-    // RUN_TEST_GROUP(SensorsGen1Common);
-    // RUN_TEST_GROUP(SensorsGen1Common_needsSensor);
 
 
     // This test is run at the end since the sensor cannot recover from a wrong parity error without hard reset

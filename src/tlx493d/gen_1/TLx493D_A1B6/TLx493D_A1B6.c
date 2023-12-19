@@ -297,7 +297,7 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
     memset(sensor->regMap + GEN_1_WRITE_REGISTERS_OFFSET, 0, GEN_1_WRITE_REGISTERS_MAX_COUNT);
 
     // set WRITE reserved register values from READ reserved register values
-    TLx493D_A1B6_setResetValues(sensor);
+    TLx493D_A1B6_setReservedRegisterValues(sensor);
 
     // enable parity test and write to registers 
     ret &= TLx493D_A1B6_enableParityTest(sensor);
@@ -439,6 +439,7 @@ bool TLx493D_A1B6_isFunctional(TLx493D_t *sensor){
 
 
 bool TLx493D_A1B6_hasWakeUp(TLx493D_t *sensor) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hassWakeUpEnabled");
     return false;
 }
 
