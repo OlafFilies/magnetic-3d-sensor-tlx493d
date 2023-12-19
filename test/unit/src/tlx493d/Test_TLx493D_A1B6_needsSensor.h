@@ -62,15 +62,16 @@ TEST_GROUP(TLx493D_A1B6_TempDisable);
 // Setup method called before every individual test defined for this test group
 TEST_SETUP(TLx493D_A1B6_TempDisable)
 {
-    TLx493D_A1B6_disableTemperatureMeasurement(&dut);
+    //TLx493D_A1B6_disableTemperatureMeasurement(&dut);
     // dut.functions->disableTemperatureMeasurement(&dut);
+    dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e);
 }
 
 
 // Tear down method called before every individual test defined for this test group
 TEST_TEAR_DOWN(TLx493D_A1B6_TempDisable)
 {
-    TLx493D_A1B6_enableTemperatureMeasurement(&dut);
+    dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e);
     // dut.functions->enableTemperatureMeasurement(&dut);
 }
 
