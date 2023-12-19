@@ -69,7 +69,7 @@ bool TLx493D_P3I8_isWakeUpEnabled(TLx493D_t *sensor);
 bool TLx493D_P3I8_enableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_P3I8_disableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_P3I8_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh);
-bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 bool TLx493D_P3I8_softwareReset(TLx493D_t *sensor);
 

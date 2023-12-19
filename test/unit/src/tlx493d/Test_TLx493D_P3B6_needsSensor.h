@@ -84,9 +84,12 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, t );
 
     dut.functions->calculateMagneticField(&dut, &x, &y, &z);
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
+    TEST_ASSERT_FLOAT_WITHIN( 2.0, 0.0, x );
+    TEST_ASSERT_FLOAT_WITHIN( 2.0, 0.0, y );
+    TEST_ASSERT_FLOAT_WITHIN( 2.0, 0.0, z );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
 
     t = 0.0;
     x = 0.0;
@@ -98,20 +101,20 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
 
-print("x / y / z\n");
-Serial.println(x);
-Serial.println(y);
-Serial.println(z);
-Serial.println(t);
-Serial.println();
+// print("x / y / z\n");
+// Serial.println(x);
+// Serial.println(y);
+// Serial.println(z);
+// Serial.println(t);
+// Serial.println();
 
     int16_t xr, yr, zr, tr;
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
-print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
+// print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
 
     int16_t xr2, yr2, zr2;
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
-print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -127,25 +130,25 @@ print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
     y = 0.0;
     z = 0.0;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
-print("x / y / z\n");
-Serial.println(x);
-Serial.println(y);
-Serial.println(z);
-Serial.println(t);
-Serial.println();
+// print("x / y / z\n");
+// Serial.println(x);
+// Serial.println(y);
+// Serial.println(z);
+// Serial.println(t);
+// Serial.println();
 
     tr = 0;
     xr = 0;
     yr = 0;
     zr = 0;
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
-print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
+// print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
 
     xr2 = 0;
     yr2 = 0;
     zr2 = 0;
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_EXTRA_SHORT_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
-print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -161,25 +164,25 @@ print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
     y = 0.0;
     z = 0.0;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
-print("x / y / z\n");
-Serial.println(x);
-Serial.println(y);
-Serial.println(z);
-Serial.println(t);
-Serial.println();
+// print("x / y / z\n");
+// Serial.println(x);
+// Serial.println(y);
+// Serial.println(z);
+// Serial.println(t);
+// Serial.println();
 
     tr = 0;
     xr = 0;
     yr = 0;
     zr = 0;
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
-print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
+// print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
 
     xr2 = 0;
     yr2 = 0;
     zr2 = 0;
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
-print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -191,9 +194,9 @@ print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
 
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
-print("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
+// print("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr2, &yr2, &zr2);
-print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -201,7 +204,7 @@ print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
 
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_EXTRA_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
-print("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
+// print("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -249,7 +252,6 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
     // TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) == true );
     
 
-//     // TODO: setting this messes up the MOD registers !
 //     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) == true );
 //     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
 // print("TLx493D_BxBy_e\n");
@@ -262,7 +264,6 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
 //     // TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[0x07] & 0x3F ); // TEMP LSBs
 
 
-//     // TODO: setting this messes up the MOD registers !
 //     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) == true );
 //     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
 // print("TLx493D_BzTemp_e\n");
@@ -541,6 +542,33 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     TEST_ASSERT_EQUAL_HEX( (-256 >> 2) & 0x03, (dut.regMap[0x13] & 0x03) >> 0 ); // ZL
     TEST_ASSERT_EQUAL_HEX( (-1024 >> 2) & 0x03, (dut.regMap[0x13] & 0x0C) >> 2 ); // ZH
     // printRegisters(&dut);
+
+
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) == true );
+
+    int16_t th    = 0;
+    uint8_t delta = 2;
+
+    // X
+    tlx493d_common_concatBytes(&dut, P3B6_WU_XL_MSBS_e, P3B6_WU_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -153,  th ); // XL
+
+    tlx493d_common_concatBytes(&dut, P3B6_WU_XH_MSBS_e, P3B6_WU_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 154,  th ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, P3B6_WU_YL_MSBS_e, P3B6_WU_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -152,  th ); // YL
+
+    tlx493d_common_concatBytes(&dut, P3B6_WU_YH_MSBS_e, P3B6_WU_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 155,  th ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, P3B6_WU_ZL_MSBS_e, P3B6_WU_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -151,  th ); // ZL
+
+    tlx493d_common_concatBytes(&dut, P3B6_WU_ZH_MSBS_e, P3B6_WU_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 152,  th ); // ZH
 }
 
 

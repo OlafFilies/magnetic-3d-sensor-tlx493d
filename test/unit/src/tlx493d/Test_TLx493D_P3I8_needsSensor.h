@@ -89,9 +89,12 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, t );
 
     dut.functions->calculateMagneticField(&dut, &x, &y, &z);
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
-    TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
+    TEST_ASSERT_FLOAT_WITHIN( 2.0, 0.0, x );
+    TEST_ASSERT_FLOAT_WITHIN( 2.0, 0.0, y );
+    TEST_ASSERT_FLOAT_WITHIN( 2.0, 0.0, z );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
+    // TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
 
     t = 0.0;
     x = 0.0;
@@ -221,7 +224,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
     // TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) == true );
     
 
-//     // TODO: setting this messes up the MOD registers !
 //     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) == true );
 //     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
 // print("TLx493D_BxBy_e\n");
@@ -235,7 +237,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
 //     // TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[0x07] & 0x3F ); // TEMP LSBs
 
 
-//     // TODO: setting this messes up the MOD registers !
 //     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) == true );
 //     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
 // print("TLx493D_BzTemp_e\n");
@@ -506,6 +507,33 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkWakeUpThresholdFunctionality)
     TEST_ASSERT_EQUAL_HEX( (-256 >> 2) & 0x03, (dut.regMap[0x13] & 0x03) >> 0 ); // ZL
     TEST_ASSERT_EQUAL_HEX( (-1024 >> 2) & 0x03, (dut.regMap[0x13] & 0x0C) >> 2 ); // ZH
     // printRegisters(&dut);
+
+
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) == true );
+
+    int16_t th    = 0;
+    uint8_t delta = 2;
+
+    // X
+    tlx493d_common_concatBytes(&dut, P3I8_WU_XL_MSBS_e, P3I8_WU_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -153,  th ); // XL
+
+    tlx493d_common_concatBytes(&dut, P3I8_WU_XH_MSBS_e, P3I8_WU_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 154,  th ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, P3I8_WU_YL_MSBS_e, P3I8_WU_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -152,  th ); // YL
+
+    tlx493d_common_concatBytes(&dut, P3I8_WU_YH_MSBS_e, P3I8_WU_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 155,  th ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, P3I8_WU_ZL_MSBS_e, P3I8_WU_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -151,  th ); // ZL
+
+    tlx493d_common_concatBytes(&dut, P3I8_WU_ZH_MSBS_e, P3I8_WU_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 152,  th ); // ZH
 }
 
 

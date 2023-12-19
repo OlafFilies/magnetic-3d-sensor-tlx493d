@@ -140,6 +140,9 @@ TLx493D_CommonFunctions_t TLx493D_W2B6_commonFunctions = {
     .hasValidFuseParity             = TLx493D_W2B6_hasValidFuseParity,
     .hasValidBusParity              = TLx493D_W2B6_hasValidBusParity,
     .hasValidConfigurationParity    = TLx493D_W2B6_hasValidConfigurationParity,
+ 
+    .hasValidWakeUpParity           = TLx493D_W2B6_hasValidWakeUpParity,
+    .isInTestMode                   = TLx493D_W2B6_isInTestMode,
     
     .hasValidTBit                   = TLx493D_W2B6_hasValidTBit,
     
@@ -241,7 +244,7 @@ bool TLx493D_W2B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
 
 
 bool TLx493D_W2B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
-    return tlx493d_gen_2_setSensitivity(sensor, W2B6_X2_e, W2B6_CP_e, val);
+    return tlx493d_gen_2_setSensitivity(sensor, TLx493D_HAS_X2_e, W2B6_X2_e, 0, W2B6_CP_e, val);
 }
 
 
@@ -327,8 +330,14 @@ bool TLx493D_W2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
 }
 
 // thesholds im mT, to be converted to proper format
-bool TLx493D_W2B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    return false;
+bool TLx493D_W2B6_setWakeUpThresholds(TLx493D_t *sensor,
+                                      double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+    return tlx493d_gen_2_setWakeUpThresholds(sensor,
+                                             W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, W2B6_XH_MSBS_e, W2B6_XH_LSBS_e,
+                                             W2B6_YL_MSBS_e, W2B6_YL_LSBS_e, W2B6_YH_MSBS_e, W2B6_YH_LSBS_e,
+                                             W2B6_ZL_MSBS_e, W2B6_ZL_LSBS_e, W2B6_ZH_MSBS_e, W2B6_ZH_LSBS_e,
+                                             TLx493D_HAS_X2_e, W2B6_X2_e, 0,
+                                             temperature, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
 bool TLx493D_W2B6_softwareReset(TLx493D_t *sensor) {
@@ -364,6 +373,18 @@ bool TLx493D_W2B6_hasValidBusParity(TLx493D_t *sensor) {
 
 bool TLx493D_W2B6_hasValidConfigurationParity(TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidConfigurationParity(sensor, W2B6_CF_e);
+}
+
+
+bool TLx493D_W2B6_hasValidWakeUpParity(TLx493D_t *sensor) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidWakeUpParity");
+    return false;
+}
+
+
+bool TLx493D_W2B6_isInTestMode(TLx493D_t *sensor) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "isInTestMode");
+    return false;
 }
 
 
@@ -406,5 +427,5 @@ void TLx493D_W2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 
 double TLx493D_W2B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
-    return tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, W2B6_X2_e, 0);
+    return tlx493d_gen_2_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, W2B6_X2_e, 0);
 }

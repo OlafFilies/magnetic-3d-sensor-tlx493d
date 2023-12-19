@@ -180,9 +180,9 @@ bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int1
    return sensor->functions->setWakeUpThresholdsAsInteger(sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
 }
 
-bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh,
-                                 double zLow, double zHigh) {
-   return sensor->functions->setWakeUpThresholds(sensor, xLow, xHigh, yLow, yHigh, zLow, zHigh);
+bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
+                                 double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+   return sensor->functions->setWakeUpThresholds(sensor, temperature, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
 

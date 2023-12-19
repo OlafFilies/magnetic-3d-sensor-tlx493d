@@ -272,7 +272,7 @@ typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr)(TLx493D_t *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);
-typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, double, double, double, double);
+typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, double, double, double, double, double);
 
 typedef bool (*TLx493D_SoftwareResetFuncPtr)(TLx493D_t *);
 

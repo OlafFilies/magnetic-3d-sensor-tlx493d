@@ -30,7 +30,7 @@ bool tlx493d_gen_2_setTwoConfigBitfields(TLx493D_t *sensor, uint8_t firstBF, uin
 
 bool tlx493d_gen_2_setMeasurement(TLx493D_t *sensor, uint8_t dtBF, uint8_t amBF, uint8_t cpBF, TLx493D_MeasurementType_t val);
 bool tlx493d_gen_2_setTrigger(TLx493D_t *sensor, uint8_t trigBF, uint8_t cpBF, TLx493D_TriggerType_t val);
-bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, uint8_t x2BF, uint8_t cpBF, TLx493D_SensitivityType_t val);
+bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF, uint8_t cpBF, TLx493D_SensitivityType_t val);
 // bool tlx493d_gen_2_setMagneticTemperatureCompensation(TLx493D_t *sensor, uint8_t tl_magBF, uint8_t cpBF, uint8_t mtc);
 
 
@@ -62,7 +62,12 @@ bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
                                                 uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
                                                 int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh);
 
-bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor,
+                                       uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
+                                       uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
+                                       uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
+                                       TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF,
+                                       double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 
 // // utilities
@@ -96,10 +101,15 @@ bool tlx493d_gen_2_hasValidTBit(TLx493D_t *sensor, uint8_t tBF) ;
 
 uint8_t tlx493d_gen_2_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
+double tlx493d_gen_2_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF);
 
 void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,
                                                           int16_t *x, int16_t *y, int16_t *z);
+
+void tlx493d_gen_2_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature);
+
+TLx493D_SensitivityType_t tlx493d_gen_2_getSensitivityType(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF);
 
 
 #ifdef __cplusplus

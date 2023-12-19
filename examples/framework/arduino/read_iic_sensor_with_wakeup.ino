@@ -31,7 +31,6 @@ bool intTriggered = false;
 void setup() {
     delay(3000);
     Serial.begin(115200);
-    delay(100);
 
     pinMode(INTERRUPT_PIN, INPUT);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), wakeUp_ISR, FALLING);
@@ -51,7 +50,6 @@ void setup() {
     Serial.println(dut.isWakeUpEnabled() ? "enabled" : "not enabled");
     // printRegisters(dut.getSensor());
 
-    delay(100);
     Serial.print("setup done.\n");
 }
 

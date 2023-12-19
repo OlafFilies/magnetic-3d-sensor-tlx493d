@@ -106,8 +106,6 @@ void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr);
 
 // void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
-double tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF);
-
 
 void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
 void tlx493d_errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);

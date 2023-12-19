@@ -65,8 +65,8 @@ bool tlx493d_disableWakeUpMode(TLx493D_t *sensor);
 
 bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th,
                                           int16_t zl_th, int16_t zh_th);
-bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh,
-                                 double zLow, double zHigh);
+bool tlx493d_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
+                                 double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 
 // utilities

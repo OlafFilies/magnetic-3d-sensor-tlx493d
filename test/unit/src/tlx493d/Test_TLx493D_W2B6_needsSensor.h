@@ -270,9 +270,9 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkModeDefaultConfigFunctionality)
     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     printRegisters(&dut);
 
-    TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[P2B6_CONFIG_REG_e] & 0xFE );
-    TEST_ASSERT_EQUAL_HEX( 0x94, dut.regMap[P2B6_MOD1_REG_e] ); // PR on, CA on
-    TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[P2B6_MOD2_REG_e] & 0xE0 );
+    TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[W2B6_CONFIG_REG_e] & 0xFE );
+    TEST_ASSERT_EQUAL_HEX( 0x94, dut.regMap[W2B6_MOD1_REG_e] ); // PR on, CA on
+    TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[W2B6_MOD2_REG_e] & 0xE0 );
 }
 
 
