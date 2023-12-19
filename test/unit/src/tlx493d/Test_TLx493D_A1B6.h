@@ -45,7 +45,7 @@ TEST_TEAR_DOWN(TLx493D_A1B6)
 /**
  * Define tests for unsupported common functionality
  */
-TEST_IFX(TLx493D_A1B6, checkUnsupportedFunctionality)
+TEST(TLx493D_A1B6, checkUnsupportedFunctionality)
 {
     static double  xl, xh, yl, yh, zl, zh;
     static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
@@ -79,13 +79,13 @@ TEST_IFX(TLx493D_A1B6, checkUnsupportedFunctionality)
  * Define tests for supported common functionality.
  * Requires that the registers have been read once, in setDefaultConfig.
  */
-TEST_IFX(TLx493D_A1B6, checkSupportedFunctionality)
+TEST(TLx493D_A1B6, checkSupportedFunctionality)
 {
     TEST_ASSERT( dut.functions->init(&dut) == true );
     TEST_ASSERT( dut.functions->deinit(&dut) == true );
 }
 
-TEST_IFX(TLx493D_A1B6, checkResetValues)
+TEST(TLx493D_A1B6, checkResetValues)
 {
     for(uint8_t i = 0; i < dut.regMapSize; ++i) {
         TEST_ASSERT( dut.regMap[i] == 0 );

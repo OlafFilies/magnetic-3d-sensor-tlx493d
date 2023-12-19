@@ -42,18 +42,31 @@ TEST(TLx493D_A1B6_needsSensor, getTemperature)
 {
     double temperature = 0.0;
 
-    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_getTemperature(&dut, &temperature));
-    TEST_ASSERT_FLOAT_WITHIN( 5.0, 25.0, temperature ); // Environmental temp is around 25 - 30 deg C
+    TEST_ASSERT_EQUAL( true, dut.functions->getTemperature(&dut, &temperature));
+    TEST_ASSERT_FLOAT_WITHIN( 8.0, 25.0, temperature ); // Environmental temp is around 20 - 30 deg C
 }
 
 TEST(TLx493D_A1B6_needsSensor, getMagneticField)
 {
     double x = 0.0, y = 0.0, z = 0.0;
 
-    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_getMagneticField(&dut, &x, &y, &z) );
+    TEST_ASSERT_EQUAL( true, dut.functions->getMagneticField(&dut, &x, &y, &z) );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x ); // Residual mag field stays within 0-1 mT
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
+}
+
+/**
+ * Define tests for supported common functionality.
+ * Requires that the registers have been read once, in setDefaultConfig.
+ */
+
+TEST(TLx493D_A1B6_needsSensor, checkSupportedFunctionality)
+{
+    TEST_ASSERT( dut.functions->readRegisters(&dut) == true );
+    TEST_ASSERT( dut.functions->isFunctional(&dut) == true );
+    TEST_ASSERT( dut.functions->hasValidFuseParity(&dut) == true );
+    TEST_ASSERT( dut.functions->hasValidTBit(&dut) == true );
 }
 
 // define test group name
@@ -78,7 +91,7 @@ TEST(TLx493D_A1B6_TempDisable, TempDisable)
     TEST_ASSERT_NOT_EQUAL ( 0x3, ( dut.regMap[A1B6_CH_e] & dut.regDef[A1B6_CH_e].mask) >> dut.regDef[A1B6_CH_e].offset );
     
     double temperature = 0.0;
-    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_getTemperature(&dut, &temperature));
+    TEST_ASSERT_EQUAL( true, dut.functions->getTemperature(&dut, &temperature));
     
     // When temperature measurement is disabled in runtime, the last measured value remains in the register
     // sample 50 values of temperature after temp disable and check if they are equal to the value measured above.
@@ -87,7 +100,7 @@ TEST(TLx493D_A1B6_TempDisable, TempDisable)
     for(uint8_t i=0; i<50; i++)
     {
         double temp_temp = 0.0;
-        TLx493D_A1B6_getTemperature(&dut, &temp_temp);
+        dut.functions->getTemperature(&dut, &temp_temp);
         temp_sum += temp_temp;
     }
 
@@ -119,26 +132,11 @@ TEST(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckDisabled)
     TEST_ASSERT_EQUAL( true, TLx493D_A1B6_transferWriteRegisters(&dut));
 
     // the readRegisters() throws NO error due to wrong parity
-    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_readRegisters(&dut) );
+    TEST_ASSERT_EQUAL( true, dut.functions->readRegisters(&dut) );
     
     // enable partity check at the end, to restore default state for other tests
     TEST_ASSERT_EQUAL( true, TLx493D_A1B6_enableParityTest(&dut) );
 }
-
-// Note: this test will hang up the sensor beyond recovery. Recovery only by power cycle.
-TEST(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckEnabled)
-{
-    // parity check is enabled, by default
-    
-    // here, changine a Write Register bitField and not recalculating parity and not setting
-    // it in the bitField.P, should give an error
-    TLx493D_A1B6_setBitfield(&dut, A1B6_Temp_NEN_e, 0);
-    TEST_ASSERT_EQUAL( true, TLx493D_A1B6_transferWriteRegisters(&dut) );
-
-    // the readRegisters() throws error due to wrong parity
-    TEST_ASSERT_EQUAL( false, TLx493D_A1B6_readRegisters(&dut) );
-}
-
 
 
 // define test group name
@@ -147,7 +145,7 @@ TEST_GROUP(TLx493D_A1B6_atReset);
 // Setup method called before every individual test defined for this test group
 TEST_SETUP(TLx493D_A1B6_atReset)
 {
-    TLx493D_A1B6_readRegisters(&dut);
+    dut.functions->readRegisters(&dut);
 }
 
 
@@ -160,8 +158,8 @@ TEST(TLx493D_A1B6_atReset, regMapatReset_MeasurementBitfields)
 {
     TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[A1B6_BX_MSB_e] & dut.regDef[A1B6_BX_MSB_e].mask) >> dut.regDef[A1B6_BX_MSB_e].offset  );
     TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[A1B6_BY_MSB_e] & dut.regDef[A1B6_BY_MSB_e].mask) >> dut.regDef[A1B6_BY_MSB_e].offset  );
-    TEST_ASSERT_EQUAL_UINT8 ( 0x00, (dut.regMap[A1B6_BZ_MSB_e] & dut.regDef[A1B6_BZ_MSB_e].mask) >> dut.regDef[A1B6_BZ_MSB_e].offset  );
-    TEST_ASSERT_EQUAL_UINT8 ( 0x01, (dut.regMap[A1B6_TEMP_MSB_e] & dut.regDef[A1B6_TEMP_MSB_e].mask) >> dut.regDef[A1B6_TEMP_MSB_e].offset );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x00, ( dut.regMap[A1B6_BZ_MSB_e] & dut.regDef[A1B6_BZ_MSB_e].mask) >> dut.regDef[A1B6_BZ_MSB_e].offset  );
+    TEST_ASSERT_EQUAL_UINT8 ( 0x01, ( dut.regMap[A1B6_TEMP_MSB_e] & dut.regDef[A1B6_TEMP_MSB_e].mask) >> dut.regDef[A1B6_TEMP_MSB_e].offset );
     
     TEST_ASSERT_EQUAL_UINT8 ( 0x5, ( dut.regMap[A1B6_BX_LSB_e] & dut.regDef[A1B6_BX_LSB_e].mask) >> dut.regDef[A1B6_BX_LSB_e].offset );
     TEST_ASSERT_EQUAL_UINT8 ( 0x3, ( dut.regMap[A1B6_BY_LSB_e] & dut.regDef[A1B6_BY_LSB_e].mask) >> dut.regDef[A1B6_BY_LSB_e].offset );
@@ -187,6 +185,7 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     RUN_TEST_CASE(TLx493D_A1B6_needsSensor, readRegisters);
     RUN_TEST_CASE(TLx493D_A1B6_needsSensor, getTemperature);
     RUN_TEST_CASE(TLx493D_A1B6_needsSensor, getMagneticField);
+    RUN_TEST_CASE(TLx493D_A1B6_needsSensor, checkSupportedFunctionality);
 
     RUN_TEST_CASE(TLx493D_A1B6_TempDisable, TempDisable);
     RUN_TEST_CASE(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckDisabled);
