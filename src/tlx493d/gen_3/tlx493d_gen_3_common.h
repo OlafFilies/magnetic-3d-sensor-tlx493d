@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 
-bool tlx493d_gen_3_readRegistersSPI(TLx493D_t *sensor);
+bool tlx493d_gen_3_readRegisters(TLx493D_t *sensor, uint8_t channelBF);
 
 void tlx493d_gen_3_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, int16_t *temperature);
 void tlx493d_gen_3_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
@@ -27,11 +27,11 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, TLx493D_
 bool tlx493d_gen_3_setTrigger(TLx493D_t *sensor, uint8_t trigBF, TLx493D_TriggerType_t val);
 bool tlx493d_gen_3_setSensitivity(TLx493D_t *sensor, uint8_t shortBF, uint8_t xtrShortBF, TLx493D_SensitivityType_t val);
 
-bool tlx493d_gen_3_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF);
-bool tlx493d_gen_3_setIICAddress(TLx493D_t *sensor, uint8_t iicadrBF, uint8_t fpBF, TLx493D_IICAddressType_t addr); // Gen. 1 and 2
-bool tlx493d_gen_3_set1ByteReadMode(TLx493D_t *sensor, uint8_t prBF, uint8_t fpBF, uint8_t prdBF, uint8_t pr);
+bool tlx493d_gen_3_setDefaultConfig(TLx493D_t *sensor, uint8_t caBF, uint8_t intBF);
+bool tlx493d_gen_3_setIICAddress(TLx493D_t *sensor, uint8_t iicadrBF, TLx493D_IICAddressType_t addr);
+bool tlx493d_gen_3_set1ByteReadMode(TLx493D_t *sensor, uint8_t prBF, uint8_t pr);
 
-bool tlx493d_gen_3_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca);
+bool tlx493d_gen_3_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t ca);
 bool tlx493d_gen_3_setInterrupt(TLx493D_t *sensor, uint8_t intBF, uint8_t irq);
 
 bool tlx493d_gen_3_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, TLx493D_PowerModeType_t mode);
@@ -60,6 +60,9 @@ bool tlx493d_gen_3_softwareReset(TLx493D_t *sensor, uint8_t resetBF);
 bool tlx493d_gen_3_hasValidFuseParity(TLx493D_t *sensor, uint8_t fpfBF);
 bool tlx493d_gen_3_hasValidWakeUpParity(TLx493D_t *sensor, uint8_t wupBF);
 bool tlx493d_gen_3_isInTestMode(TLx493D_t *sensor, uint8_t testBF);
+
+void tlx493d_gen_3_correctDataInRegisters(TLx493D_t *sensor, uint8_t channelBF);
+
 
 // bool tlx493d_gen_3_hasValidIICadr(TLx493D_t *sensor, uint8_t idBF, uint8_t iicAdrBF);
 

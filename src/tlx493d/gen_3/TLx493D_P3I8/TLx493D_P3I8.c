@@ -168,13 +168,12 @@ bool TLx493D_P3I8_deinit(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3I8_readRegisters(TLx493D_t *sensor) {
-    return tlx493d_gen_3_readRegistersSPI(sensor);
+    return tlx493d_gen_3_readRegisters(sensor, P3I8_CHANNEL_SEL_e);
 }
 
 
 void TLx493D_P3I8_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
     tlx493d_gen_3_calculateRawTemperature(sensor, P3I8_TEMP_MSBS_e, P3I8_TEMP_LSBS_e, temperature);
-    print("Raw temperature : %d\n", temperature);
 }
 
 
@@ -251,16 +250,14 @@ bool TLx493D_P3I8_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
-    // sensor->regMap[0x0A] = 0x02; // Bit 1 is set to constant 1 !
-
     // tlx493d_common_setBitfield(sensor, P3I8_MODE_SEL_e, 0);
     tlx493d_common_setBitfield(sensor, P3I8_INT_DIS_e, 1);
     // tlx493d_common_setBitfield(sensor, P3I8_WU_EN_e, 0);
     // tlx493d_common_setBitfield(sensor, P3I8_CRC_WR_EN_e, 0);
+    return tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
 
-    bool b = tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
-
-    return b && tlx493d_gen_3_readRegistersSPI(sensor);
+    // bool b = tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
+    // return b && TLx493D_P3I8_readRegisters(sensor);
 }
 
 
@@ -399,7 +396,6 @@ bool TLx493D_P3I8_hasValidWakeUpParity(TLx493D_t *sensor) {
 bool TLx493D_P3I8_isInTestMode(TLx493D_t *sensor) {
     return tlx493d_gen_3_isInTestMode(sensor, P3I8_TEST_FLG_e );
 }
-
 
 
 bool TLx493D_P3I8_hasValidIICadr(TLx493D_t *sensor) {
