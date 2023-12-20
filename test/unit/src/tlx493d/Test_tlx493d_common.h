@@ -21,7 +21,7 @@ TEST_GROUP(SensorsCommon);
 static TEST_SETUP(SensorsCommon)
 {
     // 'main' initializes at startup, so either init everything or nothing at all, otherwise communication will be lost !
-    TLx493D_A2B6_init(&dut);
+    dut.functions->init(&dut);
 
     memset(dut.regMap, 0, dut.regMapSize);
 }
