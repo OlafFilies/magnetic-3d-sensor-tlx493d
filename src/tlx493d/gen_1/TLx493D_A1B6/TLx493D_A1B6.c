@@ -19,7 +19,6 @@
 #include "TLx493D_A1B6_enums.h"
 #include "TLx493D_A1B6.h"
 
-
 //register enums
 typedef enum {
     TLx493D_A1B6_Temp_ENABLE_default,
@@ -30,14 +29,6 @@ typedef enum {
     TLx493D_A1B6_ODD_PARITY,
     TLx493D_A1B6_EVEN_PARITY
 } TLx493D_A1B6_Reg_PARITY;
-
-// TODO: replace the following enum by TLx493D_IICAddressType_t ?!
-typedef enum {
-    TLx493D_A1B6_CONFIG_00_default,
-    TLx493D_A1B6_CONFIG_01,
-    TLx493D_A1B6_CONFIG_10,
-    TLx493D_A1B6_CONFIG_11
-} TLx493D_A1B6_Reg_IICADDR;
 
 typedef enum {
     TLx493D_A1B6_INT_ENABLE_default,
@@ -127,9 +118,6 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
     // functions related to the "Config" register
     .setMeasurement                 = TLx493D_A1B6_setMeasurement,
-    // TODO: Jens : use tlx493d_setMeasurement
-    // .enableTemperatureMeasurement     = TLx493D_A1B6_enableTemperatureMeasurement,
-    // .disableTemperatureMeasurement    = TLx493D_A1B6_disableTemperatureMeasurement,
     .setTrigger                     = TLx493D_A1B6_setTrigger,
     .setSensitivity                 = TLx493D_A1B6_setSensitivity,
     
@@ -171,6 +159,9 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
     .hasValidFuseParity             = TLx493D_A1B6_hasValidFuseParity,
     .hasValidBusParity              = TLx493D_A1B6_hasValidBusParity,
     .hasValidConfigurationParity    = TLx493D_A1B6_hasValidConfigurationParity,
+ 
+    .hasValidWakeUpParity           = TLx493D_A1B6_hasValidWakeUpParity,
+    .isInTestMode                   = TLx493D_A1B6_isInTestMode,
     
     .hasValidTBit                   = TLx493D_A1B6_hasValidTBit,
 
@@ -186,7 +177,6 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
 // note: make sure that the init function is called at reset to make sure the write default values are in sync.
 bool TLx493D_A1B6_init(TLx493D_t *sensor) {
-    // tlx493d_setI2CParameters(sensor, GEN_1_STD_IIC_ADDR);
     return tlx493d_common_init(sensor, GEN_1_REG_MAP_SIZE, TLx493D_A1B6_regDef, &TLx493D_A1B6_commonFunctions, TLx493D_A1B6_e, TLx493D_I2C_e);
 }
 
@@ -196,41 +186,38 @@ bool TLx493D_A1B6_deinit(TLx493D_t *sensor) {
 
 
 bool TLx493D_A1B6_readRegisters(TLx493D_t *sensor) {
-    return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, TLx493D_A1B6_READ_REGISTERS_MAX_COUNT);
+    return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, GEN_1_READ_REGISTERS_MAX_COUNT);
 }
 
 
 void TLx493D_A1B6_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
-    // tlx493d_gen_2_calculateRawTemperature(sensor, A1B6_TEMP_MSBS_e, A1B6_TEMP_LSBS_e, temperature);
+    tlx493d_common_calculateRawTemperature(sensor, A1B6_TEMP_MSB_e, A1B6_TEMP_LSB_e, temperature);
 }
 
 
 bool TLx493D_A1B6_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
-    // return tlx493d_common_getRawTemperature(sensor, temperature);
-    return false;
+    return tlx493d_common_getRawTemperature(sensor, temperature);
 }
 
 
 void TLx493D_A1B6_calculateRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
-    // tlx493d_gen_2_calculateRawMagneticField(sensor, A1B6_BX_MSBS_e, A1B6_BX_LSBS_e, A1B6_BY_MSBS_e, A1B6_BY_LSBS_e, A1B6_BZ_MSBS_e, A1B6_BZ_LSBS_e, x, y, z);
+    tlx493d_common_calculateRawMagneticField(sensor, A1B6_BX_MSB_e, A1B6_BX_LSB_e, A1B6_BY_MSB_e, A1B6_BY_LSB_e, A1B6_BZ_MSB_e, A1B6_BZ_LSB_e, x, y, z);
 }
 
 
 bool TLx493D_A1B6_getRawMagneticField(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z) {
-    // return tlx493d_common_getRawMagneticField(sensor, x, y, z);
-    return false;
+    return tlx493d_common_getRawMagneticField(sensor, x, y, z);
 }
 
 
 void TLx493D_A1B6_calculateRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
-    // TLx493D_A1B6_calculateRawMagneticField(sensor, x, y, z);
-    // TLx493D_A1B6_calculateRawTemperature(sensor, temperature);
+    TLx493D_A1B6_calculateRawMagneticField(sensor, x, y, z);
+    TLx493D_A1B6_calculateRawTemperature(sensor, temperature);
 }
 
 
 bool TLx493D_A1B6_getRawMagneticFieldAndTemperature(TLx493D_t *sensor, int16_t *x, int16_t *y, int16_t *z, int16_t *temperature) {
-    // return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
-    return false;
+    return tlx493d_common_getRawMagneticFieldAndTemperature(sensor, x, y, z, temperature);
 }
 
 
@@ -238,7 +225,7 @@ void TLx493D_A1B6_calculateTemperature(TLx493D_t *sensor, double *temp) {
     int16_t value = 0;
     tlx493d_common_concatBytes(sensor, A1B6_TEMP_MSB_e, A1B6_TEMP_LSB_e, &value);
     
-    *temp = ((double) value - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT;
+    *temp = (((double) value - GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT) + GEN_1_REF_TEMP;
 }
 
 bool TLx493D_A1B6_getTemperature(TLx493D_t *sensor, double *temp) {
@@ -270,42 +257,35 @@ bool TLx493D_A1B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
     return tlx493d_common_getMagneticFieldAndTemperature(sensor, x, y, z, temp);
 }
 
-
-// TODO: replaces TLx493D_A1B6_disableTemperatureMeasurement and TLx493D_A1B6_enableTemperatureMeasurement
 bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
-    // return tlx493d_gen_2_setMeasurement(sensor, A1B6_DT_e, A1B6_AM_e, A1B6_CP_e, val);
-    return false;
+    uint8_t temp_nen = 0;
+
+    switch(val) {
+        case TLx493D_BxByBzTemp_e : temp_nen = TLx493D_A1B6_Temp_ENABLE_default;
+                                    break;
+
+        case TLx493D_BxByBz_e : temp_nen = TLx493D_A1B6_Temp_DISABLE;         
+                                break;
+        
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_MeasurementType_t");
+                  return false;
+    }
+
+    TLx493D_A1B6_setBitfield(sensor, A1B6_Temp_NEN_e, temp_nen);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
+
+    return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
-
-
-bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor) {
-    
-    TLx493D_A1B6_setBitfield(sensor, A1B6_Temp_NEN_e, TLx493D_A1B6_Temp_DISABLE);
-    TLx493D_A1B6_calculateParity(sensor);
-    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
-    
-    return ret;                                                           
-}
-
-bool TLx493D_A1B6_enableTemperatureMeasurement(TLx493D_t *sensor) {
-
-    TLx493D_A1B6_setBitfield(sensor, A1B6_Temp_NEN_e, TLx493D_A1B6_Temp_ENABLE_default);
-    TLx493D_A1B6_calculateParity(sensor);
-    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
-
-    return ret; 
-}
-
 
 //  // This option depends on PR and MODE.
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
-    // return tlx493d_gen_2_setTrigger(sensor, A1B6_TRIG_e, A1B6_CP_e, val);
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setTrigger");
     return false;
 }
 
 
 bool TLx493D_A1B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
-    // return tlx493d_gen_2_setSensitivity(sensor, A1B6_X2_e, A1B6_CP_e, val);
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setSensitivity");
     return false;
 }
 
@@ -317,21 +297,19 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
     ret = TLx493D_A1B6_readRegisters(sensor);
     
     // set WRITE register values to 0x00
-    memset(sensor->regMap + TLx493D_A1B6_WRITE_REGISTERS_OFFSET, 0, TLx493D_A1B6_WRITE_REGISTERS_MAX_COUNT);
+    memset(sensor->regMap + GEN_1_WRITE_REGISTERS_OFFSET, 0, GEN_1_WRITE_REGISTERS_MAX_COUNT);
 
-    // todo: reset sensor here
-
-    // set WRITE reserved register values to READ reserved register values
+    // set WRITE reserved register values from READ reserved register values
     TLx493D_A1B6_setReservedRegisterValues(sensor);
 
     // enable parity test and write to registers 
     ret &= TLx493D_A1B6_enableParityTest(sensor);
 
     // set to MASTERCONTROLLEDMODE to start measurement
-    TLx493D_A1B6_setPowerMode_int(sensor, MASTERCONTROLLEDMODE);
+    TLx493D_A1B6_setPowerMode(sensor, MASTERCONTROLLEDMODE);
 
     // calculate parity
-    TLx493D_A1B6_calculateParity(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
 
     // write out register map to registers
     ret &= TLx493D_A1B6_transferWriteRegisters(sensor);
@@ -342,8 +320,10 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
     return ret;  
 }
 
+// Addresses for Gen 1 
+// (A0-A3 - for SDA/ADDR high at power-up)
+// (A4-A7 - for SDA/ADDR low at power-up)
 bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
-// bool tlx493d_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_StandardIICAddresses_te addr) {
     uint8_t bitfieldValue = 0;
     uint8_t deviceAddress = 0;
 
@@ -367,13 +347,33 @@ bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr
             bitfieldValue = 0b11;
             deviceAddress = 0x94;
             break;
-        
+
+        case TLx493D_IIC_ADDR_A4_e:
+            bitfieldValue = 0b00;
+            deviceAddress = 0x3E;
+            break;
+
+        case TLx493D_IIC_ADDR_A5_e:
+            bitfieldValue = 0b01;
+            deviceAddress = 0x36;
+            break;
+
+        case TLx493D_IIC_ADDR_A6_e:
+            bitfieldValue = 0b10;
+            deviceAddress = 0x1E;
+            break;
+
+        case TLx493D_IIC_ADDR_A7_e:
+            bitfieldValue = 0b11;
+            deviceAddress = 0x16;
+            break;        
+
         default:
             return false;
     }
 
     TLx493D_A1B6_setBitfield(sensor, A1B6_IICADR_e, bitfieldValue);
-    TLx493D_A1B6_calculateParity(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
 
     tlx493d_common_setIICAddress(sensor, deviceAddress);
@@ -389,19 +389,19 @@ bool TLx493D_A1B6_enable1ByteReadMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_A1B6_enableCollisionAvoidance(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enable1ByteReadMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enableCollisionAvoidance");
     return false;
 }
 
 
 bool TLx493D_A1B6_disableCollisionAvoidance(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "enable1ByteReadMode");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "disableCollisionAvoidance");
     return false;
 }
 
 bool TLx493D_A1B6_enableInterrupt(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_INT_e, TLx493D_A1B6_INT_ENABLE_default);
-    TLx493D_A1B6_calculateParity(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
 
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
@@ -409,49 +409,32 @@ bool TLx493D_A1B6_enableInterrupt(TLx493D_t *sensor) {
 
 bool TLx493D_A1B6_disableInterrupt(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_INT_e, TLx493D_A1B6_INT_DISABLE);
-    TLx493D_A1B6_calculateParity(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
 
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
 
 
 bool TLx493D_A1B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) {
-    // return tlx493d_gen_2_setPowerMode(sensor, A2B6_MODE_e, A2B6_FP_e, mode);
-    return false;
-}
-
-// TODO: renamed ; sync with common function TLx493D_A1B6_setPowerMode
-bool TLx493D_A1B6_setPowerMode_int(TLx493D_t *sensor, TLx493D_A1B6_PowerMode_t mode){
     TLx493D_A1B6_setBitfield(sensor, A1B6_FAST_e, TLx493D_A1B6_PowerModeCombinations[mode].FAST);
     TLx493D_A1B6_setBitfield(sensor, A1B6_LOW_POWER_e, TLx493D_A1B6_PowerModeCombinations[mode].LOW_POWER);
     TLx493D_A1B6_setBitfield(sensor, A1B6_LP_e, TLx493D_A1B6_PowerModeCombinations[mode].LP);
-    TLx493D_A1B6_calculateParity(sensor);
-    bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
 
-    return ret;
+    return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
 
 
-// TODO: Not yet used anywhere ?!
-// bool TLx493D_A1B6_setLowPowerPeriod(TLx493D_t *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t lp_period){
-
-//     TLx493D_A1B6_setBitfield(sensor, LP, lp_period);
-//     TLx493D_A1B6_calculateParity(sensor);
-//     bool ret = TLx493D_A1B6_transferWriteRegisters(sensor);
-    
-//     return ret;                                                 
-// }
-
-
-// TODO: anything meaningful available to use here ?
 bool TLx493D_A1B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setUpdateRate");
     return false;
 }
 
+
 bool TLx493D_A1B6_hasValidData(TLx493D_t *sensor){
     return TLx493D_A1B6_hasValidTBit(sensor) && TLx493D_A1B6_hasValidPDBit(sensor);
 }
+
 
 bool TLx493D_A1B6_isFunctional(TLx493D_t *sensor){
     return TLx493D_A1B6_hasValidFuseParity(sensor);
@@ -459,6 +442,7 @@ bool TLx493D_A1B6_isFunctional(TLx493D_t *sensor){
 
 
 bool TLx493D_A1B6_hasWakeUp(TLx493D_t *sensor) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hassWakeUpEnabled");
     return false;
 }
 
@@ -484,12 +468,11 @@ bool TLx493D_A1B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
     return false;
 }
 
-bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
     return false;
 }
 
-// note: make sure that the init function is called at reset to make sure the write default values are in sync.
 bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "softwareReset");
     return false;
@@ -497,37 +480,33 @@ bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor) {
 
 
 uint8_t TLx493D_A1B6_calculateFuseParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "calculateFuseParity");
     return false;
 }
 
 
 uint8_t TLx493D_A1B6_calculateBusParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
-    return false;
-}
-
-
-uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "calculateBusParity");
     return false;
 }
 
 
 // parity is calculated for all the WRITE register, including the parity bit
-void TLx493D_A1B6_calculateParity(TLx493D_t *sensor) {
+uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor) {
     uint8_t result = 0x00;
 
     //set parity as EVEN first
     TLx493D_A1B6_setBitfield(sensor, A1B6_P_e, TLx493D_A1B6_EVEN_PARITY); 
 
     // calculate bitwise XOR for all WRITE registers
-    for (uint8_t addr = 0x00; addr<TLx493D_A1B6_WRITE_REGISTERS_MAX_COUNT; addr++) {
-        result ^= sensor->regMap[addr+TLx493D_A1B6_WRITE_REGISTERS_OFFSET];
+    for (uint8_t addr = 0x00; addr<GEN_1_WRITE_REGISTERS_MAX_COUNT; addr++) {
+        result ^= sensor->regMap[addr+GEN_1_WRITE_REGISTERS_OFFSET];
     }
 
     // then set calculated parity
     TLx493D_A1B6_setBitfield(sensor, A1B6_P_e, tlx493d_common_calculateParity(result));
+
+    return 1;
 }
 
 
@@ -538,19 +517,31 @@ bool TLx493D_A1B6_hasValidFuseParity(TLx493D_t *sensor){
 
 
 bool TLx493D_A1B6_hasValidBusParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidBusParity");
     return false;
 }
 
 
 bool TLx493D_A1B6_hasValidConfigurationParity(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidConfigurationParity");
+    return false;
+}
+
+
+bool TLx493D_A1B6_hasValidWakeUpParity(TLx493D_t *sensor) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidWakeUpParity");
+    return false;
+}
+
+
+bool TLx493D_A1B6_isInTestMode(TLx493D_t *sensor) {
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "isInTestMode");
     return false;
 }
 
 
 bool TLx493D_A1B6_hasValidIICadr(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidIICadr");
     return false;
 }
 
@@ -562,6 +553,7 @@ bool TLx493D_A1B6_hasValidTBit(TLx493D_t *sensor) {
 
 
 void TLx493D_A1B6_setResetValues(TLx493D_t *sensor) {
+    TLx493D_A1B6_setReservedRegisterValues(sensor);
 }
 
 
@@ -571,6 +563,9 @@ void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_W_RES_3_e, TLx493D_A1B6_returnBitfield(sensor, A1B6_R_RES_3_e));
 }
 
+// Addresses for Gen 1 
+// (A0-A3 - for SDA/ADDR high at power-up)
+// (A4-A7 - for SDA/ADDR low at power-up)
 
 uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     switch(addr) {
@@ -582,15 +577,20 @@ uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_
 
         case TLx493D_IIC_ADDR_A3_e : return GEN_1_STD_IIC_ADDR_WRITE_A3;
 
+        case TLx493D_IIC_ADDR_A4_e : return GEN_1_STD_IIC_ADDR_WRITE_A4;
+
+        case TLx493D_IIC_ADDR_A5_e : return GEN_1_STD_IIC_ADDR_WRITE_A5;
+
+        case TLx493D_IIC_ADDR_A6_e : return GEN_1_STD_IIC_ADDR_WRITE_A6;
+
+        case TLx493D_IIC_ADDR_A7_e : return GEN_1_STD_IIC_ADDR_WRITE_A7;
+
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, addr, "TLx493D_IICAddressType_t");
                   return 0;
     }
 }
 
-
-void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
-                                                         double xInmT, double yInmT, double zInmT,
-                                                         int16_t *x, int16_t *y, int16_t *z) {
+void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double xInmT, double yInmT, double zInmT, int16_t *x, int16_t *y, int16_t *z) {
     *x = xInmT / GEN_1_MAG_FIELD_MULT;
     *y = yInmT / GEN_1_MAG_FIELD_MULT;
     *z = zInmT / GEN_1_MAG_FIELD_MULT;
@@ -598,32 +598,21 @@ void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 
 double TLx493D_A1B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
-    return tlx493d_common_getSensitivityScaleFactor(sensor, TLx493D_HAS_X1_e, 0, 0);
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "getSensitivityScaleFactor");
+    return 0.0;
 }
 
 
 bool TLx493D_A1B6_enableParityTest(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_PT_e, TLx493D_A1B6_PARITY_TEST_ENABLE_default);
-    TLx493D_A1B6_calculateParity(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
 
 bool TLx493D_A1B6_disableParityTest(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_PT_e, TLx493D_A1B6_PARITY_TEST_DISABLE);
-    TLx493D_A1B6_calculateParity(sensor);
+    TLx493D_A1B6_calculateConfigurationParity(sensor);
     return TLx493D_A1B6_transferWriteRegisters(sensor);
-}
-
-
-//todo: remove if not used. Note: So far not used 
-void TLx493D_A1B6_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue) {
-    TLx493D_Register_t *bf = &sensor->regDef[bitField];
-
-    if(bf->accessMode == TLx493D_READ_MODE_e) {
-        *bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
-    }
-
-    // TODO: catch condition and output error message ! assert(bf->accessMode == TLx493D_READ_MODE_e);
 }
 
 uint8_t TLx493D_A1B6_returnBitfield(TLx493D_t *sensor, uint8_t bitField) {
@@ -633,8 +622,10 @@ uint8_t TLx493D_A1B6_returnBitfield(TLx493D_t *sensor, uint8_t bitField) {
     if(bf->accessMode == TLx493D_READ_MODE_e) {
         bitFieldValue = (sensor->regMap[bf->address] & bf->mask) >> bf->offset;
     }
-
-    // TODO: catch condition and output error message !     assert(bf->accessMode == TLx493D_READ_MODE_e);
+    else {
+        tlx493d_errorBitfieldNotReadableForSensorType(sensor, bitField);
+        return 0;
+    }
 
     return bitFieldValue;
 }
@@ -645,28 +636,14 @@ void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBi
     if(bf->accessMode == TLx493D_WRITE_MODE_e) {
         sensor->regMap[bf->address + GEN_1_WRITE_REGISTERS_OFFSET] = (sensor->regMap[bf->address + GEN_1_WRITE_REGISTERS_OFFSET] & ~bf->mask) | (newBitFieldValue << bf->offset);
     }
+    else {
+        tlx493d_errorBitfieldNotWritableForSensorType(sensor, bitField);
 
-    // TODO: catch condition and output error message !     assert(bf->accessMode == TLx493D_WRITE_MODE_e);
-}
-
-bool TLx493D_A1B6_writeRegister(TLx493D_t* sensor, uint8_t bitField) {
-    TLx493D_Register_t *bf = &sensor->regDef[bitField];
-
-    if(bf->accessMode == TLx493D_WRITE_MODE_e){
-        uint8_t transBuffer[2] = { bf->address, sensor->regMap[bf->address] };
-
-        return tlx493d_transfer(sensor, transBuffer, sizeof(transBuffer), NULL, 0);
     }
-
-    // TODO: catch condition and output error message !     assert(bf->accessMode == TLx493D_WRITE_MODE_e);
-
-    return false;
 }
-
 
 bool TLx493D_A1B6_transferWriteRegisters(TLx493D_t *sensor) {
-    
-    return tlx493d_transfer(sensor, sensor->regMap + TLx493D_A1B6_WRITE_REGISTERS_OFFSET, TLx493D_A1B6_WRITE_REGISTERS_MAX_COUNT, NULL, 0);
+    return tlx493d_transfer(sensor, sensor->regMap + GEN_1_WRITE_REGISTERS_OFFSET, GEN_1_WRITE_REGISTERS_MAX_COUNT, NULL, 0);
 }
 
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor) {

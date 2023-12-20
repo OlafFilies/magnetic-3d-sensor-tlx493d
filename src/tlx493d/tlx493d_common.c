@@ -12,15 +12,6 @@
 #include "tlx493d_common.h"
 #include "Logger.h"
 
-// sensor specific includes
-#include "TLx493D_A1B6.h"
-#include "TLx493D_A2B6.h"
-#include "TLx493D_P2B6.h"
-#include "TLx493D_W2B6.h"
-#include "TLx493D_W2BW.h"
-#include "TLx493D_P3B6.h"
-#include "TLx493D_P3I8.h"
-
 
 /***
 */
@@ -229,55 +220,28 @@ void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t 
 const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor) {
     switch(sensor->sensorType) {
         case TLx493D_A1B6_e : return "TLx493D_A1B6";
-                            break;
+                              break;
 
         case TLx493D_A2B6_e : return "TLx493D_A2B6";
-                                break;
+                              break;
 
         case TLx493D_P2B6_e : return "TLx493D_P2B6";
-                                break;
+                              break;
 
         case TLx493D_W2B6_e : return "TLx493D_W2B6";
-                                break;
+                              break;
 
         case TLx493D_W2BW_e : return "TLx493D_W2BW";
-                            break;
+                              break;
 
         case TLx493D_P3B6_e : return "TLx493D_P3B6";
-                                break;
+                              break;
 
         case TLx493D_P3I8_e : return "TLx493D_P3I8";
-                                break;
+                              break;
 
         default : return "ERROR : Unknown sensorType !";
-                    break;
-    }
-}
-
-
-// TODO: move to gen 2 
-double tlx493d_common_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t sens, uint8_t x2BF, uint8_t x4BF) {
-    switch(sens) {
-        case TLx493D_HAS_X1_e : // *sf = 1.0;
-                                return 1.0;
-    
-        case TLx493D_HAS_X2_e : {
-                                    TLx493D_Register_t *x2 = &sensor->regDef[x2BF];
-                                    // *sf = (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0 : 2.0;
-                                    return (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0 : 2.0;
-        }
-    
-        case TLx493D_HAS_X4_e : {
-                                    TLx493D_Register_t *x2 = &sensor->regDef[x2BF];
-                                    TLx493D_Register_t *x4 = &sensor->regDef[x4BF];
-                                    // *sf = (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0
-                                    //                                                     : (sensor->regMap[x4->address] & x4->mask) == 0 ? 2.0 : 4.0;
-                                    return (sensor->regMap[x2->address] & x2->mask) == 0 ? 1.0
-                                                                                         : (sensor->regMap[x4->address] & x4->mask) == 0 ? 2.0 : 4.0;;
-        }
-    
-        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, sens, "TLx493D_AvailableSensitivityType_t");
-                  return 0.0;
+                  break;
     }
 }
 

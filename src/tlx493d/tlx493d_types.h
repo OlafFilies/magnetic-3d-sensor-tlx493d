@@ -58,15 +58,21 @@ typedef enum {
     TLx493D_IIC_ADDR_A1_e,
     TLx493D_IIC_ADDR_A2_e,
     TLx493D_IIC_ADDR_A3_e,
+    TLx493D_IIC_ADDR_A4_e,
+    TLx493D_IIC_ADDR_A5_e,
+    TLx493D_IIC_ADDR_A6_e,
+    TLx493D_IIC_ADDR_A7_e,
 } TLx493D_IICAddressType_t;
 
 
 typedef enum {
-    // 2nd generation
+    // 1st and 2nd generation
     TLx493D_BxByBz_e = 0,
-
-    //  3rd generation
+    
+    //  1st and 3rd generation
     TLx493D_BxByBzTemp_e,
+
+    // 3rd generation
     TLx493D_VHall_Bias_e,
     TLx493D_Spintest_e,
     TLx493D_SAT_test_e,
@@ -266,7 +272,7 @@ typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr)(TLx493D_t *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);
-typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, double, double, double, double);
+typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, double, double, double, double, double);
 
 typedef bool (*TLx493D_SoftwareResetFuncPtr)(TLx493D_t *);
 

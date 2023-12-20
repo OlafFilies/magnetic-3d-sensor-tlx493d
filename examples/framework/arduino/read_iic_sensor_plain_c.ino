@@ -32,7 +32,6 @@ void setup() {
     tlx493d_initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
     tlx493d_setDefaultConfig(&dut);
 
-    delay(100);
     Serial.println("setup done.");
 }
 

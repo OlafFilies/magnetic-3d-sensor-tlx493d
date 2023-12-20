@@ -92,6 +92,56 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, x );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
+
+
+    // TLx493D_FULL_RANGE_e
+    int16_t xr, yr, zr, tr;
+    dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
+
+    int16_t xr2, yr2, zr2;
+    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
+
+    TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
+    TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
+    TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
+
+
+    // TLx493D_SHORT_RANGE_e
+    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) == true );
+    TEST_ASSERT( dut.functions->getTemperature(&dut, &t) == true );
+
+    t = 0.0;
+    x = 0.0;
+    y = 0.0;
+    z = 0.0;
+    dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
+
+    tr = 0;
+    xr = 0;
+    yr = 0;
+    zr = 0;
+    dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
+
+    xr2 = 0;
+    yr2 = 0;
+    zr2 = 0;
+    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
+
+    TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
+    TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
+    TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
+    
+
+    // back to TLx493D_FULL_RANGE_e
+    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
+
+
+    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
+    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr2, &yr2, &zr2);
+
+    TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
+    TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
+    TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
 }
 
 
@@ -110,7 +160,6 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkConfigMeasurementFunctionality)
 
 
     // Unsupported by our code, although supported by sensor ! 
-    // TODO: support ??
     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) == false );
     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) == false );
     TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) == false );
@@ -355,9 +404,10 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkWakeUpSettingsFunctionality)
 {
     TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == true );
     TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
-
+printRegisters(&dut);
     TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == true );
     TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == true );
+printRegisters(&dut);
 
     TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == true );
 }
@@ -426,6 +476,83 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     TEST_ASSERT_EQUAL_HEX( (-100 >> 1) & 0x07, (dut.regMap[0x0E] >> 3) & 0x07 );
     TEST_ASSERT_EQUAL_HEX( (-256 >> 1) & 0x07, dut.regMap[0x0F] & 0x07 );
     TEST_ASSERT_EQUAL_HEX( (-1024 >> 1) & 0x07, (dut.regMap[0x0F] >> 3) & 0x07 );
+
+
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) == true );
+    int16_t th    = 0;
+    uint8_t delta = 2;
+
+    // X
+    tlx493d_common_concatBytes(&dut, P2B6_XL_MSBS_e, P2B6_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // XL
+
+    tlx493d_common_concatBytes(&dut, P2B6_XH_MSBS_e, P2B6_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, P2B6_YL_MSBS_e, P2B6_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // YL
+
+    tlx493d_common_concatBytes(&dut, P2B6_YH_MSBS_e, P2B6_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, P2B6_ZL_MSBS_e, P2B6_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // ZL
+
+    tlx493d_common_concatBytes(&dut, P2B6_ZH_MSBS_e, P2B6_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // ZH
+
+
+    // Check if temperature plays no role !
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, 0.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) == true );
+    th = 0;
+    
+    // X
+    tlx493d_common_concatBytes(&dut, P2B6_XL_MSBS_e, P2B6_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // XL
+
+    tlx493d_common_concatBytes(&dut, P2B6_XH_MSBS_e, P2B6_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, P2B6_YL_MSBS_e, P2B6_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // YL
+
+    tlx493d_common_concatBytes(&dut, P2B6_YH_MSBS_e, P2B6_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, P2B6_ZL_MSBS_e, P2B6_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // ZL
+
+    tlx493d_common_concatBytes(&dut, P2B6_ZH_MSBS_e, P2B6_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // ZH
+
+
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, 25.0, -15.0, 15.0, -15.0, 15.0, -15.0, 15.0) == true );
+    th = 0;
+    
+    // X
+    tlx493d_common_concatBytes(&dut, P2B6_XL_MSBS_e, P2B6_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -116,  th << 1 ); // XL // TODO: Why 116 and not 115 ?
+
+    tlx493d_common_concatBytes(&dut, P2B6_XH_MSBS_e, P2B6_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 115,  th << 1 ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, P2B6_YL_MSBS_e, P2B6_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -115,  th << 1 ); // YL
+
+    tlx493d_common_concatBytes(&dut, P2B6_YH_MSBS_e, P2B6_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 115,  th << 1 ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, P2B6_ZL_MSBS_e, P2B6_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -115,  th << 1 ); // ZL
+
+    tlx493d_common_concatBytes(&dut, P2B6_ZH_MSBS_e, P2B6_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 115,  th << 1 ); // ZH
 }
 
 

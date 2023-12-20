@@ -42,13 +42,73 @@ TEST_TEAR_DOWN(TLx493D_A1B6)
 }
 
 
+/**
+ * Define tests for unsupported common functionality
+ */
+TEST(TLx493D_A1B6, checkUnsupportedFunctionality)
+{
+    static double  xl, xh, yl, yh, zl, zh, t;
+    static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
+
+    TEST_ASSERT( dut.functions->setTrigger(&dut, (TLx493D_TriggerType_t)0) == false );
+    TEST_ASSERT( dut.functions->setSensitivity(&dut, (TLx493D_SensitivityType_t)0) == false );
+    TEST_ASSERT( dut.functions->enable1ByteReadMode(&dut) == false );
+    TEST_ASSERT( dut.functions->enableCollisionAvoidance(&dut) == false );
+    TEST_ASSERT( dut.functions->disableCollisionAvoidance(&dut) == false );
+    TEST_ASSERT( dut.functions->setUpdateRate(&dut, (TLx493D_UpdateRateType_t)0) == false );
+    TEST_ASSERT( dut.functions->calculateFuseParity(&dut) == false );
+    TEST_ASSERT( dut.functions->calculateBusParity(&dut) == false );    
+    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == false );
+    TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
+    TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == false );
+    TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == false );
+
+    TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) == false );
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, t, xh, xl, yh, yl, zh, zl) == false );
+
+    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
+    TEST_ASSERT( dut.functions->calculateFuseParity(&dut) == false );
+    TEST_ASSERT( dut.functions->calculateBusParity(&dut) == false );
+
+    TEST_ASSERT( dut.functions->hasValidBusParity(&dut) == false );
+    TEST_ASSERT( dut.functions->hasValidConfigurationParity(&dut) == false );
+    TEST_ASSERT( dut.functions->getSensitivityScaleFactor(&dut) == false );
+}
+
+/**
+ * Define tests for supported common functionality.
+ * Requires that the registers have been read once, in setDefaultConfig.
+ */
+TEST(TLx493D_A1B6, checkSupportedFunctionality)
+{
+    TEST_ASSERT( dut.functions->init(&dut) == true );
+    TEST_ASSERT( dut.functions->deinit(&dut) == true );
+}
+
+TEST(TLx493D_A1B6, checkResetValues)
+{
+    for(uint8_t i = 0; i < dut.regMapSize; ++i) {
+        TEST_ASSERT( dut.regMap[i] == 0 );
+    }
+
+    dut.functions->setResetValues(&dut);
+
+    // reserved values mirrored from READ to WRITE registers
+    TEST_ASSERT_EQUAL( dut.regMap[dut.regDef[A1B6_W_RES_1_e].address + GEN_1_WRITE_REGISTERS_OFFSET], dut.regMap[dut.regDef[A1B6_R_RES_1_e].address] );
+    TEST_ASSERT_EQUAL( dut.regMap[dut.regDef[A1B6_W_RES_2_e].address + GEN_1_WRITE_REGISTERS_OFFSET], dut.regMap[dut.regDef[A1B6_R_RES_2_e].address] );
+    TEST_ASSERT_EQUAL( dut.regMap[dut.regDef[A1B6_W_RES_3_e].address + GEN_1_WRITE_REGISTERS_OFFSET], dut.regMap[dut.regDef[A1B6_R_RES_3_e].address] );
+
+    TEST_ASSERT( dut.regMap[0x01 + GEN_1_WRITE_REGISTERS_OFFSET] == 0x00 ); // MOD1
+    TEST_ASSERT( dut.regMap[0x03 + GEN_1_WRITE_REGISTERS_OFFSET] == 0x00 ); // MOD2
+}
+
 // Define all relevant tests for the sensor device
 
 TEST(TLx493D_A1B6, calculateTemperature)
 {
     double temperature = 0.0;
     TLx493D_A1B6_calculateTemperature(&dut, &temperature);
-    TEST_ASSERT_FLOAT_WITHIN( 0, (0.0-GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT, temperature );
+    TEST_ASSERT_FLOAT_WITHIN( 0, ((0.0-GEN_1_TEMP_OFFSET) * GEN_1_TEMP_MULT) + GEN_1_REF_TEMP, temperature );
 }
 
 TEST(TLx493D_A1B6, calculateMagneticField)
@@ -97,7 +157,9 @@ TEST(TLx493D_A1B6, getter_BitFields)
 TEST_GROUP_RUNNER(TLx493D_A1B6)
 {
     TLx493D_A1B6_suiteSetUp();
-
+    RUN_TEST_CASE(TLx493D_A1B6, checkUnsupportedFunctionality);
+    RUN_TEST_CASE(TLx493D_A1B6, checkSupportedFunctionality);
+    RUN_TEST_CASE(TLx493D_A1B6, checkResetValues);
     RUN_TEST_CASE(TLx493D_A1B6, calculateTemperature);
     RUN_TEST_CASE(TLx493D_A1B6, calculateMagneticField);
     RUN_TEST_CASE(TLx493D_A1B6, setter_BitFields);

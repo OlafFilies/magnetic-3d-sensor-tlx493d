@@ -5,44 +5,30 @@
 // project cpp includes
 #include "TLx493D_inc.hpp"
 
+#define POWERPIN 8
+#define SDA_ADDR_PIN 7 
 
-// TLx493D_A1B6 dut(Wire);
-
-// TLx493D_A2B6 dut(Wire);
-// TLx493D_P2B6 dut(Wire);
-TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_W2BW dut(Wire);
-
-// TLx493D_P3B6 dut(Wire);
-
-
-// TLx493D_A1B6 a1b6(Wire);
-
-// TLx493D_A2B6 a2b6(Wire);
-// TLx493D_P2B6 p2b6(Wire);
-// TLx493D_W2B6 w2b6(Wire);
-// TLx493D_W2BW w2bw(Wire);
-
-// TLx493D_P3B6 p3b6(Wire);
-
+// address 0x3E when SDA/ADDR held low at power up
+TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A4_e); //0x3E
 
 void setup() {
     delay(3000);
     Serial.begin(115200);
 
-    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
-    dut.begin();
+    // explicit power pin needed to power up board after the addrPin is pulled down
+    dut.setPowerPin(POWERPIN, OUTPUT, HIGH, LOW, 50, 50);
+    // set pin used to drive SDA/ADDR pin before power up
+    // This pin is then isolated from the I2C bus by switching it high-Z before I2C init
+    dut.setAddrPin(SDA_ADDR_PIN, OUTPUT, LOW, HIGH, 1, 1);
+    
+    // Set the sensor constructor to activate extended address switching pin
+    dut.begin(true, false, true);
 
-
-    // a1b6.begin();
-
-    // a2b6.begin();
-    // p2b6.begin();
-    // w2b6.begin();
-    // w2bw.begin();
-
-    // p3b6.begin();
-
+    // Options to set the other remaining addresses when SDA low at power-up.
+    // dut.setIICAddress(TLx493D_IIC_ADDR_A5_e); // 0x36
+    // dut.setIICAddress(TLx493D_IIC_ADDR_A6_e); // 0x1E
+    // dut.setIICAddress(TLx493D_IIC_ADDR_A7_e); // 0x16
+  
     Serial.print("setup done.\n");
 }
 

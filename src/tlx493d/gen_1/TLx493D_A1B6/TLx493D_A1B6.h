@@ -69,11 +69,7 @@ bool TLx493D_A1B6_getMagneticField(TLx493D_t *sensor, double *x, double *y, doub
 void TLx493D_A1B6_calculateMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 bool TLx493D_A1B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, double *y, double *z, double *temp);
 
-
 bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t mVals);
-// TODO: replace next 2 functions withe the one above !
-bool TLx493D_A1B6_enableTemperatureMeasurement(TLx493D_t *sensor);
-bool TLx493D_A1B6_disableTemperatureMeasurement(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trig);
 bool TLx493D_A1B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t sens);
@@ -91,8 +87,6 @@ bool TLx493D_A1B6_enableInterrupt(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableInterrupt(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode);
-bool TLx493D_A1B6_setPowerMode_int(TLx493D_t *sensor, TLx493D_A1B6_PowerMode_t mode);
-// bool TLx493D_A1B6_setLowPowerPeriod(TLx493D_t *sensor, TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t lp_period);
 bool TLx493D_A1B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t rate);
 
 
@@ -105,13 +99,11 @@ bool TLx493D_A1B6_enableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableWakeUpMode(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh);
-bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
+bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh);
 
 bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor);
 
 // utilities
-void TLx493D_A1B6_calculateParity(TLx493D_t *sensor);
-// TODO: TLx493D_A1B6_calculateParity to be replaced by appropriate one of the next 3 !
 uint8_t TLx493D_A1B6_calculateFuseParity(TLx493D_t *sensor);
 uint8_t TLx493D_A1B6_calculateBusParity(TLx493D_t *sensor);
 uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor);
@@ -123,9 +115,11 @@ bool TLx493D_A1B6_hasValidFuseParity(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidBusParity(TLx493D_t *sensor);
 bool TLx493D_A1B6_hasValidConfigurationParity(TLx493D_t *sensor);
 
+bool TLx493D_A1B6_hasValidWakeUpParity(TLx493D_t *sensor);
+bool TLx493D_A1B6_isInTestMode(TLx493D_t *sensor);
+
 void TLx493D_A1B6_setResetValues(TLx493D_t *sensor);
-// TODO: maybe replace the following function by the one above if appropriate
-void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *senor);
+void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *sensor);
 
 uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
@@ -135,19 +129,13 @@ void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_A1B6_getSensitivityScaleFactor(TLx493D_t *sensor);
 
-
-// TODO : the following function may be replaced by one of the above common functions if appropriate
-bool TLx493D_A1B6_writeRegister(TLx493D_t* sensor, uint8_t bitField);
 bool TLx493D_A1B6_transferWriteRegisters(TLx493D_t *sensor);
 
 bool TLx493D_A1B6_enableParityTest(TLx493D_t *sensor);
 bool TLx493D_A1B6_disableParityTest(TLx493D_t *sensor);
 
-
-void TLx493D_A1B6_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
 uint8_t TLx493D_A1B6_returnBitfield(TLx493D_t *sensor, uint8_t bitField);
 void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBitFieldValue);
-
 
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor);
 
