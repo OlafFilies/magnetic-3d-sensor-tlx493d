@@ -128,9 +128,9 @@ TEST_GROUP_RUNNER(TLx493D_P3I8)
 
 #ifndef TEST_TLx493D_P3I8_NEEDS_SENSOR
 
-    // run gen 2 common functions tests
+    // run gen 3 common functions tests
     RUN_TEST_GROUP(SensorsCommon);
-    RUN_TEST_GROUP(SensorsGen2Common);
+    RUN_TEST_GROUP(SensorsGen3Common);
 
 #endif
 
