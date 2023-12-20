@@ -47,7 +47,7 @@ TEST_TEAR_DOWN(TLx493D_A1B6)
  */
 TEST(TLx493D_A1B6, checkUnsupportedFunctionality)
 {
-    static double  xl, xh, yl, yh, zl, zh;
+    static double  xl, xh, yl, yh, zl, zh, t;
     static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
 
     TEST_ASSERT( dut.functions->setTrigger(&dut, (TLx493D_TriggerType_t)0) == false );
@@ -64,7 +64,7 @@ TEST(TLx493D_A1B6, checkUnsupportedFunctionality)
     TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == false );
 
     TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) == false );
-    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, xh, xl, yh, yl, zh, zl) == false );
+    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, t, xh, xl, yh, yl, zh, zl) == false );
 
     TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
     TEST_ASSERT( dut.functions->calculateFuseParity(&dut) == false );

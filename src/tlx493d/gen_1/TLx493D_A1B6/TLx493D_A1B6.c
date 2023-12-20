@@ -599,7 +599,7 @@ void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_A1B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "getSensitivityScaleFactor");
-    return 1.0;
+    return 0.0;
 }
 
 
