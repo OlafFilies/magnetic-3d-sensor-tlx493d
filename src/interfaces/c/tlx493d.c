@@ -22,7 +22,6 @@
 #include "TLx493D_P3B6.h"
 #include "TLx493D_P3I8.h"
 
-
 // functions common to all sensors
 bool tlx493d_init(TLx493D_t *sensor, TLx493D_SupportedSensorType_t sensorType) {
    switch(sensorType) {
@@ -166,9 +165,11 @@ bool tlx493d_isWakeUpEnabled(TLx493D_t *sensor) {
    return sensor->functions->isWakeUpEnabled(sensor);
 }
 
+
 bool tlx493d_enableWakeUpMode(TLx493D_t *sensor) {
    return sensor->functions->enableWakeUpMode(sensor);
 }
+
 
 bool tlx493d_disableWakeUpMode(TLx493D_t *sensor) {
    return sensor->functions->disableWakeUpMode(sensor);

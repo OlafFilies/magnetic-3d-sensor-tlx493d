@@ -102,8 +102,12 @@ iic_with_wakeup: arduino
 	cp examples/framework/arduino/read_iic_sensor_with_wakeup.ino build/build.ino
 
 
-2iic: arduino
-	cp examples/framework/arduino/read_2_iic_sensors.ino build/build.ino
+3iic: arduino
+	cp examples/framework/arduino/read_3_different_iic_sensors.ino build/build.ino
+
+
+3iic_equal: arduino
+	cp examples/framework/arduino/read_3_equal_iic_sensors.ino build/build.ino
 
 
 # example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 unity flash monitor
