@@ -1,6 +1,10 @@
-// project cpp includes
+/** Project CPP includes */
 #include "TLx493D_inc.hpp"
 
+
+/** Definition of the upper and lower thresholds in X, Y, Z-direction.
+ *  These thresholds define under which conditions the sensor wakes up and triggers his interrupt.
+ */
 #define THRESHOLD         (int16_t)200
 
 #define LOWER_THRESHOLD_X  (-THRESHOLD)
@@ -11,20 +15,13 @@
 #define UPPER_THRESHOLD_Y  (THRESHOLD)
 #define UPPER_THRESHOLD_Z  (THRESHOLD)
 
-#define INTERRUPT_PIN  3
-// TLx493D_A1B6 dut(Wire);
+/** Definition of the interrupt pin, which will detected the triggered interrupt.
+ *  Please be aware that you have to change the pin according to your setup.
+ *  Here a XCM1100-XMC2GO is used as microcontroller.
+ */
+#define INTERRUPT_PIN  9
 
-// TLx493D_A2B6 dut(Wire);
-// TLx493D_P2B6 dut(Wire);
-// TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
-
-// TLx493D_A2B6 a2b6(Wire);
-// TLx493D_P2B6 p2b6(Wire);
-// TLx493D_W2B6 w2b6(Wire);
-// TLx493D_W2BW w2bw(Wire);
-
-// TLx493D_P3B6 p3b6(Wire);
 
 bool intTriggered = false;
 
@@ -32,88 +29,65 @@ void setup() {
     delay(3000);
     Serial.begin(115200);
 
+    /** Definition of the interrupt pin and attaching of a callback-function to it. 
+     *  In the attachInterrupt function we can also define when the service routine should
+     *  be triggered. In our case on a falling edge.  
+     */
     pinMode(INTERRUPT_PIN, INPUT);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), wakeUp_ISR, FALLING);
 
-    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
     dut.begin();
-    printRegisters(dut.getSensor());
-    // dut.setMeasurement(TLx493D_BxByBzTemp_e);
-    // dut.setPowerMode(TLx493D_LOW_POWER_MODE_e);
-    dut.setSensitivity(TLx493D_FULL_RANGE_e);
+
+    /** Here we're setting the thresholds for all three directions of the sensor.
+     *  After this we enable the wake up mode as well as the interrupt mode.
+     *  Both is necessary in order to enable the wake up feature of the sensor.
+     * 
+     *  The datasheet also recommends to disable the interrupt after it is triggered.
+     *  The reason for that is that the sensor continues to trigger the interrupt
+     *  as long as one of the thresholds is exceeded.
+     */
     dut.setWakeUpThresholdsAsInteger(LOWER_THRESHOLD_X, UPPER_THRESHOLD_X, LOWER_THRESHOLD_Y, UPPER_THRESHOLD_Y, LOWER_THRESHOLD_Z, UPPER_THRESHOLD_Z);
     dut.enableWakeUpMode();
     dut.enableInterrupt();
-    printRegisters(dut.getSensor());
-    // // dut.disableWakeUpMode();
+    
+    /** Here we are checking if the wake up is set correctly.
+     *  This can be done due to an internal flag in the register, which is
+     *  representing the status of the wake up.
+     */
     Serial.print("isWakeUpEnabled : ");
     Serial.println(dut.isWakeUpEnabled() ? "enabled" : "not enabled");
-    // printRegisters(dut.getSensor());
-
+    delay(100);
     Serial.print("setup done.\n");
 }
 
-
+/** The code in the loop is constantly checking if the interrupt flag is set.
+ *  If this condition is fulfilled, we're reading the temperature as well as the
+ *  magnetic values in X, Y, Z-direction and printing them to the console.
+ *  Afterwards we're reseting the flag and wait for two seconds.
+ */
 void loop() {
     if( intTriggered ) {
-    double temp1 = 0.0, temp2 = 0.0, temp3 = 0.0;
-    double valX1 = 0, valY1 = 0, valZ1 = 0, valX2 = 0, valY2 = 0, valZ2 = 0, valX3 = 0, valY3 = 0, valZ3 = 0;
+    double temp1 = 0.0;
+    double valX1 = 0, valY1 = 0, valZ1 = 0;
 
     printRegisters(dut.getSensor());
 
     dut.getTemperature(&temp1); 
-    // // dut2.getTemperature(&temp2); 
-    // // dut3.getTemperature(&temp3); 
-
     dut.getMagneticField(&valX1, &valY1, &valZ1);
-    // // dut2.getMagneticField(&valX2, &valY2, &valZ2);
-    // // dut3.getMagneticField(&valX3, &valY3, &valZ3);
-
+ 
     Serial.println("========================================");
     Serial.print("Temperature of Sensor 1:\t");Serial.print(temp1);Serial.println(" °C");
     Serial.print("Magnetic X-Value of Sensor 1:\t");Serial.print(valX1);Serial.println(" mT");
     Serial.print("Magnetic Y-Value of Sensor 1:\t");Serial.print(valY1);Serial.println(" mT");
     Serial.print("Magnetic Z-Value of Sensor 1:\t");Serial.print(valZ1);Serial.println(" mT");
-    // Serial.println("----------------------------------------");
-    // // // Serial.print("Temperature of Sensor 2:\t");Serial.print(temp2);Serial.println(" °C");
-    // // // Serial.print("Magnetic X-Value of Sensor 2:\t");Serial.print(valX2);Serial.println(" mT");
-    // // // Serial.print("Magnetic Y-Value of Sensor 2:\t");Serial.print(valY2);Serial.println(" mT");
-    // // // Serial.print("Magnetic Z-Value of Sensor 2:\t");Serial.print(valZ2);Serial.println(" mT");
-    // // // Serial.println("----------------------------------------");
-    // // // Serial.print("Temperature of Sensor 3:\t");Serial.print(temp3);Serial.println(" °C");
-    // // // Serial.print("Magnetic X-Value of Sensor 3:\t");Serial.print(valX3);Serial.println(" mT");
-    // // // Serial.print("Magnetic Y-Value of Sensor 3:\t");Serial.print(valY3);Serial.println(" mT");
-    // // // Serial.print("Magnetic Z-Value of Sensor 3:\t");Serial.print(valZ3);Serial.println(" mT");
-    // // // Serial.println("========================================\n\n");
-    // // Serial.println(dut.isWakeUpEnabled());
 
-    // // dut.readRegisters();
-    // printRegisters(dut.getSensor());
     delay(2000);
-    // printRegisters(dut.getSensor());
-    // delay(200);
-intTriggered = false;
+
+    intTriggered = false;
     }
 }
 
+/** The interrupt service routine is simply setting a boolean flag as soon the sensor interrupt is triggered */
 void wakeUp_ISR() {
     intTriggered = true;
-    // Serial.println("Interrupt triggered");
-    // double temp1 = 0.0, temp2 = 0.0, temp3 = 0.0;
-    // double valX1 = 0, valY1 = 0, valZ1 = 0, valX2 = 0, valY2 = 0, valZ2 = 0, valX3 = 0, valY3 = 0, valZ3 = 0;
-
-    // dut.getTemperature(&temp1); 
-    // // // dut2.getTemperature(&temp2); 
-    // // // dut3.getTemperature(&temp3); 
-
-    // dut.getMagneticField(&valX1, &valY1, &valZ1);
-    // // // dut2.getMagneticField(&valX2, &valY2, &valZ2);
-    // // // dut3.getMagneticField(&valX3, &valY3, &valZ3);
-
-    // Serial.println("========================================");
-    // Serial.print("Temperature of Sensor 1:\t");Serial.print(temp1);Serial.println(" °C");
-    // Serial.print("Magnetic X-Value of Sensor 1:\t");Serial.print(valX1);Serial.println(" mT");
-    // Serial.print("Magnetic Y-Value of Sensor 1:\t");Serial.print(valY1);Serial.println(" mT");
-    // Serial.print("Magnetic Z-Value of Sensor 1:\t");Serial.print(valZ1);Serial.println(" mT");
-    // printRegisters(dut.getSensor());
 }
