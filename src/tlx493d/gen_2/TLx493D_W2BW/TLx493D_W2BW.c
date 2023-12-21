@@ -65,7 +65,8 @@ TLx493D_Register_t TLx493D_W2BW_regDef[] = {
     { /* W2BW_CA_e, */         TLx493D_READ_WRITE_MODE_e,   0x11,   0x08,   3,  1 },
     { /* W2BW_INT_e, */        TLx493D_READ_WRITE_MODE_e,   0x11,   0x04,   2,  1 },
     { /* W2BW_MODE_e, */       TLx493D_READ_WRITE_MODE_e,   0x11,   0x03,   0,  2 },
-    { /* W2BW_PRD_e, */        TLx493D_READ_WRITE_MODE_e,   0x13,   0x80,   7,  1 },
+    { /* W2BW_PRD_e, */        TLx493D_READ_WRITE_MODE_e,   0x13,   0xE0,   5,  3 },
+    // { /* W2BW_X4_e, */         TLx493D_READ_WRITE_MODE_e,        0x14,   0x01,   0,  1 },
     { /* W2BW_X4_e, */         TLx493D_WRITE_MODE_e,        0x14,   0x01,   0,  1 },
     { /* W2BW_TYPE_e, */       TLx493D_READ_MODE_e,         0x16,   0x30,   4,  2 },
     { /* W2BW_HWV_e, */        TLx493D_READ_MODE_e,         0x16,   0x0F,   0,  4 },
@@ -239,7 +240,7 @@ bool TLx493D_W2BW_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trigger) {
 
 
 bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
-    return tlx493d_gen_2_setSensitivity(sensor, TLx493D_HAS_X2_e, W2BW_X2_e, W2BW_X4_e, W2BW_CP_e, val);
+    return tlx493d_gen_2_setSensitivity(sensor, TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_e, W2BW_CP_e, val);
 }
 
 

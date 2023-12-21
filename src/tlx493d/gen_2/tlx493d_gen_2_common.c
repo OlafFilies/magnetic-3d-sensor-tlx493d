@@ -123,19 +123,44 @@ bool tlx493d_gen_2_setTrigger(TLx493D_t *sensor, uint8_t trigBF, uint8_t cpBF, T
 
 bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF, uint8_t cpBF,
                                   TLx493D_SensitivityType_t val) {
+    uint8_t shortVal      = 0;
+    uint8_t extraShortVal = 0;
+
     switch(availSens) {
         case TLx493D_HAS_X1_e : return val == TLx493D_FULL_RANGE_e;
     
-        case TLx493D_HAS_X2_e : return (val != TLx493D_EXTRA_SHORT_RANGE_e ? tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1)
-                                                                           : false);
+        case TLx493D_HAS_X2_e : return tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1);
     
-        case TLx493D_HAS_X4_e : return (tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1)
-                                       ? tlx493d_gen_2_setOneConfigBitfield(sensor, x4BF, cpBF, ((val == TLx493D_FULL_RANGE_e) || (val == TLx493D_SHORT_RANGE_e)) ? 0 : 1)
-                                       : false);
-    
+        case TLx493D_HAS_X4_e : {  
+                                    switch(val) {
+                                        case TLx493D_FULL_RANGE_e  : shortVal      = 0;
+                                                                     extraShortVal = 0;
+                                                                     break;
+
+                                        case TLx493D_SHORT_RANGE_e : shortVal      = 1;
+                                                                     extraShortVal = 0;
+                                                                     break;
+                                     
+                                        case TLx493D_EXTRA_SHORT_RANGE_e : shortVal      = 1;
+                                                                           extraShortVal = 1;
+                                                                           break;
+
+                                        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_t");
+                                                  return false;
+                                    }
+
+// print("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
+                                    // return (
+                                    tlx493d_gen_2_setOneConfigBitfield(sensor, x4BF, cpBF, extraShortVal);
+                                    return tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, shortVal);
+                                                //: false);
+        }
+
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, availSens, "TLx493D_AvailableSensitivityType_t");
                   return false;
     }
+    
+    return false;
 }
 
 
@@ -592,7 +617,8 @@ double tlx493d_gen_2_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availa
         case TLx493D_HAS_X4_e : {
                                     bool x2IsNotSet = tlx493d_common_returnBitfield(sensor, x2BF) == 0;
                                     bool x4IsNotSet = tlx493d_common_returnBitfield(sensor, x4BF) == 0;
-                                    return x2IsNotSet ? 1.0 : (x4IsNotSet ? 2.0 : 4.0);
+                                    // print("x4 : %d\n", x4IsNotSet ? 0 : 1);
+                                    return (x2IsNotSet ? 1.0 : (x4IsNotSet ? 2.0 : 4.0));
         }
     
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, availSens, "TLx493D_AvailableSensitivityType_t");
