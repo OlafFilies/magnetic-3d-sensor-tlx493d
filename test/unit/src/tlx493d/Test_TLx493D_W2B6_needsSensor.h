@@ -517,9 +517,9 @@ TEST_GROUP_RUNNER(TLx493D_W2B6_needsSensor)
     RUN_TEST_GROUP(SensorsCommonFunctions);
 
     // run gen 2 common functions tests
-    RUN_TEST_GROUP(SensorsCommon);
-    RUN_TEST_GROUP(SensorsGen2Common);
     RUN_TEST_GROUP(SensorsGen2Common_needsSensor);
+    RUN_TEST_GROUP(SensorsGen2Common);
+    RUN_TEST_GROUP(SensorsCommon);
 
     TLx493D_W2B6_needsSensor_suiteTearDown();
 }

@@ -611,10 +611,10 @@ TEST_GROUP_RUNNER(TLx493D_P3B6_needsSensor)
     // run common functions tests
     RUN_TEST_GROUP(SensorsCommonFunctions);
 
-    // run gen 2 common functions tests
-    RUN_TEST_GROUP(SensorsCommon);
-    RUN_TEST_GROUP(SensorsGen3Common);
+    // run gen 3 common functions tests
     RUN_TEST_GROUP(SensorsGen3Common_needsSensor);
+    RUN_TEST_GROUP(SensorsGen3Common);
+    RUN_TEST_GROUP(SensorsCommon);
 
     TLx493D_P3B6_needsSensor_suiteTearDown();
 }
