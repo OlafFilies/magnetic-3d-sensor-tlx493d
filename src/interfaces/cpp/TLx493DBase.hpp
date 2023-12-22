@@ -495,36 +495,42 @@ class TLx493DBase {
         }
 
         /**
-         * @brief Get the Com Lib I F Type object
+         * @brief The function `getComLibIFType` is returning the communication interface of the sensor.
+         * It is reading out the corresponding structure member of the sensor object.
          * 
-         * @return TLx493D_SupportedComLibraryInterfaceType_t 
+         * @return A `TLx493D_SupportedComLibraryInterfaceType_t` enum which contains the communication
+         * interface type.
+         * @retval TLx493D_I2C_e - 0
+         * @retval TLx493D_SPI_e - 1
          */
         TLx493D_SupportedComLibraryInterfaceType_t getComLibIFType() {
             return sensor.comIFType;
         }
 
         /**
-         * @brief Get the Register Map object
+         * @brief The function `getRegisterMap` gets the internal register map of the sensor object.
          * 
-         * @return uint8_t* 
+         * @return A pointer to the register map array with its saved values.
          */
         uint8_t *getRegisterMap() {
             return sensor.regMap;
         }
 
         /**
-         * @brief Get the Register Map Size object
+         * @brief The function `getRegisterMapSize` returns the register map size of the internal register
+         * map of the sensor object.
          * 
-         * @return uint8_t 
+         * @return Size of the internal register map. 
          */
         uint8_t getRegisterMapSize() {
             return sensor.regMapSize;
         }
 
         /**
-         * @brief 
+         * @brief The function `getI2CAddress` is returning the I2C address of the sensor.
+         * It is reading out the I2C address stored within the sensor object.
          * 
-         * @return uint8_t 
+         * @return I2C address of the sensor.
          */
         uint8_t getI2CAddress() {
             return sensor.comInterface.comLibParams.iic_params.address;
@@ -534,19 +540,22 @@ class TLx493DBase {
     protected:
 
         /**
-         * @brief Construct a new TLx493DBase object
+         * @brief The function `TLx493DBase` is the constructor of the class.
          * 
          */
         TLx493DBase() {
         }
 
-        TLx493D_t  sensor;
+        TLx493D_t  sensor; /**< Declaration of the sensor object structure. */
 };
 
-
-/***
- * Generic template class.
-*/
+/**
+ * @brief The class `TLx493D` is a template class, which inherits its functionality from the `TLx493DBase` class. 
+ * 
+ * @tparam BoardSupportClass A helper class, which takes care of needed power pins as well user defined pins.
+ * @tparam BusWrapper A wrapper class for the bus system.
+ * @tparam sensorType Specific sensor type of the used sensor.
+ */
 template<typename BoardSupportClass, typename BusWrapper, TLx493D_SupportedSensorType_t sensorType>
     class TLx493D : public TLx493DBase {
 
@@ -554,10 +563,18 @@ template<typename BoardSupportClass, typename BusWrapper, TLx493D_SupportedSenso
 
         typedef typename BusWrapper::BusType  BusType;
         
-
+        /**
+         * @brief The function `TLx493D` is the constructor of the template class.
+         * 
+         */
         TLx493D();
+
+        /**
+         * @brief The function `TLx493D` is the overloaded constructor of the template class.
+         * 
+         * @param[in] c Bus type of the uses sensor.
+         */
         TLx493D(BusType &c);
 };
-
 
 #endif // TLX493D_BASE_HPP
