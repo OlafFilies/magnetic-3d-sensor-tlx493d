@@ -120,7 +120,7 @@ jobs:
 
     strategy:
       # flashing only one by one 
-      max-parallel: 1
+      # max-parallel: 1
 
       matrix:
         # List of all examples in the lib to compile
