@@ -131,30 +131,27 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivit
     
         case TLx493D_HAS_X2_e : return tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1);
     
-        case TLx493D_HAS_X4_e : {  
-                                    switch(val) {
-                                        case TLx493D_FULL_RANGE_e  : shortVal      = 0;
-                                                                     extraShortVal = 0;
-                                                                     break;
+        // case TLx493D_HAS_X4_e : {  
+        //                             switch(val) {
+        //                                 case TLx493D_FULL_RANGE_e  : shortVal      = 0;
+        //                                                              extraShortVal = 0;
+        //                                                              break;
 
-                                        case TLx493D_SHORT_RANGE_e : shortVal      = 1;
-                                                                     extraShortVal = 0;
-                                                                     break;
+        //                                 case TLx493D_SHORT_RANGE_e : shortVal      = 1;
+        //                                                              extraShortVal = 0;
+        //                                                              break;
                                      
-                                        case TLx493D_EXTRA_SHORT_RANGE_e : shortVal      = 1;
-                                                                           extraShortVal = 1;
-                                                                           break;
+        //                                 case TLx493D_EXTRA_SHORT_RANGE_e : shortVal      = 1;
+        //                                                                    extraShortVal = 1;
+        //                                                                    break;
 
-                                        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_t");
-                                                  return false;
-                                    }
+        //                                 default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_t");
+        //                                           return false;
+        //                             }
 
-// print("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
-                                    // return (
-                                    tlx493d_gen_2_setOneConfigBitfield(sensor, x4BF, cpBF, extraShortVal);
-                                    return tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, shortVal);
-                                                //: false);
-        }
+        //                             return tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, extraShortVal) ? tlx493d_gen_2_setOneConfigBitfield(sensor, x4BF, cpBF, shortVal);
+        //                                                                                                          : false);
+        // }
 
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, availSens, "TLx493D_AvailableSensitivityType_t");
                   return false;
@@ -508,7 +505,10 @@ uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint
         parity ^= sensor->regMap[i];
     }
 
-    parity ^= (sensor->regMap[0x0D] & 0x7F); // WA
+    // parity ^= (sensor->regMap[0x0D] & 0x7F); // WA
+    parity = (uint8_t) (parity ^ (sensor->regMap[0x0D] & 0x7F)); // WA
+    // parity = (sensor->regMap[0x0D] & 0x7F); // WA
+    // parity = (uint8_t) (parity ^ (sensor->regMap[0x0D] & ((uint8_t) 0x7F))); // WA
     parity ^= (sensor->regMap[0x0E] & 0x3F); // TST
     parity ^= (sensor->regMap[0x0F] & 0x3F); // PH
 //     parity ^= (sensor->regMap[0x0D] & ~sensor->regDef[waBF].mask);
@@ -632,7 +632,7 @@ void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int
                                                           int16_t *x, int16_t *y, int16_t *z) {
     double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * sensor->functions->getSensitivityScaleFactor(sensor);
     
-    *x = xInmT * scaledSensitivity;
+    *x = (int16_t) (xInmT * scaledSensitivity);
     *y = yInmT * scaledSensitivity;
     *z = zInmT * scaledSensitivity;
 }

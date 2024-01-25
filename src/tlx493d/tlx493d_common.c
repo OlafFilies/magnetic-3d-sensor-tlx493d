@@ -67,10 +67,16 @@ void tlx493d_common_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF
 
 
 bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, int16_t *temperature) {
+    bool b = false;
+
     if( sensor->functions->readRegisters(sensor) ) {
         sensor->functions->calculateRawTemperature(sensor, temperature);
-        return true;
+        // return true;
+        b = true;
     }
+
+    // return false;
+    return b;
 }
 
 
@@ -164,7 +170,9 @@ void tlx493d_common_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t new
     TLx493D_Register_t *bf = &sensor->regDef[bitField];
 
     if((bf->accessMode == TLx493D_WRITE_MODE_e) || (bf->accessMode == TLx493D_READ_WRITE_MODE_e)) {
-        sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask);
+        sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ((uint8_t) ~bf->mask)) | (((uint8_t) (newBitFieldValue << bf->offset)) & ((uint8_t) bf->mask));
+    //     sensor->regMap[bf->address] = (uint8_t) ((sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask));
+//        sensor->regMap[bf->address] = (sensor->regMap[bf->address] & ~bf->mask) | ((newBitFieldValue << bf->offset) & bf->mask);
     }
     else {
         tlx493d_errorBitfieldNotWritableForSensorType(sensor, bitField);

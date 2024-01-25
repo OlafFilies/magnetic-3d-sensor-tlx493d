@@ -66,10 +66,12 @@ TLx493D_Register_t TLx493D_W2BW_regDef[] = {
     { /* W2BW_INT_e, */        TLx493D_READ_WRITE_MODE_e,   0x11,   0x04,   2,  1 },
     { /* W2BW_MODE_e, */       TLx493D_READ_WRITE_MODE_e,   0x11,   0x03,   0,  2 },
     { /* W2BW_PRD_e, */        TLx493D_READ_WRITE_MODE_e,   0x13,   0xE0,   5,  3 },
-    // { /* W2BW_X4_e, */         TLx493D_READ_WRITE_MODE_e,        0x14,   0x01,   0,  1 },
     { /* W2BW_X4_e, */         TLx493D_WRITE_MODE_e,        0x14,   0x01,   0,  1 },
     { /* W2BW_TYPE_e, */       TLx493D_READ_MODE_e,         0x16,   0x30,   4,  2 },
     { /* W2BW_HWV_e, */        TLx493D_READ_MODE_e,         0x16,   0x0F,   0,  4 },
+
+    /* From here on write-only fields are listed. These are not part of the registers set !*/
+    { /* W2BW_X4_READWRITE_e, */    TLx493D_READ_WRITE_MODE_e,   0x17,   0x01,   0,  1 },
 };
 
 
@@ -240,7 +242,30 @@ bool TLx493D_W2BW_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t trigger) {
 
 
 bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
-    return tlx493d_gen_2_setSensitivity(sensor, TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_e, W2BW_CP_e, val);
+    uint8_t shortVal      = 0;
+    uint8_t extraShortVal = 0;
+
+    switch(val) {
+        case TLx493D_FULL_RANGE_e  : shortVal      = 0;
+                                     extraShortVal = 0;
+                                     break;
+
+        case TLx493D_SHORT_RANGE_e : shortVal      = 1;
+                                     extraShortVal = 0;
+                                     break;
+        
+        case TLx493D_EXTRA_SHORT_RANGE_e : shortVal      = 1;
+                                           extraShortVal = 1;
+                                           break;
+
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_SensitivityType_t");
+                  return false;
+    }
+
+// print("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
+    tlx493d_common_setBitfield(sensor, W2BW_X4_READWRITE_e, extraShortVal);
+    return tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X2_e, W2BW_CP_e, shortVal) ? tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X4_e, W2BW_CP_e, extraShortVal)
+                                                                                      : false;
 }
 
 
@@ -338,7 +363,7 @@ bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor,
                                              W2BW_XL_MSBS_e, W2BW_XL_LSBS_e, W2BW_XH_MSBS_e, W2BW_XH_LSBS_e,
                                              W2BW_YL_MSBS_e, W2BW_YL_LSBS_e, W2BW_YH_MSBS_e, W2BW_YH_LSBS_e,
                                              W2BW_ZL_MSBS_e, W2BW_ZL_LSBS_e, W2BW_ZH_MSBS_e, W2BW_ZH_LSBS_e,
-                                             TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_e,
+                                             TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_READWRITE_e,
                                              temperature, xLow, xHigh, yLow, yHigh, zLow, zHigh);
 }
 
@@ -431,5 +456,5 @@ void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 
 double TLx493D_W2BW_getSensitivityScaleFactor(TLx493D_t *sensor) {
-    return tlx493d_gen_2_getSensitivityScaleFactor(sensor, TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_e);
+    return tlx493d_gen_2_getSensitivityScaleFactor(sensor, TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_READWRITE_e);
 }

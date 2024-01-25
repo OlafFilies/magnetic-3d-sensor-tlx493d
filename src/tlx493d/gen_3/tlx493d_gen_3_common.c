@@ -449,8 +449,8 @@ void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int
     double sf   = sensor->functions->getSensitivityScaleFactor(sensor);
     double temp = (double) rawTemp;
 
-    *x = (xInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x))))
-       / ((GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))) / sf);
+    *x = (int16_t) ((xInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x))))
+       / ((GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))) / sf));
 
     *y = (yInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + temp * GEN_3_O3y))))
        / ((GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + temp * GEN_3_L3y))) / sf);
