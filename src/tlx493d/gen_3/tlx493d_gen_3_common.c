@@ -15,42 +15,43 @@
 #include "tlx493d_gen_3_common.h"
 
 
-bool tlx493d_gen_3_readRegisters(TLx493D_t *sensor, uint8_t channelBF) {
-    return tlx493d_common_readRegisters(sensor);
+void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF) {
+    uint8_t channel = tlx493d_common_returnBitfield(sensor, channelSaveBF);
+// print("channel : %x\n", channel);
 
-    // bool b = tlx493d_common_readRegisters(sensor);
-    // tlx493d_gen_3_correctDataInRegisters(sensor, channelBF);
-    // return b;
-}
-
-
-void tlx493d_gen_3_copyRegisters(TLx493D_t *sensor, uint8_t toIndex) {
-    for(uint8_t i = sensor->regMapSize; i >= toIndex; --i) {
-        sensor->regMap[i] = sensor->regMap[i - 4];
-    }
-}
-
-void tlx493d_gen_3_correctDataInRegisters(TLx493D_t *sensor, uint8_t channelBF) {
-    uint8_t channel = (sensor->regMap[7] && 0xF0) >> 4;
-    // tlx493d_common_returnBitfield(sensor, channelBF);
-print("channel : %x\n", channel);
+    uint8_t offset = 0;
 
     switch(channel) {
         // TLx493D_BxTemp_e
-        case 0b1100 : tlx493d_gen_3_copyRegisters(sensor, 6);
-                      return;
+        case 0b1100 : offset = 2;
+                      break;
 
         // TLx493D_BxBy_e
-        case 0b1101 : tlx493d_gen_3_copyRegisters(sensor, 8);
-                      return;
+        case 0b1101 : offset = 4;
+                      break;
         
         // TLx493D_BzTemp_e
-        case 0b1110 : tlx493d_gen_3_copyRegisters(sensor, 4);
-                      return;
+        case 0b1110 : offset = 0;
+                      break;
         
         default : return;
     }
 
+// printRegisters(sensor);
+    uint8_t regCopy[sensor->regMapSize];
+    memcpy(regCopy, sensor->regMap, sensor->regMapSize);
+    memcpy(sensor->regMap + offset + 4, regCopy + offset, sensor->regMapSize - offset - 4);
+    memset(sensor->regMap + offset, 0, 4);
+// printRegisters(sensor);
+}
+
+
+bool tlx493d_gen_3_readRegisters(TLx493D_t *sensor, uint8_t channelSaveBF) {
+    // return tlx493d_common_readRegisters(sensor);
+
+    bool b = tlx493d_common_readRegisters(sensor);
+    tlx493d_gen_3_shiftDataInRegisters(sensor, channelSaveBF);
+    return b;
 }
 
 
@@ -118,7 +119,7 @@ void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, ui
 }
 
 
-bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, TLx493D_MeasurementType_t val) {
+bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, uint8_t channelSaveBF, TLx493D_MeasurementType_t val) {
     uint8_t channel = 0;
 
     switch(val) {
@@ -148,6 +149,7 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, TLx493D_
     }
 
     tlx493d_common_setBitfield(sensor, channelBF, channel);
+    tlx493d_common_setBitfield(sensor, channelSaveBF, channel);
     return tlx493d_common_writeRegister(sensor, channelBF);
 }
 

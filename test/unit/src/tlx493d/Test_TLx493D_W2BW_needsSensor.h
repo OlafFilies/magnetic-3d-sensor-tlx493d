@@ -279,7 +279,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigSensitivityFunctionality)
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) == true );
     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X2_e) == 0x01 );
-    TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X4_READABLE_e) == 0x01 );
+    TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X4_READWRITE_e) == 0x01 );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 4.0, sf );
@@ -288,7 +288,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigSensitivityFunctionality)
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) == true );
     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X2_e) == 0x01 );
-    TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X4_READABLE_e) == 0x00 );
+    TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X4_READWRITE_e) == 0x00 );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 2.0, sf );
@@ -297,7 +297,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigSensitivityFunctionality)
     TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
     TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
     TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X2_e) == 0x00 );
-    TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X4_READABLE_e) == 0x00 );
+    TEST_ASSERT( tlx493d_common_returnBitfield(&dut, W2BW_X4_READWRITE_e) == 0x00 );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 1.0, sf );

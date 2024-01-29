@@ -242,7 +242,7 @@ typedef bool (*TLx493D_GetMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, doubl
 
 // functions related to the "Config" register
 typedef bool (*TLx493D_SetMeasurementFuncPtr)(TLx493D_t *, TLx493D_MeasurementType_t);
-typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_t *, uint8_t);
+typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_t *, TLx493D_TriggerType_t);
 typedef bool (*TLx493D_SetSetSensitivityFuncPtr)(TLx493D_t *, TLx493D_SensitivityType_t);
 
 
