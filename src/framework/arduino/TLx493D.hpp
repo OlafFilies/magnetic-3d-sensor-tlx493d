@@ -31,7 +31,7 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         typedef typename TwoWireWrapper::BusType  BusType;
 
  
-        TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
+        explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
             tlx493d_init(&sensor, sensorType);
         }
 
@@ -148,7 +148,7 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         typedef typename SPIClassWrapper::BusType  BusType;
 
  
-        TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
+        explicit TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
             tlx493d_init(&sensor, sensorType);
         }
 

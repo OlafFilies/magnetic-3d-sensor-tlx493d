@@ -3,17 +3,29 @@
 
 
 // std includes
-#include <stdarg.h>
+// #include <stdarg.h>
 
 
 #ifdef __cplusplus
 
+#include <cstdarg>
+
+using TLx493D_t = struct TLx493D_t;
+
 extern "C" {
+
+#else
+
+#include <stdarg.h>
+
+typedef struct TLx493D_t  TLx493D_t;
 
 #endif
 
 
-typedef struct TLx493D_t  TLx493D_t;
+// typedef struct TLx493D_t  TLx493D_t;
+// using TLx493D_t = struct TLx493D_t;
+
 
 /**
  * @brief The function `printRegisters` prints out all the internal registers of the

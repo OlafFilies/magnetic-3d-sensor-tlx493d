@@ -239,6 +239,11 @@ bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 
 
 bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
+
+    // sensor->comInterface.comLibParams.spi_params.dummy = (val == TLx493D_BzTemp_e ? 0x04 : 0x00);
+
+    tlx493d_setReadAddress(sensor, val == TLx493D_BzTemp_e ? 0x04 : 0x00);
+
     return tlx493d_gen_3_setMeasurement(sensor, P3I8_CHANNEL_SEL_e, P3I8_CHANNEL_SEL_SAVE_e, val);
 }
 
@@ -421,7 +426,7 @@ bool TLx493D_P3I8_hasValidTBit(TLx493D_t *sensor) {
 
 
 void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
-    sensor->regMap[0x0A] = 0x02; // MOD1
+    sensor->regMap[0x0A] = 0x62; // MOD1
     sensor->regMap[0x0B] = 0x00; // MOD2
 
     // for wake-up parity calculation
@@ -433,6 +438,9 @@ void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x11] = 0x80;
     sensor->regMap[0x12] = 0xCC;
     sensor->regMap[0x13] = 0x2C;
+
+    // P3I8_CHANNEL_SEL_SAVE_e
+    sensor->regMap[0x1B] = 0x00;
 }
 
 

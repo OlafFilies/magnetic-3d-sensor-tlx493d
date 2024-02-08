@@ -440,6 +440,9 @@ void TLx493D_W2BW_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x11] = 0x80; // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
     sensor->regMap[0x13] = 0x00; // MOD2
     sensor->regMap[0x14] = 0x00; // CONFIG2
+
+    // W2BW_X4_READWRITE_e
+    sensor->regMap[0x17] = 0x00;
 }
 
 

@@ -10,9 +10,11 @@
 
 
 // SPI
-#define TLX493D_SPI_READ_WRITE_BIT        0x80
+// #define TLX493D_SPI_READ_WRITE_BIT        0x80
+// #define TLX493D_SPI_READ_BIT_ON           0x84
+#define TLX493D_SPI_READ_BIT              0x80
 #define TLX493D_SPI_READ_BIT_ON           0x80
-#define TLX493D_SPI_WRITE_BIT_OFF         0x00
+#define TLX493D_SPI_READ_BIT_OFF          0x00
 
 #define TLX493D_SPI_AUTO_INC_BIT          0x60
 #define TLX493D_SPI_AUTO_INC_BIT_ON       0x60
@@ -25,7 +27,7 @@ class SPIClassWrapper {
 
         typedef SPIClass BusType;
 
-        SPIClassWrapper(SPIClass &bus) : spi(bus) {
+        explicit SPIClassWrapper(SPIClass &bus) : spi(bus) {
         }
 
 
@@ -39,10 +41,10 @@ class SPIClassWrapper {
         }
 
 
-        bool transfer(uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
-            uint8_t bytesWritten = 0;
-
+        bool transfer(uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen, uint8_t readAddress) {
              if( (txLen > 0) && (txBuffer != NULL) ) {
+                uint8_t bytesWritten = 0;
+
                 for(; bytesWritten < txLen; ++bytesWritten) {
                     spi.transfer(txBuffer[bytesWritten]);
                 }
@@ -54,10 +56,10 @@ class SPIClassWrapper {
 
             if( (rxLen > 0)  && (rxBuffer != NULL) ) {
                 uint16_t bytesRead = 0;
-                spi.transfer(TLX493D_SPI_READ_BIT_ON);
+                spi.transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
 
                 for(; bytesRead < rxLen; ++bytesRead) {
-                    rxBuffer[bytesRead] = spi.transfer(TLX493D_SPI_READ_BIT_ON);
+                    rxBuffer[bytesRead] = spi.transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
                 }
 
                 if( bytesRead != rxLen ) {

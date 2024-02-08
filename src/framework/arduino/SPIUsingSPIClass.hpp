@@ -19,7 +19,7 @@
 #include "tlx493d_types.h"
 
 
-extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
+// extern "C" bool tlx493d_transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
 
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi);
 bool tlx493d_initCommunication(TLx493D_t *sensor, SPIClass &spi);

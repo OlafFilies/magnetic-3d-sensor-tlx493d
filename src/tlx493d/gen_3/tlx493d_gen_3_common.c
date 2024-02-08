@@ -17,7 +17,9 @@
 
 void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF) {
     uint8_t channel = tlx493d_common_returnBitfield(sensor, channelSaveBF);
-// print("channel : %x\n", channel);
+    
+    // print("channel : %x\n", channel);
+    // printRegisters(sensor);
 
     uint8_t offset = 0;
 
@@ -37,12 +39,12 @@ void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF
         default : return;
     }
 
-// printRegisters(sensor);
     uint8_t regCopy[sensor->regMapSize];
     memcpy(regCopy, sensor->regMap, sensor->regMapSize);
     memcpy(sensor->regMap + offset + 4, regCopy + offset, sensor->regMapSize - offset - 4);
     memset(sensor->regMap + offset, 0, 4);
-// printRegisters(sensor);
+ 
+    // printRegisters(sensor);
 }
 
 
@@ -150,6 +152,11 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, uint8_t 
 
     tlx493d_common_setBitfield(sensor, channelBF, channel);
     tlx493d_common_setBitfield(sensor, channelSaveBF, channel);
+
+    // if( sensor->regMap[0x0B] != sensor->regMap[0x1B] ) {
+    //     error("CHANNEL != CHANNEL_SAVE !! %x <-> %x\n", sensor->regMap[0x0B], sensor->regMap[0x1B]);
+    // }
+
     return tlx493d_common_writeRegister(sensor, channelBF);
 }
 

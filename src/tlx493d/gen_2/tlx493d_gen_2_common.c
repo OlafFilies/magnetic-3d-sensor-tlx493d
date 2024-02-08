@@ -396,8 +396,8 @@ bool tlx493d_gen_2_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t cp
 
 
 bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold12Bits) {
-    TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
-    TLx493D_Register_t *lsbs = &sensor->regDef[lsbsBF];
+    TLx493D_Register_t const *msbs = &sensor->regDef[msbsBF];
+    TLx493D_Register_t const *lsbs = &sensor->regDef[lsbsBF];
 
     int16_t thresh11Bits = threshold12Bits >> 1;
 
