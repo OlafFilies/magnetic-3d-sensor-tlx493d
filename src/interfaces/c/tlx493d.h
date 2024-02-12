@@ -404,7 +404,7 @@ bool tlx493d_disableWakeUpMode(TLx493D_t *sensor);
 bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th,
                                           int16_t zl_th, int16_t zh_th);
 
-// TODO: Rework - new parameter temp
+// TODO(jensb): Rework - new parameter temp
 /**
  * @brief The function `tlx493d_setWakeUpThresholds` sets the wake-up thresholds for the TLx493D sensor in mT.
  * It sets the lower and upper threshold for each of three axis in mT. If one of these thresholds is exceeded the sensor

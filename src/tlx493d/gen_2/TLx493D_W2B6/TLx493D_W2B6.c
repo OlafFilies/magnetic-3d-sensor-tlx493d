@@ -304,6 +304,7 @@ bool TLx493D_W2B6_isFunctional(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2B6_hasWakeUp(TLx493D_t *sensor) {
+    (void) sensor;
     return true;
 }
 

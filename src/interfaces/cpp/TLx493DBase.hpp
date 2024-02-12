@@ -3,8 +3,8 @@
 
 
 // std includes
-#include <stdbool.h>
-#include <stdint.h>
+// #include <stdbool.h>
+#include <cstdint>
 
 // project cpp includes
 #include "types.hpp"
@@ -404,7 +404,7 @@ class TLx493DBase {
             return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
         }
 
-        //TODO: Rework - new parameter temp
+        //TODO(jensb): - Rework - new parameter temp
         /**
          * @brief The function `setWakeUpThresholds` sets the wake-up thresholds for the TLx493D sensor in mT.
          * It sets the lower and upper threshold for each of three axis in mT. If one of these thresholds is exceeded the sensor
@@ -561,20 +561,12 @@ template<typename BoardSupportClass, typename BusWrapper, TLx493D_SupportedSenso
 
     private:
 
-        typedef typename BusWrapper::BusType  BusType;
-        
-        /**
-         * @brief The function `TLx493D` is the constructor of the template class.
-         * 
-         */
-        TLx493D();
+        // typedef typename BusWrapper::BusType  BusType;
+        using BusType = typename BusWrapper::BusType;
 
-        /**
-         * @brief The function `TLx493D` is the overloaded constructor of the template class.
-         * 
-         * @param[in] c Bus type of the uses sensor.
-         */
-        TLx493D(BusType &c);
+
+        TLx493D();
+        explicit TLx493D(BusType &c);
 };
 
 #endif // TLX493D_BASE_HPP

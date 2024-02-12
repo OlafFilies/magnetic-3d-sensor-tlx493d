@@ -74,6 +74,9 @@ TLx493D_Register_t TLx493D_P3B6_regDef[] = {
     { /* P3B6_CHIP_ID_4_e, */     TLx493D_READ_MODE_e,        0x19, 0xFF, 0, 8 },
     { /* P3B6_ID_PAR_e, */        TLx493D_READ_MODE_e,        0x1A, 0x40, 6, 1 },
     { /* P3B6_CHIP_ID_5_e, */     TLx493D_READ_MODE_e,        0x1A, 0x3F, 0, 6 },
+
+    /* From here on fields to be saved for proper handling of skip@read are listed. These are not part of the registers set !*/
+    { /* P3B6_CHANNEL_SEL_SAVE_e, */ TLx493D_READ_WRITE_MODE_e,  0x1B, 0xF0, 4, 4 },
 };
 
 
@@ -171,7 +174,7 @@ bool TLx493D_P3B6_deinit(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3B6_readRegisters(TLx493D_t *sensor) {
-    return tlx493d_gen_3_readRegisters(sensor, P3B6_CHANNEL_SEL_e);
+    return tlx493d_gen_3_readRegisters(sensor, P3B6_CHANNEL_SEL_SAVE_e);
 }
 
 
@@ -238,7 +241,7 @@ bool TLx493D_P3B6_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 
 
 bool TLx493D_P3B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
-    return tlx493d_gen_3_setMeasurement(sensor, P3B6_CHANNEL_SEL_e, val);
+    return tlx493d_gen_3_setMeasurement(sensor, P3B6_CHANNEL_SEL_e, P3B6_CHANNEL_SEL_SAVE_e, val);
 }
 
 
@@ -322,6 +325,7 @@ bool TLx493D_P3B6_isFunctional(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3B6_hasWakeUp(TLx493D_t *sensor) {
+    (void) sensor;
     return true;
 }
 

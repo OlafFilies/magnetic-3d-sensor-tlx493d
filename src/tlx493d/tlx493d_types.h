@@ -151,6 +151,7 @@ typedef struct TLx493D_Register_t {
 
 
 typedef bool (*TLx493D_OneParamsFuncPtr)(TLx493D_t *sensor);
+typedef void (*TLx493D_SetReadAddressFuncPtr)(TLx493D_t *sensor, uint8_t address);
 typedef bool (*TLx493D_TransferFuncPtr)(TLx493D_t *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 
@@ -179,6 +180,11 @@ typedef struct TLx493D_ComLibraryFunctions_t {
         TLx493D_TransferFuncPtr  spi_transfer;
         TLx493D_TransferFuncPtr  iic_transfer;
     } transfer;
+
+    union {
+        TLx493D_SetReadAddressFuncPtr  spi_setReadAddress;
+        TLx493D_SetReadAddressFuncPtr  iic_setReadAddress;
+    } setReadAddress;
 } TLx493D_ComLibraryFunctions_t;
 
 
@@ -198,7 +204,6 @@ typedef struct TLx493D_CommunicationInterface_t {
     TLx493D_ComLibraryFunctions_t   *comLibFuncs;
     TLx493D_ComLibraryParameters_t   comLibParams;
     TLx493D_ComLibraryObject_t       comLibObj;
-    // bool                             isToBeDeleted;
 } TLx493D_CommunicationInterface_t;
 
 
@@ -211,7 +216,6 @@ typedef struct TLx493D_BoardSupportInterface_t {
     // TLx493D_BoardSupportFunctions_t   *boardSupportFuncs;
     // TLx493D_BoardSupportParameters_t   boardSupportParams;
     TLx493D_BoardSupportObject_t       boardSupportObj;
-    // bool                               isToBeDeleted;
 } TLx493D_BoardSupportInterface_t;
 
 
@@ -242,7 +246,7 @@ typedef bool (*TLx493D_GetMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, doubl
 
 // functions related to the "Config" register
 typedef bool (*TLx493D_SetMeasurementFuncPtr)(TLx493D_t *, TLx493D_MeasurementType_t);
-typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_t *, uint8_t);
+typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_t *, TLx493D_TriggerType_t);
 typedef bool (*TLx493D_SetSetSensitivityFuncPtr)(TLx493D_t *, TLx493D_SensitivityType_t);
 
 

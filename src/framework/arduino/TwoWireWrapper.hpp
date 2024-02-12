@@ -15,7 +15,7 @@ class TwoWireWrapper {
 
         typedef TwoWire BusType;
 
-        TwoWireWrapper(TwoWire &bus) : iic(bus) {
+        explicit TwoWireWrapper(TwoWire &bus) : iic(bus) {
         }
 
 

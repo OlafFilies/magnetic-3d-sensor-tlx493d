@@ -32,15 +32,8 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         typedef TwoWireWrapper                    BusWrapperType;
         typedef typename TwoWireWrapper::BusType  BusType;
 
-        /**
-         * @brief The function `TLx493D` is the constructor of the template class.
-         * It is calling the corresponding common initialization function of the sensor, depending
-         * on the chosen parameters in the constructor.
-         * 
-         * @param[in] bus       Bus type of the used sensor
-         * @param[in] iicAdr    I2C Address of the sensor, by default address A0 is chosen.
-         */
-        TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
+ 
+        explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
             tlx493d_init(&sensor, sensorType);
         }
 
@@ -256,12 +249,8 @@ template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
         typedef SPIClassWrapper                    BusWrapperType;
         typedef typename SPIClassWrapper::BusType  BusType;
 
-        /**
-         * @brief The function `TLx493D` is the constructor of the template class.
-         * 
-         * @param[in] bus Bus type of the chosen sensor.
-         */
-        TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
+ 
+        explicit TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
             tlx493d_init(&sensor, sensorType);
         }
 

@@ -63,8 +63,8 @@
 
         Rel_R(bsc, bscIF, "implements")
         Rel_R(comLib, comLibIF, "implements")
+        Rel(comLib, bsc, "uses", $tags="async")
 
-        Rel_R(sensorBlock, bscIF, "uses (tbd)", $tags="async")
         Rel_R(sensorBlock, comLibIF, "uses")
     }
 

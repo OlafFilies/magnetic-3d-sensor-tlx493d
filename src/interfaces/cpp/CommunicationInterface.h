@@ -18,6 +18,7 @@ typedef struct TLx493D_t  TLx493D_t;
 
 
 bool tlx493d_transfer(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen);
+void tlx493d_setReadAddress(TLx493D_t *sensor, uint8_t address);
 
 
 #ifdef __cplusplus

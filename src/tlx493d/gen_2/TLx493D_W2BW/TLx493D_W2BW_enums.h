@@ -49,6 +49,7 @@ typedef enum {
                 W2BW_X4_e,
                 W2BW_TYPE_e,
                 W2BW_HWV_e,
+                W2BW_X4_READWRITE_e,
 } TLx493D_W2BW_registerNames_te;
 
 
