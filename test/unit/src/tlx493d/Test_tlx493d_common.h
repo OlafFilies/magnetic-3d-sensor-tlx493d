@@ -119,16 +119,16 @@ TEST_IFX(SensorsCommon, checkParityFunctionality)
 
 TEST_IFX(SensorsCommon, checkConcatBytes)
 {
-    typedef enum {
-                MSB0 = 0,
-                MSB1,
-                MSB2,
-                MSB3,
-                LSB0,
-                LSB1,
-                LSB2,
-                LSB3,
-    } registerNames_te;
+    enum {
+            MSB0 = 0,
+            MSB1,
+            MSB2,
+            MSB3,
+            LSB0,
+            LSB1,
+            LSB2,
+            LSB3,
+    } registerNames;
 
 
     TLx493D_Register_t regDef[] = {

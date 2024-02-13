@@ -2,25 +2,26 @@
 #include "TLx493D_inc.hpp"
 
 
-/** Definiton of the power up pin for Kits2GO */
-#define POWER_PIN_HIGH 15
+const uint8_t POWER_PIN = LED2;
+
 
 TLx493D_t dut;
+
 
 void setup() {
     Serial.begin(115200);
     delay(3000);
 
     /** Setting the defined power up pin as input and enabling it */
-    pinMode(POWER_PIN_HIGH, OUTPUT);
-    digitalWrite(POWER_PIN_HIGH, HIGH);
+    pinMode(POWER_PIN, OUTPUT);
+    digitalWrite(POWER_PIN, HIGH);
 
     /** Initialization of the sensor and the communication interface.
      *  After that the default configuration of the sensor is set. This means
      *  1-Byte read mode and interrupt disabled.
      */
     tlx493d_init(&dut, TLx493D_P2B6_e);
-    tlx493d_initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
+    ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
     tlx493d_setDefaultConfig(&dut);
 
     Serial.println("setup done.");

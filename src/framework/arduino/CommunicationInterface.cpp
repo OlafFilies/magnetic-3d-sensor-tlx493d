@@ -13,8 +13,8 @@
 // sensor specific includes
 
 // project cpp includes
-// #include "IICUsingTwoWire.hpp"
-// #include "SPIUsingSPIClass.hpp"
+#include "IICUsingTwoWire.hpp"
+#include "SPIUsingSPIClass.hpp"
 
 
 extern "C" bool tlx493d_transfer(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
@@ -38,29 +38,34 @@ extern "C" void tlx493d_setReadAddress(TLx493D_t *sensor, uint8_t address) {
 }
 
 
-void tlx493d_deinitCommunication(TLx493D_t *sensor) {
-    if( sensor->comIFType == TLx493D_I2C_e ) {
-        // sensor->comInterface.comLibObj.iic_obj->wire->deinit();
-        sensor->comInterface.comLibFuncs->deinit.iic_deinit(sensor);
+namespace ifx {
+    namespace tlx493d {
+        void deinitCommunication(TLx493D_t *sensor) {
+        // void tlx493d_deinitCommunication(TLx493D_t *sensor) {
+            if( sensor->comIFType == TLx493D_I2C_e ) {
+                // sensor->comInterface.comLibObj.iic_obj->wire->deinit();
+                sensor->comInterface.comLibFuncs->deinit.iic_deinit(sensor);
 
-        if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
-            delete sensor->comInterface.comLibObj.iic_obj->wire;
+                if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
+                    delete sensor->comInterface.comLibObj.iic_obj->wire;
+                }
+
+                free(sensor->comInterface.comLibObj.iic_obj);
+                sensor->comInterface.comLibObj.iic_obj = NULL;
+            }
+            else if( sensor->comIFType == TLx493D_SPI_e ) {
+                // sensor->comInterface.comLibObj.spi_obj->spi->deinit();
+                sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
+
+                if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
+                    delete sensor->comInterface.comLibObj.spi_obj->spi;
+                }
+
+                free(sensor->comInterface.comLibObj.spi_obj);
+                sensor->comInterface.comLibObj.spi_obj = NULL;
+            }
+
+            sensor->comInterface.comLibFuncs = NULL;
         }
-
-        free(sensor->comInterface.comLibObj.iic_obj);
-        sensor->comInterface.comLibObj.iic_obj = NULL;
     }
-    else if( sensor->comIFType == TLx493D_SPI_e ) {
-        // sensor->comInterface.comLibObj.spi_obj->spi->deinit();
-        sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
-
-        if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
-            delete sensor->comInterface.comLibObj.spi_obj->spi;
-        }
-
-        free(sensor->comInterface.comLibObj.spi_obj);
-        sensor->comInterface.comLibObj.spi_obj = NULL;
-    }
-
-    sensor->comInterface.comLibFuncs = NULL;
 }

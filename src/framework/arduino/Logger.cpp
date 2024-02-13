@@ -14,7 +14,27 @@
 #include "tlx493d_types.h"
 
 
-#define BUFFER_SIZE  512
+namespace ifx {
+    namespace tlx493d {
+        const uint16_t LOGGER_BUFFER_SIZE = 512;
+
+        static void logMessage(const char *prefix, const char *format, va_list vaList) {
+            char buffer[LOGGER_BUFFER_SIZE];
+
+            size_t prefixSize = strlen(prefix);
+            memcpy(buffer, prefix, prefixSize);
+            int ret = vsprintf(buffer + prefixSize, format, vaList);
+
+            if( (ret + prefixSize) > LOGGER_BUFFER_SIZE ) {
+                Serial.print("FATAL : Buffer overflow (> ");
+                Serial.print(LOGGER_BUFFER_SIZE);
+                Serial.println(" characters) because message too long !\n");
+            }
+
+            Serial.println(buffer);
+        }
+    }
+}
 
 
 extern "C" {
@@ -35,27 +55,10 @@ extern "C" {
     }
 
 
-    void logMessage(const char *prefix, const char *format, va_list vaList) {
-        char buffer[BUFFER_SIZE];
-
-        size_t prefixSize = strlen(prefix);
-        memcpy(buffer, prefix, prefixSize);
-        int ret = vsprintf(buffer + prefixSize, format, vaList);
-
-        if( (ret + prefixSize) > BUFFER_SIZE ) {
-            Serial.print("FATAL : Buffer overflow (> ");
-            Serial.print(BUFFER_SIZE);
-            Serial.println(" characters) because message too long !\n");
-        }
-
-        Serial.println(buffer);
-    }
-
-
     void print(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
-        logMessage("", format, ap);
+        ifx::tlx493d::logMessage("", format, ap);
         va_end(ap);
     }
 
@@ -63,7 +66,7 @@ extern "C" {
     void info(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
-        logMessage("INFO : ", format, ap);
+        ifx::tlx493d::logMessage("INFO : ", format, ap);
         va_end(ap);
     }
 
@@ -71,7 +74,7 @@ extern "C" {
     void warn(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
-        logMessage("WARNING : ", format, ap);
+        ifx::tlx493d::logMessage("WARNING : ", format, ap);
         va_end(ap);
     }
 
@@ -79,7 +82,7 @@ extern "C" {
     void error(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
-        logMessage("ERROR : ", format, ap);
+        ifx::tlx493d::logMessage("ERROR : ", format, ap);
         va_end(ap);
     }
 

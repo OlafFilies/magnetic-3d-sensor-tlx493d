@@ -28,7 +28,23 @@ void tlx493d_setReadAddress(TLx493D_t *sensor, uint8_t address);
 #endif
 
 
-void tlx493d_deinitCommunication(TLx493D_t *sensor);
+#ifdef __cplusplus
+
+namespace ifx {
+    namespace tlx493d {
+
+#endif
+
+
+void deinitCommunication(TLx493D_t *sensor);
+
+
+#ifdef __cplusplus
+
+    }
+}
+
+#endif
 
 
 #endif // TLX493D_COMMUNICATION_INTERFACE_H

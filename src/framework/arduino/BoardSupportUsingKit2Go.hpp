@@ -19,8 +19,13 @@
 #include "tlx493d_types.h"
 
 
-bool tlx493d_initBoardSupport(TLx493D_t *sensor, Kit2GoBoardSupport &bsc);
-// extern "C" bool tlx493d_initBoardSupport(TLx493D_t *sensor);
+namespace ifx {
+    namespace tlx493d {
+    bool initBoardSupport(TLx493D_t *sensor, Kit2GoBoardSupport &bsc);
+
+    // bool tlx493d_initBoardSupport(TLx493D_t *sensor);
+    }
+}
 
 
 #endif // TLX493D_BOARD_SUPPORT_USING_KIT2GO_HPP

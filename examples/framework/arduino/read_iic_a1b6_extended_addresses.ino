@@ -5,21 +5,27 @@
 // project cpp includes
 #include "TLx493D_inc.hpp"
 
-#define POWERPIN 8
-#define SDA_ADDR_PIN 7 
+
+using namespace ifx::tlx493d;
+
+
+const uint8_t POWER_PIN       = 8;
+const uint8_t SDA_ADDRESS_PIN = 7 ;
+
 
 // address 0x3E when SDA/ADDR held low at power up
 TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A4_e); //0x3E
+
 
 void setup() {
     delay(3000);
     Serial.begin(115200);
 
     // explicit power pin needed to power up board after the addrPin is pulled down
-    dut.setPowerPin(POWERPIN, OUTPUT, HIGH, LOW, 50, 50);
+    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
     // set pin used to drive SDA/ADDR pin before power up
     // This pin is then isolated from the I2C bus by switching it high-Z before I2C init
-    dut.setAddrPin(SDA_ADDR_PIN, OUTPUT, LOW, HIGH, 1, 1);
+    dut.setAddrPin(SDA_ADDRESS_PIN, OUTPUT, LOW, HIGH, 1, 1);
     
     // Set the sensor constructor to activate extended address switching pin
     dut.begin(true, false, true);
