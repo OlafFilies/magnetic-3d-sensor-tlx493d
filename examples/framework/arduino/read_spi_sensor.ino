@@ -2,8 +2,11 @@
 #include "TLx493D_inc.hpp"
 
 
-/** SPI chip select pin */
-#define CHIP_SELECT_PIN 3
+using namespace ifx::tlx493d;
+
+
+const uint8_t POWER_PIN       = LED2;
+const uint8_t CHIP_SELECT_PIN = 3;
 
 
 TLx493D_P3I8 dut(SPI);
@@ -16,7 +19,7 @@ void setup() {
     /** Setting the power up pin of the Kit2GO as well as the chip select pin for the SPI 
      *  For this we're using the functions of the Board Support Class
      */
-    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
+    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
     dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
     dut.begin();
 

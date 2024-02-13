@@ -1,10 +1,16 @@
 /** Project CPP includes */ 
 #include "TLx493D_inc.hpp"
 
+
+using namespace ifx::tlx493d;
+
+
 /** Declaration of three sensor objects with the same default address (A0). */
 TLx493D_W2B6 dut1(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2B6 dut2(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2B6 dut3(Wire, TLx493D_IIC_ADDR_A0_e);
+
+// TODO(Jens): pull power pin defs out as const uint8_t ...
 
 void setup() {
     delay(3000);

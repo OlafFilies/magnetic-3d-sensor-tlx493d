@@ -43,18 +43,6 @@ void printRegisters(TLx493D_t *sensor);
 void printDouble(double d);
 
 /**
- * @brief The function `logMessage` is used print a formatted, user defined message
- * to the serial output.
- * 
- * @param[in] prefix User defined prefix for a given string which is printed before the actual
- * message. For example "INFO : ", see also at the `info` function below.
- * @param[in] format Actual string, which should be printed to the serial output - without the prefix.
- * @param[in] vaList Variable arguments list, which is initialized by `va_start`. `va_list` is a special
- * type defined in the `stdarg.h`.
- */
-void logMessage(const char *prefix, const char *format, va_list vaList);
-
-/**
  * @brief The function `print` is used to print out a formatted string - without prefix - to the serial output.
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 

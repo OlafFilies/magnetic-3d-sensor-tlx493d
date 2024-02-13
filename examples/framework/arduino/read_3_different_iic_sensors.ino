@@ -1,6 +1,10 @@
 /** Project CPP includes */ 
 #include "TLx493D_inc.hpp"
 
+
+using namespace ifx::tlx493d;
+
+
 /** Declaration of three sensor objects. One of the second generation
  *  and two of the third generation. The two sensors of the third generation
  *  have different default addresses.
@@ -9,6 +13,9 @@ TLx493D_W2BW dut1(Wire, TLx493D_IIC_ADDR_A0_e);
 
 TLx493D_P3B6 dut2(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_P3B6 dut3(Wire, TLx493D_IIC_ADDR_A1_e);
+
+// TODO(Jens): Assign different addresses or change them below ?!
+// TODO(Jens): Need to power up W2BW sensor in setup in order to avoid race condition ! Use pin definition const uint8_t ...
 
 void setup() {
     delay(3000);
@@ -25,9 +32,6 @@ void setup() {
     dut2.begin();
     dut3.begin();
     
-    delay(100);
-    Serial.print("setup done.\n");
-
     delay(100);
     Serial.print("setup done.\n");
 }

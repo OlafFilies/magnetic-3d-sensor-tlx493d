@@ -1,6 +1,13 @@
 /** Project CPP includes */
 #include "TLx493D_inc.hpp"
 
+
+using namespace ifx::tlx493d;
+
+
+const uint8_t POWER_PIN = LED2;
+
+
 /** Definition of the sensor object with the default address of the sensor.
  *  If you want to use any other sensor variant, just comment the active line
  *  and uncomment the desired sensor type.
@@ -8,9 +15,9 @@
 // TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
@@ -21,7 +28,7 @@ void setup() {
     Serial.begin(115200);
 
     /** Definition of the power pin to power up the sensor. */
-    dut.setPowerPin(LED2, OUTPUT, HIGH, LOW, 50, 50);
+    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
     dut.begin();
 
     Serial.print("setup done.\n");

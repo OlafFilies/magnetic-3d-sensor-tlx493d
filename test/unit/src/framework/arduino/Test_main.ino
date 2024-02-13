@@ -2,7 +2,7 @@
 #include "Test_includes.hpp"
 
 
-#define POWER_PIN LED2 // 15
+const uint8_t POWER_PIN = LED2;
 
 
 extern "C" {

@@ -2,28 +2,33 @@
 #include "TLx493D_inc.hpp"
 
 
+using namespace ifx::tlx493d;
+
+
 /** Definition of the upper and lower thresholds in X, Y, Z-direction.
  *  These thresholds define under which conditions the sensor wakes up and triggers his interrupt.
  */
-#define THRESHOLD         (int16_t)200
+const int16_t THRESHOLD = 200;
 
-#define LOWER_THRESHOLD_X  (-THRESHOLD)
-#define LOWER_THRESHOLD_Y  (-THRESHOLD)
-#define LOWER_THRESHOLD_Z  (-THRESHOLD)
+const int16_t LOWER_THRESHOLD_X = -THRESHOLD;
+const int16_t LOWER_THRESHOLD_Y = -THRESHOLD;
+const int16_t LOWER_THRESHOLD_Z = -THRESHOLD;
 
-#define UPPER_THRESHOLD_X  (THRESHOLD)
-#define UPPER_THRESHOLD_Y  (THRESHOLD)
-#define UPPER_THRESHOLD_Z  (THRESHOLD)
+const int16_t UPPER_THRESHOLD_X = THRESHOLD;
+const int16_t UPPER_THRESHOLD_Y = THRESHOLD;
+const int16_t UPPER_THRESHOLD_Z = THRESHOLD;
 
 /** Definition of the interrupt pin, which will detected the triggered interrupt.
  *  Please be aware that you have to change the pin according to your setup.
  *  Here a XCM1100-XMC2GO is used as microcontroller.
  */
-#define INTERRUPT_PIN  9
+const uint8_t INTERRUPT_PIN = 9;
+
 
 TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 bool intTriggered = false;
+
 
 void setup() {
     delay(3000);
