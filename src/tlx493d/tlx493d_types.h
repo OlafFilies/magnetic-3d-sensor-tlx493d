@@ -109,10 +109,19 @@ typedef enum {
 } TLx493D_AvailableSensitivityType_t;
 
 
+// typedef enum {
+//                TLx493D_LOW_POWER_MODE_e = 0,
+//                TLx493D_MASTER_CONTROLLED_MODE_e,
+//                TLx493D_FAST_MODE_e,
+// } TLx493D_PowerModeType_t;
+
+
 typedef enum {
-               TLx493D_LOW_POWER_MODE_e = 0,
-               TLx493D_MASTER_CONTROLLED_MODE_e,
+               TLx493D_POWER_DOWN_MODE_e = 0,
                TLx493D_FAST_MODE_e,
+               TLx493D_LOW_POWER_MODE_e,
+               TLx493D_ULTRA_LOW_POWER_MODE_e,
+               TLx493D_MASTER_CONTROLLED_MODE_e,
 } TLx493D_PowerModeType_t;
 
 

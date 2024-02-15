@@ -21,9 +21,9 @@
 
 namespace ifx {
     namespace tlx493d {
-    bool initBoardSupport(TLx493D_t *sensor, Kit2GoBoardSupport &bsc);
+        bool initBoardSupport(TLx493D_t *sensor, Kit2GoBoardSupport &bsc);
 
-    // bool tlx493d_initBoardSupport(TLx493D_t *sensor);
+        // bool tlx493d_initBoardSupport(TLx493D_t *sensor);
     }
 }
 

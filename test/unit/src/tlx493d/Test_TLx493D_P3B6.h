@@ -63,23 +63,23 @@ TEST_IFX(TLx493D_P3B6_internal, checkSupportedFunctionality)
 TEST_IFX(TLx493D_P3B6_internal, checkResetValues)
 {
     for(uint8_t i = 0; i < dut.regMapSize; ++i) {
-        TEST_ASSERT( dut.regMap[i] == 0 );
+        TEST_ASSERT_EQUAL_HEX8( 0, dut.regMap[i] );
     }
 
     dut.functions->setResetValues(&dut);
 
-    TEST_ASSERT( dut.regMap[0x0A] == 0x62 ); // MOD1
-    TEST_ASSERT( dut.regMap[0x0B] == 0x00 ); // MOD2
+    TEST_ASSERT_EQUAL_HEX8( 0x62, dut.regMap[0x0A] ); // MOD1
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[0x0B] ); // MOD2
 
     // for wake-up parity calculation
-    TEST_ASSERT( dut.regMap[0x0C] == 0x7F );
-    TEST_ASSERT( dut.regMap[0x0D] == 0x80 );
-    TEST_ASSERT( dut.regMap[0x0E] == 0x7F );
-    TEST_ASSERT( dut.regMap[0x0F] == 0x80 );  
-    TEST_ASSERT( dut.regMap[0x10] == 0x7F );
-    TEST_ASSERT( dut.regMap[0x11] == 0x80 );
-    TEST_ASSERT( dut.regMap[0x12] == 0xCC );
-    TEST_ASSERT( dut.regMap[0x13] == 0x2C );
+    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x0C] );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x0D] );
+    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x0E] );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x0F] );  
+    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x10] );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x11] );
+    TEST_ASSERT_EQUAL_HEX8( 0xCC, dut.regMap[0x12] );
+    TEST_ASSERT_EQUAL_HEX8( 0x2C, dut.regMap[0x13] );
 }
 
 

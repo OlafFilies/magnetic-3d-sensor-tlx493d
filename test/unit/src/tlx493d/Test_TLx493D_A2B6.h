@@ -78,14 +78,14 @@ TEST_IFX(TLx493D_A2B6_internal, checkSupportedFunctionality)
 TEST_IFX(TLx493D_A2B6_internal, checkResetValues)
 {
     for(uint8_t i = 0; i < dut.regMapSize; ++i) {
-        TEST_ASSERT( dut.regMap[i] == 0 );
+        TEST_ASSERT_EQUAL_HEX8( 0, dut.regMap[i] );
     }
 
     dut.functions->setResetValues(&dut);
 
-    TEST_ASSERT( dut.regMap[0x10] == 0x00 ); // CONFIG
-    TEST_ASSERT( dut.regMap[0x11] == 0x00 ); // MOD1
-    TEST_ASSERT( dut.regMap[0x13] == 0x00 ); // MOD2
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[0x10] ); // CONFIG
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[0x11] ); // MOD1
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[0x13] ); // MOD2
 }
 
 

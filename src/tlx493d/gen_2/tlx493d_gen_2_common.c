@@ -129,7 +129,8 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivit
     switch(availSens) {
         case TLx493D_HAS_X1_e : return val == TLx493D_FULL_RANGE_e;
     
-        case TLx493D_HAS_X2_e : return tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1);
+        case TLx493D_HAS_X2_e : return val == TLx493D_HAS_X4_e ? false
+                                                               : tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1);
     
         // case TLx493D_HAS_X4_e : {  
         //                             switch(val) {

@@ -28,6 +28,7 @@ namespace ifx {
         class Kit2GoBoardSupport {
 
             public:
+            
                 /**
                  * Create a new Kit2GoBoardSupport object with initialised datastructures of type PinCtrl to hold parameters for powerPins, selectPins
                  * and addrPins.
@@ -35,6 +36,7 @@ namespace ifx {
                  */
                 Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0}, addrPins{false, 0, 0, 0, 0, 0, 0} {
                 }
+
                 /**
                  * @brief The function `init` sets/resets the board pin modes and/or values based on the values of the datastructures set in the main code.  
                  * 
@@ -206,6 +208,7 @@ namespace ifx {
 
 
             private:
+
                 /**
                 * A structure to represent pins with all necessary parameters. 
                 */
