@@ -7,14 +7,11 @@ $(info PORT : $(PORT))
 
 
 # TEST_COMMON=-DTEST_SENSORS_COMMON \
-# 			-DTEST_SENSORS_GEN_1_COMMON \
-# 			-DTEST_SENSORS_GEN_2_COMMON \
-# 			-DTEST_SENSORS_GEN_3_COMMON
+# 		      -DTEST_SENSORS_GEN_1_COMMON \
+# 			  -DTEST_SENSORS_GEN_2_COMMON \
+# 			  -DTEST_SENSORS_GEN_3_COMMON
 
-# TEST_COMMON_NEEDS_SENSOR=-DTEST_SENSORS_COMMON_NEEDS_SENSOR \
-# 						 -DTEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR \
-# 						 -DTEST_SENSORS_GEN_2_COMMON_NEEDS_SENSOR \
-# 			 			 -DTEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
+# TEST_COMMON_NEEDS_SENSOR=-DTEST_SENSORS_COMMONFUNCTIONS_NEEDS_SENSOR 
 
 TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
                    -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
@@ -75,8 +72,8 @@ test: TESTS=$(TESTS_NO_SENSOR)
 
 test_all \
 test_needsSensor \
-test: unity compile
-#flash
+test: unity flash
+#test: unity compile
 
 
 EXAMPLES = iic_plain_c iic iic_with_wakeup 3iic 3iic_equal iic_ext_addr spi
@@ -86,7 +83,7 @@ EXAMPLES = iic_plain_c iic iic_with_wakeup 3iic 3iic_equal iic_ext_addr spi
 
 ### Arduino targets
 clean:
-	-rm -rf build/* cppcheck_reports
+	-rm -rf build/* cppcheck_reports build.ino.*elf.* ./-lm.res log log.[0-9]*
 	find . -name '*ctu-info' -exec \rm {} \;
 
 
