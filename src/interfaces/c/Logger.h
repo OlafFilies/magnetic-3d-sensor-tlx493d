@@ -33,7 +33,7 @@ typedef struct TLx493D_t  TLx493D_t;
  * 
  * @param[in,out] sensor A pointer to a TLx493D_t structure, which represents the TLx493D sensor.
  */
-void printRegisters(TLx493D_t *sensor);
+void printRegisters(TLx493D_t *sensor, const char *headLine);
 
 /**
  * @brief The function `printDouble` prints out a value in the double format. 

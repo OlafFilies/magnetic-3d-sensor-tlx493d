@@ -31,19 +31,22 @@ namespace ifx {
                 Serial.println(" characters) because message too long !\n");
             }
 
-            Serial.println(buffer);
+            Serial.print(buffer);
         }
     }
 }
 
 
 extern "C" {
-    void printRegisters(TLx493D_t *sensor) {
-        Serial.print("\nregMap :"); 
+    void printRegisters(TLx493D_t *sensor, const char *headLine = NULL) {
+        Serial.println();
+        Serial.println(headLine);
+        // Serial.println();
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
-            Serial.print("  0x");
-            Serial.print(sensor->regMap[i], HEX);
+            print("    0x%02X", sensor->regMap[i]);
+            // Serial.print("  0x");
+            // Serial.print(sensor->regMap[i], HEX);
         }
 
         Serial.println();
@@ -89,8 +92,7 @@ extern "C" {
 
     void flush() {
         // USE WITH CAUTION ! DEVICE MAY HANGUP !
-        // Serial.flush();
-        Serial.println();
-
+        Serial.flush();
+        // Serial.println();
     }
 }

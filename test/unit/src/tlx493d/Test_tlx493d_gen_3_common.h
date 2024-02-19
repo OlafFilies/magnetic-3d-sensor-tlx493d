@@ -29,17 +29,17 @@ static TEST_TEAR_DOWN(SensorsGen3Common)
 }
 
 
-// Define all relevant tests for the sensor device
-TEST_IFX(SensorsGen3Common, dummy)
-{
-    TEST_ASSERT( true == !false );
-}
+// // Define all relevant tests for the sensor device
+// TEST_IFX(SensorsGen3Common, dummy)
+// {
+//     TEST_ASSERT( true == !false );
+// }
 
 
 // Bundle all tests to be executed for this test group
 static TEST_GROUP_RUNNER(SensorsGen3Common)
 {
-    RUN_TEST_CASE(SensorsGen3Common, dummy);
+    // RUN_TEST_CASE(SensorsGen3Common, dummy);
 }
 
 

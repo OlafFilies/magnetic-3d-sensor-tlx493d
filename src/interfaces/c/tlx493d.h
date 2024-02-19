@@ -474,6 +474,9 @@ void tlx493d_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t r
                                                     int16_t *x, int16_t *y, int16_t *z);
 
 
+void tlx493d_printRegisters(TLx493D_t *sensor);
+
+
 #ifdef __cplusplus
 
 }

@@ -151,6 +151,8 @@ TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
     .softwareReset                  = TLx493D_A1B6_softwareReset,
 
+    .printRegisters                 = TLx493D_A1B6_printRegisters,
+
     // functions used internally and not accessible through the common interface
     .calculateFuseParity            = TLx493D_A1B6_calculateFuseParity,
     .calculateBusParity             = TLx493D_A1B6_calculateBusParity,
@@ -649,4 +651,9 @@ bool TLx493D_A1B6_transferWriteRegisters(TLx493D_t *sensor) {
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor) {
     TLx493D_Register_t *bf = &sensor->regDef[A1B6_PD_e];
     return ((sensor->regMap[bf->address] & bf->mask) != 0);
+}
+
+
+void TLx493D_A1B6_printRegisters(TLx493D_t *sensor) {
+    printRegisters(sensor, TLX493D_A1B6_REGISTER_HEADLINE); 
 }

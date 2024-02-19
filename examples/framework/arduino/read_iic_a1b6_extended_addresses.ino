@@ -61,7 +61,7 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    printRegisters(dut.getSensor());
+    dut.printRegisters();
     Serial.print("\n");
 
     delay(1000);

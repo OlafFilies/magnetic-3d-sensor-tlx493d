@@ -137,6 +137,8 @@ TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
 
     .softwareReset                  = TLx493D_P3I8_softwareReset,
 
+    .printRegisters                 = TLx493D_P3I8_printRegisters,
+
     // functions used internally and not accessible through the common interface
     .calculateFuseParity            = TLx493D_P3I8_calculateFuseParity,
     .calculateBusParity             = TLx493D_P3I8_calculateBusParity,
@@ -459,4 +461,9 @@ void TLx493D_P3I8_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_P3I8_getSensitivityScaleFactor(TLx493D_t *sensor) {
     return tlx493d_gen_3_getSensitivityScaleFactor(sensor, TLx493D_HAS_X4_e, P3I8_SHORT_EN_e, P3I8_XTR_SHORT_EN_e);
+}
+
+
+void TLx493D_P3I8_printRegisters(TLx493D_t *sensor) {
+    printRegisters(sensor, TLX493D_P3I8_REGISTER_HEADLINE); 
 }

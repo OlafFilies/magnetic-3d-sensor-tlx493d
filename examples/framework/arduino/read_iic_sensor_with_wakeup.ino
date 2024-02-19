@@ -75,7 +75,7 @@ void loop() {
     double temp1 = 0.0;
     double valX1 = 0, valY1 = 0, valZ1 = 0;
 
-    printRegisters(dut.getSensor());
+    dut.printRegisters();
 
     dut.getTemperature(&temp1); 
     dut.getMagneticField(&valX1, &valY1, &valZ1);

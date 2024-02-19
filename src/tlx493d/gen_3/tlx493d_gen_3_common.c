@@ -19,7 +19,7 @@ void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF
     uint8_t channel = tlx493d_common_returnBitfield(sensor, channelSaveBF);
     
     // print("channel : %x\n", channel);
-    // printRegisters(sensor);
+    // tlx493d_printRegisters(sensor);
 
     uint8_t offset = 0;
 
@@ -44,7 +44,7 @@ void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF
     memcpy(sensor->regMap + offset + 4, regCopy + offset, sensor->regMapSize - offset - 4);
     memset(sensor->regMap + offset, 0, 4);
  
-    // printRegisters(sensor);
+    // tlx493d_printRegisters(sensor);
 }
 
 
@@ -70,7 +70,7 @@ void tlx493d_gen_3_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF,
 
 void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, double *temperature) {
     int16_t value = 0;
-// printRegisters(sensor);
+// tlx493d_printRegisters(sensor);
     tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
     *temperature = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_SENSITIVITY) + GEN_3_TEMP_REF;
     // *temperature = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_MULT) + GEN_3_TEMP_REF;
@@ -452,10 +452,17 @@ double tlx493d_gen_3_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availa
 }
 
 
+double tlx493d_gen_3_getSensitivityScaleFactorFromSensitivity(TLx493D_SensitivityType_t sens) {
+    return sens == TLx493D_FULL_RANGE_e ? 1.0
+                                        : (sens == TLx493D_SHORT_RANGE_e ? 2.0 : 4.0);
+}
+
+
 void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,
                                                           int16_t *x, int16_t *y, int16_t *z) {
-    double sf   = sensor->functions->getSensitivityScaleFactor(sensor);
+    // double sf   = sensor->functions->getSensitivityScaleFactor(sensor);
+    double sf   = tlx493d_gen_3_getSensitivityScaleFactorFromSensitivity(sens);
     double temp = (double) rawTemp;
 
     *x = (int16_t) ((xInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x))))

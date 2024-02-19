@@ -1,6 +1,10 @@
 // test includes
 #include "Test_includes.h"
 
+#include "TLx493D_A1B6_defines.h"
+#include "TLx493D_A1B6_enums.h"
+#include "TLx493D_A1B6.h"
+
 
 void TLx493D_A1B6_needsSensor_suiteSetup(void);
 void TLx493D_A1B6_needsSensor_suiteTearDown(void);
@@ -13,7 +17,6 @@ static TLx493D_t dut;
 
 
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
-#include "Test_tlx493d_common_needsSensor.h"
 #include "Test_tlx493d_common.h"
 
 

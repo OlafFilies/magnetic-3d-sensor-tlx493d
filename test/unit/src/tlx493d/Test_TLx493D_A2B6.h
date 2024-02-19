@@ -5,6 +5,10 @@
 #include "Test_includes.h"
 // #include "Test_utils.h"
 
+#include "TLx493D_A2B6_defines.h"
+#include "TLx493D_A2B6_enums.h"
+#include "TLx493D_A2B6.h"
+
 
 void TLx493D_A2B6_suiteSetUp(void);
 void TLx493D_A2B6_suiteTearDown(void);
@@ -51,16 +55,16 @@ TEST_IFX(TLx493D_A2B6_internal, checkUnsupportedFunctionality)
     static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
 
 
-    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == false );
-    TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
-    TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == false );
-    TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == false );
+    TEST_ASSERT_FALSE( dut.functions->hasWakeUp(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->isWakeUpEnabled(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->enableWakeUpMode(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->disableWakeUpMode(&dut) );
 
-    TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) == false );
-    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, t, xh, xl, yh, yl, zh, zl) == false );
+    TEST_ASSERT_FALSE( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) );
+    TEST_ASSERT_FALSE( dut.functions->setWakeUpThresholds(&dut, t, xh, xl, yh, yl, zh, zl) );
 
 
-    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
+    TEST_ASSERT_FALSE( dut.functions->softwareReset(&dut) );
 }
 
 
@@ -70,8 +74,8 @@ TEST_IFX(TLx493D_A2B6_internal, checkUnsupportedFunctionality)
  */
 TEST_IFX(TLx493D_A2B6_internal, checkSupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->init(&dut) == true );
-    TEST_ASSERT( dut.functions->deinit(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->init(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->deinit(&dut) );
 }
 
 

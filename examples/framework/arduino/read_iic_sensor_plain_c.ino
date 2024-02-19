@@ -54,7 +54,7 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    printRegisters(&dut);
+    tlx493d_printRegisters(dut.getSensor());
     Serial.print("\n");
 
     delay(1000);

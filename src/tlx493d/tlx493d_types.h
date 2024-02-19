@@ -313,6 +313,8 @@ typedef double (*TLx493D_GetSensitivityScaleFactorFuncPtr)(TLx493D_t *);
 
 typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(TLx493D_t *, TLx493D_IICAddressType_t);
 
+typedef void (*TLx493D_PrintRegistersFuncPtr)(TLx493D_t *);
+
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
 typedef struct TLx493D_CommonFunctions_t {
@@ -398,6 +400,8 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr  calculateRawMagneticFieldAtTemperature;
 
     TLx493D_GetSensitivityScaleFactorFuncPtr    getSensitivityScaleFactor;
+
+    TLx493D_PrintRegistersFuncPtr               printRegisters;
 } TLx493D_CommonFunctions_t;
 
 

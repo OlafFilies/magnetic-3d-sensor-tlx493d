@@ -188,7 +188,7 @@ TEST_IFX(SensorsCommon, checkGetTypeAsString)
     dut.sensorType = TLx493D_A2B6_e;
     TEST_ASSERT_EQUAL_STRING( "TLx493D_A2B6", tlx493d_common_getTypeAsString(&dut) );
     
-    TEST_ASSERT( tlx493d_init(&dut, (TLx493D_SupportedSensorType_t) 0x19) == false );
+    TEST_ASSERT_FALSE( tlx493d_init(&dut, (TLx493D_SupportedSensorType_t) 0x19) );
 
     dut.sensorType = (TLx493D_SupportedSensorType_t) 0x19;
     TEST_ASSERT_EQUAL_STRING( "ERROR : Unknown sensorType !", tlx493d_common_getTypeAsString(&dut) );

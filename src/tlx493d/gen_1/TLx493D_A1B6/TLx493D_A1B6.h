@@ -139,6 +139,8 @@ void TLx493D_A1B6_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBi
 
 bool TLx493D_A1B6_hasValidPDBit(TLx493D_t *sensor);
 
+void TLx493D_A1B6_printRegisters(TLx493D_t *sensor);
+
 
 #ifdef __cplusplus
 

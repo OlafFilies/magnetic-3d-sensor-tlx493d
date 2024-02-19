@@ -4,6 +4,10 @@
 // test includes
 #include "Test_includes.h"
 
+#include "TLx493D_P3B6_defines.h"
+#include "TLx493D_P3B6_enums.h"
+#include "TLx493D_P3B6.h"
+
 
 void TLx493D_P3B6_suiteSetUp(void);
 void TLx493D_P3B6_suiteTearDown(void);
@@ -51,12 +55,12 @@ TEST_IFX(TLx493D_P3B6_internal, checkUnsupportedFunctionality)
  */
 TEST_IFX(TLx493D_P3B6_internal, checkSupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->init(&dut) == true );
-    TEST_ASSERT( dut.functions->deinit(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->init(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->deinit(&dut) );
 
-    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->hasWakeUp(&dut) );
 
-    // TEST_ASSERT( dut.functions->softwareReset(&dut) == true );
+    // TEST_ASSERT_TRUE( dut.functions->softwareReset(&dut) );
 }
 
 

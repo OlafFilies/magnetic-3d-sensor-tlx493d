@@ -1,4 +1,5 @@
 // std includes
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -628,19 +629,28 @@ double tlx493d_gen_2_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availa
 }
 
 
+double tlx493d_gen_2_getSensitivityScaleFactorFromSensitivity(TLx493D_SensitivityType_t sens) {
+    return sens == TLx493D_FULL_RANGE_e ? 1.0
+                                        : (sens == TLx493D_SHORT_RANGE_e ? 2.0 : 4.0);
+}
+
+
 void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,
                                                           int16_t *x, int16_t *y, int16_t *z) {
-    double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * sensor->functions->getSensitivityScaleFactor(sensor);
+    // double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * sensor->functions->getSensitivityScaleFactor(sensor);
+    double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * tlx493d_gen_2_getSensitivityScaleFactorFromSensitivity(sens);
     
-    *x = (int16_t) (xInmT * scaledSensitivity);
-    *y = yInmT * scaledSensitivity;
-    *z = zInmT * scaledSensitivity;
+    *x = round(xInmT * scaledSensitivity);
+    // *x = (int16_t) (xInmT * scaledSensitivity);
+    *y = round(yInmT * scaledSensitivity);
+    *z = round(zInmT * scaledSensitivity);
 }
 
 
 void tlx493d_gen_2_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature) {
-    *rawTemperature = (int16_t) (((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
+    *rawTemperature = round(((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
+    // *rawTemperature = (int16_t) (((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
 }
 
 

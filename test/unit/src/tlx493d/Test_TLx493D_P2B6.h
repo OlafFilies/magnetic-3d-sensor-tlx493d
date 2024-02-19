@@ -4,6 +4,10 @@
 // test includes
 #include "Test_includes.h"
 
+#include "TLx493D_P2B6_defines.h"
+#include "TLx493D_P2B6_enums.h"
+#include "TLx493D_P2B6.h"
+
 
 void TLx493D_P2B6_suiteSetUp(void);
 void TLx493D_P2B6_suiteTearDown(void);
@@ -41,7 +45,7 @@ static TEST_TEAR_DOWN(TLx493D_P2B6_internal)
 
 TEST_IFX(TLx493D_P2B6_internal, checkUnsupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
+    TEST_ASSERT_FALSE( dut.functions->softwareReset(&dut) );
 }
 
 
@@ -51,10 +55,10 @@ TEST_IFX(TLx493D_P2B6_internal, checkUnsupportedFunctionality)
  */
 TEST_IFX(TLx493D_P2B6_internal, checkSupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->init(&dut) == true );
-    TEST_ASSERT( dut.functions->deinit(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->init(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->deinit(&dut) );
 
-    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->hasWakeUp(&dut) );
 }
 
 

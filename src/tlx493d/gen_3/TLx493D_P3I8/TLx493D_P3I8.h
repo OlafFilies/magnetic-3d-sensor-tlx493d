@@ -99,6 +99,8 @@ void TLx493D_P3I8_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_P3I8_getSensitivityScaleFactor(TLx493D_t *sensor);
 
+void TLx493D_P3I8_printRegisters(TLx493D_t *sensor);
+
 
 #ifdef __cplusplus
 
