@@ -1,4 +1,5 @@
 // std includes
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <string.h>
@@ -465,19 +466,19 @@ void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int
     double sf   = tlx493d_gen_3_getSensitivityScaleFactorFromSensitivity(sens);
     double temp = (double) rawTemp;
 
-    *x = (int16_t) ((xInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x))))
-       / ((GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))) / sf));
+    *x = (int16_t) lround(((xInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0x + temp * (GEN_3_O1x + temp * (GEN_3_O2x + temp * GEN_3_O3x))))
+                         / ((GEN_3_L0x + temp * (GEN_3_L1x + temp * (GEN_3_L2x + temp * GEN_3_L3x))) / sf)));
 
-    *y = (yInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + temp * GEN_3_O3y))))
-       / ((GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + temp * GEN_3_L3y))) / sf);
+    *y = (int16_t) lround((yInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0y + temp * (GEN_3_O1y + temp * (GEN_3_O2y + temp * GEN_3_O3y))))
+                         / ((GEN_3_L0y + temp * (GEN_3_L1y + temp * (GEN_3_L2y + temp * GEN_3_L3y))) / sf));
 
-    *z = (zInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0z + temp * (GEN_3_O1z + temp * (GEN_3_O2z + temp * GEN_3_O3z))))
-       / ((GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + temp * GEN_3_L3z))) / sf);
+    *z = (int16_t) lround((zInmT * GEN_3_FULL_RANGE_FIELD_SENSITIVITY - (GEN_3_O0z + temp * (GEN_3_O1z + temp * (GEN_3_O2z + temp * GEN_3_O3z))))
+                         / ((GEN_3_L0z + temp * (GEN_3_L1z + temp * (GEN_3_L2z + temp * GEN_3_L3z))) / sf));
 }
 
 
 void tlx493d_gen_3_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature) {
-    *rawTemperature = (int16_t) ((temperature - GEN_3_TEMP_REF) * GEN_3_TEMP_SENSITIVITY + GEN_3_TEMP_OFFSET);
+    *rawTemperature = (int16_t) lround((temperature - GEN_3_TEMP_REF) * GEN_3_TEMP_SENSITIVITY + GEN_3_TEMP_OFFSET);
 
 }
 

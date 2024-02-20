@@ -50,6 +50,14 @@ void printDouble(double d);
 void print(const char *format, ...);
 
 /**
+ * @brief The function `println` is used to print out a formatted string - without prefix - to the serial output plus a trailing linefeed.
+ * 
+ * @param[in] format Actual string, which should be printed to the serial output. 
+ * @param[in] ... Actual string, which should be printed to the serial output. 
+*/
+void println(const char *format, ...);
+
+/**
  * @brief The function `info` is used to print out an info message to the user.
  * It uses the prefix "INFO : " to directly indicate the origin of the message.
  * It also allows to pass a variable number of arguments to the function (...).

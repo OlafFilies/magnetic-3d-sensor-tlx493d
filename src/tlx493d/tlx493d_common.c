@@ -265,31 +265,26 @@ void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr) {
 
 
 void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName) {
-    print("");
     warn("Feature '%s' not available for sensor type '%s' !", featureName, tlx493d_common_getTypeAsString(sensor));
 }
 
 
 void tlx493d_errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t bf) {
-    print("");
     error("Bitfield '%d' not readable for sensor type '%s' !", bf, tlx493d_common_getTypeAsString(sensor));
 }
 
 
 void tlx493d_errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t bf) {
-    print("");
     error("Bitfield '%d' not writable for sensor type '%s' !", bf, tlx493d_common_getTypeAsString(sensor));
 }
 
 
 void tlx493d_errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func) {
-    print("");
     error("Function '%s' not supported for sensor type '%s' !", func, tlx493d_common_getTypeAsString(sensor));
 }
 
 
 void tlx493d_errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType) {
-    print("");
     error("Selection '%d' for type '%s' not supported for sensor type '%s' !", sel, selType, tlx493d_common_getTypeAsString(sensor));
 }
 

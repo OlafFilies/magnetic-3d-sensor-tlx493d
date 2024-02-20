@@ -66,27 +66,43 @@ extern "C" {
     }
 
 
+    void println(const char *format, ...) {
+        Serial.println();
+        va_list ap;
+        va_start(ap, format);
+        ifx::tlx493d::logMessage("", format, ap);
+        va_end(ap);
+        Serial.println();
+    }
+
+
     void info(const char *format, ...) {
+        Serial.println();
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("INFO : ", format, ap);
         va_end(ap);
+        Serial.println();
     }
 
 
     void warn(const char *format, ...) {
+        Serial.println();
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("WARNING : ", format, ap);
         va_end(ap);
+        Serial.println();
     }
 
 
     void error(const char *format, ...) {
+        Serial.println();
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("ERROR : ", format, ap);
         va_end(ap);
+        Serial.println();
     }
 
 

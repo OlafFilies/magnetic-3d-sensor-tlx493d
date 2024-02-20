@@ -481,7 +481,7 @@ uint8_t tlx493d_gen_2_calculateFuseParity(TLx493D_t *sensor, uint8_t fpBF, uint8
 uint8_t tlx493d_gen_2_calculateBusParity(TLx493D_t *sensor, uint8_t to) {
 	uint8_t parity = sensor->regMap[0];
 
-	for (uint8_t i = 1; i < to; ++i) {
+	for (uint8_t i = 1; i <= to; ++i) {
 		parity ^= sensor->regMap[i];
 	}
 
@@ -641,15 +641,15 @@ void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int
     // double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * sensor->functions->getSensitivityScaleFactor(sensor);
     double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * tlx493d_gen_2_getSensitivityScaleFactorFromSensitivity(sens);
     
-    *x = round(xInmT * scaledSensitivity);
+    *x = (int16_t) lround(xInmT * scaledSensitivity);
     // *x = (int16_t) (xInmT * scaledSensitivity);
-    *y = round(yInmT * scaledSensitivity);
-    *z = round(zInmT * scaledSensitivity);
+    *y = (int16_t) lround(yInmT * scaledSensitivity);
+    *z = (int16_t) lround(zInmT * scaledSensitivity);
 }
 
 
 void tlx493d_gen_2_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature) {
-    *rawTemperature = round(((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
+    *rawTemperature = (int16_t) lround(((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
     // *rawTemperature = (int16_t) (((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
 }
 

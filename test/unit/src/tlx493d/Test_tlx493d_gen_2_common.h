@@ -17,16 +17,16 @@
 TEST_GROUP(SensorsGen2Common);
 
 
-// Setup method called before every individual test defined for this test group
-static TEST_SETUP(SensorsGen2Common)
-{
-}
+// // Setup method called before every individual test defined for this test group
+// static TEST_SETUP(SensorsGen2Common)
+// {
+// }
 
 
-// Tear down method called before every individual test defined for this test group
-static TEST_TEAR_DOWN(SensorsGen2Common)
-{
-}
+// // Tear down method called before every individual test defined for this test group
+// static TEST_TEAR_DOWN(SensorsGen2Common)
+// {
+// }
 
 
 // TEST_IFX(SensorsGen2Common, checkCalculateMagneticFieldAndTemperature)

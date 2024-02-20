@@ -201,8 +201,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkBasicFunctionality)
 
 TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
 {
-    TLx493D_Register_t *channel = &dut.regDef[P3I8_CHANNEL_SEL_e];
-
     // switch to LPM
     TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
