@@ -4,6 +4,10 @@ name: Arduino CI
 on:
   - push
   - pull_request
+  # push:
+  #   branches: [master main]
+  # pull_request:
+  #   branches: [master main]
 
 # This template runes multiple workflows
 jobs:
