@@ -40,95 +40,95 @@ TEST_IFX(SensorsCommon, checkParityFunctionality)
     // even parity values
     uint8_t data   = 0x00;
     uint8_t parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, parity );
 
     data   = 0x33;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x00 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x00 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x01 );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getOddParity(parity) );
 
     data   = 0x55;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x00 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x00 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x01 );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getOddParity(parity) );
     
     data   = 0xAA;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x00 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x00 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x01 );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getOddParity(parity) );
 
     data   = 0x36;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x00 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x00 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x01 );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getOddParity(parity) );
 
     data   = 0xFF;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x00 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x00 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x01 );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getOddParity(parity) );
 
     // odd parity values
     data   = 0x01;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 
     data   = 0x80;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 
     data   = 0x37;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 
     data   = 0x86;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 
     data   = 0x68;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 
     data   = 0xF8;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 
     data   = 0xF7;
     parity = tlx493d_common_calculateParity(data);
-    TEST_ASSERT( parity == 0x01 );
-    TEST_ASSERT( tlx493d_common_getEvenParity(parity) == 0x01 );
-    TEST_ASSERT( tlx493d_common_getOddParity(parity) == 0x00 );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, parity );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_getEvenParity(parity) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_getOddParity(parity) );
 }
 
 
 TEST_IFX(SensorsCommon, checkConcatBytes)
 {
-    enum {
-            MSB0 = 0,
-            MSB1,
-            MSB2,
-            MSB3,
-            LSB0,
-            LSB1,
-            LSB2,
-            LSB3,
-    } registerNames;
+    enum RegisterNames {
+        MSB0 = 0,
+        MSB1,
+        MSB2,
+        MSB3,
+        LSB0,
+        LSB1,
+        LSB2,
+        LSB3,
+    };
 
 
     TLx493D_Register_t regDef[] = {
@@ -162,19 +162,19 @@ TEST_IFX(SensorsCommon, checkConcatBytes)
 
     int16_t result = 0;
     tlx493d_common_concatBytes(&dut, MSB0, LSB0, &result);
-    TEST_ASSERT( result == 0x1100 );
+    TEST_ASSERT_EQUAL_HEX16( 0x1100, result );
 
     result = 0;
     tlx493d_common_concatBytes(&dut, MSB1, LSB1, &result);
-    TEST_ASSERT( result == 0x32 );
+    TEST_ASSERT_EQUAL_HEX8( 0x32, result );
 
     result = 0;
     tlx493d_common_concatBytes(&dut, MSB2, LSB2, &result);
-    TEST_ASSERT( result == 0xFFFFFFDD );
+    TEST_ASSERT_EQUAL_HEX32( 0xFFFFFFDD, result );
 
     result = 0;
     tlx493d_common_concatBytes(&dut, MSB3, LSB3, &result);
-    TEST_ASSERT( result == 0xFFFFFFBF );
+    TEST_ASSERT_EQUAL_HEX32( 0xFFFFFFBF, result );
 
     dut.regDef = regDefSave;
     memcpy(dut.regMap, saveRegs, 8);
@@ -186,12 +186,12 @@ TEST_IFX(SensorsCommon, checkGetTypeAsString)
     TLx493D_SupportedSensorType_t sensorType = dut.sensorType;
 
     dut.sensorType = TLx493D_A2B6_e;
-    TEST_ASSERT( tlx493d_common_getTypeAsString(&dut) == "TLx493D_A2B6" );
-
-    TEST_ASSERT(tlx493d_init(&dut, (TLx493D_SupportedSensorType_t) 0x19) == false);
+    TEST_ASSERT_EQUAL_STRING( "TLx493D_A2B6", tlx493d_common_getTypeAsString(&dut) );
+    
+    TEST_ASSERT_FALSE( tlx493d_init(&dut, (TLx493D_SupportedSensorType_t) 0x19) );
 
     dut.sensorType = (TLx493D_SupportedSensorType_t) 0x19;
-    TEST_ASSERT( tlx493d_common_getTypeAsString(&dut) == "ERROR : Unknown sensorType !" );
+    TEST_ASSERT_EQUAL_STRING( "ERROR : Unknown sensorType !", tlx493d_common_getTypeAsString(&dut) );
 
     dut.sensorType = sensorType;
 }

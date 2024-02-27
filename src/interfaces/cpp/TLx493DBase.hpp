@@ -477,6 +477,11 @@ namespace ifx {
                 }
 
 
+                void printRegisters() {
+                    ::tlx493d_printRegisters(&sensor);
+                }
+
+
                 // Attribute getters for TLx493D object
                 /**
                  * @brief The function `getSensor` retrieves the sensor object of the class.

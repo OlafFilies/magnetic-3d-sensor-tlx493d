@@ -4,6 +4,10 @@
 // test includes
 #include "Test_includes.h"
 
+#include "TLx493D_A1B6_defines.h"
+#include "TLx493D_A1B6_enums.h"
+#include "TLx493D_A1B6.h"
+
 
 void TLx493D_A1B6_suiteSetUp(void);
 void TLx493D_A1B6_suiteTearDown(void);

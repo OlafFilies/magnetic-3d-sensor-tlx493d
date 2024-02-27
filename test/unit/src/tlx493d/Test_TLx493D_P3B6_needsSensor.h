@@ -1,6 +1,10 @@
 // test includes
 #include "Test_includes.h"
 
+#include "TLx493D_P3B6_defines.h"
+#include "TLx493D_P3B6_enums.h"
+#include "TLx493D_P3B6.h"
+
 
 void TLx493D_P3B6_needsSensor_suiteSetup(void);
 void TLx493D_P3B6_needsSensor_suiteTearDown(void);
@@ -12,9 +16,7 @@ static TLx493D_t dut;
 
 // test includes that may require dut
 #include "Test_tlx493d_commonFunctions_needsSensor.h"
-#include "Test_tlx493d_common_needsSensor.h"
 #include "Test_tlx493d_common.h"
-#include "Test_tlx493d_gen_3_common_needsSensor.h"
 #include "Test_tlx493d_gen_3_common.h"
 
 
@@ -48,14 +50,14 @@ static TEST_TEAR_DOWN(TLx493D_P3B6_needsSensorInternal)
  */
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkUnsupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->hasValidBusParity(&dut) == false );
-    TEST_ASSERT( dut.functions->hasValidConfigurationParity(&dut) == false );
-    TEST_ASSERT( dut.functions->hasValidTBit(&dut) == false );
+    TEST_ASSERT_FALSE( dut.functions->hasValidBusParity(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->hasValidConfigurationParity(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->hasValidTBit(&dut) );
  
-    TEST_ASSERT( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A3_e) == false );
-    TEST_ASSERT( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A2_e) == false );
-    TEST_ASSERT( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A1_e) == false );
-    TEST_ASSERT( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A0_e) == false );
+    TEST_ASSERT_FALSE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A3_e) );
+    TEST_ASSERT_FALSE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A2_e) );
+    TEST_ASSERT_FALSE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A1_e) );
+    TEST_ASSERT_FALSE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A0_e) );
 }
 
 
@@ -66,21 +68,21 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkUnsupportedFunctionality)
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkSupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    // printRegisters(&dut);
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // tlx493d_printRegisters(&dut);
  
-    // TEST_ASSERT( dut.functions->hasValidData(&dut) == true ); // fails sometimes
+    // TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) ); // fails sometimes
 
-    TEST_ASSERT( dut.functions->isFunctional(&dut) == true );
-    TEST_ASSERT( dut.functions->hasValidFuseParity(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->isFunctional(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->hasValidFuseParity(&dut) );
 }
 
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 {
     // TLx493D_FULL_RANGE_e
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
-    TEST_ASSERT( dut.functions->getTemperature(&dut, &t) == true );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );
+    TEST_ASSERT_TRUE( dut.functions->getTemperature(&dut, &t) );
     TEST_ASSERT_FLOAT_WITHIN( 20.0, 25.0, t );
 
     dut.functions->calculateMagneticField(&dut, &x, &y, &z);
@@ -122,8 +124,8 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
 
     // TLx493D_EXTRA_SHORT_RANGE_e
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) == true );
-    TEST_ASSERT( dut.functions->getTemperature(&dut, &t) == true );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) );
+    TEST_ASSERT_TRUE( dut.functions->getTemperature(&dut, &t) );
 
     t = 0.0;
     x = 0.0;
@@ -156,8 +158,8 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
 
     // TLx493D_SHORT_RANGE_e
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) == true );
-    TEST_ASSERT( dut.functions->getTemperature(&dut, &t) == true );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) );
+    TEST_ASSERT_TRUE( dut.functions->getTemperature(&dut, &t) );
 
     t = 0.0;
     x = 0.0;
@@ -190,7 +192,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     
 
     // back to TLx493D_FULL_RANGE_e
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );
 
 
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
@@ -214,7 +216,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkBasicFunctionality)
 {
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 }
 
 
@@ -224,90 +226,82 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
 
     // switch to LPM
     // print("\nLPM mode\n");
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
 
     // Unsupported
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e) == false );
+    TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e) );
 
 
     // Supported
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) == true );
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) == true );
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) == true );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
 
 
     // print("TLx493D_BxTemp_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
    
 
     // print("TLx493D_BxBy_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
     // print("TLx493D_BzTemp_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
     // print("TLx493D_BxByBzTemp_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
-    // // switch to MCM
+    // switch to MCM
     // print("MCM mode\n");
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
 
     // print("TLx493D_BxTemp_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
    
 
     // print("TLx493D_BxBy_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
     // print("TLx493D_BzTemp_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
     // print("TLx493D_BxByBzTemp_e\n");
-    TEST_ASSERT( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 }
 
 
@@ -317,31 +311,31 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigTriggerFunctionality)
 
 
     // MCM supports other modes, so enable MCM first
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true );
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
     // try triggers
-    TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_AFTER_REG_05_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT( (tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) == 0b10) || (tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) == 0b11) );
+    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_AFTER_REG_05_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_GREATER_OR_EQUAL_INT8( 0b10, tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) );
+    TEST_ASSERT_LESS_OR_EQUAL_INT8( 0b11, tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) );
 
     //
-    TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b01, tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b01, tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) );
 
     //
-    TEST_ASSERT( dut.functions->setTrigger(&dut, TLx493D_NO_ADC_ON_READ_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b00, tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_NO_ADC_ON_READ_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b00, tlx493d_common_returnBitfield(&dut, P3B6_TRIGGER_SEL_e) );
 
 
     // switch back to LPM
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
-    // printRegisters(&dut);
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 }
 
 
@@ -353,146 +347,143 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigSensitivityFunctionality)
     TEST_ASSERT( (tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) & tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e)) != 1 );
 
     // supported
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e) );
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_EXTRA_SHORT_RANGE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 4.0, sf );
 
 
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e) );
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 2.0, sf );
     
 
-    TEST_ASSERT( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e) );
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) );
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_XTR_SHORT_EN_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_SHORT_EN_e) );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
     TEST_ASSERT_EQUAL_FLOAT( 1.0, sf );
-    // printRegisters(&dut);
 }
 
 
 // Check if setDefaultConfig worked properly and data can be read and expected values are set.
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkModeDefaultConfigFunctionality)
 {
-    // TEST_ASSERT( dut.functions->setDefaultConfig(&dut) == true);
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
+    // TEST_ASSERT_TRUE( dut.functions->setDefaultConfig(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
-    TEST_ASSERT_EQUAL_HEX( 0x42, dut.regMap[P3B6_MOD1_REG_e] );
-    TEST_ASSERT_EQUAL_HEX( 0x00, dut.regMap[P3B6_MOD2_REG_e] );
-    // printRegisters(&dut);
+    TEST_ASSERT_EQUAL_HEX8( 0x42, dut.regMap[P3B6_MOD1_REG_e] );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[P3B6_MOD2_REG_e] );
 }
 
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkModeCollisionAvoidanceFunctionality)
 {
-    TEST_ASSERT( dut.functions->disableCollisionAvoidance(&dut) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_COLLISION_DIS_e) );
+    TEST_ASSERT_TRUE( dut.functions->disableCollisionAvoidance(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_COLLISION_DIS_e) );
 
-    TEST_ASSERT( dut.functions->enableCollisionAvoidance(&dut) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_COLLISION_DIS_e) );
+    TEST_ASSERT_TRUE( dut.functions->enableCollisionAvoidance(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_COLLISION_DIS_e) );
 }
 
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkModeInterruptFunctionality)
 {
-    // TEST_ASSERT( dut.functions->enableInterrupt(&dut) == true );
+    // TEST_ASSERT_TRUE( dut.functions->enableInterrupt(&dut) );
     // TEST_ASSERT( (dut.regMap[P3B6_MOD1_REG_e] & 0x04) == 0x00 );
 
-    TEST_ASSERT( dut.functions->disableInterrupt(&dut) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_INT_DIS_e) );
+    TEST_ASSERT_TRUE( dut.functions->disableInterrupt(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_INT_DIS_e) );
 }
 
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkModePowerModeFunctionality)
 {
     // Unsupported
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_FAST_MODE_e) == false );
+    TEST_ASSERT_FALSE( dut.functions->setPowerMode(&dut, TLx493D_FAST_MODE_e) );
 
 
     // Supported
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
 
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
-    // printRegisters(&dut);
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 }
 
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkModeUpdateRateFunctionality)
 {
     // Valid only in LPM
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
     // Supported
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_125_HZ_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b01, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_125_HZ_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b01, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
 
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_31_HZ_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b10, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_31_HZ_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b10, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
 
 
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_16_HZ_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b11, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_16_HZ_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b11, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
 
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_1000_HZ_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0b00, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_1000_HZ_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0b00, tlx493d_common_returnBitfield(&dut, P3B6_F_UPDATE_SEL_e) );
 
 
     // Unsupported
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_97_HZ_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_24_HZ_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_12_HZ_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_6_HZ_e) == false );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_97_HZ_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_24_HZ_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_12_HZ_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_6_HZ_e) );
 
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_3_HZ_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_0_4_HZ_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_0_05_HZ_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_770_HZ_e) == false );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_3_HZ_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_0_4_HZ_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_0_05_HZ_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_770_HZ_e) );
 
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_SLOW_e) == false );
-    TEST_ASSERT( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_FAST_e) == false );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_SLOW_e) );
+    TEST_ASSERT_FALSE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_FAST_e) );
 }
 
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpSettingsFunctionality)
 {
     // Valid only in LPM
-    TEST_ASSERT( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
-    TEST_ASSERT_EQUAL_HEX( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
 
-    TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == true );
-    TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == false );
+    TEST_ASSERT_TRUE( dut.functions->disableWakeUpMode(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->isWakeUpEnabled(&dut) );
 
-    TEST_ASSERT( dut.functions->enableWakeUpMode(&dut) == true );
-    TEST_ASSERT( dut.functions->isWakeUpEnabled(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->enableWakeUpMode(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->isWakeUpEnabled(&dut) );
 
-    TEST_ASSERT( dut.functions->disableWakeUpMode(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->disableWakeUpMode(&dut) );
 }
 
 
@@ -500,74 +491,71 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
 {
     // pos. numbers
                                                               //   xlTh,         xhTh,        ylTh,        yhTh,        zlTh,        zhTh);
-    TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x0ABC >> 2, 0x00BC >> 2, 0x000C >> 2, 0x0FBC >> 2, 0x0F0C >> 2, 0x0F00 >> 2) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x0ABC >> 2, 0x00BC >> 2, 0x000C >> 2, 0x0FBC >> 2, 0x0F0C >> 2, 0x0F00 >> 2) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
+    // threshold 10 bits explicit (+ 2 implicit set to 0)
     // MSBs
-    // threshold10Bits
-    TEST_ASSERT_EQUAL_HEX( 0x0ABC >> 4, dut.regMap[0x0D] ); // XL
-    TEST_ASSERT_EQUAL_HEX( 0x00BC >> 4, dut.regMap[0x0C] ); // XH
-    TEST_ASSERT_EQUAL_HEX( 0x000C >> 4, dut.regMap[0x0F] ); // YL
-    TEST_ASSERT_EQUAL_HEX( 0x0FBC >> 4, dut.regMap[0x0E] ); // YH
-    TEST_ASSERT_EQUAL_HEX( 0x0F0C >> 4, dut.regMap[0x11] ); // ZL
-    TEST_ASSERT_EQUAL_HEX( 0x0F00 >> 4, dut.regMap[0x10] ); // ZH
+    TEST_ASSERT_EQUAL_HEX8( 0x0ABC >> 4, tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL
+    TEST_ASSERT_EQUAL_HEX8( 0x00BC >> 4, tlx493d_common_returnBitfield(&dut, P3B6_WU_XH_MSBS_e) ); // XH
+    TEST_ASSERT_EQUAL_HEX8( 0x000C >> 4, tlx493d_common_returnBitfield(&dut, P3B6_WU_YL_MSBS_e) ); // YL
+    TEST_ASSERT_EQUAL_HEX8( 0x0FBC >> 4, tlx493d_common_returnBitfield(&dut, P3B6_WU_YH_MSBS_e) ); // YH
+    TEST_ASSERT_EQUAL_HEX8( 0x0F0C >> 4, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZL_MSBS_e) ); // ZL
+    TEST_ASSERT_EQUAL_HEX8( 0x0F00 >> 4, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZH_MSBS_e) ); // ZH
 
     // LSBs
-    TEST_ASSERT_EQUAL_HEX( (0x0ABC >> 2) & 0x03, (dut.regMap[0x12] & 0x30) >> 4 ); // XL
-    TEST_ASSERT_EQUAL_HEX( (0x00BC >> 2) & 0x03, (dut.regMap[0x12] & 0xC0) >> 6 ); // XH
-    TEST_ASSERT_EQUAL_HEX( (0x000C >> 2) & 0x03, (dut.regMap[0x12] & 0x03) >> 0 ); // YL
-    TEST_ASSERT_EQUAL_HEX( (0x0FBC >> 2) & 0x03, (dut.regMap[0x12] & 0x0C) >> 2 ); // YH
-    TEST_ASSERT_EQUAL_HEX( (0x0F0C >> 2) & 0x03, (dut.regMap[0x13] & 0x03) >> 0 ); // ZL
-    TEST_ASSERT_EQUAL_HEX( (0x0F00 >> 2) & 0x03, (dut.regMap[0x13] & 0x0C) >> 2 ); // ZH
+    TEST_ASSERT_EQUAL_HEX8( (0x0ABC >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_LSBS_e) ); // XL
+    TEST_ASSERT_EQUAL_HEX8( (0x00BC >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_XH_LSBS_e) ); // XH
+    TEST_ASSERT_EQUAL_HEX8( (0x000C >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_YL_LSBS_e) ); // YL
+    TEST_ASSERT_EQUAL_HEX8( (0x0FBC >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_YH_LSBS_e) ); // YH
+    TEST_ASSERT_EQUAL_HEX8( (0x0F0C >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZL_LSBS_e) ); // ZL
+    TEST_ASSERT_EQUAL_HEX8( (0x0F00 >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZH_LSBS_e) ); // ZH
 
 
     // // neg. numbers in hex format
-    TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, ((int16_t) 0x8ABC) >> 2, ((int16_t) 0x80BC) >> 2, ((int16_t) 0x800C) >> 2,
-                                                                   ((int16_t) 0x8FBC) >> 2, ((int16_t) 0x8F0C) >> 2, ((int16_t) 0x8F00) >> 2) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, ((int16_t) 0x8ABC) >> 2, ((int16_t) 0x80BC) >> 2, ((int16_t) 0x800C) >> 2,
+                                                                        ((int16_t) 0x8FBC) >> 2, ((int16_t) 0x8F0C) >> 2, ((int16_t) 0x8F00) >> 2) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
-    // threshold10Bits
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8ABC) >> 4) & 0xFF, dut.regMap[0x0D] ); // XL
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x80BC) >> 4) & 0xFF, dut.regMap[0x0C] ); // XH
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x800C) >> 4) & 0xFF, dut.regMap[0x0F] ); // YL
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8FBC) >> 4) & 0xFF, dut.regMap[0x0E] ); // YH
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8F0C) >> 4) & 0xFF, dut.regMap[0x11] ); // ZL
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8F00) >> 4) & 0xFF, dut.regMap[0x10] ); // ZH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8ABC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x80BC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_XH_MSBS_e) ); // XH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x800C) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_YL_MSBS_e) ); // YL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8FBC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_YH_MSBS_e) ); // YH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8F0C) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZL_MSBS_e) ); // ZL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8F00) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZH_MSBS_e) ); // ZH
 
     // LSBs
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8ABC) >> 2) & 0x03, (dut.regMap[0x12] & 0x30) >> 4 ); // XL
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x80BC) >> 2) & 0x03, (dut.regMap[0x12] & 0xC0) >> 6 ); // XH
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x800C) >> 2) & 0x03, (dut.regMap[0x12] & 0x03) >> 0 ); // YL
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8FBC) >> 2) & 0x03, (dut.regMap[0x12] & 0x0C) >> 2 ); // YH
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8F0C) >> 2) & 0x03, (dut.regMap[0x13] & 0x03) >> 0 ); // ZL
-    TEST_ASSERT_EQUAL_HEX( (((int16_t) 0x8F00) >> 2) & 0x03, (dut.regMap[0x13] & 0x0C) >> 2 ); // ZH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8ABC) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_LSBS_e) ); // XL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x80BC) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_XH_LSBS_e) ); // XH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x800C) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_YL_LSBS_e) ); // YL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8FBC) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_YH_LSBS_e) ); // YH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8F0C) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZL_LSBS_e) ); // ZL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8F00) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZH_LSBS_e) ); // ZH
 
 
     // neg. numbers in int format
-    TEST_ASSERT( dut.functions->setWakeUpThresholdsAsInteger(&dut, -1 >> 2, -2 >> 2, -16 >> 2, -100 >> 2, -256 >> 2, -1024 >> 2) == true );
-    TEST_ASSERT( dut.functions->readRegisters(&dut) == true);
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, -1 >> 2, -2 >> 2, -16 >> 2, -100 >> 2, -256 >> 2, -1024 >> 2) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
-    // threshold10Bits
-    TEST_ASSERT_EQUAL_HEX( (-1 >> 4) & 0xFF, dut.regMap[0x0D] ); // XL
-    TEST_ASSERT_EQUAL_HEX( (-2 >> 4) & 0xFF, dut.regMap[0x0C] ); // XH
-    TEST_ASSERT_EQUAL_HEX( (-16 >> 4) & 0xFF, dut.regMap[0x0F] ); // YL
-    TEST_ASSERT_EQUAL_HEX( (-100 >> 4) & 0xFF, dut.regMap[0x0E] ); // YH
-    TEST_ASSERT_EQUAL_HEX( (-256 >> 4) & 0xFF, dut.regMap[0x11] ); // ZL
-    TEST_ASSERT_EQUAL_HEX( (-1024 >> 4) & 0xFF, dut.regMap[0x10] ); // ZH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1) >> 4) & 0xFF,    tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -2) >> 4) & 0xFF,    tlx493d_common_returnBitfield(&dut, P3B6_WU_XH_MSBS_e) ); // XH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -16) >> 4) & 0xFF,   tlx493d_common_returnBitfield(&dut, P3B6_WU_YL_MSBS_e) ); // YL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -100) >> 4) & 0xFF,  tlx493d_common_returnBitfield(&dut, P3B6_WU_YH_MSBS_e) ); // YH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -256) >> 4) & 0xFF,  tlx493d_common_returnBitfield(&dut, P3B6_WU_ZL_MSBS_e) ); // ZL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1024) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZH_MSBS_e) ); // ZH
 
     // LSBs
-    TEST_ASSERT_EQUAL_HEX( (-1 >> 2) & 0x03, (dut.regMap[0x12] & 0x30) >> 4 ); // XL
-    TEST_ASSERT_EQUAL_HEX( (-2 >> 2) & 0x03, (dut.regMap[0x12] & 0xC0) >> 6 ); // XH
-    TEST_ASSERT_EQUAL_HEX( (-16 >> 2) & 0x03, (dut.regMap[0x12] & 0x03) >> 0 ); // YL
-    TEST_ASSERT_EQUAL_HEX( (-100 >> 2) & 0x03, (dut.regMap[0x12] & 0x0C) >> 2 ); // YH
-    TEST_ASSERT_EQUAL_HEX( (-256 >> 2) & 0x03, (dut.regMap[0x13] & 0x03) >> 0 ); // ZL
-    TEST_ASSERT_EQUAL_HEX( (-1024 >> 2) & 0x03, (dut.regMap[0x13] & 0x0C) >> 2 ); // ZH
-    // printRegisters(&dut);
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1) >> 2) & 0x03,    tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_LSBS_e) ); // XL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -2) >> 2) & 0x03,    tlx493d_common_returnBitfield(&dut, P3B6_WU_XH_LSBS_e) ); // XH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -16) >> 2) & 0x03,   tlx493d_common_returnBitfield(&dut, P3B6_WU_YL_LSBS_e) ); // YL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -100) >> 2) & 0x03,  tlx493d_common_returnBitfield(&dut, P3B6_WU_YH_LSBS_e) ); // YH
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -256) >> 2) & 0x03,  tlx493d_common_returnBitfield(&dut, P3B6_WU_ZL_LSBS_e) ); // ZL
+    TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1024) >> 2) & 0x03, tlx493d_common_returnBitfield(&dut, P3B6_WU_ZH_LSBS_e) ); // ZH
 
 
-    TEST_ASSERT( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) == true );
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) );
 
     int16_t th    = 0;
     uint8_t delta = 2;
@@ -635,7 +623,6 @@ TEST_GROUP_RUNNER(TLx493D_P3B6_needsSensor)
     RUN_TEST_GROUP(SensorsCommonFunctions);
 
     // run gen 3 common functions tests
-    RUN_TEST_GROUP(SensorsGen3Common_needsSensor);
     RUN_TEST_GROUP(SensorsGen3Common);
     RUN_TEST_GROUP(SensorsCommon);
 

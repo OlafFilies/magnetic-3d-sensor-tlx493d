@@ -41,8 +41,8 @@ bool tlx493d_gen_3_hasValidData(TLx493D_t *sensor, uint8_t measBF);
 bool tlx493d_gen_3_isFunctional(TLx493D_t *sensor);
 
 bool tlx493d_gen_3_isWakeUpEnabled(TLx493D_t *sensor, uint8_t wuBF);
-bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF);
-bool tlx493d_gen_3_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF);
+bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF);
+bool tlx493d_gen_3_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF);
 
 bool tlx493d_gen_3_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold12Bits);
 bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
@@ -62,6 +62,9 @@ bool tlx493d_gen_3_softwareReset(TLx493D_t *sensor, uint8_t resetBF);
 
 
 // utilities
+bool tlx493d_gen_3_setWakeUpParity(TLx493D_t *sensor, uint8_t wuBF, uint8_t wupBF);
+uint8_t tlx493d_gen_3_calculateWakeUpParity(TLx493D_t *sensor, uint8_t wuBF);
+
 bool tlx493d_gen_3_hasValidFuseParity(TLx493D_t *sensor, uint8_t fpfBF);
 bool tlx493d_gen_3_hasValidWakeUpParity(TLx493D_t *sensor, uint8_t wupBF);
 bool tlx493d_gen_3_isInTestMode(TLx493D_t *sensor, uint8_t testBF);

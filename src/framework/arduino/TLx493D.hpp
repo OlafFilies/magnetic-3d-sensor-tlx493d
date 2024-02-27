@@ -56,11 +56,11 @@ namespace ifx {
                  * or keep them off at initialization. 
                  * @param[in] enableSelect          Tells the BoardSupportClass, whether it should turn the select pins on
                  * or keep them off at initialization.
-                 * @param[in] enableExtendedAddr    Enable or disable the extended address feature of the sensor.
+                 * @param[in] enableExtendedAdress    Enable or disable the extended address feature of the sensor.
                  */
-                void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddr = false) {
-                    bsc.init(enablePower, enableSelect, enableExtendedAddr);
+                void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false) {
                     initBoardSupport(&sensor, bsc);
+                    bsc.init(enablePower, enableSelect, enableExtendedAdress);
                     initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
                     setDefaultConfig();
                 }
@@ -73,11 +73,11 @@ namespace ifx {
                  * or keep them off at initialization. True - by default.
                  * @param[in] enableSelect          Tells the BoardSupportClass, whether it should turn the select pins on
                  * or keep them off at initialization. False - by default.
-                 * @param[in] enableExtendedAddr    Enable or disable the extended address feature of the sensor.
+                 * @param[in] enableExtendedAdress    Enable or disable the extended address feature of the sensor.
                  * False - by default.
                  */
-                void begin(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddr = false) {
-                    init(enablePower, enableSelect, enableExtendedAddr);
+                void begin(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false) {
+                    init(enablePower, enableSelect, enableExtendedAdress);
                 }
 
                 /**
@@ -87,8 +87,8 @@ namespace ifx {
                  */
                 void deinit() {
                     deinitCommunication(&sensor); // includes call to busWrapper.deinit();
-                    tlx493d_deinit(&sensor);
                     bsc.deinit();
+                    tlx493d_deinit(&sensor);
                 }
 
                 /**
@@ -107,12 +107,13 @@ namespace ifx {
                  * @param[in] pinDirection          Pin direction of the pin (OUTPUT, INPUT, INPUT-PULLUP).
                  * @param[in] pinEnableValue        Value to enable the power pin, depends on the pin (Active high or low).
                  * @param[in] pinDisableValue       Value to disable the power pin, depends on the pin (Active high or low).
-                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms].
+                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
-                                uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
-                    bsc.setPowerPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
+                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection,
+                                 uint8_t pinEnableValue, uint8_t pinDisableValue,
+                                 uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
+                    bsc.setPowerPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -131,12 +132,13 @@ namespace ifx {
                  * @param[in] pinDirection          Pin direction of the pin (OUTPUT, INPUT, INPUT-PULLUP).
                  * @param[in] pinEnableValue        Value to enable the power pin, depends on the pin (Active high or low).
                  * @param[in] pinDisableValue       Value to disable the power pin, depends on the pin (Active high or low).
-                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms]. 
+                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
-                                uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
-                    bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
+                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection,
+                                  uint8_t pinEnableValue, uint8_t pinDisableValue,
+                                  uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
+                    bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -148,7 +150,7 @@ namespace ifx {
                 }
 
                 /**
-                 * @brief The function `setAddrPin` defines a pin, which can be used for the extended address feature of the first
+                 * @brief The function `setAdressPin` defines a pin, which can be used for the extended address feature of the first
                  * sensor generation. Here the SDA-line of the I2C bus has to be pulled low in order to use
                  * the second half of addresses.
                  * 
@@ -156,20 +158,21 @@ namespace ifx {
                  * @param[in] pinDirection          Pin direction of the pin (OUTPUT, INPUT, INPUT-PULLUP).
                  * @param[in] pinEnableValue        Value to enable the power pin, depends on the pin (Active high or low).
                  * @param[in] pinDisableValue       Value to disable the power pin, depends on the pin (Active high or low).
-                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms]. 
+                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setAddrPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
-                                uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
-                    bsc.setAddrPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
+                void setAddressPin(uint8_t pinNumber, uint8_t pinDirection,
+                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
+                                   uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
+                    bsc.setAdressPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
-                 * @brief The function `unsetAddrPin` does remove the address pin from the BoardSupportClass.
+                 * @brief The function `unsetAdressPin` does remove the address pin from the BoardSupportClass.
                  * 
                  */
-                void unsetAddrPin() {
-                    bsc.unsetAddrPin();
+                void unsetAddressPin() {
+                    bsc.unsetAdressPin();
                 }
 
                 /**
@@ -186,6 +189,13 @@ namespace ifx {
                  */
                 void disablePower() {
                     bsc.controlPower(false);
+                }
+
+                void reset() {
+                    sensor.functions->setResetValues(&sensor);
+                    bsc.reset();
+                    initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
+                    setDefaultConfig();
                 }
 
                 /**
@@ -205,19 +215,19 @@ namespace ifx {
                 }
 
                 /**
-                 * @brief The function `enableAddr` enables the defined address pin.
+                 * @brief The function `enableAdress` enables the defined address pin.
                  * 
                  */
-                void enableAddr() {
-                    bsc.controlAddr(true);
+                void enableAddress() {
+                    bsc.controlAddress(true);
                 }
 
                 /**
-                 * @brief The function `disableAddr` disables the defined address pin.
+                 * @brief The function `disableAdress` disables the defined address pin.
                  * 
                  */
-                void disableAddr() {
-                    bsc.controlAddr(false);
+                void disableAddress() {
+                    bsc.controlAddress(false);
                 }
 
 
@@ -271,8 +281,8 @@ namespace ifx {
                  *
                  */
                 void init() {
-                    bsc.init(true);
                     initBoardSupport(&sensor, bsc);
+                    bsc.init(true);
                     initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
                     setDefaultConfig();
                 }
@@ -295,8 +305,8 @@ namespace ifx {
                  */
                 void deinit() {
                     deinitCommunication(&sensor); // includes call to busWrapper.deinit();
-                    tlx493d_deinit(&sensor);
                     bsc.deinit();
+                    tlx493d_deinit(&sensor);
                 }
 
                 /**
@@ -315,12 +325,13 @@ namespace ifx {
                  * @param[in] pinDirection          Pin direction of the pin (OUTPUT, INPUT, INPUT-PULLUP).
                  * @param[in] pinEnableValue        Value to enable the power pin, depends on the pin (Active high or low).
                  * @param[in] pinDisableValue       Value to disable the power pin, depends on the pin (Active high or low).
-                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms].
+                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
-                                uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
-                    bsc.setPowerPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
+                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection,
+                                 uint8_t pinEnableValue, uint8_t pinDisableValue,
+                                 uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
+                    bsc.setPowerPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -339,12 +350,13 @@ namespace ifx {
                  * @param[in] pinDirection          Pin direction of the pin (OUTPUT, INPUT, INPUT-PULLUP).
                  * @param[in] pinEnableValue        Value to enable the power pin, depends on the pin (Active high or low).
                  * @param[in] pinDisableValue       Value to disable the power pin, depends on the pin (Active high or low).
-                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms]. 
+                 * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
-                                uint8_t delayAfterDisable = 0, uint8_t  delayAfterEnable = 0) {
-                    bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterDisable, delayAfterEnable);
+                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection,
+                                  uint8_t pinEnableValue, uint8_t pinDisableValue,
+                                  uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
+                    bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -369,6 +381,13 @@ namespace ifx {
                  */
                 void disablePower() {
                     bsc.controlPower(false);
+                }
+
+                void reset() {
+                    sensor.functions->setResetValues(&sensor);
+                    bsc.reset();
+                    // initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
+                    setDefaultConfig();
                 }
 
                 /**

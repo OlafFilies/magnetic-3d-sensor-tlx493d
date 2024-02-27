@@ -33,7 +33,7 @@ typedef struct TLx493D_t  TLx493D_t;
  * 
  * @param[in,out] sensor A pointer to a TLx493D_t structure, which represents the TLx493D sensor.
  */
-void printRegisters(TLx493D_t *sensor);
+void printRegisters(TLx493D_t *sensor, const char *headLine);
 
 /**
  * @brief The function `printDouble` prints out a value in the double format. 
@@ -48,6 +48,14 @@ void printDouble(double d);
  * @param[in] format Actual string, which should be printed to the serial output. 
  */
 void print(const char *format, ...);
+
+/**
+ * @brief The function `println` is used to print out a formatted string - without prefix - to the serial output plus a trailing linefeed.
+ * 
+ * @param[in] format Actual string, which should be printed to the serial output. 
+ * @param[in] ... Actual string, which should be printed to the serial output. 
+*/
+void println(const char *format, ...);
 
 /**
  * @brief The function `info` is used to print out an info message to the user.

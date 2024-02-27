@@ -132,6 +132,8 @@ TLx493D_CommonFunctions_t TLx493D_W2B6_commonFunctions = {
 
     .softwareReset                  = TLx493D_W2B6_softwareReset,
 
+    .printRegisters                 = TLx493D_W2B6_printRegisters,
+
     // functions used internally and not accessible through the common interface
     .calculateFuseParity            = TLx493D_W2B6_calculateFuseParity,
     .calculateBusParity             = TLx493D_W2B6_calculateBusParity,
@@ -249,7 +251,8 @@ bool TLx493D_W2B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 
 bool TLx493D_W2B6_setDefaultConfig(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setDefaultConfig(sensor, W2B6_CONFIG_REG_e, W2B6_MOD1_REG_e, W2B6_MOD2_REG_e, W2B6_CP_e, W2B6_CA_e, W2B6_INT_e);
+    return tlx493d_gen_2_setDefaultConfig(sensor, W2B6_CP_e, W2B6_CA_e, W2B6_INT_e);
+    // return tlx493d_gen_2_setDefaultConfig(sensor, W2B6_CONFIG_REG_e, W2B6_MOD1_REG_e, W2B6_MOD2_REG_e, W2B6_CP_e, W2B6_CA_e, W2B6_INT_e);
 }
 
 
@@ -264,12 +267,14 @@ bool TLx493D_W2B6_enable1ByteReadMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2B6_enableCollisionAvoidance(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2B6_CA_e, W2B6_FP_e, W2B6_PRD_e, 0);
+    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2B6_CA_e, W2B6_FP_e, 0);
+    // return tlx493d_gen_2_setCollisionAvoidance(sensor, W2B6_CA_e, W2B6_FP_e, W2B6_PRD_e, 0);
 }
 
 
 bool TLx493D_W2B6_disableCollisionAvoidance(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2B6_CA_e, W2B6_FP_e, W2B6_PRD_e, 1);
+    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2B6_CA_e, W2B6_FP_e, 1);
+    // return tlx493d_gen_2_setCollisionAvoidance(sensor, W2B6_CA_e, W2B6_FP_e, W2B6_PRD_e, 1);
 }
 
 
@@ -429,4 +434,9 @@ void TLx493D_W2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_W2B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
     return tlx493d_gen_2_getSensitivityScaleFactor(sensor, TLx493D_HAS_X2_e, W2B6_X2_e, 0);
+}
+
+
+void TLx493D_W2B6_printRegisters(TLx493D_t *sensor) {
+    printRegisters(sensor, TLX493D_W2B6_REGISTER_HEADLINE); 
 }

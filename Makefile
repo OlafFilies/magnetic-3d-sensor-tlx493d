@@ -7,14 +7,11 @@ $(info PORT : $(PORT))
 
 
 # TEST_COMMON=-DTEST_SENSORS_COMMON \
-# 			-DTEST_SENSORS_GEN_1_COMMON \
-# 			-DTEST_SENSORS_GEN_2_COMMON \
-# 			-DTEST_SENSORS_GEN_3_COMMON
+# 		      -DTEST_SENSORS_GEN_1_COMMON \
+# 			  -DTEST_SENSORS_GEN_2_COMMON \
+# 			  -DTEST_SENSORS_GEN_3_COMMON
 
-# TEST_COMMON_NEEDS_SENSOR=-DTEST_SENSORS_COMMON_NEEDS_SENSOR \
-# 						 -DTEST_SENSORS_GEN_1_COMMON_NEEDS_SENSOR \
-# 						 -DTEST_SENSORS_GEN_2_COMMON_NEEDS_SENSOR \
-# 			 			 -DTEST_SENSORS_GEN_3_COMMON_NEEDS_SENSOR
+# TEST_COMMON_NEEDS_SENSOR=-DTEST_SENSORS_COMMONFUNCTIONS_NEEDS_SENSOR 
 
 TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
                    -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
@@ -76,19 +73,31 @@ test: TESTS=$(TESTS_NO_SENSOR)
 test_all \
 test_needsSensor \
 test: unity flash
+#test: unity compile
+
+
+EXAMPLES = iic_c_style iic iic_with_wakeup 3iic 3iic_equal iic_ext_addr spi
+
+# $(EXAMPLES): arduino compile
 
 
 ### Arduino targets
 clean:
-	-rm -rf build/*
+	-rm -rf build/* cppcheck_reports build.ino.*elf.* ./-lm.res log.[0-9]*
+	find . -name '*ctu-info' -exec \rm {} \;
+
 
 arduino: clean
 	cp -r config/arduinoLibraryTemplate/* build
 	find src -name '*.[hc]*' -a \( \! -path '*mtb*' \) -a \( \! -name 'main*' \) -print -exec cp {} build \;
 
 
-iic_plain_c: arduino
-	cp examples/framework/arduino/read_iic_sensor_plain_c.ino build/build.ino
+iic_ext_addr: arduino
+	cp examples/framework/arduino/read_iic_a1b6_extended_addresses.ino build/build.ino
+
+
+iic_c_style: arduino
+	cp examples/framework/arduino/read_iic_sensor_c_style.ino build/build.ino
  
 
 spi: arduino
@@ -166,6 +175,61 @@ prepare:
 	arduino-cli.exe core list
 	arduino-cli.exe board listall
 	arduino-cli.exe board listall Infineon
+
+
+comp_gcc:
+	gcc -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -std=c++17 foo.cpp -o foo.o
+
+
+comp_clang:
+	clang -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wno-c++98-compat -Wunreachable-code -std=c++17 foo.cpp -o foo.o
+
+
+# 	#gcc -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code build/TLx493D_P2B6.c
+# #	arm-none-eabi-gcc -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic build/TLx493D_P2B6.c -o build/TLx493D_P2B6.o
+# #	arm-none-eabi-gcc -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wno-c++98-compat -Wunreachable-code -std=c++17 foo.cpp -o foo.o
+# #	clang -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wno-c++98-compat -Wunreachable-code -std=c++17 foo.cpp -o foo.o
+# #	clang -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wno-c++98-compat -Wunreachable-code -std=c11 build/TLx493D_P2B6.c
+
+# #	arm-none-eabi-gcc -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic foo.cpp -o foo.o
+# #	gcc -c -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic build/TLx493D_P2B6.c -o build/TLx493D_P2B6.o
+# #	gcc -c -Wall -Wpedantic build/TLx493D_P2B6.c -o build/TLx493D_P2B6.o
+
+
+# (make compile_examples) 2>&1 | tee log
+# (make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic compile) 2>&1 | tee log
+# (make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic compile) > log 2>&1
+
+# ./filter.pl
+
+compile_examples:
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 iic_c_style compile
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 iic compile
+	make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic_with_wakeup compile
+	make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM21 3iic compile
+	make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM24 3iic_equal compile
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM iic_ext_addr compile
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 spi compile
+
+
+
+
+run_clang_tidy: C_CPP_SOURCES = $(shell find src -name \*.[hc]\*)
+
+
+run_clang_tidy:
+	$(info $(C_CPP_SOURCES))
+	clang-tidy -header-filter=.* --extra-arg="-Isrc/tlx493d" --extra-arg="-Isrc/framework/arduino" --extra-arg="-Isrc/interfaces/c" --extra-arg="-Isrc/interfaces/cpp" --extra-arg="-I/mnt/c/Users/bargfred/AppData/Local/Arduino15/packages/Infineon/hardware/xmc/2.2.0/cores" $(C_CPP_SOURCES)
+
+
+run_cppcheck:
+	~/cppcheck/cppcheck.danmar/cppcheck -i build -i config -i doc -i examples -i results -i reports_hml -i Unity \
+                             -I./src/tlx493d -I./src/interfaces/c \
+                             --checkers-report=cppcheck.checkers --check-level=exhaustive --xml --enable=all --inconclusive \
+                             --addon=misra_local.py --addon=misc \
+                             --max-configs=100 ./ 2> ./err.xml
+	~/cppcheck/cppcheck.danmar/htmlreport/cppcheck-htmlreport --file=err.xml --title=TLx493D --report-dir=cppcheck_reports --source-dir=.
+	firefox cppcheck_reports/index.html
 
 
 

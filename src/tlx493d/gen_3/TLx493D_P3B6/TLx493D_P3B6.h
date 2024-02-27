@@ -75,6 +75,8 @@ bool TLx493D_P3B6_softwareReset(TLx493D_t *sensor);
 
 
 // utilities
+bool tlx493d_P3B6_setWakeUpParity(TLx493D_t *sensor);
+
 uint8_t TLx493D_P3B6_calculateFuseParity(TLx493D_t *sensor);
 uint8_t TLx493D_P3B6_calculateBusParity(TLx493D_t *sensor);
 uint8_t TLx493D_P3B6_calculateConfigurationParity(TLx493D_t *sensor);
@@ -98,6 +100,8 @@ void TLx493D_P3B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
                                                          int16_t *x, int16_t *y, int16_t *z);
 
 double TLx493D_P3B6_getSensitivityScaleFactor(TLx493D_t *sensor);
+
+void TLx493D_P3B6_printRegisters(TLx493D_t *sensor);
 
 
 #ifdef __cplusplus

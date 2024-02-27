@@ -126,7 +126,7 @@ void setup() {
     pinMode(POWER_PIN, OUTPUT);
     digitalWrite(POWER_PIN, HIGH);
 
-    delay(500);
+    delay(50);
     Serial.print("setup done.\n");
 }
 
@@ -137,7 +137,7 @@ void setup() {
 void loop() {
     Serial.println("\n");
 
-    int         argc       = 2;
+    const int   argc       = 2;
     const char *argv[argc] = { "", "-v" };
 
     (void) UnityMain(argc, argv, RunAllTests);

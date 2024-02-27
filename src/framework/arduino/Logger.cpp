@@ -31,19 +31,22 @@ namespace ifx {
                 Serial.println(" characters) because message too long !\n");
             }
 
-            Serial.println(buffer);
+            Serial.print(buffer);
         }
     }
 }
 
 
 extern "C" {
-    void printRegisters(TLx493D_t *sensor) {
-        Serial.print("\nregMap :"); 
+    void printRegisters(TLx493D_t *sensor, const char *headLine = NULL) {
+        Serial.println();
+        Serial.println(headLine);
+        // Serial.println();
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
-            Serial.print("  0x");
-            Serial.print(sensor->regMap[i], HEX);
+            print("    0x%02X", sensor->regMap[i]);
+            // Serial.print("  0x");
+            // Serial.print(sensor->regMap[i], HEX);
         }
 
         Serial.println();
@@ -63,34 +66,49 @@ extern "C" {
     }
 
 
+    void println(const char *format, ...) {
+        Serial.println();
+        va_list ap;
+        va_start(ap, format);
+        ifx::tlx493d::logMessage("", format, ap);
+        va_end(ap);
+        Serial.println();
+    }
+
+
     void info(const char *format, ...) {
+        Serial.println();
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("INFO : ", format, ap);
         va_end(ap);
+        Serial.println();
     }
 
 
     void warn(const char *format, ...) {
+        Serial.println();
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("WARNING : ", format, ap);
         va_end(ap);
+        Serial.println();
     }
 
 
     void error(const char *format, ...) {
+        Serial.println();
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("ERROR : ", format, ap);
         va_end(ap);
+        Serial.println();
     }
 
 
     void flush() {
         // USE WITH CAUTION ! DEVICE MAY HANGUP !
-        // Serial.flush();
-        Serial.println();
-
+        Serial.flush();
+        // Serial.println();
     }
 }

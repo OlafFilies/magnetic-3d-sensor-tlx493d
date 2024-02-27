@@ -4,6 +4,10 @@
 // test includes
 #include "Test_includes.h"
 
+#include "TLx493D_W2B6_defines.h"
+#include "TLx493D_W2B6_enums.h"
+#include "TLx493D_W2B6.h"
+
 
 void TLx493D_W2B6_suiteSetUp(void);
 void TLx493D_W2B6_suiteTearDown(void);
@@ -41,7 +45,7 @@ static TEST_TEAR_DOWN(TLx493D_W2B6_internal)
 
 TEST_IFX(TLx493D_W2B6_internal, checkUnsupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->softwareReset(&dut) == false );
+    TEST_ASSERT_FALSE( dut.functions->softwareReset(&dut) );
 }
 
 
@@ -61,23 +65,23 @@ TEST_IFX(TLx493D_W2B6_internal, checkSupportedFunctionality)
 TEST_IFX(TLx493D_W2B6_internal, checkResetValues)
 {
     for(uint8_t i = 0; i < dut.regMapSize; ++i) {
-        TEST_ASSERT( dut.regMap[i] == 0 );
+        TEST_ASSERT_EQUAL_HEX8( 0, dut.regMap[i] );
     }
 
     dut.functions->setResetValues(&dut);
 
-    TEST_ASSERT( dut.regMap[0x07] == 0x80 );
-    TEST_ASSERT( dut.regMap[0x08] == 0x7F );
-    TEST_ASSERT( dut.regMap[0x09] == 0x80 );
-    TEST_ASSERT( dut.regMap[0x0A] == 0x7F );
-    TEST_ASSERT( dut.regMap[0x0B] == 0x80 );
-    TEST_ASSERT( dut.regMap[0x0C] == 0x7F );
-    TEST_ASSERT( dut.regMap[0x0D] == 0x38 );
-    TEST_ASSERT( dut.regMap[0x0E] == 0x38 );
-    TEST_ASSERT( dut.regMap[0x0F] == 0x38 );  
-    TEST_ASSERT( dut.regMap[0x10] == 0x01 ); // CONFIG
-    TEST_ASSERT( dut.regMap[0x11] == 0x80 ); // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
-    TEST_ASSERT( dut.regMap[0x13] == 0x00 ); // MOD2
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x07] );
+    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x08] );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x09] );
+    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x0A] );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x0B] );
+    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x0C] );
+    TEST_ASSERT_EQUAL_HEX8( 0x38, dut.regMap[0x0D] );
+    TEST_ASSERT_EQUAL_HEX8( 0x38, dut.regMap[0x0E] );
+    TEST_ASSERT_EQUAL_HEX8( 0x38, dut.regMap[0x0F] );  
+    TEST_ASSERT_EQUAL_HEX8( 0x01, dut.regMap[0x10] ); // CONFIG
+    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x11] ); // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[0x13] ); // MOD2
 }
 
 

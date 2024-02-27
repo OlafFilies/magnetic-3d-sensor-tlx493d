@@ -102,6 +102,8 @@ void TLx493D_P2B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_P2B6_getSensitivityScaleFactor(TLx493D_t *sensor);
 
+void TLx493D_P2B6_printRegisters(TLx493D_t *sensor);
+
 
 #ifdef __cplusplus
 

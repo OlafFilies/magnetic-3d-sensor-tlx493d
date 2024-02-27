@@ -139,6 +139,8 @@ TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
 
     .softwareReset                  = TLx493D_P3B6_softwareReset,
 
+    .printRegisters                 = TLx493D_P3B6_printRegisters,
+
     // functions used internally and not accessible through the common interface
     .calculateFuseParity            = TLx493D_P3B6_calculateFuseParity,
     .calculateBusParity             = TLx493D_P3B6_calculateBusParity,
@@ -256,16 +258,12 @@ bool TLx493D_P3B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 
 bool TLx493D_P3B6_setDefaultConfig(TLx493D_t *sensor) {
-    return tlx493d_gen_3_setDefaultConfig(sensor, P3B6_COLLISION_DIS_e, P3B6_INT_DIS_e);
+    bool b = tlx493d_gen_3_setDefaultConfig(sensor, P3B6_COLLISION_DIS_e, P3B6_INT_DIS_e);
 
-    // //  tlx493d_common_setBitfield(sensor, P3B6_MODE_SEL_e, 0);
-    //  tlx493d_common_setBitfield(sensor, P3B6_INT_DIS_e, 1);
-    //  tlx493d_common_setBitfield(sensor, P3B6_COLLISION_DIS_e, 0);
-    // //  tlx493d_common_setBitfield(sensor, P3B6_WU_EN_e, 0);
-    // //  tlx493d_common_setBitfield(sensor, P3B6_CRC_WR_EN_e, 0);
+    tlx493d_common_setBitfield(sensor, P3B6_RST_FLG_CLR_e, 1);
+    b &= tlx493d_common_writeRegister(sensor, P3B6_RST_FLG_CLR_e);
 
-    // bool b = TLx493D_P3B6_enable1ByteReadMode(sensor);
-    // return b && tlx493d_common_readRegisters(sensor);
+    return b;
 }
 
 
@@ -335,11 +333,12 @@ bool TLx493D_P3B6_isWakeUpEnabled(TLx493D_t *sensor) {
 }
 
 bool TLx493D_P3B6_enableWakeUpMode(TLx493D_t *sensor) {
-    return tlx493d_gen_3_enableWakeUpMode(sensor, P3B6_WU_EN_e);
+    return tlx493d_gen_3_enableWakeUpMode(sensor, P3B6_WU_EN_e, P3B6_WU_EN_CP_e, P3B6_WU_PAR_e);
 }
 
 bool TLx493D_P3B6_disableWakeUpMode(TLx493D_t *sensor) {
-    return tlx493d_gen_3_disableWakeUpMode(sensor, P3B6_WU_EN_e);
+    return tlx493d_gen_3_disableWakeUpMode(sensor, P3B6_WU_EN_e, P3B6_WU_EN_CP_e, P3B6_WU_PAR_e);
+
 }
 
 
@@ -364,6 +363,11 @@ bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
 
 bool TLx493D_P3B6_softwareReset(TLx493D_t *sensor) {
     return tlx493d_gen_3_softwareReset(sensor, P3B6_SOFT_RST_e);
+}
+
+
+bool tlx493d_P3B6_setWakeUpParity(TLx493D_t *sensor) {
+    return tlx493d_gen_3_setWakeUpParity(sensor, P3B6_WU_EN_e, P3B6_WU_PAR_e);
 }
 
 
@@ -437,6 +441,9 @@ void TLx493D_P3B6_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x11] = 0x80;
     sensor->regMap[0x12] = 0xCC;
     sensor->regMap[0x13] = 0x2C;
+
+    // P3B6_CHANNEL_SEL_SAVE_e
+    sensor->regMap[0x1B] = 0x00;
 }
 
 
@@ -455,4 +462,9 @@ void TLx493D_P3B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int1
 
 double TLx493D_P3B6_getSensitivityScaleFactor(TLx493D_t *sensor) {
     return tlx493d_gen_3_getSensitivityScaleFactor(sensor, TLx493D_HAS_X4_e, P3B6_SHORT_EN_e, P3B6_XTR_SHORT_EN_e);
+}
+
+
+void TLx493D_P3B6_printRegisters(TLx493D_t *sensor) {
+    printRegisters(sensor, TLX493D_P3B6_REGISTER_HEADLINE); 
 }
