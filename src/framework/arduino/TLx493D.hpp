@@ -218,16 +218,16 @@ namespace ifx {
                  * @brief The function `enableAdress` enables the defined address pin.
                  * 
                  */
-                void enableAdress() {
-                    bsc.controlAdress(true);
+                void enableAddress() {
+                    bsc.controlAddress(true);
                 }
 
                 /**
                  * @brief The function `disableAdress` disables the defined address pin.
                  * 
                  */
-                void disableAdress() {
-                    bsc.controlAdress(false);
+                void disableAddress() {
+                    bsc.controlAddress(false);
                 }
 
 
