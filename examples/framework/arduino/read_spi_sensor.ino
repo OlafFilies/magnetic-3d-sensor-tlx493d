@@ -11,6 +11,8 @@ const uint8_t CHIP_SELECT_PIN = 3;
 
 TLx493D_P3I8 dut(SPI);
 
+uint8_t count = 0;
+
 
 void setup() {
     delay(3000);
@@ -63,4 +65,15 @@ void loop() {
     Serial.print("\n");
 
     delay(1000);
+
+    Serial.print("count : ");
+    Serial.println(count);
+
+    if( ++count == 10 ) {
+        Serial.println("Before reset -------------------------------------------------------------------------------------------------------");
+        // dut.reset();
+        dut.softwareReset();
+        Serial.println("After reset -------------------------------------------------------------------------------------------------------");
+        count = 0;
+    }
 }
