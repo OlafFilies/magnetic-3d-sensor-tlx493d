@@ -124,14 +124,16 @@ bool tlx493d_gen_2_setTrigger(TLx493D_t *sensor, uint8_t trigBF, uint8_t cpBF, T
 
 bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF, uint8_t cpBF,
                                   TLx493D_SensitivityType_t val) {
-    uint8_t shortVal      = 0;
-    uint8_t extraShortVal = 0;
+    (void) x4BF;
+
+    // uint8_t shortVal      = 0;
+    // uint8_t extraShortVal = 0;
 
     switch(availSens) {
         case TLx493D_HAS_X1_e : return val == TLx493D_FULL_RANGE_e;
     
-        case TLx493D_HAS_X2_e : return val == TLx493D_HAS_X4_e ? false
-                                                               : tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1);
+        case TLx493D_HAS_X2_e : return val == TLx493D_EXTRA_SHORT_RANGE_e ? false
+                                                                          : tlx493d_gen_2_setOneConfigBitfield(sensor, x2BF, cpBF, val == TLx493D_FULL_RANGE_e ? 0 : 1);
     
         // case TLx493D_HAS_X4_e : {  
         //                             switch(val) {
@@ -168,7 +170,8 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivit
 // }
 
 
-bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
+bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
+// bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
     tlx493d_common_setBitfield(sensor, caBF, 0);
     tlx493d_common_setBitfield(sensor, intBF, 1);
 
@@ -238,7 +241,8 @@ bool tlx493d_gen_2_set1ByteReadMode(TLx493D_t *sensor, uint8_t prBF, uint8_t fpB
 
 // CA only in Low Power and MCM mode, not in Fast Mode !
 // MODE depends on PR and TRIG !
-bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca) {
+bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t ca) {
+// bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca) {
     tlx493d_common_setBitfield(sensor, caBF, ca);
     tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
 
@@ -638,6 +642,9 @@ double tlx493d_gen_2_getSensitivityScaleFactorFromSensitivity(TLx493D_Sensitivit
 void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,
                                                           int16_t *x, int16_t *y, int16_t *z) {
+    (void) sensor;
+    (void) rawTemp;
+
     // double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * sensor->functions->getSensitivityScaleFactor(sensor);
     double scaledSensitivity = GEN_2_FULL_RANGE_FIELD_SENSITIVITY * tlx493d_gen_2_getSensitivityScaleFactorFromSensitivity(sens);
     
@@ -649,6 +656,8 @@ void tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int
 
 
 void tlx493d_gen_2_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature) {
+    (void) sensor;
+    
     *rawTemperature = (int16_t) lround(((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
     // *rawTemperature = (int16_t) (((temperature - GEN_2_TEMP_REF) / GEN_2_TEMP_RESOLUTION + GEN_2_TEMP_OFFSET) / 4.0);
 }

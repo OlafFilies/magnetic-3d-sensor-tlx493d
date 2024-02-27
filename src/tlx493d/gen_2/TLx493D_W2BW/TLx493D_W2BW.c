@@ -272,7 +272,8 @@ bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 
 bool TLx493D_W2BW_setDefaultConfig(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CONFIG_REG_e, W2BW_MOD1_REG_e, W2BW_MOD2_REG_e, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e);
+    return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e);
+    // return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CONFIG_REG_e, W2BW_MOD1_REG_e, W2BW_MOD2_REG_e, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e);
 }
 
 
@@ -287,12 +288,14 @@ bool TLx493D_W2BW_enable1ByteReadMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2BW_enableCollisionAvoidance(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, W2BW_PRD_e, 0);
+    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, 0);
+    // return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, W2BW_PRD_e, 0);
 }
 
 
 bool TLx493D_W2BW_disableCollisionAvoidance(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, W2BW_PRD_e, 1);
+    return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, 1);
+    // return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, W2BW_PRD_e, 1);
 }
 
 
@@ -327,6 +330,7 @@ bool TLx493D_W2BW_isFunctional(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2BW_hasWakeUp(TLx493D_t *sensor) {
+    (void) sensor;
     return true;
 }
 

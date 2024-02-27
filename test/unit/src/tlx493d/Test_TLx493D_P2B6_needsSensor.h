@@ -327,9 +327,9 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkModeInterruptFunctionality)
 
 TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkModePowerModeFunctionality)
 {
-    // TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_FAST_MODE_e) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
-    // TEST_ASSERT_EQUAL_HEX8( 0x03, tlx493d_common_returnBitfield(&dut, P2B6_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_FAST_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x03, tlx493d_common_returnBitfield(&dut, P2B6_MODE_e) );
 
     TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));

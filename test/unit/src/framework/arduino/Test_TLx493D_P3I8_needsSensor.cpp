@@ -18,9 +18,10 @@ extern "C" {
 
         ifx::tlx493d::Kit2GoBoardSupport bsc;
         bsc.setSelectPin(SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
-        bsc.begin();
+        // bsc.begin();
         ifx::tlx493d::initBoardSupport(&dut, bsc);
         ifx::tlx493d::initCommunication(&dut, SPI);
+        bsc.begin();
 
         dut.functions->setDefaultConfig(&dut);
     }

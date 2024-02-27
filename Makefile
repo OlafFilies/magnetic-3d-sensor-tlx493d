@@ -76,14 +76,14 @@ test: unity flash
 #test: unity compile
 
 
-EXAMPLES = iic_plain_c iic iic_with_wakeup 3iic 3iic_equal iic_ext_addr spi
+EXAMPLES = iic_c_style iic iic_with_wakeup 3iic 3iic_equal iic_ext_addr spi
 
 # $(EXAMPLES): arduino compile
 
 
 ### Arduino targets
 clean:
-	-rm -rf build/* cppcheck_reports build.ino.*elf.* ./-lm.res log log.[0-9]*
+	-rm -rf build/* cppcheck_reports build.ino.*elf.* ./-lm.res log.[0-9]*
 	find . -name '*ctu-info' -exec \rm {} \;
 
 
@@ -96,8 +96,8 @@ iic_ext_addr: arduino
 	cp examples/framework/arduino/read_iic_a1b6_extended_addresses.ino build/build.ino
 
 
-iic_plain_c: arduino
-	cp examples/framework/arduino/read_iic_sensor_plain_c.ino build/build.ino
+iic_c_style: arduino
+	cp examples/framework/arduino/read_iic_sensor_c_style.ino build/build.ino
  
 
 spi: arduino
@@ -196,14 +196,21 @@ comp_clang:
 # #	gcc -c -Wall -Wpedantic build/TLx493D_P2B6.c -o build/TLx493D_P2B6.o
 
 
+# (make compile_examples) 2>&1 | tee log
+# (make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic compile) 2>&1 | tee log
+# (make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic compile) > log 2>&1
+
+# ./filter.pl
+
 compile_examples:
-	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 iic_plain_c compile
+	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 iic_c_style compile
 	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 iic compile
 	make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic_with_wakeup compile
 	make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM21 3iic compile
 	make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM24 3iic_equal compile
 	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM iic_ext_addr compile
 	make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 spi compile
+
 
 
 

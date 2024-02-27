@@ -75,6 +75,8 @@ bool TLx493D_P3I8_softwareReset(TLx493D_t *sensor);
 
 
 // utilities
+bool tlx493d_P3I8_setWakeUpParity(TLx493D_t *sensor);
+
 uint8_t TLx493D_P3I8_calculateFuseParity(TLx493D_t *sensor);
 uint8_t TLx493D_P3I8_calculateBusParity(TLx493D_t *sensor);
 uint8_t TLx493D_P3I8_calculateConfigurationParity(TLx493D_t *sensor);

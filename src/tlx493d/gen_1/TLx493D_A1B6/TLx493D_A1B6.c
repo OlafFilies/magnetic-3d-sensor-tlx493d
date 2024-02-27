@@ -281,19 +281,22 @@ bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t va
 
 //  // This option depends on PR and MODE.
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
+    (void) val;
+
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setTrigger");
     return false;
 }
 
 
 bool TLx493D_A1B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t val) {
+    (void) val;
+
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setSensitivity");
     return false;
 }
 
 
-bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
-    
+bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {  
     bool ret = true;
     // read READ register values
     ret = TLx493D_A1B6_readRegisters(sensor);
@@ -428,6 +431,8 @@ bool TLx493D_A1B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) 
 
 
 bool TLx493D_A1B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
+    (void) val;
+
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setUpdateRate");
     return false;
 }
@@ -444,7 +449,7 @@ bool TLx493D_A1B6_isFunctional(TLx493D_t *sensor){
 
 
 bool TLx493D_A1B6_hasWakeUp(TLx493D_t *sensor) {
-    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hassWakeUpEnabled");
+    tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasWakeUp");
     return false;
 }
 
@@ -466,11 +471,26 @@ bool TLx493D_A1B6_disableWakeUpMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_A1B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh) {
+    (void) xlTh;
+    (void) xhTh;
+    (void) ylTh;
+    (void) yhTh;
+    (void) zlTh;
+    (void) zhTh;
+
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholdsAsInteger");
     return false;
 }
 
 bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
+    (void) temperature;
+    (void) xLow;
+    (void) xHigh;
+    (void) yLow;
+    (void) yHigh;
+    (void) zLow;
+    (void) zHigh;
+
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setWakeUpThresholds");
     return false;
 }
@@ -592,7 +612,12 @@ uint8_t TLx493D_A1B6_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_
     }
 }
 
-void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double xInmT, double yInmT, double zInmT, int16_t *x, int16_t *y, int16_t *z) {
+void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+                                                         double xInmT, double yInmT, double zInmT, int16_t *x, int16_t *y, int16_t *z) {
+    (void) sensor;
+    (void) rawTemp;
+    (void) sens;
+
     *x = xInmT / GEN_1_MAG_FIELD_MULT;
     *y = yInmT / GEN_1_MAG_FIELD_MULT;
     *z = zInmT / GEN_1_MAG_FIELD_MULT;

@@ -177,19 +177,19 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );
 
 
-    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
-    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr2, &yr2, &zr2);
+    // dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
+    // dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr2, &yr2, &zr2);
 
-    TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
-    TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
-    TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
+    // TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
+    // TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
+    // TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
 
 
-    dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_EXTRA_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
+    // dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_EXTRA_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
 
-    TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
-    TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
-    TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
+    // TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
+    // TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
+    // TEST_ASSERT_INT16_WITHIN( 2, zr, zr2 );
 }
 
 

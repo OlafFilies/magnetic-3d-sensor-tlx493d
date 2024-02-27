@@ -241,9 +241,7 @@ bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 
 
 bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
-
     // sensor->comInterface.comLibParams.spi_params.dummy = (val == TLx493D_BzTemp_e ? 0x04 : 0x00);
-
     tlx493d_setReadAddress(sensor, val == TLx493D_BzTemp_e ? 0x04 : 0x00);
 
     return tlx493d_gen_3_setMeasurement(sensor, P3I8_CHANNEL_SEL_e, P3I8_CHANNEL_SEL_SAVE_e, val);
@@ -261,18 +259,19 @@ bool TLx493D_P3I8_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 
 bool TLx493D_P3I8_setDefaultConfig(TLx493D_t *sensor) {
-    // tlx493d_common_setBitfield(sensor, P3I8_MODE_SEL_e, 0);
     tlx493d_common_setBitfield(sensor, P3I8_INT_DIS_e, 1);
-    // tlx493d_common_setBitfield(sensor, P3I8_WU_EN_e, 0);
-    // tlx493d_common_setBitfield(sensor, P3I8_CRC_WR_EN_e, 0);
-    return tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
+    bool b = tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
 
-    // bool b = tlx493d_common_writeRegister(sensor, P3I8_MODE_SEL_e);
-    // return b && TLx493D_P3I8_readRegisters(sensor);
+    tlx493d_common_setBitfield(sensor, P3I8_RST_FLG_CLR_e, 1);
+    b &= tlx493d_common_writeRegister(sensor, P3I8_RST_FLG_CLR_e);
+
+    return b;
 }
 
 
 bool TLx493D_P3I8_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address) {
+    (void) address;
+
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "setIICAddress");
     return false;
 }
@@ -327,6 +326,8 @@ bool TLx493D_P3I8_isFunctional(TLx493D_t *sensor) {
 
 
 bool TLx493D_P3I8_hasWakeUp(TLx493D_t *sensor) {
+    (void) sensor;
+
     return true;
 }
 
@@ -336,11 +337,11 @@ bool TLx493D_P3I8_isWakeUpEnabled(TLx493D_t *sensor) {
 }
 
 bool TLx493D_P3I8_enableWakeUpMode(TLx493D_t *sensor) {
-    return tlx493d_gen_3_enableWakeUpMode(sensor, P3I8_WU_EN_e);
+    return tlx493d_gen_3_enableWakeUpMode(sensor, P3I8_WU_EN_e, P3I8_WU_EN_CP_e, P3I8_WU_PAR_e);
 }
 
 bool TLx493D_P3I8_disableWakeUpMode(TLx493D_t *sensor) {
-    return tlx493d_gen_3_disableWakeUpMode(sensor, P3I8_WU_EN_e);
+    return tlx493d_gen_3_disableWakeUpMode(sensor, P3I8_WU_EN_e, P3I8_WU_EN_CP_e, P3I8_WU_PAR_e);
 }
 
 
@@ -366,7 +367,14 @@ bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
 }
 
 bool TLx493D_P3I8_softwareReset(TLx493D_t *sensor) {
+    tlx493d_common_setBitfield(sensor, P3I8_RST_FLG_CLR_e, 1);
+
     return tlx493d_gen_3_softwareReset(sensor, P3I8_SOFT_RST_e);
+}
+
+
+bool tlx493d_P3I8_setWakeUpParity(TLx493D_t *sensor) {
+    return tlx493d_gen_3_setWakeUpParity(sensor, P3I8_WU_EN_e, P3I8_WU_PAR_e);
 }
 
 
@@ -447,6 +455,8 @@ void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
 
 
 uint8_t TLx493D_P3I8_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+    (void) addr;
+    
     tlx493d_errorFunctionNotSupportedForSensorType(sensor, "selectIICAddress");
     return 0;
 }
