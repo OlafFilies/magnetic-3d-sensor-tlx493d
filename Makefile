@@ -1,6 +1,6 @@
-FQBN ?=
-PORT ?=
-TEST ?=
+FQBN  ?=
+PORT  ?=
+TESTS ?=
 
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
@@ -119,7 +119,7 @@ iic_with_wakeup: arduino
 	cp examples/framework/arduino/read_3_equal_iic_sensors.ino build/build.ino
 
 
-# example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TEST=TLE493D_A2B6 unity flash monitor
+# example call : make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 TESTS=-DTEST_TLE493D_A2B6 unity flash monitor
 unity: arduino
 	cp -r test/unit/Unity/*.[hc] build
 	cp test/unit/src/Test_*.h build
