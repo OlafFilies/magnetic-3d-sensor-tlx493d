@@ -27,6 +27,7 @@ bool TLx493D_A2B6_init(TLx493D_t *sensor);
 bool TLx493D_A2B6_deinit(TLx493D_t *sensor);
 
 bool TLx493D_A2B6_readRegisters(TLx493D_t *sensor);
+bool TLx493D_A2B6_readRegistersAndCheck(TLx493D_t *sensor);
 
 void TLx493D_A2B6_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature);
 bool TLx493D_A2B6_getRawTemperature(TLx493D_t *sensor, int16_t *temperature);

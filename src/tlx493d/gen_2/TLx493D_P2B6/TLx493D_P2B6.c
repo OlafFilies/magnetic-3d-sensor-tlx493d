@@ -78,6 +78,7 @@ TLx493D_CommonFunctions_t TLx493D_P2B6_commonFunctions = {
     .deinit                         = TLx493D_P2B6_deinit,
 
     .readRegisters                  = TLx493D_P2B6_readRegisters,
+    .readRegistersAndCheck          = TLx493D_P2B6_readRegistersAndCheck,
 
     .calculateRawTemperature        = TLx493D_P2B6_calculateRawTemperature,
     .getRawTemperature              = TLx493D_P2B6_getRawTemperature,
@@ -169,32 +170,37 @@ bool TLx493D_P2B6_deinit(TLx493D_t *sensor) {
 
 
 bool TLx493D_P2B6_readRegisters(TLx493D_t *sensor) {
-    bool isOk = false;
+//     bool isOk = false;
 
-    do {
-        isOk = tlx493d_common_readRegisters(sensor);
+//     do {
+//         isOk = tlx493d_common_readRegisters(sensor);
 
-println("isOk = %d", isOk);
+// println("isOk = %d", isOk);
 
-println("hasValidData = %d", TLx493D_P2B6_hasValidData(sensor));
-println("hasValidBusParity = %d", TLx493D_P2B6_hasValidBusParity(sensor));
-println("hasValidTBit = %d", TLx493D_P2B6_hasValidTBit(sensor));
-println("hasValidPD0Bit = %d", tlx493d_common_returnBitfield(sensor, P2B6_PD0_e) == 1);
-println("hasValidPD3Bit = %d", tlx493d_common_returnBitfield(sensor, P2B6_PD3_e) == 1);
+// println("hasValidData = %d", TLx493D_P2B6_hasValidData(sensor));
+// println("hasValidBusParity = %d", TLx493D_P2B6_hasValidBusParity(sensor));
+// println("hasValidTBit = %d", TLx493D_P2B6_hasValidTBit(sensor));
+// println("hasValidPD0Bit = %d", tlx493d_common_returnBitfield(sensor, P2B6_PD0_e) == 1);
+// println("hasValidPD3Bit = %d", tlx493d_common_returnBitfield(sensor, P2B6_PD3_e) == 1);
 
-println("isFunctional = %d", TLx493D_P2B6_isFunctional(sensor));
-println("hasValidFuseParity = %d", TLx493D_P2B6_hasValidFuseParity(sensor));
-println("hasValidConfigurationParity = %d", TLx493D_P2B6_hasValidConfigurationParity(sensor));
+// println("isFunctional = %d", TLx493D_P2B6_isFunctional(sensor));
+// println("hasValidFuseParity = %d", TLx493D_P2B6_hasValidFuseParity(sensor));
+// println("hasValidConfigurationParity = %d", TLx493D_P2B6_hasValidConfigurationParity(sensor));
 
-    } while( ! (TLx493D_P2B6_hasValidData(sensor) && isOk) );
-    // } while( ! (isOk && TLx493D_P2B6_hasValidData(sensor) && TLx493D_P2B6_isFunctional(sensor)) );
+//     } while( ! (TLx493D_P2B6_hasValidData(sensor) && isOk) );
+//     // } while( ! (isOk && TLx493D_P2B6_hasValidData(sensor) && TLx493D_P2B6_isFunctional(sensor)) );
 
-println("hier !!!");
+// println("hier !!!");
 
-    // while( ! (TLx493D_P2B6_hasValidTBit(sensor) && tlx493d_common_readRegisters(sensor)) ) ;
-    return true;
+//     // while( ! (TLx493D_P2B6_hasValidTBit(sensor) && tlx493d_common_readRegisters(sensor)) ) ;
+//     return true;
 
-    // return tlx493d_common_readRegisters(sensor);
+    return tlx493d_common_readRegisters(sensor);
+}
+
+
+bool TLx493D_P2B6_readRegistersAndCheck(TLx493D_t *sensor) {
+    return tlx493d_common_readRegistersAndCheck(sensor);
 }
 
 
@@ -294,23 +300,21 @@ bool TLx493D_P2B6_enable1ByteReadMode(TLx493D_t *sensor) {
 
 bool TLx493D_P2B6_enableCollisionAvoidance(TLx493D_t *sensor) {
     return tlx493d_gen_2_setCollisionAvoidance(sensor, P2B6_CA_e, P2B6_FP_e, 0);
-    // return tlx493d_gen_2_setCollisionAvoidance(sensor, P2B6_CA_e, P2B6_FP_e, P2B6_PRD_e, 0);
 }
 
 
 bool TLx493D_P2B6_disableCollisionAvoidance(TLx493D_t *sensor) {
     return tlx493d_gen_2_setCollisionAvoidance(sensor, P2B6_CA_e, P2B6_FP_e, 1);
-    // return tlx493d_gen_2_setCollisionAvoidance(sensor, P2B6_CA_e, P2B6_FP_e, P2B6_PRD_e, 1);
 }
 
 
 bool TLx493D_P2B6_enableInterrupt(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setInterrupt(sensor, P2B6_INT_e, P2B6_FP_e, P2B6_PRD_e, 0);
+    return tlx493d_gen_2_setInterrupt(sensor, P2B6_INT_e, P2B6_FP_e, 0);
 }
 
 
 bool TLx493D_P2B6_disableInterrupt(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setInterrupt(sensor, P2B6_INT_e, P2B6_FP_e, P2B6_PRD_e, 1);
+    return tlx493d_gen_2_setInterrupt(sensor, P2B6_INT_e, P2B6_FP_e, 1);
 }
 
 
@@ -325,9 +329,10 @@ bool TLx493D_P2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
 
 
 bool TLx493D_P2B6_hasValidData(TLx493D_t *sensor) {
-    println("tlx493d_common_returnBitfield(sensor, P2B6_MODE_e) = %d", tlx493d_common_returnBitfield(sensor, P2B6_MODE_e));
-    return( tlx493d_common_returnBitfield(sensor, P2B6_MODE_e) == 0b11 ? tlx493d_gen_2_hasValidData(sensor)
-                                                                       : tlx493d_gen_2_hasValidData(sensor) && (tlx493d_common_returnBitfield(sensor, P2B6_PD0_e) == 1) && (tlx493d_common_returnBitfield(sensor, P2B6_PD3_e) == 1) );
+    return( tlx493d_gen_2_hasValidData(sensor, P2B6_MODE_e, P2B6_PD3_e, P2B6_PD0_e) );
+
+    // return( tlx493d_gen_2_hasValidData(sensor) && (tlx493d_common_returnBitfield(sensor, P2B6_MODE_e) == 0b11 ? true
+    //                                                                    : (tlx493d_common_returnBitfield(sensor, P2B6_PD0_e) == 1) && (tlx493d_common_returnBitfield(sensor, P2B6_PD3_e) == 1) );
 }
 
 

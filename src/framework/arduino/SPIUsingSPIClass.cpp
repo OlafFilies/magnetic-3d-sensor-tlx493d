@@ -1,6 +1,7 @@
 // std includes
-#include <malloc.h>
-#include <stddef.h>
+#include <cstddef>
+#include <cstdlib>
+#include <new>
 
 // project c includes
 // common to all sensors
@@ -56,7 +57,7 @@ namespace ifx {
         }
 
 
-        TLx493D_ComLibraryFunctions_t  comLibFuncs_spi = {
+        static TLx493D_ComLibraryFunctions_t  comLibFuncs_spi = {
                                                     .init           = { .spi_init           = initSPI },
                                                     .deinit         = { .spi_deinit         = deinitSPI },
                                                     .transfer       = { .spi_transfer       = transferSPI },

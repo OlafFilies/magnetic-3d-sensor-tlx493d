@@ -209,12 +209,17 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
 
     // Unsupported
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e) );
+    TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
+    TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
+    TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
 
 
     // Supported
-    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
-    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
-    TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
+    // print("Test mode start ...\n");
+    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
+    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
+    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
+    // print("Test mode end.\n");
 
 
     // print("TLx493D_BxTemp_e\n");
@@ -278,6 +283,12 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3I8_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3I8_CHANNEL_SEL_SAVE_e) );
+
+
+    // switch to LPM
+    TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3I8_MODE_SEL_e) );
 }
 
 
@@ -291,18 +302,20 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigTriggerFunctionality)
     TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3I8_MODE_SEL_e) );
 
     // try triggers
-    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_AFTER_REG_05_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
-    TEST_ASSERT_GREATER_OR_EQUAL_INT8( 0b10, tlx493d_common_returnBitfield(&dut, P3I8_TRIGGER_SEL_e) );
-    TEST_ASSERT_LESS_OR_EQUAL_INT8( 0b11, tlx493d_common_returnBitfield(&dut, P3I8_TRIGGER_SEL_e) );
+    // There is no stop condition for SPI interfaces, so ignore this mode !
+    TEST_ASSERT_FALSE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_STOP_CONDITION_e) );
+    // TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_STOP_CONDITION_e) );
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_GREATER_OR_EQUAL_INT8( 0b10, tlx493d_common_returnBitfield(&dut, P3I8_TRIGGER_SEL_e) );
+    // TEST_ASSERT_LESS_OR_EQUAL_INT8( 0b11, tlx493d_common_returnBitfield(&dut, P3I8_TRIGGER_SEL_e) );
 
     //
-    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e) );
+    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b01, tlx493d_common_returnBitfield(&dut, P3I8_TRIGGER_SEL_e) );
 
     //
-    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_NO_ADC_ON_READ_e) );
+    TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_NO_TRIGGER_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b00, tlx493d_common_returnBitfield(&dut, P3I8_TRIGGER_SEL_e) );
 
@@ -365,7 +378,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkModeInterruptFunctionality)
 {
     // TEST_ASSERT_TRUE( dut.functions->enableInterrupt(&dut) );
     // TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3I8_INT_DIS_e) );
-    // // TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[P3I8_MOD1_REG_e] & 0x40 );
 
     TEST_ASSERT_TRUE( dut.functions->disableInterrupt(&dut) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
@@ -406,7 +418,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkModeUpdateRateFunctionality)
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b10, tlx493d_common_returnBitfield(&dut, P3I8_F_UPDATE_SEL_e) );
 
-
     TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_16_HZ_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b11, tlx493d_common_returnBitfield(&dut, P3I8_F_UPDATE_SEL_e) );
@@ -445,7 +456,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkWakeUpSettingsFunctionality)
 
     TEST_ASSERT_TRUE( dut.functions->enableWakeUpMode(&dut) );
     TEST_ASSERT_TRUE( dut.functions->isWakeUpEnabled(&dut) );
-
     TEST_ASSERT_TRUE( dut.functions->disableWakeUpMode(&dut) );
 }
 

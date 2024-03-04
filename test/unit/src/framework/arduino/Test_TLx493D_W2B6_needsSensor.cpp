@@ -2,6 +2,9 @@
 #include "Test_includes.hpp"
 
 
+const uint8_t POWER_PIN = LED2;
+
+
 extern "C" {
     // project includes
     #include "Test_TLx493D_W2B6_needsSensor.h"
@@ -12,7 +15,13 @@ extern "C" {
     void TLx493D_W2B6_needsSensor_suiteSetup() {
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_W2B6_init(&dut);
+
+        ifx::tlx493d::Kit2GoBoardSupport bsc;
+        bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
+        ifx::tlx493d::initBoardSupport(&dut, bsc);
         ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
+        bsc.begin();
+
         dut.functions->setDefaultConfig(&dut);
     }
     

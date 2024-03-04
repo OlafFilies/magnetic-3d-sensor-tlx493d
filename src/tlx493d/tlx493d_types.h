@@ -83,9 +83,15 @@ typedef enum {
 
 
 typedef enum {
+               // 1st and 2nd gen.
                TLx493D_NO_ADC_ON_READ_e = 0,
                TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e,
                TLx493D_ADC_ON_READ_AFTER_REG_05_e,
+
+               // 3rd gen. only
+               TLx493D_NO_TRIGGER_e,
+               TLx493D_ADC_ON_READ_e,
+               TLx493D_ADC_ON_STOP_CONDITION_e,
 } TLx493D_TriggerType_t;
 
 
@@ -233,6 +239,7 @@ typedef bool (*TLx493D_InitFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DeinitFuncPtr)(TLx493D_t *);
 
 typedef bool (*TLx493D_ReadRegistersFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_ReadRegistersAndCheckFuncPtr)(TLx493D_t *);
 
 typedef void (*TLx493D_CalculateRawTemperatureFuncPtr)(TLx493D_t *, int16_t *);
 typedef bool (*TLx493D_GetRawTemperatureFuncPtr)(TLx493D_t *, int16_t *);
@@ -322,6 +329,7 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_DeinitFuncPtr                       deinit;
 
     TLx493D_ReadRegistersFuncPtr                readRegisters;
+    TLx493D_ReadRegistersAndCheckFuncPtr        readRegistersAndCheck;
 
     TLx493D_CalculateRawTemperatureFuncPtr      calculateRawTemperature;
     TLx493D_GetRawTemperatureFuncPtr            getRawTemperature;

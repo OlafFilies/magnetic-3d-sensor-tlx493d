@@ -41,7 +41,7 @@ void    tlx493d_common_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t 
 
 bool tlx493d_common_writeRegister(TLx493D_t* sensor, uint8_t bitField);
 bool tlx493d_common_readRegisters(TLx493D_t *sensor);
-
+bool tlx493d_common_readRegistersAndCheck(TLx493D_t *sensor);
 
 void tlx493d_common_calculateRawTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, int16_t *temperature);
 bool tlx493d_common_getRawTemperature(TLx493D_t *sensor, int16_t *temperature);

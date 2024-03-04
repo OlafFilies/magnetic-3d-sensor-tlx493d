@@ -1,6 +1,7 @@
 // std includes
-#include <malloc.h>
-#include <stddef.h>
+#include <cstddef>
+#include <cstdlib>
+#include <new>
 
 // project c includes
 // common to all sensors
@@ -41,7 +42,7 @@ namespace ifx {
         }
 
 
-        TLx493D_ComLibraryFunctions_t  comLibFuncs_iic = {
+        static TLx493D_ComLibraryFunctions_t  comLibFuncs_iic = {
                                                     .init           = { .iic_init           = initIIC },
                                                     .deinit         = { .iic_deinit         = deinitIIC },
                                                     .transfer       = { .iic_transfer       = transferIIC },

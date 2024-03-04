@@ -1,5 +1,6 @@
 // std includes
-#include <stdbool.h>
+#include <cstdbool>
+#include <new>
 
 // Arduino includes
 #include "types.hpp"
@@ -54,10 +55,9 @@ namespace ifx {
                 sensor->comInterface.comLibObj.iic_obj = NULL;
             }
             else if( sensor->comIFType == TLx493D_SPI_e ) {
-                // sensor->comInterface.comLibObj.spi_obj->spi->deinit();
                 sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
 
-                if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
+                if( sensor->comInterface.comLibObj.spi_obj->isToBeDeleted ) {
                     delete sensor->comInterface.comLibObj.spi_obj->spi;
                 }
 

@@ -65,6 +65,7 @@ TLx493D_CommonFunctions_t TLx493D_A2B6_commonFunctions = {
     .deinit                         = TLx493D_A2B6_deinit,
 
     .readRegisters                  = TLx493D_A2B6_readRegisters,
+    .readRegistersAndCheck          = TLx493D_A2B6_readRegistersAndCheck,
 
     .calculateRawTemperature        = TLx493D_A2B6_calculateRawTemperature,
     .getRawTemperature              = TLx493D_A2B6_getRawTemperature,
@@ -158,6 +159,11 @@ bool TLx493D_A2B6_deinit(TLx493D_t *sensor) {
 
 bool TLx493D_A2B6_readRegisters(TLx493D_t *sensor) {
     return tlx493d_common_readRegisters(sensor);
+}
+
+
+bool TLx493D_A2B6_readRegistersAndCheck(TLx493D_t *sensor) {
+    return tlx493d_common_readRegistersAndCheck(sensor);
 }
 
 
@@ -282,23 +288,21 @@ bool TLx493D_A2B6_enable1ByteReadMode(TLx493D_t *sensor) {
 
 bool TLx493D_A2B6_enableCollisionAvoidance(TLx493D_t *sensor) {
     return tlx493d_gen_2_setCollisionAvoidance(sensor, A2B6_CA_e, A2B6_FP_e, 0);
-    // return tlx493d_gen_2_setCollisionAvoidance(sensor, A2B6_CA_e, A2B6_FP_e, A2B6_PRD_e, 0);
 }
 
 
 bool TLx493D_A2B6_disableCollisionAvoidance(TLx493D_t *sensor) {
     return tlx493d_gen_2_setCollisionAvoidance(sensor, A2B6_CA_e, A2B6_FP_e, 1);
-    // return tlx493d_gen_2_setCollisionAvoidance(sensor, A2B6_CA_e, A2B6_FP_e, A2B6_PRD_e, 1);
 }
 
 
 bool TLx493D_A2B6_enableInterrupt(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setInterrupt(sensor, A2B6_INT_e, A2B6_FP_e, A2B6_PRD_e, 0);
+    return tlx493d_gen_2_setInterrupt(sensor, A2B6_INT_e, A2B6_FP_e, 0);
 }
 
 
 bool TLx493D_A2B6_disableInterrupt(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setInterrupt(sensor, A2B6_INT_e, A2B6_FP_e, A2B6_PRD_e, 1);
+    return tlx493d_gen_2_setInterrupt(sensor, A2B6_INT_e, A2B6_FP_e, 1);
 }
 
 
@@ -336,7 +340,7 @@ bool TLx493D_A2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
 
 
 bool TLx493D_A2B6_hasValidData(TLx493D_t *sensor) {
-    return tlx493d_gen_2_hasValidData(sensor);
+    return tlx493d_gen_2_hasValidData(sensor, A2B6_MODE_e, A2B6_PD3_e, A2B6_PD0_e);
 }
 
 

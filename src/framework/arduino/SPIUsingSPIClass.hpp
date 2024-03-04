@@ -3,10 +3,7 @@
 
 
 // std includes
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdbool>
 
 // Arduino includes
 #include <Arduino.h>

@@ -42,7 +42,7 @@ void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF
 
     uint8_t regCopy[sensor->regMapSize];
     memcpy(regCopy, sensor->regMap, sensor->regMapSize);
-    memcpy(sensor->regMap + offset + 4, regCopy + offset, sensor->regMapSize - offset - 4);
+    memcpy(sensor->regMap + offset + 4, regCopy + offset, (size_t) (sensor->regMapSize - offset - 4));
     memset(sensor->regMap + offset, 0, 4);
  
     // tlx493d_printRegisters(sensor);
@@ -129,14 +129,14 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, uint8_t 
         case TLx493D_BxByBzTemp_e : channel = 0b0000;
                                     break;
 
-        case TLx493D_VHall_Bias_e : channel = 0b0001;
-                                    break;
+        // case TLx493D_VHall_Bias_e : channel = 0b0001;
+        //                             break;
         
-        case TLx493D_Spintest_e : channel = 0b0010;
-                                  break;
+        // case TLx493D_Spintest_e : channel = 0b0010;
+        //                           break;
 
-        case TLx493D_SAT_test_e : channel = 0b1000;
-                                  break;
+        // case TLx493D_SAT_test_e : channel = 0b1000;
+        //                           break;
         
         case TLx493D_BxTemp_e : channel = 0b1100;
                                 break;
@@ -153,6 +153,7 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, uint8_t 
 
     tlx493d_common_setBitfield(sensor, channelBF, channel);
     tlx493d_common_setBitfield(sensor, channelSaveBF, channel);
+    // sensor->functions->printRegisters(sensor);
 
     // if( sensor->regMap[0x0B] != sensor->regMap[0x1B] ) {
     //     error("CHANNEL != CHANNEL_SAVE !! %x <-> %x\n", sensor->regMap[0x0B], sensor->regMap[0x1B]);
@@ -167,20 +168,22 @@ bool tlx493d_gen_3_setTrigger(TLx493D_t *sensor, uint8_t trigBF, TLx493D_Trigger
     uint8_t trig = 0;
 
     switch(val) {
-        case TLx493D_NO_ADC_ON_READ_e : trig = 0b00;
-                                        break;
+        case TLx493D_NO_TRIGGER_e : trig = 0b00;
+                                    break;
 
-        case TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e : trig = 0b01;
-                                                      break;
+        case TLx493D_ADC_ON_READ_e : trig = 0b01;
+                                     break;
         
-        case TLx493D_ADC_ON_READ_AFTER_REG_05_e : trig = 0b10;
-                                                  break;
+        case TLx493D_ADC_ON_STOP_CONDITION_e : trig = 0b10;
+                                               break;
         
         default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_TriggerType_t");
                   return false;
     }
 
     tlx493d_common_setBitfield(sensor, trigBF, trig);
+    // sensor->functions->printRegisters(sensor);
+
     return tlx493d_common_writeRegister(sensor, trigBF);
 }
 
@@ -208,6 +211,8 @@ bool tlx493d_gen_3_setSensitivity(TLx493D_t *sensor, uint8_t shortBF, uint8_t xt
 
     tlx493d_common_setBitfield(sensor, shortBF, shortVal);
     tlx493d_common_setBitfield(sensor, xtrShortBF, extraShortVal);
+    // sensor->functions->printRegisters(sensor);
+
     return tlx493d_common_writeRegister(sensor, shortBF);
 }
 
@@ -295,10 +300,8 @@ bool tlx493d_gen_3_setUpdateRate(TLx493D_t *sensor, uint8_t fUpdateBF, TLx493D_U
 
 
 bool tlx493d_gen_3_hasValidData(TLx493D_t *sensor, uint8_t measBF) {
-    return !sensor->functions->isInTestMode(sensor) && (tlx493d_common_returnBitfield(sensor, measBF) != 0);
-
-    // TLx493D_Register_t *meas = &sensor->regDef[measBF];
-    // return !sensor->functions->isInTestMode(sensor) && ((sensor->regMap[meas->address] & meas->mask) != 0);
+    return (tlx493d_common_returnBitfield(sensor, measBF) != 0);
+    // return !sensor->functions->isInTestMode(sensor) && (tlx493d_common_returnBitfield(sensor, measBF) != 0);
 }
 
 
@@ -317,7 +320,7 @@ bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wuc
 
     if( sensor->functions->isInTestMode(sensor) ) {
         info("Sensor %s was in test mode, changed to normal mode in order to enable wake up !", tlx493d_common_getTypeAsString(sensor));
-        b &= sensor->functions->setMeasurement(sensor, 0);
+        b &= sensor->functions->setMeasurement(sensor, TLx493D_BxByBzTemp_e);
     }
 
     tlx493d_common_setBitfield(sensor, wuBF, 1);
@@ -345,8 +348,8 @@ bool tlx493d_gen_3_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
     TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
     TLx493D_Register_t *lsbs = &sensor->regDef[lsbsBF];
 
-    uint8_t lower = threshold10Bits & (lsbs->mask >> lsbs->offset);
-    uint8_t upper = (threshold10Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset);
+    uint8_t lower = (uint8_t) (threshold10Bits & (lsbs->mask >> lsbs->offset));
+    uint8_t upper = (uint8_t) ((threshold10Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset));
 
     tlx493d_common_setBitfield(sensor, msbsBF, upper);
     bool b = tlx493d_common_writeRegister(sensor, msbsBF);
@@ -424,7 +427,7 @@ uint8_t tlx493d_gen_3_calculateWakeUpParity(TLx493D_t *sensor, uint8_t wuBF) {
         parity ^= sensor->regMap[i];
     }
 
-    parity ^= (sensor->regMap[0x13] & ((uint8_t) 0x0F));
+    parity = (uint8_t) (parity ^ (sensor->regMap[0x13] & 0x0F));
 
 	return tlx493d_common_getOddParity(tlx493d_common_calculateParity(parity));
 }

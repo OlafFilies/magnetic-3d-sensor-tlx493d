@@ -1,6 +1,6 @@
 // std includes
-#include <malloc.h>
-#include <stddef.h>
+#include <cstddef>
+#include <cstdlib>
 
 // project c includes
 // common to all sensors

@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -241,7 +240,6 @@ bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 
 
 bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
-    // sensor->comInterface.comLibParams.spi_params.dummy = (val == TLx493D_BzTemp_e ? 0x04 : 0x00);
     tlx493d_setReadAddress(sensor, val == TLx493D_BzTemp_e ? 0x04 : 0x00);
 
     return tlx493d_gen_3_setMeasurement(sensor, P3I8_CHANNEL_SEL_e, P3I8_CHANNEL_SEL_SAVE_e, val);
@@ -249,7 +247,9 @@ bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t va
 
 
 bool TLx493D_P3I8_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
-    return tlx493d_gen_3_setTrigger(sensor, P3I8_TRIGGER_SEL_e, val);
+    // There is no stop condition for SPI interfaces, so ignore this mode !
+    return val == TLx493D_ADC_ON_STOP_CONDITION_e ? false
+                                                  : tlx493d_gen_3_setTrigger(sensor, P3I8_TRIGGER_SEL_e, val);
 }
 
 

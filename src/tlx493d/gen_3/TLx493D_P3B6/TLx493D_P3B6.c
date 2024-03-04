@@ -362,6 +362,8 @@ bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
 }
 
 bool TLx493D_P3B6_softwareReset(TLx493D_t *sensor) {
+    tlx493d_common_setBitfield(sensor, P3B6_RST_FLG_CLR_e, 1);
+
     return tlx493d_gen_3_softwareReset(sensor, P3B6_SOFT_RST_e);
 }
 

@@ -17,15 +17,19 @@ namespace ifx {
 
                 using BusType = SPIClass;
 
-                static constexpr uint8_t TLX493D_SPI_READ_BIT         = 0x80;
+                // static constexpr uint8_t TLX493D_SPI_READ_BIT         = 0x80;
                 static constexpr uint8_t TLX493D_SPI_READ_BIT_ON      = 0x80;
-                static constexpr uint8_t TLX493D_SPI_READ_BIT_OFF     = 0x00;
+                // static constexpr uint8_t TLX493D_SPI_READ_BIT_OFF     = 0x00;
 
-                static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT     = 0x60;
-                static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_ON  = 0x60;
-                static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_OFF = 0x00;
+                // static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT     = 0x60;
+                // static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_ON  = 0x60;
+                // static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_OFF = 0x00;
 
                 explicit SPIClassWrapper(SPIClass &bus) : spi(bus) {
+                }
+
+
+                ~SPIClassWrapper() {
                 }
 
 

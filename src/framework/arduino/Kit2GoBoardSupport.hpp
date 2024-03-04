@@ -37,6 +37,11 @@ namespace ifx {
                 Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0}, addressPins{false, 0, 0, 0, 0, 0, 0} {
                 }
 
+
+                ~Kit2GoBoardSupport() {
+                }
+
+
                 /**
                  * @brief The function `init` sets/resets the board pin modes and/or values based on the values of the datastructures set in the main code.  
                  * 
@@ -47,12 +52,13 @@ namespace ifx {
                  *  stored in addressPins structure is activated and later isolated in a prescribed way to enable the 4 extended addresses of the said device.        
                  */
                 void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddress = false) {
-                    for(const auto &p : selectPins) {
-                        initPin(p);
+                    if( enableSelect ) {
+                        for(const auto &p : selectPins) {
+                            initPin(p);
+                        }
+
+                        controlSelect(enableSelect);
                     }
-
-                    controlSelect(enableSelect);
-
 
                     if( enableExtendedAddress ) {
                         for(const auto &p : addressPins){
@@ -62,18 +68,18 @@ namespace ifx {
                         controlAddress(true);
                     }
 
-
-                    for(const auto &p : powerPins) {
-                        initPin(p);
-                    }
-
-                    // controlPower(enablePower);
-                    controlPower(false);
-
                     if( enablePower ) {
-                        controlPower(true);
-                    }
+                        for(const auto &p : powerPins) {
+                            initPin(p);
+                        }
 
+                        // controlPower(enablePower);
+                        controlPower(false);
+
+                        if( enablePower ) {
+                            controlPower(true);
+                        }
+                    }
 
                     if( enableExtendedAddress ) {
                         controlAddress(false);

@@ -289,23 +289,21 @@ bool TLx493D_W2BW_enable1ByteReadMode(TLx493D_t *sensor) {
 
 bool TLx493D_W2BW_enableCollisionAvoidance(TLx493D_t *sensor) {
     return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, 0);
-    // return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, W2BW_PRD_e, 0);
 }
 
 
 bool TLx493D_W2BW_disableCollisionAvoidance(TLx493D_t *sensor) {
     return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, 1);
-    // return tlx493d_gen_2_setCollisionAvoidance(sensor, W2BW_CA_e, W2BW_FP_e, W2BW_PRD_e, 1);
 }
 
 
 bool TLx493D_W2BW_enableInterrupt(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setInterrupt(sensor, W2BW_INT_e, W2BW_FP_e, W2BW_PRD_e, 0);
+    return tlx493d_gen_2_setInterrupt(sensor, W2BW_INT_e, W2BW_FP_e, 0);
 }
 
 
 bool TLx493D_W2BW_disableInterrupt(TLx493D_t *sensor) {
-    return tlx493d_gen_2_setInterrupt(sensor, W2BW_INT_e, W2BW_FP_e, W2BW_PRD_e, 1);
+    return tlx493d_gen_2_setInterrupt(sensor, W2BW_INT_e, W2BW_FP_e, 1);
 }
 
 
@@ -320,7 +318,7 @@ bool TLx493D_W2BW_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
 
 
 bool TLx493D_W2BW_hasValidData(TLx493D_t *sensor) {
-    return tlx493d_gen_2_hasValidData(sensor);
+    return tlx493d_gen_2_hasValidData(sensor, W2BW_MODE_e, W2BW_PD3_e, W2BW_PD0_e);
 }
 
 

@@ -41,12 +41,13 @@ bool tlx493d_gen_2_set1ByteReadMode(TLx493D_t *sensor, uint8_t prBF, uint8_t fpB
 
 bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t ca);
 // bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_t fpBF, uint8_t prdBF, uint8_t ca);
-bool tlx493d_gen_2_setInterrupt(TLx493D_t *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq);
+// bool tlx493d_gen_2_setInterrupt(TLx493D_t *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq);
+bool tlx493d_gen_2_setInterrupt(TLx493D_t *sensor, uint8_t intBF, uint8_t fpBF, uint8_t irq);
 
 bool tlx493d_gen_2_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, uint8_t fpBF, TLx493D_PowerModeType_t mode);
 bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_t ur);
 
-bool tlx493d_gen_2_hasValidData(TLx493D_t *sensor);
+bool tlx493d_gen_2_hasValidData(TLx493D_t *sensor, uint8_t modeBF, uint8_t pd3BF, uint8_t pd0BF);
 bool tlx493d_gen_2_isFunctional(TLx493D_t *sensor);
 
 

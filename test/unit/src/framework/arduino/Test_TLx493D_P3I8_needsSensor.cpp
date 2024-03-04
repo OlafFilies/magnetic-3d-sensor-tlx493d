@@ -2,7 +2,7 @@
 #include "Test_includes.hpp"
 
 
-const uint8_t SELECT_PIN = 3;
+const uint8_t CHIP_SELECT_PIN = 3;
 
 
 extern "C" {
@@ -17,8 +17,7 @@ extern "C" {
         (void) TLx493D_P3I8_init(&dut);
 
         ifx::tlx493d::Kit2GoBoardSupport bsc;
-        bsc.setSelectPin(SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
-        // bsc.begin();
+        bsc.setSelectPin(CHIP_SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
         ifx::tlx493d::initBoardSupport(&dut, bsc);
         ifx::tlx493d::initCommunication(&dut, SPI);
         bsc.begin();

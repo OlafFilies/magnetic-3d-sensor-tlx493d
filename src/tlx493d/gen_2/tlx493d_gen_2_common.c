@@ -171,7 +171,6 @@ bool tlx493d_gen_2_setSensitivity(TLx493D_t *sensor, TLx493D_AvailableSensitivit
 
 
 bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
-// bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t configREG, uint8_t mod1REG, uint8_t mod2REG, uint8_t cpBF, uint8_t caBF, uint8_t intBF) {
     tlx493d_common_setBitfield(sensor, caBF, 0);
     tlx493d_common_setBitfield(sensor, intBF, 1);
 
@@ -250,7 +249,7 @@ bool tlx493d_gen_2_setCollisionAvoidance(TLx493D_t *sensor, uint8_t caBF, uint8_
 }
 
 
-bool tlx493d_gen_2_setInterrupt(TLx493D_t *sensor, uint8_t intBF, uint8_t fpBF, uint8_t prdBF, uint8_t irq) {
+bool tlx493d_gen_2_setInterrupt(TLx493D_t *sensor, uint8_t intBF, uint8_t fpBF, uint8_t irq) {
     tlx493d_common_setBitfield(sensor, intBF, irq);
     tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
 
@@ -335,8 +334,11 @@ bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF,
 }
 
 
-bool tlx493d_gen_2_hasValidData(TLx493D_t *sensor) {
-    return sensor->functions->hasValidBusParity(sensor) && sensor->functions->hasValidTBit(sensor);
+bool tlx493d_gen_2_hasValidData(TLx493D_t *sensor, uint8_t modeBF, uint8_t pd3BF, uint8_t pd0BF) {
+    return( sensor->functions->hasValidBusParity(sensor)
+         && sensor->functions->hasValidTBit(sensor)
+         && (tlx493d_common_returnBitfield(sensor, modeBF) == 0b11 ? true
+                                                                   : (tlx493d_common_returnBitfield(sensor, pd3BF) == 1) && (tlx493d_common_returnBitfield(sensor, pd0BF) == 1)) );
 }
 
 
@@ -407,8 +409,8 @@ bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
 
     int16_t thresh11Bits = threshold12Bits >> 1;
 
-    uint8_t lower = thresh11Bits & (lsbs->mask >> lsbs->offset);
-    uint8_t upper = (thresh11Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset);
+    uint8_t lower = (uint8_t) (thresh11Bits & (lsbs->mask >> lsbs->offset));
+    uint8_t upper = (uint8_t) ((thresh11Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset));
 
     // print("threshold12Bits = %#X / %d   thresh11Bits = %#X / %d  upper = %#X / %d  lower = %#X / %d\n",
     //       threshold12Bits, threshold12Bits, thresh11Bits, thresh11Bits, upper, upper, lower, lower);
@@ -474,7 +476,7 @@ uint8_t tlx493d_gen_2_calculateFuseParity(TLx493D_t *sensor, uint8_t fpBF, uint8
     TLx493D_Register_t *fp  = &sensor->regDef[fpBF];
     TLx493D_Register_t *prd = &sensor->regDef[prdBF];
 
-	uint8_t parity = sensor->regMap[fp->address] & ~fp->mask;
+	uint8_t parity = sensor->regMap[fp->address] & ((uint8_t) ~fp->mask);
 	parity ^= sensor->regMap[prd->address] & prd->mask;
 
 	return tlx493d_common_getOddParity(tlx493d_common_calculateParity(parity));
@@ -495,13 +497,12 @@ uint8_t tlx493d_gen_2_calculateBusParity(TLx493D_t *sensor, uint8_t to) {
 
 uint8_t tlx493d_gen_2_calculateConfigurationParity(TLx493D_t *sensor, uint8_t cpBF) {
     TLx493D_Register_t *cp     = &sensor->regDef[cpBF];
-	uint8_t             parity = tlx493d_common_calculateParity(sensor->regMap[cp->address] & ~cp->mask);
+	uint8_t             parity = tlx493d_common_calculateParity(sensor->regMap[cp->address] & ((uint8_t) ~cp->mask));
 	return tlx493d_common_getEvenParity(parity);
 }
 
 
 uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint8_t cpBF) {
-// uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint8_t waBF, uint8_t tstBF, uint8_t phBF, uint8_t cpBF) {
 // uint8_t tlx493d_gen_2_calculateConfigurationParityWakeup(TLx493D_t *sensor, uint8_t cpBF, uint8_t from, uint8_t to) {
     TLx493D_Register_t *cp     = &sensor->regDef[cpBF];
 	uint8_t              parity = sensor->regMap[0x07]; //from];
@@ -513,15 +514,9 @@ uint8_t tlx493d_gen_2_calculateConfigurationParityWakeUp(TLx493D_t *sensor, uint
 
     // parity ^= (sensor->regMap[0x0D] & 0x7F); // WA
     parity = (uint8_t) (parity ^ (sensor->regMap[0x0D] & 0x7F)); // WA
-    // parity = (sensor->regMap[0x0D] & 0x7F); // WA
-    // parity = (uint8_t) (parity ^ (sensor->regMap[0x0D] & ((uint8_t) 0x7F))); // WA
-    parity ^= (sensor->regMap[0x0E] & 0x3F); // TST
-    parity ^= (sensor->regMap[0x0F] & 0x3F); // PH
-//     parity ^= (sensor->regMap[0x0D] & ~sensor->regDef[waBF].mask);
-//     parity ^= (sensor->regMap[0x0E] & ~sensor->regDef[tstBF].mask);
-//     parity ^= (sensor->regMap[0x0F] & ~sensor->regDef[phBF].mask);
-
-    parity ^= sensor->regMap[0x10] & ~cp->mask;
+    parity = (uint8_t) (parity ^ (sensor->regMap[0x0E] & 0x3F)); // TST
+    parity = (uint8_t) (parity ^ (sensor->regMap[0x0F] & 0x3F)); // PH
+    parity = (uint8_t) (parity ^ (sensor->regMap[0x10] & ~cp->mask));
 
 	return tlx493d_common_getOddParity(tlx493d_common_calculateParity(parity));
 }

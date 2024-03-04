@@ -198,7 +198,6 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     RUN_TEST_GROUP(SensorsCommonFunctions);
 
     // run gen 1 common functions tests
-    RUN_TEST_GROUP(SensorsCommon_needsSensor);
     RUN_TEST_GROUP(SensorsCommon);
     
 

@@ -137,13 +137,6 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 1, ysr, yfr );
     TEST_ASSERT_FLOAT_WITHIN( 1, zsr, zfr );
 
-    
-    // TEST_ASSERT_EQUAL_INT16( tr2, tr3 );
-    // TEST_ASSERT_EQUAL_INT16( xr2, xr3 );
-    // TEST_ASSERT_EQUAL_INT16( yr2, yr3 );
-    // TEST_ASSERT_EQUAL_INT16( zr2, zr3 );
-
-
 
     // back to TLx493D_FULL_RANGE_e
     TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );

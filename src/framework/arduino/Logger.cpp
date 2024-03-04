@@ -1,7 +1,7 @@
 // std includes
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
 
 // Arduino includes
 #include <Arduino.h>

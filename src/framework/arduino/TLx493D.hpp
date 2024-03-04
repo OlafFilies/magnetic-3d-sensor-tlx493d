@@ -3,8 +3,8 @@
 
 
 // std includes
-#include <stdbool.h>
-#include <stdint.h>
+#include <cstdbool>
+#include <cstdint>
 
 // project cpp includes
 #include "types.hpp"
@@ -192,6 +192,7 @@ namespace ifx {
                 }
 
                 void reset() {
+                    deinitCommunication(&sensor);
                     sensor.functions->setResetValues(&sensor);
                     bsc.reset();
                     initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
@@ -384,10 +385,15 @@ namespace ifx {
                 }
 
                 void reset() {
-                    sensor.functions->setResetValues(&sensor);
                     bsc.reset();
+                    
+                    tlx493d_init(&sensor, sensorType);
+                    init();
+
+                    // sensor.functions->setResetValues(&sensor);
+
                     // initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
-                    setDefaultConfig();
+                    // setDefaultConfig();
                 }
 
                 /**

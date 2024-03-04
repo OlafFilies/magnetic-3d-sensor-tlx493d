@@ -21,6 +21,10 @@ namespace ifx {
                 }
 
 
+                ~TwoWireWrapper() {
+                }
+
+
                 void init() {
                     iic.begin();
                 }
