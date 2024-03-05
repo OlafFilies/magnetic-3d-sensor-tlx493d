@@ -2,7 +2,7 @@
 #include "Test_includes.hpp"
 
 
-const uint8_t POWER_PIN = LED2;
+const static uint8_t POWER_PIN = LED2;
 
 static ifx::tlx493d::Kit2GoBoardSupport bsc;
 
@@ -18,33 +18,19 @@ extern "C" {
         // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_A2B6_init(&dut);
 
-    pinMode(POWER_PIN, OUTPUT);
-    digitalWrite(POWER_PIN, HIGH);
-    delay(0);
-
-
-        // bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
-        // bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50000, 50000);
-        // ifx::tlx493d::initBoardSupport(&dut, bsc);
-        // bsc.begin();
+        bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 0, 250000);
+        ifx::tlx493d::initBoardSupport(&dut, bsc);
+        bsc.init();
 
         ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
-
         dut.functions->setDefaultConfig(&dut);
-
-
-
-        // sensor.functions->setResetValues(&sensor);
-        // bsc.reset();
-        // ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
-        // dut.functions->setDefaultConfig(&dut);
     }
     
 
     // Method invoked by Unity after a test suite is run 
     void TLx493D_A2B6_needsSensor_suiteTearDown() {
         ifx::tlx493d::deinitCommunication(&dut);
-        // bsc.deinit();
+        bsc.deinit();
 
         // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
         dut.functions->deinit(&dut);

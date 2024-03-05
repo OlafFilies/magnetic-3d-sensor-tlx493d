@@ -72,7 +72,7 @@ namespace ifx {
 
             private:
 
-            TwoWire &iic;
+                TwoWire &iic;
         };
     }
 }

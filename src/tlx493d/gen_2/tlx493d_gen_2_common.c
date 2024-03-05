@@ -338,6 +338,7 @@ bool tlx493d_gen_2_hasValidData(TLx493D_t *sensor, uint8_t modeBF, uint8_t pd3BF
     return( sensor->functions->hasValidBusParity(sensor)
          && sensor->functions->hasValidTBit(sensor)
          && (tlx493d_common_returnBitfield(sensor, modeBF) == 0b11 ? true
+                                                                //    : (tlx493d_common_returnBitfield(sensor, pd0BF) == 1)) );
                                                                    : (tlx493d_common_returnBitfield(sensor, pd3BF) == 1) && (tlx493d_common_returnBitfield(sensor, pd0BF) == 1)) );
 }
 
@@ -375,6 +376,7 @@ bool tlx493d_gen_2_writeConfigurationRegisters(TLx493D_t *sensor) {
 
     return tlx493d_transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
 }
+
 
 bool tlx493d_gen_2_enableWakeUpMode(TLx493D_t *sensor, uint8_t tstBF, uint8_t wuBF, uint8_t cpbBF) {
     bool isTestMode = tlx493d_common_returnBitfield(sensor, tstBF) != 0;
@@ -436,7 +438,7 @@ bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
     retVal &= tlx493d_gen_2_setThreshold(sensor, zlMSBBF, zlLSBBF, zlTh);
     retVal &= tlx493d_gen_2_setThreshold(sensor, zhMSBBF, zhLSBBF, zhTh);
 
-    sensor->functions->readRegisters(sensor);
+    retVal &= sensor->functions->readRegisters(sensor);
 
     return retVal;
 }

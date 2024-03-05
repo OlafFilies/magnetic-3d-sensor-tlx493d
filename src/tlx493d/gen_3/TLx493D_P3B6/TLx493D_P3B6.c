@@ -85,6 +85,7 @@ TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
     .deinit                         = TLx493D_P3B6_deinit,
 
     .readRegisters                  = TLx493D_P3B6_readRegisters,
+    .readRegistersAndCheck          = TLx493D_P3B6_readRegistersAndCheck,
 
     .calculateRawTemperature        = TLx493D_P3B6_calculateRawTemperature,
     .getRawTemperature              = TLx493D_P3B6_getRawTemperature,
@@ -177,6 +178,11 @@ bool TLx493D_P3B6_deinit(TLx493D_t *sensor) {
 
 bool TLx493D_P3B6_readRegisters(TLx493D_t *sensor) {
     return tlx493d_gen_3_readRegisters(sensor, P3B6_CHANNEL_SEL_SAVE_e);
+}
+
+
+bool TLx493D_P3B6_readRegistersAndCheck(TLx493D_t *sensor) {
+    return tlx493d_common_readRegistersAndCheck(sensor);
 }
 
 

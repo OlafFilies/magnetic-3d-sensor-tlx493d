@@ -68,10 +68,10 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkUnsupportedFunctionality)
 
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkSupportedFunctionality)
 {
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     // tlx493d_printRegisters(&dut);
  
-    // TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) ); // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) ); // fails sometimes
 
     TEST_ASSERT_TRUE( dut.functions->isFunctional(&dut) );
     TEST_ASSERT_TRUE( dut.functions->hasValidFuseParity(&dut) );
@@ -497,7 +497,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     // pos. numbers
                                                               //   xlTh,         xhTh,        ylTh,        yhTh,        zlTh,        zhTh);
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x0ABC >> 2, 0x00BC >> 2, 0x000C >> 2, 0x0FBC >> 2, 0x0F0C >> 2, 0x0F00 >> 2) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // threshold 10 bits explicit (+ 2 implicit set to 0)
     // MSBs
@@ -520,7 +520,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     // // neg. numbers in hex format
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, ((int16_t) 0x8ABC) >> 2, ((int16_t) 0x80BC) >> 2, ((int16_t) 0x800C) >> 2,
                                                                         ((int16_t) 0x8FBC) >> 2, ((int16_t) 0x8F0C) >> 2, ((int16_t) 0x8F00) >> 2) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8ABC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL
@@ -541,7 +541,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
 
     // neg. numbers in int format
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, -1 >> 2, -2 >> 2, -16 >> 2, -100 >> 2, -256 >> 2, -1024 >> 2) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1) >> 4) & 0xFF,    tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL

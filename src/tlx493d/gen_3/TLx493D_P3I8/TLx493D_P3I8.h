@@ -25,6 +25,7 @@ bool TLx493D_P3I8_init(TLx493D_t *sensor);
 bool TLx493D_P3I8_deinit(TLx493D_t *sensor);
 
 bool TLx493D_P3I8_readRegisters(TLx493D_t *sensor);
+bool TLx493D_P3I8_readRegistersAndCheck(TLx493D_t *sensor);
 
 void TLx493D_P3I8_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature);
 bool TLx493D_P3I8_getRawTemperature(TLx493D_t *sensor, int16_t *temperature);

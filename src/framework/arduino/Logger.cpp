@@ -106,7 +106,7 @@ extern "C" {
     }
 
 
-    void flush() {
+    void logFlush() {
         // USE WITH CAUTION ! DEVICE MAY HANGUP !
         Serial.flush();
         // Serial.println();

@@ -80,7 +80,7 @@ namespace ifx {
 
             private:
 
-            SPIClass &spi;
+                SPIClass &spi;
         };
     }
 }

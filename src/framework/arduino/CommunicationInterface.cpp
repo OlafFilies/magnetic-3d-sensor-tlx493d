@@ -42,27 +42,33 @@ extern "C" void tlx493d_setReadAddress(TLx493D_t *sensor, uint8_t address) {
 namespace ifx {
     namespace tlx493d {
         void deinitCommunication(TLx493D_t *sensor) {
-        // void tlx493d_deinitCommunication(TLx493D_t *sensor) {
             if( sensor->comIFType == TLx493D_I2C_e ) {
-                // sensor->comInterface.comLibObj.iic_obj->wire->deinit();
-                sensor->comInterface.comLibFuncs->deinit.iic_deinit(sensor);
-
-                if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
-                    delete sensor->comInterface.comLibObj.iic_obj->wire;
+                if( sensor->comInterface.comLibFuncs != NULL ) {
+                    sensor->comInterface.comLibFuncs->deinit.iic_deinit(sensor);
                 }
 
-                free(sensor->comInterface.comLibObj.iic_obj);
-                sensor->comInterface.comLibObj.iic_obj = NULL;
+                if( sensor->comInterface.comLibObj.iic_obj != NULL ) {
+                    if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
+                        delete sensor->comInterface.comLibObj.iic_obj->wire;
+                    }
+
+                    free(sensor->comInterface.comLibObj.iic_obj);
+                    sensor->comInterface.comLibObj.iic_obj = NULL;
+                }
             }
             else if( sensor->comIFType == TLx493D_SPI_e ) {
-                sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
-
-                if( sensor->comInterface.comLibObj.spi_obj->isToBeDeleted ) {
-                    delete sensor->comInterface.comLibObj.spi_obj->spi;
+                if( sensor->comInterface.comLibFuncs != NULL ) {
+                    sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
                 }
 
-                free(sensor->comInterface.comLibObj.spi_obj);
-                sensor->comInterface.comLibObj.spi_obj = NULL;
+                if( sensor->comInterface.comLibObj.iic_obj != NULL ) {
+                    if( sensor->comInterface.comLibObj.spi_obj->isToBeDeleted ) {
+                        delete sensor->comInterface.comLibObj.spi_obj->spi;
+                    }
+
+                    free(sensor->comInterface.comLibObj.spi_obj);
+                    sensor->comInterface.comLibObj.spi_obj = NULL;
+                }
             }
 
             sensor->comInterface.comLibFuncs = NULL;

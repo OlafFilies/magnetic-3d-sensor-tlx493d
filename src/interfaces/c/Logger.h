@@ -88,7 +88,7 @@ void error(const char *format, ...);
  * @brief The function `flush` is used to send a new line character to ther serial output.
  * 
  */
-void flush(void);
+void logFlush(void);
 
 
 #ifdef __cplusplus

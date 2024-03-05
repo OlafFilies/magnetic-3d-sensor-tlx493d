@@ -17,21 +17,21 @@
 */
 bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register_t *regDef, TLx493D_CommonFunctions_t *commonFuncs,
                          TLx493D_SupportedSensorType_t sensorType, TLx493D_SupportedComLibraryInterfaceType_t comIFType) {
-    sensor->regMap            = (uint8_t*) malloc(sizeof(uint8_t) * regMapSize);
-    sensor->regDef            = regDef;
-    sensor->functions         = commonFuncs;
-    sensor->regMapSize        = regMapSize;
-    sensor->sensorType        = sensorType;
-    sensor->comIFType         = comIFType;
+    sensor->regMap     = (uint8_t*) malloc(sizeof(uint8_t) * regMapSize);
+    sensor->regDef     = regDef;
+    sensor->functions  = commonFuncs;
+    sensor->regMapSize = regMapSize;
+    sensor->sensorType = sensorType;
+    sensor->comIFType  = comIFType;
 
-    sensor->comInterface.comLibFuncs       = NULL;
-    sensor->comInterface.comLibObj.iic_obj = NULL;
+    sensor->comInterface.comLibFuncs                       = NULL;
+    sensor->comInterface.comLibObj.iic_obj                 = NULL;
 
     sensor->boardSupportInterface.boardSupportObj.k2go_obj = NULL;
 
     memset(sensor->regMap, 0, sensor->regMapSize);
-
     sensor->functions->setResetValues(sensor);
+
     return true;
 }
 
@@ -40,24 +40,59 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
  * 
 */
 bool tlx493d_common_deinit(TLx493D_t *sensor) {
-    free(sensor->regMap);
+    if( sensor->regMap != NULL ) {
+        free(sensor->regMap);
+        sensor->regMap = NULL;
+    }
 
-    sensor->regMap = NULL;
+    sensor->comInterface.comLibFuncs                       = NULL;
+    sensor->comInterface.comLibObj.iic_obj                 = NULL;
 
-    // free(sensor->comInterface.comLibObj.iic_obj);
-
-    // sensor->comInterface.comLibFuncs       = NULL;
-    // sensor->comInterface.comLibObj.iic_obj = NULL;
+    sensor->boardSupportInterface.boardSupportObj.k2go_obj = NULL;
     
     return true;
 }
 
 
+static bool tlx493d_hasNotOnly0xFFInRegmap(TLx493D_t *sensor) {
+    // Skip address 0 ! Seems to be ok even if other entries are not.
+    for(uint8_t i = 1; i < sensor->regMapSize; ++i) {
+        if( sensor->regMap[i] != 0xFF ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // /***
 //  * Generations 2 and 3, not 1.
 // */
 bool tlx493d_common_readRegisters(TLx493D_t *sensor) {
-    return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    bool isOk  = tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+    isOk      &= tlx493d_hasNotOnly0xFFInRegmap(sensor);
+
+    // if( ! isOk ) {
+println("isOk = %d", isOk);
+
+println("hasValidData = %d", sensor->functions->hasValidData(sensor));
+println("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
+println("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
+
+// println("isInTestMode = %d", sensor->functions->isInTestMode(sensor));
+
+println("isFunctional = %d", sensor->functions->isFunctional(sensor));
+println("hasValidFuseParity = %d", sensor->functions->hasValidFuseParity(sensor));
+println("hasValidConfigurationParity = %d", sensor->functions->hasValidConfigurationParity(sensor));
+
+        tlx493d_printRegisters(sensor);
+        logFlush();
+    // }
+
+    return isOk;
+    // return isOk & tlx493d_hasNotOnly0xFFInRegmap(sensor);
+
+    // return tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
 }
 
 
@@ -72,7 +107,8 @@ bool tlx493d_common_readRegistersAndCheck(TLx493D_t *sensor) {
 
     do {
         // isOk = tlx493d_transfer(sensor, NULL, 0, buf, sensor->regMapSize);
-        isOk = tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+        isOk  = tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
+        isOk &= tlx493d_hasNotOnly0xFFInRegmap(sensor);
 
 // println("isOk = %d", isOk);
 
@@ -92,10 +128,10 @@ bool tlx493d_common_readRegistersAndCheck(TLx493D_t *sensor) {
 println("isOk = %d", isOk);
 
 println("hasValidData = %d", sensor->functions->hasValidData(sensor));
-// println("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
-// println("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
+println("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
+println("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
 
-// println("isInTestMode = %d", sensor->functions->isInTestMode(sensor));
+println("isInTestMode = %d", sensor->functions->isInTestMode(sensor));
 
 println("isFunctional = %d", sensor->functions->isFunctional(sensor));
 println("hasValidFuseParity = %d", sensor->functions->hasValidFuseParity(sensor));

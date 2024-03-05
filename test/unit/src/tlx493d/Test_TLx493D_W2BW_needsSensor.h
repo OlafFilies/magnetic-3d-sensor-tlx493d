@@ -25,16 +25,9 @@ TEST_GROUP(TLx493D_W2BW_needsSensor);
 TEST_GROUP(TLx493D_W2BW_needsSensorInternal);
 
 
-// static double  x, y, z, t;
-
-
 // Setup method called before every individual test defined for this test group
 static TEST_SETUP(TLx493D_W2BW_needsSensorInternal)
 {
-    // x = 0.0;
-    // y = 0.0;
-    // z = 0.0;
-    // t = 0.0;
 }
 
 
@@ -60,18 +53,16 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkUnsupportedFunctionality)
 
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkSupportedFunctionality)
 {
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut) );
     // tlx493d_printRegisters(&dut);
  
-    // TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) ); // fails sometimes
-    // TEST_ASSERT_TRUE( dut.functions->hasValidBusParity(&dut) ); // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) );      // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidBusParity(&dut) ); // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidTBit(&dut) );      // fails sometimes
 
     TEST_ASSERT_TRUE( dut.functions->isFunctional(&dut) );
-
     TEST_ASSERT_TRUE( dut.functions->hasValidFuseParity(&dut) );
     TEST_ASSERT_TRUE( dut.functions->hasValidConfigurationParity(&dut) );
-
-    TEST_ASSERT_TRUE( dut.functions->hasValidTBit(&dut) );
 }
 
 
@@ -269,28 +260,28 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigMeasurementFunctionality)
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
-    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_DT_e) ); // DT
-    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_AM_e) ); // AM
-    TEST_ASSERT_EQUAL_HEX8( 0x80, tlx493d_common_returnBitfield(&dut, W2BW_BZ_MSBS_e) ); // Bz MSBS
-    TEST_ASSERT_EQUAL_HEX8( 0x80, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_MSBS_e) ); // TEMP MSBS
-    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_LSBS_e) ); // TEMP LSBS
-    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_BZ_LSBS_e) ); // Bz LSBS
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_DT_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_AM_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, tlx493d_common_returnBitfield(&dut, W2BW_BZ_MSBS_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_MSBS_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_LSBS_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_BZ_LSBS_e) );
 
 
     // TLx493D_BxByBz_e
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
-    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_DT_e) ); // DT
-    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_AM_e) ); // AM
-    TEST_ASSERT_EQUAL_HEX8( 0x80, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_MSBS_e) ); // TEMP MSBS
-    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_LSBS_e) ); // TEMP LSBS
+    TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_DT_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_AM_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x80, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_MSBS_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_TEMP_LSBS_e) );
 
 
     // TLx493D_BxByBzTemp_e
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
-    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_DT_e) ); // DT
-    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_AM_e) ); // AM
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_DT_e) );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, W2BW_AM_e) );
 }
 
 
@@ -317,11 +308,9 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkConfigTriggerFunctionality)
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_GREATER_OR_EQUAL_INT8( 0b10, tlx493d_common_returnBitfield(&dut, W2BW_TRIG_e) );
     TEST_ASSERT_LESS_OR_EQUAL_INT8( 0b11, tlx493d_common_returnBitfield(&dut, W2BW_TRIG_e) );
-    // TEST_ASSERT( ((dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x20) || ((dut.regMap[W2BW_CONFIG_REG_e] & 0x30) == 0x30) );
 
     // Not to be used with our default config CA = 0, INT = 1 !
     // TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_ADC_ON_READ_BEFORE_FIRST_MSB_e) );
-    // // while( dut.functions->readRegisters(&dut) == false ) ;
     // TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, W2BW_TRIG_e) );
 
     TEST_ASSERT_TRUE( dut.functions->setTrigger(&dut, TLx493D_NO_ADC_ON_READ_e) );
@@ -519,7 +508,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkWakeUpThresholdFunctionality)
 {
     // pos. numbers
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x0ABC, 0x00BC, 0x000C, 0x0FBC, 0x0F0C, 0x0F00) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // threshold 11 bits (+ 1 implicit  set to 0)
     // MSBs
@@ -541,7 +530,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkWakeUpThresholdFunctionality)
 
     // neg. numbers
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x8ABC, 0x80BC, 0x800C, 0x8FBC, 0x8F0C, 0x8F00) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8ABC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, W2BW_XL_MSBS_e) );
@@ -561,7 +550,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkWakeUpThresholdFunctionality)
 
 
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, -1, -2, -16, -100, -256, -1024) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1) >> 4) & 0xFF,    tlx493d_common_returnBitfield(&dut, W2BW_XL_MSBS_e) );
