@@ -21,9 +21,9 @@ extern "C" {
         // bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 0, 250000);
         bsc.setSelectPin(CHIP_SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
         ifx::tlx493d::initBoardSupport(&dut, bsc);
-        bsc.init();
+        bsc.init(false, true);
 
-        ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
+        ifx::tlx493d::initCommunication(&dut, SPI);
         dut.functions->setDefaultConfig(&dut);
     }
     

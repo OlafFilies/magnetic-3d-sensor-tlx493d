@@ -33,6 +33,12 @@ namespace ifx {
                 }
 
 
+                /**
+                 * @brief The SPIClass::init does not include the setting of the data mode, bit order and baudrate, all of which
+                 * is done in SPIClass::beginTransaction(SPISettings ). But we do not know about such details at this level. 
+                 * Therefore init() is not sufficient to restart a SPIClass object after a reset !
+                 * 
+                 */
                 void init() {
                     spi.begin();
                 }

@@ -37,7 +37,7 @@ namespace ifx {
 
         
                 explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
-                    tlx493d_init(&sensor, sensorType);
+                    (void) tlx493d_init(&sensor, sensorType);
                 }
 
                 /**
@@ -59,9 +59,10 @@ namespace ifx {
                  * @param[in] enableExtendedAdress    Enable or disable the extended address feature of the sensor.
                  */
                 void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false) {
-                    initBoardSupport(&sensor, bsc);
+                    (void) initBoardSupport(&sensor, bsc);
                     bsc.init(enablePower, enableSelect, enableExtendedAdress);
-                    initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
+                    bsc.enablePower(true);
+                    initCommunication(&sensor, busWrapper, iicAddress);
                     setDefaultConfig();
                 }
 
@@ -86,9 +87,9 @@ namespace ifx {
                  * all allocated memory (free the memory to be precise).
                  */
                 void deinit() {
-                    deinitCommunication(&sensor); // includes call to busWrapper.deinit();
+                    deinitCommunication(&sensor);
                     bsc.deinit();
-                    tlx493d_deinit(&sensor);
+                    (void) tlx493d_deinit(&sensor);
                 }
 
                 /**
@@ -180,7 +181,7 @@ namespace ifx {
                  * 
                  */
                 void enablePower() {
-                    bsc.controlPower(true);
+                    bsc.enablePower(true);
                 }
 
                 /**
@@ -188,14 +189,16 @@ namespace ifx {
                  * 
                  */
                 void disablePower() {
-                    bsc.controlPower(false);
+                    bsc.enablePower(false);
                 }
 
                 void reset() {
                     deinitCommunication(&sensor);
+                    // busWrapper.deinit();
                     sensor.functions->setResetValues(&sensor);
                     bsc.reset();
-                    initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
+                    initCommunication(&sensor, busWrapper, iicAddress);
+                    // busWrapper.init();
                     setDefaultConfig();
                 }
 
@@ -204,7 +207,7 @@ namespace ifx {
                  * 
                  */
                 void enableSelect() {
-                    bsc.controlSelect(true);
+                    bsc.enableSelect(true);
                 }
 
                 /**
@@ -212,7 +215,7 @@ namespace ifx {
                  * 
                  */
                 void disableSelect() {
-                    bsc.controlSelect(false);
+                    bsc.enableSelect(false);
                 }
 
                 /**
@@ -220,7 +223,7 @@ namespace ifx {
                  * 
                  */
                 void enableAddress() {
-                    bsc.controlAddress(true);
+                    bsc.enableAddress(true);
                 }
 
                 /**
@@ -228,7 +231,7 @@ namespace ifx {
                  * 
                  */
                 void disableAddress() {
-                    bsc.controlAddress(false);
+                    bsc.enableAddress(false);
                 }
 
 
@@ -265,7 +268,7 @@ namespace ifx {
 
         
                 explicit TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
-                    tlx493d_init(&sensor, sensorType);
+                    (void) tlx493d_init(&sensor, sensorType);
                 }
 
                 /**
@@ -281,10 +284,11 @@ namespace ifx {
                  * function
                  *
                  */
-                void init() {
-                    initBoardSupport(&sensor, bsc);
-                    bsc.init(true);
-                    initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
+                void init(bool enablePower = false, bool enableSelect = true) {
+                    (void) initBoardSupport(&sensor, bsc);
+                    bsc.init(enablePower, enableSelect, false);
+                    initCommunication(&sensor, busWrapper);
+                    // sensor.comInterface.comLibFuncs->init.spi_init(&sensor);
                     setDefaultConfig();
                 }
 
@@ -293,8 +297,8 @@ namespace ifx {
                  * For details see `init` function.
                  * 
                  */
-                void begin() {
-                    init();
+                void begin(bool enablePower = false, bool enableSelect = true) {
+                    init(enablePower, enableSelect);
                 }
 
 
@@ -305,9 +309,9 @@ namespace ifx {
                  * 
                  */
                 void deinit() {
-                    deinitCommunication(&sensor); // includes call to busWrapper.deinit();
+                    deinitCommunication(&sensor);
                     bsc.deinit();
-                    tlx493d_deinit(&sensor);
+                    (void) tlx493d_deinit(&sensor);
                 }
 
                 /**
@@ -373,7 +377,7 @@ namespace ifx {
                  * 
                  */
                 void enablePower() {
-                    bsc.controlPower(true);
+                    bsc.enablePower(true);
                 }
 
                 /**
@@ -381,19 +385,17 @@ namespace ifx {
                  * 
                  */
                 void disablePower() {
-                    bsc.controlPower(false);
+                    bsc.enablePower(false);
                 }
 
                 void reset() {
+                    deinitCommunication(&sensor);
+                    // sensor.comInterface.comLibFuncs->deinit.spi_deinit(&sensor);
+                    sensor.functions->setResetValues(&sensor);
                     bsc.reset();
-                    
-                    tlx493d_init(&sensor, sensorType);
-                    init();
-
-                    // sensor.functions->setResetValues(&sensor);
-
-                    // initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
-                    // setDefaultConfig();
+                    initCommunication(&sensor, busWrapper);
+                    // sensor.comInterface.comLibFuncs->init.spi_init(&sensor);
+                    setDefaultConfig();
                 }
 
                 /**
@@ -401,7 +403,7 @@ namespace ifx {
                  * 
                  */
                 void enableSelect() {
-                    bsc.controlSelect(true);
+                    bsc.enableSelect(true);
                 }
 
                 /**
@@ -409,7 +411,7 @@ namespace ifx {
                  * 
                  */
                 void disableSelect() {
-                    bsc.controlSelect(false);
+                    bsc.enableSelect(false);
                 }
 
 

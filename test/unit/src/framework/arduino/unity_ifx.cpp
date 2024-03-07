@@ -16,7 +16,7 @@ extern "C" {
     }
 
     // Method used by Unity to flush the output
-    void flushCharacter() {
+    void flushCharacter(void) {
         Serial.flush();
     }
 }

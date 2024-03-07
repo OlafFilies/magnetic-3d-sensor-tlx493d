@@ -51,38 +51,37 @@ namespace ifx {
                  * @param[in] enableExtendedAddress (Only relevant for Generation 1, A1B6 devices) Whether to use extended addressing feature. In this case, the pin
                  *  stored in addressPins structure is activated and later isolated in a prescribed way to enable the 4 extended addresses of the said device.        
                  */
-                void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddress = false) {
-                    if( enableSelect ) {
+                void init(bool isEnablePower = true, bool isEnableSelect = false, bool isEnableExtendedAddress = false) {
+                    if( isEnableSelect ) {
                         for(const auto &p : selectPins) {
                             initPin(p);
                         }
 
-                        controlSelect(enableSelect);
+                        this->enableSelect(false);
                     }
 
-                    if( enableExtendedAddress ) {
+                    if( isEnableExtendedAddress ) {
                         for(const auto &p : addressPins){
                             initPin(p);
                         }
 
-                        controlAddress(true);
+                        enableAddress(true);
                     }
 
-                    if( enablePower ) {
+                    if( isEnablePower ) {
                         for(const auto &p : powerPins) {
                             initPin(p);
                         }
 
-                        // controlPower(enablePower);
-                        controlPower(false);
+                        enablePower(false);
 
-                        if( enablePower ) {
-                            controlPower(true);
-                        }
+                        // if( isEnablePower ) {
+                        //     enablePower(true);
+                        // }
                     }
 
-                    if( enableExtendedAddress ) {
-                        controlAddress(false);
+                    if( isEnableExtendedAddress ) {
+                        enableAddress(false);
 
                         for(auto &p : addressPins){
                             setPinDirection(p, INPUT);
@@ -107,8 +106,8 @@ namespace ifx {
                  * @brief The `deinit` function sets all the pins to their disableValue.
                  */
                 void deinit() {
-                    controlPower(false);
-                    controlSelect(false);
+                    enablePower(false);
+                    enableSelect(false);
                 }
 
                 /**
@@ -187,41 +186,41 @@ namespace ifx {
 
 
                 /**
-                 * @brief The `controlPower` function sets/resets the pins in powerPins based on argument.
+                 * @brief The `enablePower` function sets/resets the pins in powerPins based on argument.
                  * 
                  * @param[in] enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */
-                void controlPower(bool enable) {
+                void enablePower(bool enable) {
                     for(const auto &p : powerPins) {
-                        controlPin(p, enable);
+                        enablePin(p, enable);
                     }
                 }
 
                 /**
-                 * @brief The `controlSelect` function sets/resets the pins in selectPins based on argument.
+                 * @brief The `enableSelect` function sets/resets the pins in selectPins based on argument.
                  * 
                  * @param[in] enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */
-                void controlSelect(bool enable) {
+                void enableSelect(bool enable) {
                     for(const auto &p : selectPins) {
-                        controlPin(p, enable);
+                        enablePin(p, enable);
                     }
                 }
 
                 /**
-                 * @brief The `controlAddress` function sets/resets the pins in selectPins based on argument.
+                 * @brief The `enableAddress` function sets/resets the pins in selectPins based on argument.
                  * 
                  * @param enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */    
-                void controlAddress(bool enable) {
+                void enableAddress(bool enable) {
                     for(const auto &p : addressPins) {
-                        controlPin(p, enable);
+                        enablePin(p, enable);
                     }
                 }
 
                 void reset() {
-                    controlPower(false);
-                    controlPower(true);
+                    enablePower(false);
+                    enablePower(true);
                 }
 
 
@@ -245,12 +244,12 @@ namespace ifx {
                 } pinCtrl;
 
                 /**
-                 * @brief The `controlPin` function sets/resets the pin on the basis of parameters in the structure `pinCtrl`.
+                 * @brief The `enablePin` function sets/resets the pin on the basis of parameters in the structure `pinCtrl`.
                  * 
                  * @param[in] p Structure of type `pinCtrl`.
                  * @param[in] enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */ 
-                void controlPin(const pinCtrl &p, bool enable) {
+                void enablePin(const pinCtrl &p, bool enable) {
                     if( p.isSet ) {
                         digitalWrite(p.pinNumber, enable ? p.enableValue : p.disableValue);
                         delayMicroseconds(enable ? p.delayAfterEnable : p.delayAfterDisable);

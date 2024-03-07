@@ -16,11 +16,8 @@
 #include "tlx493d_gen_3_common.h"
 
 
-void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF) {
+static void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF) {
     uint8_t channel = tlx493d_common_returnBitfield(sensor, channelSaveBF);
-    
-    // print("channel : %x\n", channel);
-    // tlx493d_printRegisters(sensor);
 
     uint8_t offset = 0;
 
@@ -41,18 +38,23 @@ void tlx493d_gen_3_shiftDataInRegisters(TLx493D_t *sensor, uint8_t channelSaveBF
     }
 
     uint8_t regCopy[sensor->regMapSize];
-    memcpy(regCopy, sensor->regMap, sensor->regMapSize);
-    memcpy(sensor->regMap + offset + 4, regCopy + offset, (size_t) (sensor->regMapSize - offset - 4));
-    memset(sensor->regMap + offset, 0, 4);
+    (void) memcpy(regCopy, sensor->regMap, sensor->regMapSize);
+    (void) memcpy(sensor->regMap + offset + 4, regCopy + offset, (size_t) (sensor->regMapSize - offset - 4));
+    (void) memset(sensor->regMap + offset, 0, 4);
  
     // tlx493d_printRegisters(sensor);
 }
 
 
 bool tlx493d_gen_3_readRegisters(TLx493D_t *sensor, uint8_t channelSaveBF) {
-    // return tlx493d_common_readRegisters(sensor);
-
     bool b = tlx493d_common_readRegisters(sensor);
+    tlx493d_gen_3_shiftDataInRegisters(sensor, channelSaveBF);
+    return b;
+}
+
+
+bool tlx493d_gen_3_readRegistersAndCheck(TLx493D_t *sensor, uint8_t channelSaveBF) {
+    bool b = tlx493d_common_readRegistersAndCheck(sensor);
     tlx493d_gen_3_shiftDataInRegisters(sensor, channelSaveBF);
     return b;
 }
@@ -71,7 +73,7 @@ void tlx493d_gen_3_calculateRawMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF,
 
 void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, uint8_t tempLSBBF, double *temperature) {
     int16_t value = 0;
-// tlx493d_printRegisters(sensor);
+
     tlx493d_common_concatBytes(sensor, tempMSBBF, tempLSBBF, &value);
     *temperature = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_SENSITIVITY) + GEN_3_TEMP_REF;
     // *temperature = (((double) value - GEN_3_TEMP_OFFSET) / GEN_3_TEMP_MULT) + GEN_3_TEMP_REF;
@@ -81,7 +83,9 @@ void tlx493d_gen_3_calculateTemperature(TLx493D_t *sensor, uint8_t tempMSBBF, ui
 void tlx493d_gen_3_calculateMagneticField(TLx493D_t *sensor, uint8_t bxMSBBF, uint8_t bxLSBBF, uint8_t byMSBBF, uint8_t byLSBBF,
                                           uint8_t bzMSBBF, uint8_t bzLSBBF, uint8_t tempMSBBF, uint8_t tempLSBBF,
                                           double *x, double *y, double *z) {
-    int16_t valueX = 0, valueY = 0, valueZ = 0;
+    int16_t valueX = 0;
+    int16_t valueY = 0;
+    int16_t valueZ = 0;
 
     tlx493d_common_concatBytes(sensor, bxMSBBF, bxLSBBF, &valueX);
     tlx493d_common_concatBytes(sensor, byMSBBF, byLSBBF, &valueY);
@@ -153,11 +157,6 @@ bool tlx493d_gen_3_setMeasurement(TLx493D_t *sensor, uint8_t channelBF, uint8_t 
 
     tlx493d_common_setBitfield(sensor, channelBF, channel);
     tlx493d_common_setBitfield(sensor, channelSaveBF, channel);
-    // sensor->functions->printRegisters(sensor);
-
-    // if( sensor->regMap[0x0B] != sensor->regMap[0x1B] ) {
-    //     error("CHANNEL != CHANNEL_SAVE !! %x <-> %x\n", sensor->regMap[0x0B], sensor->regMap[0x1B]);
-    // }
 
     return tlx493d_common_writeRegister(sensor, channelBF);
 }
@@ -182,7 +181,6 @@ bool tlx493d_gen_3_setTrigger(TLx493D_t *sensor, uint8_t trigBF, TLx493D_Trigger
     }
 
     tlx493d_common_setBitfield(sensor, trigBF, trig);
-    // sensor->functions->printRegisters(sensor);
 
     return tlx493d_common_writeRegister(sensor, trigBF);
 }
@@ -211,7 +209,6 @@ bool tlx493d_gen_3_setSensitivity(TLx493D_t *sensor, uint8_t shortBF, uint8_t xt
 
     tlx493d_common_setBitfield(sensor, shortBF, shortVal);
     tlx493d_common_setBitfield(sensor, xtrShortBF, extraShortVal);
-    // sensor->functions->printRegisters(sensor);
 
     return tlx493d_common_writeRegister(sensor, shortBF);
 }
@@ -227,7 +224,7 @@ bool tlx493d_gen_3_setDefaultConfig(TLx493D_t *sensor, uint8_t caBF, uint8_t int
 }
 
 
-bool tlx493d_gen_3_setIICAddress(TLx493D_t *sensor, uint8_t iicadrBF, TLx493D_IICAddressType_t addr) {
+bool tlx493d_gen_3_setIICAddress(const TLx493D_t *sensor, uint8_t iicadrBF, TLx493D_IICAddressType_t addr) {
     (void) addr;
     (void) iicadrBF;
     (void) addr;
@@ -299,19 +296,19 @@ bool tlx493d_gen_3_setUpdateRate(TLx493D_t *sensor, uint8_t fUpdateBF, TLx493D_U
 }
 
 
-bool tlx493d_gen_3_hasValidData(TLx493D_t *sensor, uint8_t measBF) {
-    return (tlx493d_common_returnBitfield(sensor, measBF) != 0);
+bool tlx493d_gen_3_hasValidData(const TLx493D_t *sensor, uint8_t measBF) {
+    return tlx493d_common_returnBitfield(sensor, measBF) != 0U;
     // return !sensor->functions->isInTestMode(sensor) && (tlx493d_common_returnBitfield(sensor, measBF) != 0);
 }
 
 
-bool tlx493d_gen_3_isFunctional(TLx493D_t *sensor) {
+bool tlx493d_gen_3_isFunctional(const TLx493D_t *sensor) {
     return sensor->functions->hasValidFuseParity(sensor);
 }
 
 
-bool tlx493d_gen_3_isWakeUpEnabled(TLx493D_t *sensor, uint8_t wuBF) {
-    return tlx493d_common_returnBitfield(sensor, wuBF) != 0;
+bool tlx493d_gen_3_isWakeUpEnabled(const TLx493D_t *sensor, uint8_t wuBF) {
+    return tlx493d_common_returnBitfield(sensor, wuBF) != 0U;
 }
 
 
@@ -319,7 +316,7 @@ bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wuc
     bool b = true;
 
     if( sensor->functions->isInTestMode(sensor) ) {
-        info("Sensor %s was in test mode, changed to normal mode in order to enable wake up !", tlx493d_common_getTypeAsString(sensor));
+        tlx493d_logInfo("Sensor %s was in test mode, changed to normal mode in order to enable wake up !", tlx493d_common_getTypeAsString(sensor));
         b &= sensor->functions->setMeasurement(sensor, TLx493D_BxByBzTemp_e);
     }
 
@@ -329,7 +326,7 @@ bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wuc
     b &= sensor->functions->readRegisters(sensor);
 
     if( ! sensor->functions->hasValidWakeUpParity(sensor) ) {
-        error("Wake up parity is not correct, cannot enter wake up mode for sensor %s !", tlx493d_common_getTypeAsString(sensor));
+        tlx493d_logError("Wake up parity is not correct, cannot enter wake up mode for sensor %s !", tlx493d_common_getTypeAsString(sensor));
         return false;
     }
 
@@ -337,19 +334,21 @@ bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wuc
 }
 
 
-bool tlx493d_gen_3_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF) {
+bool tlx493d_gen_3_disableWakeUpMode(TLx493D_t *sensor, uint8_t intBF, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF) {
     tlx493d_common_setBitfield(sensor, wuBF, 0);
     tlx493d_common_setBitfield(sensor, wucpBF, 0);
-    return tlx493d_gen_3_setWakeUpParity(sensor, wuBF, wupBF);
+    bool b = tlx493d_gen_3_setWakeUpParity(sensor, wuBF, wupBF);
+
+    return b && tlx493d_gen_3_setInterrupt(sensor, intBF, 1);
 }
 
 
 bool tlx493d_gen_3_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold10Bits) {
-    TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
-    TLx493D_Register_t *lsbs = &sensor->regDef[lsbsBF];
+    const TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
+    const TLx493D_Register_t *lsbs = &sensor->regDef[lsbsBF];
 
-    uint8_t lower = (uint8_t) (threshold10Bits & (lsbs->mask >> lsbs->offset));
-    uint8_t upper = (uint8_t) ((threshold10Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset));
+    uint8_t lower = ((uint8_t) (threshold10Bits & (lsbs->mask >> lsbs->offset)));
+    uint8_t upper = ((uint8_t) ((threshold10Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset)));
 
     tlx493d_common_setBitfield(sensor, msbsBF, upper);
     bool b = tlx493d_common_writeRegister(sensor, msbsBF);
@@ -373,7 +372,7 @@ bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
     retVal &= tlx493d_gen_3_setThreshold(sensor, zlMSBBF, zlLSBBF, zlTh);
     retVal &= tlx493d_gen_3_setThreshold(sensor, zhMSBBF, zhLSBBF, zhTh);
 
-    retVal &= sensor->functions->readRegisters(sensor);
+    // retVal &= sensor->functions->readRegisters(sensor);
     return retVal;
 }
 
@@ -384,7 +383,13 @@ bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor,
                                        uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
                                        uint8_t x2BF, uint8_t x4BF,
                                        double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    int16_t xlTh, ylTh, zlTh, xhTh, yhTh, zhTh, tr;
+    int16_t xlTh;
+    int16_t ylTh;
+    int16_t zlTh;
+    int16_t xhTh;
+    int16_t yhTh;
+    int16_t zhTh;
+    int16_t tr;
 
     tlx493d_gen_3_convertTemperatureToRaw(sensor, temperature, &tr);
 
@@ -392,12 +397,12 @@ bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor,
 
     sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, tr, sens, xLow,  yLow,  zLow,  &xlTh, &ylTh, &zlTh);
     sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, tr, sens, xHigh, yHigh, zHigh, &xhTh, &yhTh, &zhTh);
-// print("sens = %d\n", sens);
-// printDouble(temperature);
-// print("\nt = %d\n", tr);
-// print("xl = %d   xh = %d\n", xlTh, xhTh);
-// print("yl = %d   yh = %d\n", ylTh, yhTh);
-// print("zl = %d   zh = %d\n", zlTh, zhTh);
+// tlx493d_logPrint("sens = %d\n", sens);
+// tlx493d_logPrintDouble(temperature);
+// tlx493d_logPrint("\nt = %d\n", tr);
+// tlx493d_logPrint("xl = %d   xh = %d\n", xlTh, xhTh);
+// tlx493d_logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
+// tlx493d_logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
 
     return tlx493d_gen_3_setWakeUpThresholdsAsInteger(sensor,
                                                       xlMSBBF, xlLSBBF, xhMSBBF, xhLSBBF,
@@ -419,32 +424,32 @@ bool tlx493d_gen_3_setWakeUpParity(TLx493D_t *sensor, uint8_t wuBF, uint8_t wupB
 }
 
 
-uint8_t tlx493d_gen_3_calculateWakeUpParity(TLx493D_t *sensor, uint8_t wuBF) {
-    TLx493D_Register_t *wu     = &sensor->regDef[wuBF];
-	uint8_t             parity = sensor->regMap[wu->address] & wu->mask;
+uint8_t tlx493d_gen_3_calculateWakeUpParity(const TLx493D_t *sensor, uint8_t wuBF) {
+    const TLx493D_Register_t *wu     = &sensor->regDef[wuBF];
+	uint8_t                   parity = sensor->regMap[wu->address] & wu->mask;
 
-    for(uint8_t i = 0x0C; i <= 0x12; ++i) {
+    for(uint8_t i = 0x0CU; i <= 0x12U; ++i) {
         parity ^= sensor->regMap[i];
     }
 
-    parity = (uint8_t) (parity ^ (sensor->regMap[0x13] & 0x0F));
+    parity = (uint8_t) (parity ^ (sensor->regMap[0x13] & 0x0FU));
 
 	return tlx493d_common_getOddParity(tlx493d_common_calculateParity(parity));
 }
 
 
-bool tlx493d_gen_3_hasValidFuseParity(TLx493D_t *sensor, uint8_t fpfBF) {
-    return tlx493d_common_returnBitfield(sensor, fpfBF) != 0;
+bool tlx493d_gen_3_hasValidFuseParity(const TLx493D_t *sensor, uint8_t fpfBF) {
+    return tlx493d_common_returnBitfield(sensor, fpfBF) != 0U;
 }
 
 
-bool tlx493d_gen_3_hasValidWakeUpParity(TLx493D_t *sensor, uint8_t wupBF) {
-    return tlx493d_common_returnBitfield(sensor, wupBF) != 0;
+bool tlx493d_gen_3_hasValidWakeUpParity(const TLx493D_t *sensor, uint8_t wupBF) {
+    return tlx493d_common_returnBitfield(sensor, wupBF) != 0U;
 }
 
 
-bool tlx493d_gen_3_isInTestMode(TLx493D_t *sensor, uint8_t testBF) {
-    return tlx493d_common_returnBitfield(sensor, testBF) != 0;
+bool tlx493d_gen_3_isInTestMode(const TLx493D_t *sensor, uint8_t testBF) {
+    return tlx493d_common_returnBitfield(sensor, testBF) != 0U;
 }
 
 
@@ -453,7 +458,7 @@ bool tlx493d_gen_3_isInTestMode(TLx493D_t *sensor, uint8_t testBF) {
 // }
 
 
-uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+uint8_t tlx493d_gen_3_selectIICAddress(const TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     switch(addr) {
         case TLx493D_IIC_ADDR_A0_e : return GEN_3_STD_IIC_ADDR_WRITE_A0;
 
@@ -469,11 +474,11 @@ uint8_t tlx493d_gen_3_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType
 }
 
 
-double tlx493d_gen_3_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF) {
+double tlx493d_gen_3_getSensitivityScaleFactor(const TLx493D_t *sensor, TLx493D_AvailableSensitivityType_t availSens, uint8_t x2BF, uint8_t x4BF) {
     switch(availSens) {
         case TLx493D_HAS_X4_e : {
-                                    bool x2IsSet = tlx493d_common_returnBitfield(sensor, x2BF) != 0;
-                                    bool x4IsSet = tlx493d_common_returnBitfield(sensor, x4BF) != 0;
+                                    bool x2IsSet = tlx493d_common_returnBitfield(sensor, x2BF) != 0U;
+                                    bool x4IsSet = tlx493d_common_returnBitfield(sensor, x4BF) != 0U;
 
                                     return x2IsSet ? 2.0 : (x4IsSet ? 4.0 : 1.0);
         }
@@ -484,13 +489,13 @@ double tlx493d_gen_3_getSensitivityScaleFactor(TLx493D_t *sensor, TLx493D_Availa
 }
 
 
-double tlx493d_gen_3_getSensitivityScaleFactorFromSensitivity(TLx493D_SensitivityType_t sens) {
-    return sens == TLx493D_FULL_RANGE_e ? 1.0
-                                        : (sens == TLx493D_SHORT_RANGE_e ? 2.0 : 4.0);
+static double tlx493d_gen_3_getSensitivityScaleFactorFromSensitivity(const TLx493D_SensitivityType_t sens) {
+    return (sens == TLx493D_FULL_RANGE_e) ? 1.0
+                                        : ((sens == TLx493D_SHORT_RANGE_e) ? 2.0 : 4.0);
 }
 
 
-void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(const TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                           double xInmT, double yInmT, double zInmT,
                                                           int16_t *x, int16_t *y, int16_t *z) {
     (void) sensor;
@@ -510,7 +515,7 @@ void tlx493d_gen_3_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int
 }
 
 
-void tlx493d_gen_3_convertTemperatureToRaw(TLx493D_t *sensor, double temperature, int16_t *rawTemperature) {
+void tlx493d_gen_3_convertTemperatureToRaw(const TLx493D_t *sensor, double temperature, int16_t *rawTemperature) {
     (void) sensor;
 
     *rawTemperature = (int16_t) lround((temperature - GEN_3_TEMP_REF) * GEN_3_TEMP_SENSITIVITY + GEN_3_TEMP_OFFSET);
@@ -518,9 +523,9 @@ void tlx493d_gen_3_convertTemperatureToRaw(TLx493D_t *sensor, double temperature
 }
 
 
-TLx493D_SensitivityType_t tlx493d_gen_3_getSensitivityType(TLx493D_t *sensor, uint8_t x2BF, uint8_t x4BF) {
-    bool x2IsSet = tlx493d_common_returnBitfield(sensor, x2BF) != 0;
-    bool x4IsSet = tlx493d_common_returnBitfield(sensor, x4BF) != 0;
+TLx493D_SensitivityType_t tlx493d_gen_3_getSensitivityType(const TLx493D_t *sensor, uint8_t x2BF, uint8_t x4BF) {
+    bool x2IsSet = tlx493d_common_returnBitfield(sensor, x2BF) != 0U;
+    bool x4IsSet = tlx493d_common_returnBitfield(sensor, x4BF) != 0U;
 
     return x2IsSet ? TLx493D_SHORT_RANGE_e : (x4IsSet ? TLx493D_EXTRA_SHORT_RANGE_e : TLx493D_FULL_RANGE_e);
 }

@@ -1,0 +1,44 @@
+########################
+### A1B6
+make FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 A1B6_needsSensor monitor
+#
+make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 A1B6_needsSensor monitor
+
+
+########################
+### A2B6
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 iic flash monitor
+#
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 A2B6_needsSensor monitor
+
+
+### P2B6
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic flash monitor
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic_c_style flash monitor
+#
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 P2B6_needsSensor monitor
+
+
+### W2B6
+#
+make FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM17 W2B6_needsSensor monitor
+make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 W2B6_needsSensor monitor
+
+
+### W2BW
+make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic_with_wakeup flash monitor
+#
+make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 W2BW_needsSensor monitor
+
+
+########################
+### P3B6	
+make FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 P3B6_needsSensor monitor
+
+
+### P3I8
+(make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 spi flash) 2>&1 | tee log
+
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 spi flash monitor
+#
+make FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 P3I8_needsSensor monitor

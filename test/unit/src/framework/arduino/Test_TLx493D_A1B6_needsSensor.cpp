@@ -42,15 +42,19 @@ extern "C" {
         (void) TLx493D_A1B6_init(&dut);
 
         ifx::tlx493d::Kit2GoBoardSupport bsc;
-        bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
+        bsc.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 0, 250000);
         ifx::tlx493d::initBoardSupport(&dut, bsc);
+        bsc.init();
+
         ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
-        bsc.begin();
     }
     
     
     // Method invoked by Unity after a test suite is run 
     void TLx493D_A1B6_atReset_suiteTearDown() {
+        ifx::tlx493d::deinitCommunication(&dut);
+        bsc.deinit();
+
         // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
         dut.functions->deinit(&dut);
     }

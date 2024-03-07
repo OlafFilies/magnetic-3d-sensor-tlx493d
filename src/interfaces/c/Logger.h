@@ -28,67 +28,67 @@ typedef struct TLx493D_t  TLx493D_t;
 
 
 /**
- * @brief The function `printRegisters` prints out all the internal registers of the
+ * @brief The function `tlx493d_logPrintRegisters` prints out all the internal registers of the
  * passed sensor object.
  * 
  * @param[in,out] sensor A pointer to a TLx493D_t structure, which represents the TLx493D sensor.
  */
-void printRegisters(TLx493D_t *sensor, const char *headLine);
+void tlx493d_logPrintRegisters(const TLx493D_t *sensor, const char *headLine);
 
 /**
- * @brief The function `printDouble` prints out a value in the double format. 
+ * @brief The function `tlx493d_logPrintDouble` prints out a value in the double format. 
  * 
  * @param[in] d Value which will be printed to the serial monitor. 
  */
-void printDouble(double d);
+void tlx493d_logPrintDouble(double d);
 
 /**
- * @brief The function `print` is used to print out a formatted string - without prefix - to the serial output.
+ * @brief The function `tlx493d_logPrint` is used to tlx493d_logPrint out a formatted string - without prefix - to the serial output.
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 
  */
-void print(const char *format, ...);
+void tlx493d_logPrint(const char *format, ...);
 
 /**
- * @brief The function `println` is used to print out a formatted string - without prefix - to the serial output plus a trailing linefeed.
+ * @brief The function `tlx493d_logPrintln` is used to tlx493d_logPrint out a formatted string - without prefix - to the serial output plus a trailing linefeed.
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 
  * @param[in] ... Actual string, which should be printed to the serial output. 
 */
-void println(const char *format, ...);
+void tlx493d_logPrintln(const char *format, ...);
 
 /**
- * @brief The function `info` is used to print out an info message to the user.
+ * @brief The function `tlx493d_logInfo` is used to tlx493d_logPrint out an tlx493d_logInfo message to the user.
  * It uses the prefix "INFO : " to directly indicate the origin of the message.
  * It also allows to pass a variable number of arguments to the function (...).
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 
  */
-void info(const char *format, ...);
+void tlx493d_logInfo(const char *format, ...);
 
 /**
- * @brief The function `warn` is used to print out a warning message to the user.
+ * @brief The function `tlx493d_logWarn` is used to tlx493d_logPrint out a warning message to the user.
  * It uses the prefix "WARNING : " to directly indicate the origin of the message. 
  * It also allows to pass a variable number of arguments to the function (...).
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 
  */
-void warn(const char *format, ...);
+void tlx493d_logWarn(const char *format, ...);
 
 /**
- * @brief The function `error` is used to print out an error message to the user.
+ * @brief The function `tlx493d_logError` is used to tlx493d_logPrint out an tlx493d_logError message to the user.
  * It uses the prefix "ERROR : " to directly indicate the origin of the message. 
  * It also allows to pass a variable number of arguments to the function (...).
  * 
  * @param[in] format Actual string, which should be printed to the serial output.   
  */
-void error(const char *format, ...);
+void tlx493d_logError(const char *format, ...);
 
 /**
  * @brief The function `flush` is used to send a new line character to ther serial output.
  * 
  */
-void logFlush(void);
+void tlx493d_logFlush(void);
 
 
 #ifdef __cplusplus

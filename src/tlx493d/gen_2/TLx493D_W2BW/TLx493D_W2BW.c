@@ -22,7 +22,7 @@
 #include "TLx493D_W2BW.h"
 
 
-TLx493D_Register_t TLx493D_W2BW_regDef[] = {
+static TLx493D_Register_t TLx493D_W2BW_regDef[] = {
     { /* W2BW_BX_MSBS_e, */    TLx493D_READ_MODE_e,         0x00,   0xFF,   0,  8 },
     { /* W2BW_BY_MSBS_e, */    TLx493D_READ_MODE_e,         0x01,   0xFF,   0,  8 },
     { /* W2BW_BZ_MSBS_e, */    TLx493D_READ_MODE_e,         0x02,   0xFF,   0,  8 },
@@ -75,7 +75,7 @@ TLx493D_Register_t TLx493D_W2BW_regDef[] = {
 };
 
 
-TLx493D_CommonFunctions_t TLx493D_W2BW_commonFunctions = {
+static TLx493D_CommonFunctions_t TLx493D_W2BW_commonFunctions = {
     .init                           = TLx493D_W2BW_init,
     .deinit                         = TLx493D_W2BW_deinit,
 
@@ -270,7 +270,7 @@ bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
                   return false;
     }
 
-// print("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
+// tlx493d_logPrint("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
     tlx493d_common_setBitfield(sensor, W2BW_X4_READWRITE_e, extraShortVal);
     return tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X2_e, W2BW_CP_e, shortVal) ? tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X4_e, W2BW_CP_e, extraShortVal)
                                                                                       : false;
@@ -323,23 +323,23 @@ bool TLx493D_W2BW_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val)
 }
 
 
-bool TLx493D_W2BW_hasValidData(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidData(const TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidData(sensor, W2BW_MODE_e, W2BW_PD3_e, W2BW_PD0_e);
 }
 
 
-bool TLx493D_W2BW_isFunctional(TLx493D_t *sensor) {
+bool TLx493D_W2BW_isFunctional(const TLx493D_t *sensor) {
     return tlx493d_gen_2_isFunctional(sensor);
 }
 
 
-bool TLx493D_W2BW_hasWakeUp(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasWakeUp(const TLx493D_t *sensor) {
     (void) sensor;
     return true;
 }
 
 
-bool TLx493D_W2BW_isWakeUpEnabled(TLx493D_t *sensor) {
+bool TLx493D_W2BW_isWakeUpEnabled(const TLx493D_t *sensor) {
     return tlx493d_gen_2_isWakeUpEnabled(sensor, W2BW_WA_e);
 }
 
@@ -384,12 +384,12 @@ bool TLx493D_W2BW_softwareReset(TLx493D_t *sensor) {
 }
 
 
-uint8_t TLx493D_W2BW_calculateFuseParity(TLx493D_t *sensor) {
+uint8_t TLx493D_W2BW_calculateFuseParity(const TLx493D_t *sensor) {
     return tlx493d_gen_2_calculateFuseParity(sensor, W2BW_FP_e, W2BW_PRD_e);
 }
 
 
-uint8_t TLx493D_W2BW_calculateBusParity(TLx493D_t *sensor) {
+uint8_t TLx493D_W2BW_calculateBusParity(const TLx493D_t *sensor) {
     return tlx493d_gen_2_calculateBusParity(sensor, 5);
 }
 
@@ -399,39 +399,39 @@ uint8_t TLx493D_W2BW_calculateConfigurationParity(TLx493D_t *sensor) {
 }
 
 
-bool TLx493D_W2BW_hasValidFuseParity(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidFuseParity(const TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidFuseParity(sensor, W2BW_FF_e);
 }
 
 
-bool TLx493D_W2BW_hasValidBusParity(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidBusParity(const TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidBusParity(sensor, W2BW_P_e);
 }
 
 
-bool TLx493D_W2BW_hasValidConfigurationParity(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidConfigurationParity(const TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidConfigurationParity(sensor, W2BW_CF_e);
 }
 
 
-bool TLx493D_W2BW_hasValidWakeUpParity(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidWakeUpParityconst (TLx493D_t *sensor) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidWakeUpParity");
     return false;
 }
 
 
-bool TLx493D_W2BW_isInTestMode(TLx493D_t *sensor) {
+bool TLx493D_W2BW_isInTestMode(const TLx493D_t *sensor) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "isInTestMode");
     return false;
 }
 
 
-bool TLx493D_W2BW_hasValidIICadr(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidIICadr(const TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidIICadr(sensor, W2BW_ID_e, W2BW_IICADR_e);
 }
 
 
-bool TLx493D_W2BW_hasValidTBit(TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidTBit(const TLx493D_t *sensor) {
     return tlx493d_gen_2_hasValidTBit(sensor, W2BW_T_e);
 }
 
@@ -456,23 +456,23 @@ void TLx493D_W2BW_setResetValues(TLx493D_t *sensor) {
 }
 
 
-uint8_t TLx493D_W2BW_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
+uint8_t TLx493D_W2BW_selectIICAddress(const TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     return tlx493d_gen_2_selectIICAddress(sensor, addr);
 }
 
 
-void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(const TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                          double xInmT, double yInmT, double zInmT,
                                                          int16_t *x, int16_t *y, int16_t *z) {
     tlx493d_gen_2_calculateRawMagneticFieldAtTemperature(sensor, rawTemp, sens, xInmT, yInmT, zInmT, x, y, z);
 }
 
 
-double TLx493D_W2BW_getSensitivityScaleFactor(TLx493D_t *sensor) {
+double TLx493D_W2BW_getSensitivityScaleFactor(const TLx493D_t *sensor) {
     return tlx493d_gen_2_getSensitivityScaleFactor(sensor, TLx493D_HAS_X4_e, W2BW_X2_e, W2BW_X4_READWRITE_e);
 }
 
 
-void TLx493D_W2BW_printRegisters(TLx493D_t *sensor) {
-    printRegisters(sensor, TLX493D_W2BW_REGISTER_HEADLINE); 
+void TLx493D_W2BW_printRegisters(const TLx493D_t *sensor) {
+    tlx493d_logPrintRegisters(sensor, TLX493D_W2BW_REGISTER_HEADLINE); 
 }

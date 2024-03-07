@@ -103,7 +103,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, y );
     TEST_ASSERT_FLOAT_WITHIN( 1.0, 0.0, z );
 
-// print("x / y / z\n");
+// tlx493d_logPrint("x / y / z\n");
 // Serial.println(x);
 // Serial.println(y);
 // Serial.println(z);
@@ -112,11 +112,11 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
     int16_t xr, yr, zr, tr;
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
-// print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
+// tlx493d_logPrint("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
 
     int16_t xr2, yr2, zr2;
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
-// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// tlx493d_logPrint("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -132,7 +132,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     y = 0.0;
     z = 0.0;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
-// print("x / y / z\n");
+// tlx493d_logPrint("x / y / z\n");
 // Serial.println(x);
 // Serial.println(y);
 // Serial.println(z);
@@ -144,13 +144,13 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     yr = 0;
     zr = 0;
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
-// print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
+// tlx493d_logPrint("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
 
     xr2 = 0;
     yr2 = 0;
     zr2 = 0;
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_EXTRA_SHORT_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
-// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// tlx493d_logPrint("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -166,7 +166,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     y = 0.0;
     z = 0.0;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
-// print("x / y / z\n");
+// tlx493d_logPrint("x / y / z\n");
 // Serial.println(x);
 // Serial.println(y);
 // Serial.println(z);
@@ -178,13 +178,13 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     yr = 0;
     zr = 0;
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xr, &yr, &zr, &tr);
-// print("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
+// tlx493d_logPrint("xr = %d   yr = %d   zr = %d   tr = %d\n", xr, yr, zr, tr);
 
     xr2 = 0;
     yr2 = 0;
     zr2 = 0;
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, x, y, z, &xr2, &yr2, &zr2);
-// print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// tlx493d_logPrint("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -196,9 +196,9 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
 
 //     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_FULL_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
-// // print("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
+// // tlx493d_logPrint("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
 //     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr2, &yr2, &zr2);
-// // print("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
+// // tlx493d_logPrint("xr2 = %d   yr2 = %d   zr2 = %d\n", xr2, yr2, zr2);
 
 //     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
 //     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -206,7 +206,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
 
 
 //     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tr, TLx493D_EXTRA_SHORT_RANGE_e, 0.5, 0.5, 0.5, &xr, &yr, &zr);
-// // print("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
+// // tlx493d_logPrint("xr = %d   yr = %d   zr = %d\n", xr, yr, zr);
 
 //     TEST_ASSERT_INT16_WITHIN( 2, xr, xr2 );
 //     TEST_ASSERT_INT16_WITHIN( 2, yr, yr2 );
@@ -223,7 +223,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkBasicFunctionality)
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
 {
     // switch to LPM
-    // print("\nLPM mode\n");
+    // tlx493d_logPrint("\nLPM mode\n");
     TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
@@ -242,28 +242,28 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
     // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
 
 
-    // print("TLx493D_BxTemp_e\n");
+    // tlx493d_logPrint("TLx493D_BxTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
    
 
-    // print("TLx493D_BxBy_e\n");
+    // tlx493d_logPrint("TLx493D_BxBy_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
-    // print("TLx493D_BzTemp_e\n");
+    // tlx493d_logPrint("TLx493D_BzTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
-    // print("TLx493D_BxByBzTemp_e\n");
+    // tlx493d_logPrint("TLx493D_BxByBzTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
@@ -271,34 +271,34 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
 
 
     // switch to MCM
-    // print("MCM mode\n");
+    // tlx493d_logPrint("MCM mode\n");
     TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3B6_MODE_SEL_e) );
 
 
-    // print("TLx493D_BxTemp_e\n");
+    // tlx493d_logPrint("TLx493D_BxTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b1100, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
    
 
-    // print("TLx493D_BxBy_e\n");
+    // tlx493d_logPrint("TLx493D_BxBy_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxBy_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b1101, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
-    // print("TLx493D_BzTemp_e\n");
+    // tlx493d_logPrint("TLx493D_BzTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BzTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
     TEST_ASSERT_EQUAL_HEX8( 0b1110, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
-    // print("TLx493D_BxByBzTemp_e\n");
+    // tlx493d_logPrint("TLx493D_BxByBzTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
@@ -486,6 +486,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpSettingsFunctionality)
     TEST_ASSERT_TRUE( dut.functions->disableWakeUpMode(&dut) );
     TEST_ASSERT_FALSE( dut.functions->isWakeUpEnabled(&dut) );
 
+// TODO: comment out or in ?
     // TEST_ASSERT_TRUE( dut.functions->enableWakeUpMode(&dut) );
     // TEST_ASSERT_TRUE( dut.functions->isWakeUpEnabled(&dut) );
     // TEST_ASSERT_TRUE( dut.functions->disableWakeUpMode(&dut) );
@@ -497,7 +498,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     // pos. numbers
                                                               //   xlTh,         xhTh,        ylTh,        yhTh,        zlTh,        zhTh);
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x0ABC >> 2, 0x00BC >> 2, 0x000C >> 2, 0x0FBC >> 2, 0x0F0C >> 2, 0x0F00 >> 2) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // threshold 10 bits explicit (+ 2 implicit set to 0)
     // MSBs
@@ -520,7 +521,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     // // neg. numbers in hex format
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, ((int16_t) 0x8ABC) >> 2, ((int16_t) 0x80BC) >> 2, ((int16_t) 0x800C) >> 2,
                                                                         ((int16_t) 0x8FBC) >> 2, ((int16_t) 0x8F0C) >> 2, ((int16_t) 0x8F00) >> 2) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8ABC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL
@@ -541,7 +542,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
 
     // neg. numbers in int format
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, -1 >> 2, -2 >> 2, -16 >> 2, -100 >> 2, -256 >> 2, -1024 >> 2) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1) >> 4) & 0xFF,    tlx493d_common_returnBitfield(&dut, P3B6_WU_XL_MSBS_e) ); // XL
@@ -561,6 +562,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
 
 
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     int16_t th    = 0;
     uint8_t delta = 2;
@@ -586,7 +588,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     tlx493d_common_concatBytes(&dut, P3B6_WU_ZH_MSBS_e, P3B6_WU_ZH_LSBS_e, &th);
     TEST_ASSERT_INT16_WITHIN( delta, 152,  th ); // ZH
 
-    dut.functions->printRegisters(&dut);
+    tlx493d_printRegisters(&dut);
 }
 
 

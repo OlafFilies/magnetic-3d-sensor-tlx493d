@@ -35,8 +35,8 @@ bool tlx493d_common_init(TLx493D_t *sensor, uint8_t regMapSize, TLx493D_Register
 bool tlx493d_common_deinit(TLx493D_t *sensor);
 
 
-void    tlx493d_common_getBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
-uint8_t tlx493d_common_returnBitfield(TLx493D_t *sensor, uint8_t bitField);
+void    tlx493d_common_getBitfield(const TLx493D_t *sensor, uint8_t bitField, uint8_t *bitFieldValue);
+uint8_t tlx493d_common_returnBitfield(const TLx493D_t *sensor, uint8_t bitField);
 void    tlx493d_common_setBitfield(TLx493D_t *sensor, uint8_t bitField, uint8_t newBitFieldValue);
 
 bool tlx493d_common_writeRegister(TLx493D_t* sensor, uint8_t bitField);
@@ -94,24 +94,24 @@ bool tlx493d_common_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x,
 
 
 // utilities
-uint8_t tlx493d_common_calculateParity(uint8_t data);
+uint8_t tlx493d_common_calculateParity(uint8_t dataIn);
 uint8_t tlx493d_common_getOddParity(uint8_t parity);
 uint8_t tlx493d_common_getEvenParity(uint8_t parity);
 
 void tlx493d_common_concatBytes(TLx493D_t *sensor, uint8_t msbBitfield, uint8_t lsbBitfield, int16_t *result);
 
-const char *tlx493d_common_getTypeAsString(TLx493D_t *sensor);
+const char *tlx493d_common_getTypeAsString(const TLx493D_t *sensor);
 
 void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr);
 
 // void tlx493d_common_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens, double mT, int16_t *rawMF);
 
 
-void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName);
-void tlx493d_errorBitfieldNotReadableForSensorType(TLx493D_t *sensor, uint8_t field);
-void tlx493d_errorBitfieldNotWritableForSensorType(TLx493D_t *sensor, uint8_t field);
-void tlx493d_errorFunctionNotSupportedForSensorType(TLx493D_t *sensor, const char *func);
-void tlx493d_errorSelectionNotSupportedForSensorType(TLx493D_t *sensor, uint8_t sel, const char *selType);
+void tlx493d_warnFeatureNotAvailableForSensorType(const TLx493D_t *sensor, const char *featureName);
+void tlx493d_errorBitfieldNotReadableForSensorType(const TLx493D_t *sensor, uint8_t bf);
+void tlx493d_errorBitfieldNotWritableForSensorType(const TLx493D_t *sensor, uint8_t bf);
+void tlx493d_errorFunctionNotSupportedForSensorType(const TLx493D_t *sensor, const char *func);
+void tlx493d_errorSelectionNotSupportedForSensorType(const TLx493D_t *sensor, uint8_t sel, const char *selType);
 
 
 #ifdef __cplusplus

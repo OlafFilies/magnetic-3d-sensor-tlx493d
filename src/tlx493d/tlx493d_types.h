@@ -281,14 +281,14 @@ typedef bool (*TLx493D_SetPowerModeFuncPtr)(TLx493D_t *, TLx493D_PowerModeType_t
 typedef bool (*TLx493D_SetUpdateRateFuncPtr)(TLx493D_t *, TLx493D_UpdateRateType_t);
 
 // functions related to the "Diag" register
-typedef bool (*TLx493D_HasValidDataFuncPtr)(TLx493D_t *);
-typedef bool (*TLx493D_IsFunctionalFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_HasValidDataFuncPtr)(const TLx493D_t *);
+typedef bool (*TLx493D_IsFunctionalFuncPtr)(const TLx493D_t *);
 
 
 // functions available only to a subset of sensors with wake-up functionality
 // functions related to the "WU" register
-typedef bool (*TLx493D_HasWakeUpFuncPtr)(TLx493D_t *);
-typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_HasWakeUpFuncPtr)(const TLx493D_t *);
+typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(const TLx493D_t *);
 typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DisableWakeUpModeFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_SetWakeUpThresholdsAsIntegerFuncPtr)(TLx493D_t *, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t);
@@ -298,29 +298,29 @@ typedef bool (*TLx493D_SoftwareResetFuncPtr)(TLx493D_t *);
 
 
 // functions used internally and not accessible through the common interface
-typedef uint8_t (*TLx493D_CalculateFuseParityFuncPtr)(TLx493D_t *);
-typedef uint8_t (*TLx493D_CalculateBusParityFuncPtr)(TLx493D_t *);
+typedef uint8_t (*TLx493D_CalculateFuseParityFuncPtr)(const TLx493D_t *);
+typedef uint8_t (*TLx493D_CalculateBusParityFuncPtr)(const TLx493D_t *);
 typedef uint8_t (*TLx493D_CalculateConfigParityFuncPtr)(TLx493D_t *);
 
-typedef bool (*TLx493D_HasValidFuseParityFuncPtr)(TLx493D_t *);
-typedef bool (*TLx493D_HasValidBusParityFuncPtr)(TLx493D_t *);
-typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(TLx493D_t *);
-typedef bool (*TLx493D_HasValidWakeUpParityFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_HasValidFuseParityFuncPtr)(const TLx493D_t *);
+typedef bool (*TLx493D_HasValidBusParityFuncPtr)(const TLx493D_t *);
+typedef bool (*TLx493D_HasValidConfigParityFuncPtr)(const TLx493D_t *);
+typedef bool (*TLx493D_HasValidWakeUpParityFuncPtr)(const TLx493D_t *);
 
-typedef bool (*TLx493D_HasValidTBitFuncPtr)(TLx493D_t *);
-typedef bool (*TLx493D_isInTestModeFuncPtr)(TLx493D_t *);
+typedef bool (*TLx493D_HasValidTBitFuncPtr)(const TLx493D_t *);
+typedef bool (*TLx493D_isInTestModeFuncPtr)(const TLx493D_t *);
 
 typedef void (*TLx493D_SetResetValuesFuncPtr)(TLx493D_t *);
 
-typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(TLx493D_t *, int16_t, TLx493D_SensitivityType_t,
+typedef void (*TLx493D_CalculateRawMagneticFieldAtTemperatureFuncPtr)(const TLx493D_t *, int16_t, TLx493D_SensitivityType_t,
                                                                       double, double, double,
                                                                       int16_t *, int16_t *, int16_t *);
 
-typedef double (*TLx493D_GetSensitivityScaleFactorFuncPtr)(TLx493D_t *);
+typedef double (*TLx493D_GetSensitivityScaleFactorFuncPtr)(const TLx493D_t *);
 
-typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(TLx493D_t *, TLx493D_IICAddressType_t);
+typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(const TLx493D_t *, TLx493D_IICAddressType_t);
 
-typedef void (*TLx493D_PrintRegistersFuncPtr)(TLx493D_t *);
+typedef void (*TLx493D_PrintRegistersFuncPtr)(const TLx493D_t *);
 
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.

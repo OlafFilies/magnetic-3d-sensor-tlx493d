@@ -27,11 +27,11 @@ uint8_t count = 0;
 
 
 void setup() {
-    delay(3000);
     Serial.begin(115200);
+    delay(3000);
 
     /** Definition of the power pin to power up the sensor. */
-    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 0, 50000);
+    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 0, 250000);
     // dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 250000, 250000);
     dut.begin();
 
@@ -112,9 +112,9 @@ void loop() {
     Serial.println(count);
 
     if( ++count == 10 ) {
-        Serial.println("Before reset -------------------------------------------------------------------------------------------------------");
+        Serial.println("\nBefore reset -------------------------------------------------------------------------------------------------------");
         dut.reset();
-        Serial.println("After reset -------------------------------------------------------------------------------------------------------");
+        Serial.println("\nAfter reset -------------------------------------------------------------------------------------------------------");
         count = 0;
     }
 }

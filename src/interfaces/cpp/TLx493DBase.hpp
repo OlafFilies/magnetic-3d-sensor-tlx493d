@@ -556,6 +556,7 @@ namespace ifx {
                 TLx493D_t  sensor; /**< Declaration of the sensor object structure. */
         };
 
+
         /**
          * @brief The class `TLx493D` is a template class, which inherits its functionality from the `TLx493DBase` class. 
          * 

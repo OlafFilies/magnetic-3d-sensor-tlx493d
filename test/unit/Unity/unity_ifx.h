@@ -14,7 +14,7 @@ extern "C" {
 
 
 void putCharacter(char c);
-void flushCharacter();
+void flushCharacter(void);
 
 
 #ifdef __cplusplus

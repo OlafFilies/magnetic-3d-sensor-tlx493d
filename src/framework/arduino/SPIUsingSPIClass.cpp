@@ -39,13 +39,13 @@ namespace ifx {
 
         static bool transferSPI(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
             if( sensor->boardSupportInterface.boardSupportObj.k2go_obj != NULL ) {
-                sensor->boardSupportInterface.boardSupportObj.k2go_obj->k2go->controlSelect(true);
+                sensor->boardSupportInterface.boardSupportObj.k2go_obj->k2go->enableSelect(true);
             }
 
             bool b = sensor->comInterface.comLibObj.spi_obj->spi->transfer(txBuffer, txLen, rxBuffer, rxLen, spiReadAddress);
 
             if( sensor->boardSupportInterface.boardSupportObj.k2go_obj != NULL ) {
-                sensor->boardSupportInterface.boardSupportObj.k2go_obj->k2go->controlSelect(false);
+                sensor->boardSupportInterface.boardSupportObj.k2go_obj->k2go->enableSelect(false);
             }
 
             return b;
@@ -53,6 +53,8 @@ namespace ifx {
 
 
         static void setReadAddressSPI(TLx493D_t *sensor, uint8_t address) {
+            (void) sensor;
+            
             spiReadAddress = address;
         }
 
