@@ -133,9 +133,21 @@ compile:
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
+# switch to -std=c23 whenever XMCLib is conforming; currently neither c99 nor c11 work !
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
-                                    		             --build-property compiler.cpp.extra_flags="$(TESTS)" build
+	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) \
+	                        --build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\" -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -fanalyzer " \
+        		            --build-property compiler.cpp.extra_flags="$(TESTS) -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -std=c++20 -fanalyzer " \
+                            --build-property compiler.ar.cmd=arm-none-eabi-gcc-ar \
+                            --build-property compiler.libraries.ldflags=-lstdc++ \
+                            --build-property compiler.arm.cmsis.path="-isystem{compiler.xmclib_include.path}/XMCLib/inc -isystem{compiler.dsp_include.path} -isystem{compiler.nn_include.path} -isystem{compiler.cmsis_include.path} -isystem{compiler.xmclib_include.path}/LIBS -isystem{build.variant.path} -isystem{build.variant.config_path}" \
+                            --build-property compiler.usb.path="-isystem{runtime.platform.path}/cores/usblib -isystem{runtime.platform.path}/cores/usblib/Common -isystem{runtime.platform.path}/cores/usblib/Class -isystem{runtime.platform.path}/cores/usblib/Class/Common -isystem{runtime.platform.path}/cores/usblib/Class/Device -isystem{runtime.platform.path}/cores/usblib/Core -isystem{runtime.platform.path}/cores/usblib/Core/XMC4000" \
+					build
+
+#                           --build-property compiler.path="/home/jensb/gcc/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin/" \
+
+
+
 endif
 
 
@@ -223,6 +235,8 @@ run_clang_tidy:
 
 
 run_cppcheck:
+	export PATH=~/cppcheck/cppcheck.danmar/:$PATH
+	export RULE_TEXTS=/home/jensb/pull_requests/3d_magnetic/magnetic-3d-sensor-tlx493d/misra.txt					 
 	~/cppcheck/cppcheck.danmar/cppcheck -i build -i config -i doc -i examples -i results -i reports_hml -i Unity \
                              -I./src/tlx493d -I./src/interfaces/c \
                              --checkers-report=cppcheck.checkers --check-level=exhaustive --xml --enable=all --inconclusive \
