@@ -20,7 +20,7 @@ const uint8_t POWER_PIN = 8; // P1.10
 
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
-// TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
 
 
@@ -88,8 +88,9 @@ void loop() {
     Serial.print("count : ");
     Serial.println(count);
 
-    if( ++count == 10 ) {
+    if( ++count == 2 ) {
         Serial.println("\nBefore reset -------------------------------------------------------------------------------------------------------");
+        // reset does not work for W2BW : either drive strength too low or delay to stabilize critical.
         dut.reset();
         Serial.println("\nAfter reset -------------------------------------------------------------------------------------------------------");
         count = 0;
