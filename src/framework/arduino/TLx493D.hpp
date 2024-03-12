@@ -3,8 +3,8 @@
 
 
 // std includes
-#include <stdbool.h>
-#include <stdint.h>
+#include <cstdbool>
+#include <cstdint>
 
 // project cpp includes
 #include "types.hpp"
@@ -32,12 +32,13 @@ namespace ifx {
             public:
 
                 typedef BoardSupport                                    BoardSupportType;
-                typedef ifx::tlx493d::TwoWireWrapper                    BusWrapperType;
+                // typedef ifx::tlx493d::TwoWireWrapper                    BusWrapperType;
                 typedef typename ifx::tlx493d::TwoWireWrapper::BusType  BusType;
 
         
-                explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
-                    tlx493d_init(&sensor, sensorType);
+                explicit TLx493D(BusType &busObj, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), bus(busObj), iicAddress(iicAdr) {
+                // explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
+                    (void) tlx493d_init(&sensor, sensorType);
                 }
 
                 /**
@@ -59,9 +60,10 @@ namespace ifx {
                  * @param[in] enableExtendedAdress    Enable or disable the extended address feature of the sensor.
                  */
                 void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false) {
-                    initBoardSupport(&sensor, bsc);
+                    (void) initBoardSupport(&sensor, bsc);
                     bsc.init(enablePower, enableSelect, enableExtendedAdress);
-                    initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
+                    initCommunication(&sensor, bus, iicAddress, false);
+                    // initCommunication(&sensor, busWrapper, iicAddress, false);
                     setDefaultConfig();
                 }
 
@@ -86,9 +88,9 @@ namespace ifx {
                  * all allocated memory (free the memory to be precise).
                  */
                 void deinit() {
-                    deinitCommunication(&sensor); // includes call to busWrapper.deinit();
+                    deinitCommunication(&sensor, false);
                     bsc.deinit();
-                    tlx493d_deinit(&sensor);
+                    (void) tlx493d_deinit(&sensor);
                 }
 
                 /**
@@ -110,10 +112,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms].
                  * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setPowerPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                  uint8_t pinEnableValue, uint8_t pinDisableValue,
                                  uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    bsc.setPowerPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
+                    bsc.setPowerPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -135,10 +137,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms]. 
                  * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setSelectPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
                                   uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
+                    bsc.setSelectPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -161,10 +163,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms]. 
                  * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setAddressPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setAddressPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                    uint8_t pinEnableValue, uint8_t pinDisableValue,
                                    uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    bsc.setAdressPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
+                    bsc.setAdressPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -180,7 +182,7 @@ namespace ifx {
                  * 
                  */
                 void enablePower() {
-                    bsc.controlPower(true);
+                    bsc.enablePower(true);
                 }
 
                 /**
@@ -188,7 +190,16 @@ namespace ifx {
                  * 
                  */
                 void disablePower() {
-                    bsc.controlPower(false);
+                    bsc.enablePower(false);
+                }
+
+                void reset() {
+                    deinitCommunication(&sensor, true);
+                    sensor.functions->setResetValues(&sensor);
+                    bsc.reset();
+                    initCommunication(&sensor, bus, iicAddress, true);
+                    // initCommunication(&sensor, busWrapper, iicAddress, true);
+                    setDefaultConfig();
                 }
 
                 void reset() {
@@ -203,7 +214,7 @@ namespace ifx {
                  * 
                  */
                 void enableSelect() {
-                    bsc.controlSelect(true);
+                    bsc.enableSelect(true);
                 }
 
                 /**
@@ -211,7 +222,7 @@ namespace ifx {
                  * 
                  */
                 void disableSelect() {
-                    bsc.controlSelect(false);
+                    bsc.enableSelect(false);
                 }
 
                 /**
@@ -219,7 +230,7 @@ namespace ifx {
                  * 
                  */
                 void enableAddress() {
-                    bsc.controlAddress(true);
+                    bsc.enableAddress(true);
                 }
 
                 /**
@@ -227,7 +238,7 @@ namespace ifx {
                  * 
                  */
                 void disableAddress() {
-                    bsc.controlAddress(false);
+                    bsc.enableAddress(false);
                 }
 
 
@@ -242,7 +253,8 @@ namespace ifx {
 
 
                 BoardSupportType          bsc;          /**< BoardSupportClass */
-                BusWrapperType            busWrapper;   /**< BusWrapperClass */
+                // BusWrapperType            busWrapper;   /**< BusWrapperClass */
+                BusType                   bus;  /**< Bus Class */
                 TLx493D_IICAddressType_t  iicAddress;   /**< I2C-Address of the sensor */
         };
 
@@ -259,12 +271,13 @@ namespace ifx {
             public:
 
                 typedef BoardSupport                                     BoardSupportType;
-                typedef ifx::tlx493d::SPIClassWrapper                    BusWrapperType;
+                // typedef ifx::tlx493d::SPIClassWrapper                    BusWrapperType;
                 typedef typename ifx::tlx493d::SPIClassWrapper::BusType  BusType;
 
         
-                explicit TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
-                    tlx493d_init(&sensor, sensorType);
+                explicit TLx493D(BusType &busObj) : bsc(), bus(busObj) {
+                // explicit TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
+                    (void) tlx493d_init(&sensor, sensorType);
                 }
 
                 /**
@@ -280,10 +293,11 @@ namespace ifx {
                  * function
                  *
                  */
-                void init() {
-                    initBoardSupport(&sensor, bsc);
-                    bsc.init(true);
-                    initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
+                void init(bool enablePower = false, bool enableSelect = true) {
+                    (void) initBoardSupport(&sensor, bsc);
+                    bsc.init(enablePower, enableSelect, false);
+                    // initCommunication(&sensor, busWrapper, true);
+                    initCommunication(&sensor, bus, true);
                     setDefaultConfig();
                 }
 
@@ -292,8 +306,8 @@ namespace ifx {
                  * For details see `init` function.
                  * 
                  */
-                void begin() {
-                    init();
+                void begin(bool enablePower = false, bool enableSelect = true) {
+                    init(enablePower, enableSelect);
                 }
 
 
@@ -304,9 +318,9 @@ namespace ifx {
                  * 
                  */
                 void deinit() {
-                    deinitCommunication(&sensor); // includes call to busWrapper.deinit();
+                    deinitCommunication(&sensor, false);
                     bsc.deinit();
-                    tlx493d_deinit(&sensor);
+                    (void) tlx493d_deinit(&sensor);
                 }
 
                 /**
@@ -328,10 +342,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms].
                  * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setPowerPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                  uint8_t pinEnableValue, uint8_t pinDisableValue,
                                  uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    bsc.setPowerPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
+                    bsc.setPowerPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -353,10 +367,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable      Delay after enabling the power pin in [ms]. 
                  * @param[in] delayAfterDisable     Delay after disabling the power pin in [ms].
                  */
-                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setSelectPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
                                   uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    bsc.setSelectPin(pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
+                    bsc.setSelectPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -372,7 +386,7 @@ namespace ifx {
                  * 
                  */
                 void enablePower() {
-                    bsc.controlPower(true);
+                    bsc.enablePower(true);
                 }
 
                 /**
@@ -380,7 +394,16 @@ namespace ifx {
                  * 
                  */
                 void disablePower() {
-                    bsc.controlPower(false);
+                    bsc.enablePower(false);
+                }
+
+                void reset() {
+                    deinitCommunication(&sensor, false);
+                    sensor.functions->setResetValues(&sensor);
+                    bsc.reset();
+                    // initCommunication(&sensor, busWrapper, true);
+                    initCommunication(&sensor, bus, true);
+                    setDefaultConfig();
                 }
 
                 void reset() {
@@ -395,7 +418,7 @@ namespace ifx {
                  * 
                  */
                 void enableSelect() {
-                    bsc.controlSelect(true);
+                    bsc.enableSelect(true);
                 }
 
                 /**
@@ -403,14 +426,16 @@ namespace ifx {
                  * 
                  */
                 void disableSelect() {
-                    bsc.controlSelect(false);
+                    bsc.enableSelect(false);
                 }
 
 
             private:
 
                 BoardSupportType  bsc;          /**< BoardSupportClass */
-                BusWrapperType    busWrapper;   /**< BusWrapperClass */
+                // BusWrapperType    busWrapper;   /**< BusWrapperClass */
+                BusType           bus;  /**< Bus Class */
+
         };
     }
 }

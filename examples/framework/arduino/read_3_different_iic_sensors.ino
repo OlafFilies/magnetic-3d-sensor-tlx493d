@@ -18,9 +18,8 @@ TLx493D_P3B6 dut3(Wire, TLx493D_IIC_ADDR_A1_e);
 // TODO(Jens): Need to power up W2BW sensor in setup in order to avoid race condition ! Use pin definition const uint8_t ...
 
 void setup() {
-    delay(3000);
     Serial.begin(115200);
-    delay(100);
+    delay(3000);
 
     /** Here we don't need a special routine for the initialization of the sensors,
      *  because only the second generation is critical in this case. So you have
@@ -32,7 +31,6 @@ void setup() {
     dut2.begin();
     dut3.begin();
     
-    delay(100);
     Serial.print("setup done.\n");
 }
 

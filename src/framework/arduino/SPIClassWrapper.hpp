@@ -17,25 +17,45 @@ namespace ifx {
 
                 using BusType = SPIClass;
 
-                static constexpr uint8_t TLX493D_SPI_READ_BIT         = 0x80;
+                // static constexpr uint8_t TLX493D_SPI_READ_BIT         = 0x80;
                 static constexpr uint8_t TLX493D_SPI_READ_BIT_ON      = 0x80;
-                static constexpr uint8_t TLX493D_SPI_READ_BIT_OFF     = 0x00;
+                // static constexpr uint8_t TLX493D_SPI_READ_BIT_OFF     = 0x00;
 
-                static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT     = 0x60;
-                static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_ON  = 0x60;
-                static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_OFF = 0x00;
+                // static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT     = 0x60;
+                // static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_ON  = 0x60;
+                // static constexpr uint8_t TLX493D_SPI_AUTO_INC_BIT_OFF = 0x00;
 
-                explicit SPIClassWrapper(SPIClass &bus) : spi(bus) {
+                explicit SPIClassWrapper() : spi(nullptr) {
                 }
 
 
-                void init() {
-                    spi.begin();
+                explicit SPIClassWrapper(SPIClass &bus) : spi(&bus) {
+                }
+
+
+                ~SPIClassWrapper() {
+                }
+
+
+                /**
+                 * @brief The SPIClass::init does not include the setting of the data mode, bit order and baudrate, all of which
+                 * is done in SPIClass::beginTransaction(SPISettings ). But we do not know about such details at this level. 
+                 * Therefore init() is not sufficient to restart a SPIClass object after a reset !
+                 * 
+                 */
+                void init(const SPISettings &settings) {
+                // void init(uint32_t clockFreq, uint8_t bitOrder, uint8_t dataMode) {
+                    // SPISettings settings(clockFreq, bitOrder, dataMode);
+                    spi->beginTransaction(settings);
+                    // spi.beginTransaction(settings);
+
+                    // spi.begin();
                 }
 
 
                 void deinit() {
-                    spi.end();
+                    spi->end();
+                    // spi.end();
                 }
 
 
@@ -44,7 +64,8 @@ namespace ifx {
                         uint8_t bytesWritten = 0;
 
                         for(; bytesWritten < txLen; ++bytesWritten) {
-                            spi.transfer(txBuffer[bytesWritten]);
+                            spi->transfer(txBuffer[bytesWritten]);
+                            // spi.transfer(txBuffer[bytesWritten]);
                         }
 
                         if( bytesWritten != txLen ) {
@@ -54,10 +75,12 @@ namespace ifx {
 
                     if( (rxLen > 0)  && (rxBuffer != NULL) ) {
                         uint16_t bytesRead = 0;
-                        spi.transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
+                        spi->transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
+                        // spi.transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
 
                         for(; bytesRead < rxLen; ++bytesRead) {
-                            rxBuffer[bytesRead] = spi.transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
+                            rxBuffer[bytesRead] = spi->transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
+                            // rxBuffer[bytesRead] = spi.transfer(TLX493D_SPI_READ_BIT_ON | readAddress);
                         }
 
                         if( bytesRead != rxLen ) {
@@ -70,13 +93,19 @@ namespace ifx {
 
 
                 SPIClass &getBus() {
-                    return spi;
+                    return *spi;
+                }
+
+
+                void setBus(SPIClass &spiObj) {
+                    spi = &spiObj;
                 }
 
 
             private:
 
-            SPIClass &spi;
+                // SPIClass &spi;
+                SPIClass *spi;
         };
     }
 }

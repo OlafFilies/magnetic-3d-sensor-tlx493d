@@ -1,7 +1,7 @@
 // std includes
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
 
 // Arduino includes
 #include <Arduino.h>
@@ -16,13 +16,13 @@
 
 namespace ifx {
     namespace tlx493d {
-        const uint16_t LOGGER_BUFFER_SIZE = 512;
+        const uint16_t LOGGER_BUFFER_SIZE = 512U;
 
         static void logMessage(const char *prefix, const char *format, va_list vaList) {
             char buffer[LOGGER_BUFFER_SIZE];
 
             size_t prefixSize = strlen(prefix);
-            memcpy(buffer, prefix, prefixSize);
+            (void) memcpy(buffer, prefix, prefixSize);
             int ret = vsprintf(buffer + prefixSize, format, vaList);
 
             if( (ret + prefixSize) > LOGGER_BUFFER_SIZE ) {
@@ -38,13 +38,13 @@ namespace ifx {
 
 
 extern "C" {
-    void printRegisters(TLx493D_t *sensor, const char *headLine = NULL) {
+    void tlx493d_logPrintRegisters(const TLx493D_t *sensor, const char *headLine = NULL) {
         Serial.println();
         Serial.println(headLine);
         // Serial.println();
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
-            print("    0x%02X", sensor->regMap[i]);
+            tlx493d_logPrint("    0x%02X", sensor->regMap[i]);
             // Serial.print("  0x");
             // Serial.print(sensor->regMap[i], HEX);
         }
@@ -53,12 +53,12 @@ extern "C" {
     }
 
 
-    void printDouble(double d) {
+    void tlx493d_logPrintDouble(double d) {
         Serial.print(d);
     }
 
 
-    void print(const char *format, ...) {
+    void tlx493d_logPrint(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("", format, ap);
@@ -66,7 +66,7 @@ extern "C" {
     }
 
 
-    void println(const char *format, ...) {
+    void tlx493d_logPrintln(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -76,7 +76,7 @@ extern "C" {
     }
 
 
-    void info(const char *format, ...) {
+    void tlx493d_logInfo(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -86,7 +86,7 @@ extern "C" {
     }
 
 
-    void warn(const char *format, ...) {
+    void tlx493d_logWarn(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -96,7 +96,7 @@ extern "C" {
     }
 
 
-    void error(const char *format, ...) {
+    void tlx493d_logError(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -106,7 +106,7 @@ extern "C" {
     }
 
 
-    void flush() {
+    void tlx493d_logFlush() {
         // USE WITH CAUTION ! DEVICE MAY HANGUP !
         Serial.flush();
         // Serial.println();

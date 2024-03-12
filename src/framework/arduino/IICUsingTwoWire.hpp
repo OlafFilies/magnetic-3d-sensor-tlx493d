@@ -3,10 +3,7 @@
 
 
 // std includes
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdbool>
 
 // Arduino includes
 #include <Arduino.h>
@@ -22,8 +19,8 @@
 
 namespace ifx {
     namespace tlx493d {
-        bool initCommunication(TLx493D_t *sensor, TwoWireWrapper &tw, TLx493D_IICAddressType_t iicAdr);
-        bool initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr);
+        // bool initCommunication(TLx493D_t *sensor, TwoWireWrapper &tw, TLx493D_IICAddressType_t iicAdr, bool executeInit = false);
+        bool initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr, bool executeInit = false);
     }
 }
 

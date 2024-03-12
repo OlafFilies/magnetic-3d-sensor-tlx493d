@@ -34,8 +34,13 @@ namespace ifx {
                  * and addressPins.
                  * @brief Default constructor with no parameters.
                  */
-                Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0}, addressPins{false, 0, 0, 0, 0, 0, 0} {
+                Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0, 0}, addressPins{false, 0, 0, 0, 0, 0, 0, 0} {
                 }
+
+
+                ~Kit2GoBoardSupport() {
+                }
+
 
                 /**
                  * @brief The function `init` sets/resets the board pin modes and/or values based on the values of the datastructures set in the main code.  
@@ -46,40 +51,36 @@ namespace ifx {
                  * @param[in] enableExtendedAddress (Only relevant for Generation 1, A1B6 devices) Whether to use extended addressing feature. In this case, the pin
                  *  stored in addressPins structure is activated and later isolated in a prescribed way to enable the 4 extended addresses of the said device.        
                  */
-                void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAddress = false) {
-                    for(const auto &p : selectPins) {
-                        initPin(p);
+                void init(bool isEnablePower = true, bool isEnableSelect = false, bool isEnableExtendedAddress = false) {
+                    if( isEnableSelect ) {
+                        for(const auto &p : selectPins) {
+                            initPin(p);
+                        }
+
+                        this->enableSelect(false);
                     }
 
-                    controlSelect(enableSelect);
-
-
-                    if( enableExtendedAddress ) {
+                    if( isEnableExtendedAddress ) {
                         for(const auto &p : addressPins){
                             initPin(p);
                         }
 
-                        controlAddress(true);
+                        enableAddress(true);
                     }
 
+                    if( isEnablePower ) {
+                        for(const auto &p : powerPins) {
+                            initPin(p);
+                        }
 
-                    for(const auto &p : powerPins) {
-                        initPin(p);
+                        reset();
                     }
 
-                    // controlPower(enablePower);
-                    controlPower(false);
-
-                    if( enablePower ) {
-                        controlPower(true);
-                    }
-
-
-                    if( enableExtendedAddress ) {
-                        controlAddress(false);
+                    if( isEnableExtendedAddress ) {
+                        enableAddress(false);
 
                         for(auto &p : addressPins){
-                            setPinDirection(p, INPUT);
+                            setPinDirectionToTristate(p);
                         }
                     }
                 }
@@ -101,8 +102,8 @@ namespace ifx {
                  * @brief The `deinit` function sets all the pins to their disableValue.
                  */
                 void deinit() {
-                    controlPower(false);
-                    controlSelect(false);
+                    enablePower(false);
+                    enableSelect(false);
                 }
 
                 /**
@@ -116,16 +117,17 @@ namespace ifx {
                  * @brief The `setPowerPin` function is setter function to route pin parameters from the main code into the datastructures/variables of this class.
                  * 
                  * @param[in] pinNumber Arduino pin number of the GPIO to be used as 3V3 POWER pin for the sensor.
-                 * @param[in] pinDirection Direction of the Arduino pin to be used as the 3V3 POWER pin.
+                 * @param[in] pinDriveDirection Direction of the Arduino pin to be used as the 3V3 POWER pin.
+                 * @param[in] pinTristateDirection Direction of the Arduino pin when in tristate.
                  * @param[in] pinEnableValue Value of the pin in enabled state.
                  * @param[in] pinDisableValue Value of the pin in disabled state.
                  * @param[in] delayAfterEnable delay in ms after the pin is enabled. Needed to meet settling time constraints.  
                  * @param[in] delayAfterDisable delay in ms after the pin is disabled. Needed to meet settling time constraints.
                  */
-                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setPowerPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                  uint8_t pinEnableValue, uint8_t pinDisableValue,
                                  uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    powerPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
+                    powerPins[0] = { true, pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
                 }
 
                 /**
@@ -144,10 +146,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable delay in ms after the pin is enabled. Needed to meet settling time constraints.
                  * @param[in] delayAfterDisable delay in ms after the pin is disabled. Needed to meet settling time constraints.
                  */
-                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setSelectPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
                                   uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    selectPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
+                    selectPins[0] = { true, pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
                 }
 
                 /**
@@ -167,9 +169,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable delay in ms after the pin is enabled. Needed to meet settling time constraints.
                  * @param[in] delayAfterDisable delay in ms after the pin is disabled. Needed to meet settling time constraints.
                  */
-                void setAddressPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
+                void setAddressPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
+                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
                                    uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    addressPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
+                    addressPins[0] = { true, pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
                 }
 
                 /**
@@ -181,41 +184,41 @@ namespace ifx {
 
 
                 /**
-                 * @brief The `controlPower` function sets/resets the pins in powerPins based on argument.
+                 * @brief The `enablePower` function sets/resets the pins in powerPins based on argument.
                  * 
                  * @param[in] enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */
-                void controlPower(bool enable) {
+                void enablePower(bool enable) {
                     for(const auto &p : powerPins) {
-                        controlPin(p, enable);
+                        enablePin(p, enable);
                     }
                 }
 
                 /**
-                 * @brief The `controlSelect` function sets/resets the pins in selectPins based on argument.
+                 * @brief The `enableSelect` function sets/resets the pins in selectPins based on argument.
                  * 
                  * @param[in] enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */
-                void controlSelect(bool enable) {
+                void enableSelect(bool enable) {
                     for(const auto &p : selectPins) {
-                        controlPin(p, enable);
+                        enablePin(p, enable);
                     }
                 }
 
                 /**
-                 * @brief The `controlAddress` function sets/resets the pins in selectPins based on argument.
+                 * @brief The `enableAddress` function sets/resets the pins in selectPins based on argument.
                  * 
                  * @param enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */    
-                void controlAddress(bool enable) {
+                void enableAddress(bool enable) {
                     for(const auto &p : addressPins) {
-                        controlPin(p, enable);
+                        enablePin(p, enable);
                     }
                 }
 
                 void reset() {
-                    controlPower(false);
-                    controlPower(true);
+                    enablePower(false);
+                    enablePower(true);
                 }
 
 
@@ -228,7 +231,9 @@ namespace ifx {
                     /*@{*/
                     bool     isSet;             /**< the state of the pin, to be activated at `init` or not. */
                     uint8_t  pinNumber;         /**< the Arduino pin number of the pin. */
-                    uint8_t  direction;         /**< the direction for the Arduino pin. */
+
+                    uint8_t  driveDirection;    /**< the direction for the Arduino pin when actively driving. */
+                    uint8_t  tristateDirection; /**< the direction for the Arduino pin when in tristate. */
                     
                     uint8_t  enableValue;       /**< the value of the pin to be enabled or set by the `init` function. */
                     uint8_t  disableValue;      /**< the value of the pin when the pin is disabled. */
@@ -239,12 +244,12 @@ namespace ifx {
                 } pinCtrl;
 
                 /**
-                 * @brief The `controlPin` function sets/resets the pin on the basis of parameters in the structure `pinCtrl`.
+                 * @brief The `enablePin` function sets/resets the pin on the basis of parameters in the structure `pinCtrl`.
                  * 
                  * @param[in] p Structure of type `pinCtrl`.
                  * @param[in] enable Sets pin to pinEnableValue if true, else to pinDisableValue.
                  */ 
-                void controlPin(const pinCtrl &p, bool enable) {
+                void enablePin(const pinCtrl &p, bool enable) {
                     if( p.isSet ) {
                         digitalWrite(p.pinNumber, enable ? p.enableValue : p.disableValue);
                         delayMicroseconds(enable ? p.delayAfterEnable : p.delayAfterDisable);
@@ -258,14 +263,20 @@ namespace ifx {
                  */ 
                 void initPin(const pinCtrl &p) {
                     if( p.isSet ) {
-                        pinMode(p.pinNumber, p.direction);
+                        pinMode(p.pinNumber, p.driveDirection);
                     }
                 }
 
-                void setPinDirection(pinCtrl &p, uint8_t direction) {
+                void setPinDirectionToDrive(pinCtrl &p) {
                     if( p.isSet ) {
-                        p.direction = direction;
-                        pinMode(p.pinNumber, direction);
+                        pinMode(p.pinNumber, p.driveDirection);
+                    }
+                }
+
+
+                void setPinDirectionToTristate(pinCtrl &p) {
+                    if( p.isSet ) {
+                        pinMode(p.pinNumber, p.tristateDirection);
                     }
                 }
 

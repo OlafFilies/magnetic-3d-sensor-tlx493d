@@ -192,7 +192,7 @@ bool tlx493d_softwareReset(TLx493D_t *sensor) {
 }
 
 
-const char *tlx493d_getTypeAsString(TLx493D_t *sensor) {
+const char *tlx493d_getTypeAsString(const TLx493D_t *sensor) {
    return tlx493d_common_getTypeAsString(sensor);
 }
 

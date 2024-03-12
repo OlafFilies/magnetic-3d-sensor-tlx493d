@@ -15,14 +15,14 @@ uint8_t count = 0;
 
 
 void setup() {
-    delay(3000);
     Serial.begin(115200);
+    delay(3000);
 
     /** Setting the power up pin of the Kit2GO as well as the chip select pin for the SPI 
      *  For this we're using the functions of the Board Support Class
      */
-    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
-    dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
+    // dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
+    dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, INPUT, LOW, HIGH, 50, 50);
     dut.begin();
 
     Serial.print("setup done.\n");
@@ -71,8 +71,12 @@ void loop() {
 
     if( ++count == 10 ) {
         Serial.println("Before reset -------------------------------------------------------------------------------------------------------");
+
+        // The current experimental board does not support power down as the chip VDD is hard wired !
         // dut.reset();
+
         dut.softwareReset();
+
         Serial.println("After reset -------------------------------------------------------------------------------------------------------");
         count = 0;
     }

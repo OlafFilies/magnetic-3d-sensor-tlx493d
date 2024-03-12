@@ -131,8 +131,8 @@ TEST_GROUP_RUNNER(TLx493D_W2B6)
 #ifndef TEST_TLx493D_W2B6_NEEDS_SENSOR
 
     // run gen 2 common functions tests
-    RUN_TEST_GROUP(SensorsCommon);
     RUN_TEST_GROUP(SensorsGen2Common);
+    RUN_TEST_GROUP(SensorsCommon);
 
 #endif
 

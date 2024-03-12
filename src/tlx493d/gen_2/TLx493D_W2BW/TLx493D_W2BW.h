@@ -51,6 +51,7 @@ bool TLx493D_W2BW_init(TLx493D_t *sensor);
 bool TLx493D_W2BW_deinit(TLx493D_t *sensor);
 
 bool TLx493D_W2BW_readRegisters(TLx493D_t *sensor);
+bool TLx493D_W2BW_readRegistersAndCheck(TLx493D_t *sensor);
 
 void TLx493D_W2BW_calculateRawTemperature(TLx493D_t *sensor, int16_t *temperature);
 bool TLx493D_W2BW_getRawTemperature(TLx493D_t *sensor, int16_t *temperature);
@@ -167,10 +168,10 @@ bool TLx493D_W2BW_setPowerMode(TLx493D_t *sensor, uint8_t mode);
 bool TLx493D_W2BW_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t ur);
 
 
-bool TLx493D_W2BW_hasValidData(TLx493D_t *sensor);
-bool TLx493D_W2BW_isFunctional(TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidData(const TLx493D_t *sensor);
+bool TLx493D_W2BW_isFunctional(const TLx493D_t *sensor);
 
-bool TLx493D_W2BW_hasWakeUp(TLx493D_t *sensor);
+bool TLx493D_W2BW_hasWakeUp(const TLx493D_t *sensor);
 
 /**
  * @brief Checks if the wake up functionality is enabled
@@ -179,7 +180,7 @@ bool TLx493D_W2BW_hasWakeUp(TLx493D_t *sensor);
  * @return true - If wake up is enabled
  * @return false - If wake up is disabled
  */
-bool TLx493D_W2BW_isWakeUpEnabled(TLx493D_t *sensor);
+bool TLx493D_W2BW_isWakeUpEnabled(const TLx493D_t *sensor);
 
 bool TLx493D_W2BW_enableWakeUpMode(TLx493D_t *sensor);
 bool TLx493D_W2BW_disableWakeUpMode(TLx493D_t *sensor);
@@ -189,29 +190,31 @@ bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor, double temperature, dou
 
 bool TLx493D_W2BW_softwareReset(TLx493D_t *sensor);
 
-uint8_t TLx493D_W2BW_calculateFuseParity(TLx493D_t *sensor);
-uint8_t TLx493D_W2BW_calculateBusParity(TLx493D_t *sensor);
+uint8_t TLx493D_W2BW_calculateFuseParity(const TLx493D_t *sensor);
+uint8_t TLx493D_W2BW_calculateBusParity(const TLx493D_t *sensor);
 uint8_t TLx493D_W2BW_calculateConfigurationParity(TLx493D_t *sensor);
 
-bool TLx493D_W2BW_hasValidFuseParity(TLx493D_t *sensor);
-bool TLx493D_W2BW_hasValidBusParity(TLx493D_t *sensor);
-bool TLx493D_W2BW_hasValidConfigurationParity(TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidFuseParity(const TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidBusParity(const TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidConfigurationParity(const TLx493D_t *sensor);
 
-bool TLx493D_W2BW_hasValidWakeUpParity(TLx493D_t *sensor);
-bool TLx493D_W2BW_isInTestMode(TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidWakeUpParity(const TLx493D_t *sensor);
+bool TLx493D_W2BW_isInTestMode(const TLx493D_t *sensor);
 
-bool TLx493D_W2BW_hasValidTBit(TLx493D_t *sensor);
-bool TLx493D_W2BW_hasValidIICadr(TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidTBit(const TLx493D_t *sensor);
+bool TLx493D_W2BW_hasValidIICadr(const TLx493D_t *sensor);
 
 void TLx493D_W2BW_setResetValues(TLx493D_t *sensor);
 
-uint8_t TLx493D_W2BW_selectIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
+uint8_t TLx493D_W2BW_selectIICAddress(const TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
-void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
+void TLx493D_W2BW_calculateRawMagneticFieldAtTemperature(const TLx493D_t *sensor, int16_t rawTemp, TLx493D_SensitivityType_t sens,
                                                          double xInmT, double yInmT, double zInmT,
                                                          int16_t *x, int16_t *y, int16_t *z);
 
-double TLx493D_W2BW_getSensitivityScaleFactor(TLx493D_t *sensor);
+double TLx493D_W2BW_getSensitivityScaleFactor(const TLx493D_t *sensor);
+
+void TLx493D_W2BW_printRegisters(const TLx493D_t *sensor);
 
 void TLx493D_W2BW_printRegisters(TLx493D_t *sensor);
 

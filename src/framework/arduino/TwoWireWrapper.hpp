@@ -17,26 +17,40 @@ namespace ifx {
 
                 using BusType = TwoWire;
 
-                explicit TwoWireWrapper(TwoWire &bus) : iic(bus) {
+
+                explicit TwoWireWrapper() : iic(nullptr) {
+                }
+
+
+                explicit TwoWireWrapper(TwoWire &bus) : iic(&bus) {
+                }
+
+
+                ~TwoWireWrapper() {
                 }
 
 
                 void init() {
-                    iic.begin();
+                    iic->begin();
+                    // iic.begin();
                 }
 
 
                 void deinit() {
-                    iic.end();
+                    iic->end();
+                    // iic.end();
                 }
 
 
                 bool transfer(uint8_t iicAddress, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
                     if( (txLen > 0) && (txBuffer != NULL) ) {
-                        iic.beginTransmission(iicAddress);
+                        iic->beginTransmission(iicAddress);
+                        // iic.beginTransmission(iicAddress);
 
-                        uint8_t bytesWritten = iic.write(txBuffer, txLen);
-                        iic.endTransmission(true);
+                        uint8_t bytesWritten = iic->write(txBuffer, txLen);
+                        iic->endTransmission(true);
+                        // uint8_t bytesWritten = iic.write(txBuffer, txLen);
+                        // iic.endTransmission(true);
 
                         if( bytesWritten != txLen ) {
                             return false;
@@ -44,11 +58,17 @@ namespace ifx {
                     }
 
                     if( (rxLen > 0)  && (rxBuffer != NULL) ) {
-                        uint8_t bytesRead = iic.requestFrom(iicAddress, rxLen);
+                        uint8_t bytesRead = iic->requestFrom(iicAddress, rxLen);
 
-                        for(uint16_t i = 0; (i < rxLen) && (iic.available() > 0); ++i) {
-                            rxBuffer[i] = iic.read();
+                        for(uint16_t i = 0; (i < rxLen) && (iic->available() > 0); ++i) {
+                            rxBuffer[i] = iic->read();
                         }
+
+                        // uint8_t bytesRead = iic.requestFrom(iicAddress, rxLen);
+
+                        // for(uint16_t i = 0; (i < rxLen) && (iic.available() > 0); ++i) {
+                        //     rxBuffer[i] = iic.read();
+                        // }
 
                         // iic.endTransmission(true);
 
@@ -62,13 +82,18 @@ namespace ifx {
 
 
                 TwoWire &getBus() {
-                    return iic;
+                    return *iic;
+                }
+
+
+                void setBus(BusType &iicObj) {
+                    iic = &iicObj;
                 }
 
 
             private:
 
-            TwoWire &iic;
+                TwoWire *iic;
         };
     }
 }

@@ -18,14 +18,14 @@ TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A4_e); //0x3E
 
 
 void setup() {
-    delay(3000);
     Serial.begin(115200);
+    delay(3000);
 
     // explicit power pin needed to power up board after the addrPin is pulled down
-    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
+    dut.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 50, 50);
     // set pin used to drive SDA/ADDR pin before power up
     // This pin is then isolated from the I2C bus by switching it high-Z before I2C init
-    dut.setAddrPin(SDA_ADDRESS_PIN, OUTPUT, LOW, HIGH, 1, 1);
+    dut.setAddrPin(SDA_ADDRESS_PIN, OUTPUT, INPUT, LOW, HIGH, 1, 1);
     
     // Set the sensor constructor to activate extended address switching pin
     dut.begin(true, false, true);
