@@ -18,8 +18,8 @@
 
 namespace ifx {
     namespace tlx493d {
-        bool initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi);
-        bool initCommunication(TLx493D_t *sensor, SPIClass &spi);
+        // bool initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi, bool executeInit = false, uint32_t clockFreq = 200000, uint8_t bitOrder = MSBFIRST, uint8_t dataMode = SPI_MODE2);
+        bool initCommunication(TLx493D_t *sensor, SPIClass &spi, bool executeInit = false, uint32_t clockFreq = 200000, uint8_t bitOrder = MSBFIRST, uint8_t dataMode = SPI_MODE2);
     }
 }
 

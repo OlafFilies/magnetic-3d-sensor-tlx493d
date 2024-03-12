@@ -356,7 +356,7 @@ bool TLx493D_P3I8_disableWakeUpMode(TLx493D_t *sensor) {
 
 bool TLx493D_P3I8_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
                                                int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh) {
-    return tlx493d_gen_3_setWakeUpThresholdsAsInteger(sensor,
+    return tlx493d_gen_3_setWakeUpThresholdsAsInteger(sensor, P3I8_WU_EN_e, P3I8_WU_EN_CP_e, P3I8_WU_PAR_e,
                                                       P3I8_WU_XL_MSBS_e, P3I8_WU_XL_LSBS_e, P3I8_WU_XH_MSBS_e, P3I8_WU_XH_LSBS_e,
                                                       P3I8_WU_YL_MSBS_e, P3I8_WU_YL_LSBS_e, P3I8_WU_YH_MSBS_e, P3I8_WU_YH_LSBS_e,
                                                       P3I8_WU_ZL_MSBS_e, P3I8_WU_ZL_LSBS_e, P3I8_WU_ZH_MSBS_e, P3I8_WU_ZH_LSBS_e,
@@ -367,7 +367,7 @@ bool TLx493D_P3I8_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
 // thesholds im mT, to be converted to proper format
 bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
                                       double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    return tlx493d_gen_3_setWakeUpThresholds(sensor,
+    return tlx493d_gen_3_setWakeUpThresholds(sensor, P3I8_WU_EN_e, P3I8_WU_EN_CP_e, P3I8_WU_PAR_e,
                                              P3I8_WU_XL_MSBS_e, P3I8_WU_XL_LSBS_e, P3I8_WU_XH_MSBS_e, P3I8_WU_XH_LSBS_e,
                                              P3I8_WU_YL_MSBS_e, P3I8_WU_YL_LSBS_e, P3I8_WU_YH_MSBS_e, P3I8_WU_YH_LSBS_e,
                                              P3I8_WU_ZL_MSBS_e, P3I8_WU_ZL_LSBS_e, P3I8_WU_ZH_MSBS_e, P3I8_WU_ZH_LSBS_e,

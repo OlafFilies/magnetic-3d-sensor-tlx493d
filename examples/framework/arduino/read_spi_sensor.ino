@@ -22,7 +22,7 @@ void setup() {
      *  For this we're using the functions of the Board Support Class
      */
     // dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
-    dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, LOW, HIGH, 50, 50);
+    dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, INPUT, LOW, HIGH, 50, 50);
     dut.begin();
 
     Serial.print("setup done.\n");
@@ -74,7 +74,7 @@ void loop() {
         Serial.println("Before reset -------------------------------------------------------------------------------------------------------");
 
         // The current experimental board does not support power down as the chip VDD is hard wired !
-        dut.reset();
+        // dut.reset();
 
         dut.softwareReset();
 

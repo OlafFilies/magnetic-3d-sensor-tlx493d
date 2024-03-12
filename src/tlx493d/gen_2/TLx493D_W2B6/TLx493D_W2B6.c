@@ -332,7 +332,7 @@ bool TLx493D_W2B6_disableWakeUpMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh) {
-    return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor,
+    return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor, W2B6_CP_e,
                                                       W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, W2B6_XH_MSBS_e, W2B6_XH_LSBS_e,
                                                       W2B6_YL_MSBS_e, W2B6_YL_LSBS_e, W2B6_YH_MSBS_e, W2B6_YH_LSBS_e,
                                                       W2B6_ZL_MSBS_e, W2B6_ZL_LSBS_e, W2B6_ZH_MSBS_e, W2B6_ZH_LSBS_e,
@@ -342,7 +342,7 @@ bool TLx493D_W2B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
 // thesholds im mT, to be converted to proper format
 bool TLx493D_W2B6_setWakeUpThresholds(TLx493D_t *sensor,
                                       double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    return tlx493d_gen_2_setWakeUpThresholds(sensor,
+    return tlx493d_gen_2_setWakeUpThresholds(sensor, W2B6_CP_e,
                                              W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, W2B6_XH_MSBS_e, W2B6_XH_LSBS_e,
                                              W2B6_YL_MSBS_e, W2B6_YL_LSBS_e, W2B6_YH_MSBS_e, W2B6_YH_LSBS_e,
                                              W2B6_ZL_MSBS_e, W2B6_ZL_LSBS_e, W2B6_ZH_MSBS_e, W2B6_ZH_LSBS_e,

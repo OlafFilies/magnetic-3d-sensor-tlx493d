@@ -25,9 +25,9 @@ void setup() {
     // dut1.setPowerPin(8, OUTPUT, HIGH, LOW, 50, 50);
     // dut2.setPowerPin(9, OUTPUT, HIGH, LOW, 50, 50);
     // dut3.setPowerPin(10, OUTPUT, HIGH, LOW, 50, 50);
-    dut1.setPowerPin(8, OUTPUT, HIGH, LOW, 0, 250000);
-    dut2.setPowerPin(9, OUTPUT, HIGH, LOW, 0, 250000);
-    dut3.setPowerPin(10, OUTPUT, HIGH, LOW, 0, 250000);
+    dut1.setPowerPin(8, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+    dut2.setPowerPin(9, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+    dut3.setPowerPin(10, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
 
     /** Here we're enabling one sensor after the other. This procedure 
      *  is necessary, otherwise it can happen that the initialization of the

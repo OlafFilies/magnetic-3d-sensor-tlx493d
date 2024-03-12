@@ -343,22 +343,62 @@ bool tlx493d_gen_3_disableWakeUpMode(TLx493D_t *sensor, uint8_t intBF, uint8_t w
 }
 
 
+bool tlx493d_gen_3_writeWakeupParityRelatedRegisters(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF) {
+    tlx493d_common_setBitfield(sensor, wucpBF, tlx493d_common_returnBitfield(sensor, wuBF));
+
+    tlx493d_common_setBitfield(sensor, wupBF, tlx493d_gen_3_calculateWakeUpParity(sensor, wuBF));
+
+    uint8_t txBuffer[9] = {
+                              0x0C,
+                              sensor->regMap[0x0C],
+                              sensor->regMap[0x0D],
+                              sensor->regMap[0x0E],
+                              sensor->regMap[0x0F],
+                              sensor->regMap[0x10],
+                              sensor->regMap[0x11],
+                              sensor->regMap[0x12],
+                              sensor->regMap[0x13],
+                           };
+
+    return tlx493d_transfer(sensor, txBuffer, sizeof(txBuffer), NULL, 0);
+}
+
+
 bool tlx493d_gen_3_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold10Bits) {
     const TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
     const TLx493D_Register_t *lsbs = &sensor->regDef[lsbsBF];
 
-    uint8_t lower = ((uint8_t) (threshold10Bits & (lsbs->mask >> lsbs->offset)));
-    uint8_t upper = ((uint8_t) ((threshold10Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset)));
+    // uint8_t lower = (uint8_t) (((uint8_t) threshold10Bits) & (lsbs->mask >> lsbs->offset));
+    // uint8_t upper = (uint8_t) ((((uint8_t) threshold10Bits) >> lsbs->numBits) & (msbs->mask >> msbs->offset));
+    uint8_t lower = (uint8_t) (((uint8_t) threshold10Bits) & (lsbs->mask >> lsbs->offset));
+    uint8_t upper = (uint8_t) (((uint8_t) (threshold10Bits >> lsbs->numBits)) & (msbs->mask >> msbs->offset));
 
     tlx493d_common_setBitfield(sensor, msbsBF, upper);
-    bool b = tlx493d_common_writeRegister(sensor, msbsBF);
+    // bool b = tlx493d_common_writeRegister(sensor, msbsBF);
 
     tlx493d_common_setBitfield(sensor, lsbsBF, lower);
-    return b && tlx493d_common_writeRegister(sensor, lsbsBF);
+    // return b && tlx493d_common_writeRegister(sensor, lsbsBF);
+
+    return true;
 }
 
 
-bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
+// bool tlx493d_gen_3_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold10Bits) {
+//     const TLx493D_Register_t *msbs = &sensor->regDef[msbsBF];
+//     const TLx493D_Register_t *lsbs = &sensor->regDef[lsbsBF];
+
+//     uint8_t lower = ((uint8_t) (threshold10Bits & (lsbs->mask >> lsbs->offset)));
+//     uint8_t upper = ((uint8_t) ((threshold10Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset)));
+
+//     tlx493d_common_setBitfield(sensor, msbsBF, upper);
+//     bool b = tlx493d_common_writeRegister(sensor, msbsBF);
+
+//     tlx493d_common_setBitfield(sensor, lsbsBF, lower);
+//     return b && tlx493d_common_writeRegister(sensor, lsbsBF);
+// }
+
+
+bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF,
                                                 uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                                 uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                                 uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
@@ -372,12 +412,14 @@ bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
     retVal &= tlx493d_gen_3_setThreshold(sensor, zlMSBBF, zlLSBBF, zlTh);
     retVal &= tlx493d_gen_3_setThreshold(sensor, zhMSBBF, zhLSBBF, zhTh);
 
+    retVal &= tlx493d_gen_3_writeWakeupParityRelatedRegisters(sensor, wuBF, wucpBF, wupBF);
+
     // retVal &= sensor->functions->readRegisters(sensor);
     return retVal;
 }
 
 
-bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor,
+bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF,
                                        uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                        uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                        uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
@@ -404,7 +446,7 @@ bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor,
 // tlx493d_logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
 // tlx493d_logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
 
-    return tlx493d_gen_3_setWakeUpThresholdsAsInteger(sensor,
+    return tlx493d_gen_3_setWakeUpThresholdsAsInteger(sensor, wuBF, wucpBF, wupBF,
                                                       xlMSBBF, xlLSBBF, xhMSBBF, xhLSBBF,
                                                       ylMSBBF, ylLSBBF, yhMSBBF, yhLSBBF,
                                                       zlMSBBF, zlLSBBF, zhMSBBF, zhLSBBF,

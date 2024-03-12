@@ -45,14 +45,15 @@ bool tlx493d_gen_3_isWakeUpEnabled(const TLx493D_t *sensor, uint8_t wuBF);
 bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF);
 bool tlx493d_gen_3_disableWakeUpMode(TLx493D_t *sensor, uint8_t intBF, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF);
 
+bool tlx493d_gen_3_writeWakeupParityRelatedRegisters(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF);
 bool tlx493d_gen_3_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold10Bits);
-bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
+bool tlx493d_gen_3_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF,
                                                 uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                                 uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                                 uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
                                                 int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh);
 
-bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor,
+bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor, uint8_t wuBF, uint8_t wucpBF, uint8_t wupBF,
                                        uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                        uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                        uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,

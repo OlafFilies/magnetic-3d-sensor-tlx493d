@@ -422,11 +422,12 @@ bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
     tlx493d_common_setBitfield(sensor, msbsBF, upper);
     tlx493d_common_setBitfield(sensor, lsbsBF, lower);
 
-    return tlx493d_gen_2_writeConfigurationRegisters(sensor);
+    return true;
+    // return tlx493d_gen_2_writeConfigurationRegisters(sensor);
 }
 
 
-bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
+bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, uint8_t cpBF,
                                                 uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                                 uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                                 uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
@@ -440,13 +441,17 @@ bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
     retVal &= tlx493d_gen_2_setThreshold(sensor, zlMSBBF, zlLSBBF, zlTh);
     retVal &= tlx493d_gen_2_setThreshold(sensor, zhMSBBF, zhLSBBF, zhTh);
 
-    retVal &= sensor->functions->readRegisters(sensor);
+    tlx493d_common_setBitfield(sensor, cpBF, sensor->functions->calculateConfigurationParity(sensor));
+
+    retVal &= tlx493d_gen_2_writeConfigurationRegisters(sensor);
+
+    // retVal &= sensor->functions->readRegisters(sensor);
 
     return retVal;
 }
 
 
-bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor,
+bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor, uint8_t cpBF,
                                        uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                        uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                        uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
@@ -473,7 +478,7 @@ bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor,
 // tlx493d_logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
 // tlx493d_logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
 
-    return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor,
+    return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor, cpBF,
                                                       xlMSBBF, xlLSBBF, xhMSBBF, xhLSBBF,
                                                       ylMSBBF, ylLSBBF, yhMSBBF, yhLSBBF,
                                                       zlMSBBF, zlLSBBF, zhMSBBF, zhLSBBF,

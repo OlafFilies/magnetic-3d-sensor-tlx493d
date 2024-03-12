@@ -469,7 +469,7 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
 {
     // pos. numbers
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x0ABC, 0x00BC, 0x000C, 0x0FBC, 0x0F0C, 0x0F00) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // threshold 11 bits (+ 1 implicit  set to 0)
     // MSBs
@@ -489,10 +489,11 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     TEST_ASSERT_EQUAL_HEX8( (0x0F00 >> 1) & 0x07, tlx493d_common_returnBitfield(&dut, W2B6_ZH_LSBS_e) );
 
 
-    // neg. numbers
+    // neg. numbers in hex format
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, 0x8ABC, 0x80BC, 0x800C, 0x8FBC, 0x8F0C, 0x8F00) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
+    // threshold 11 bits (+ 1 implicit  set to 0)
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8ABC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, W2B6_XL_MSBS_e) );
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x80BC) >> 4) & 0xFF, tlx493d_common_returnBitfield(&dut, W2B6_XH_MSBS_e) );
@@ -510,8 +511,9 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) 0x8F00) >> 1) & 0x07, tlx493d_common_returnBitfield(&dut, W2B6_ZH_LSBS_e) );
 
 
+    // neg. numbers in int format
     TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholdsAsInteger(&dut, -1, -2, -16, -100, -256, -1024) );
-    // TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     // MSBs
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1) >> 4) & 0xFF,    tlx493d_common_returnBitfield(&dut, W2B6_XL_MSBS_e) );
@@ -528,6 +530,86 @@ TEST_IFX(TLx493D_W2B6_needsSensorInternal, checkWakeUpThresholdFunctionality)
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -100) >> 1) & 0x07,  tlx493d_common_returnBitfield(&dut, W2B6_YH_LSBS_e) );
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -256) >> 1) & 0x07,  tlx493d_common_returnBitfield(&dut, W2B6_ZL_LSBS_e) );
     TEST_ASSERT_EQUAL_HEX8( (((int16_t) -1024) >> 1) & 0x07, tlx493d_common_returnBitfield(&dut, W2B6_ZH_LSBS_e) );
+
+
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholds(&dut, 25.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    int16_t th    = 0;
+    uint8_t delta = 2;
+
+    // X
+    tlx493d_common_concatBytes(&dut, W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // XL
+
+    tlx493d_common_concatBytes(&dut, W2B6_XH_MSBS_e, W2B6_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, W2B6_YL_MSBS_e, W2B6_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // YL
+
+    tlx493d_common_concatBytes(&dut, W2B6_YH_MSBS_e, W2B6_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, W2B6_ZL_MSBS_e, W2B6_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // ZL
+
+    tlx493d_common_concatBytes(&dut, W2B6_ZH_MSBS_e, W2B6_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // ZH
+
+
+    // Check if temperature plays no role !
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholds(&dut, 0.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    th = 0;
+    
+    // X
+    tlx493d_common_concatBytes(&dut, W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // XL
+
+    tlx493d_common_concatBytes(&dut, W2B6_XH_MSBS_e, W2B6_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, W2B6_YL_MSBS_e, W2B6_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // YL
+
+    tlx493d_common_concatBytes(&dut, W2B6_YH_MSBS_e, W2B6_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, W2B6_ZL_MSBS_e, W2B6_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -38,  th << 1 ); // ZL
+
+    tlx493d_common_concatBytes(&dut, W2B6_ZH_MSBS_e, W2B6_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 38,  th << 1 ); // ZH
+
+
+    TEST_ASSERT_TRUE( dut.functions->setWakeUpThresholds(&dut, 25.0, -15.0, 15.0, -15.0, 15.0, -15.0, 15.0) );
+    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    th = 0;
+    
+    // X
+    tlx493d_common_concatBytes(&dut, W2B6_XL_MSBS_e, W2B6_XL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -115,  th << 1 ); // XL
+
+    tlx493d_common_concatBytes(&dut, W2B6_XH_MSBS_e, W2B6_XH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 115,  th << 1 ); // XH
+
+    // Y
+    tlx493d_common_concatBytes(&dut, W2B6_YL_MSBS_e, W2B6_YL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -115,  th << 1 ); // YL
+
+    tlx493d_common_concatBytes(&dut, W2B6_YH_MSBS_e, W2B6_YH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 115,  th << 1 ); // YH
+
+    // Z
+    tlx493d_common_concatBytes(&dut, W2B6_ZL_MSBS_e, W2B6_ZL_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, -115,  th << 1 ); // ZL
+
+    tlx493d_common_concatBytes(&dut, W2B6_ZH_MSBS_e, W2B6_ZH_LSBS_e, &th);
+    TEST_ASSERT_INT16_WITHIN( delta, 115,  th << 1 ); // ZH
 }
 
 

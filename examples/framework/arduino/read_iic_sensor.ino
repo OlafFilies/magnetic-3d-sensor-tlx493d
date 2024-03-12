@@ -5,22 +5,23 @@
 using namespace ifx::tlx493d;
 
 
-const uint8_t POWER_PIN = LED2;
+/* For XMC 1100 boards. */
+// const uint8_t POWER_PIN = LED2;
 
-
-/** Definition of the sensor object with the default address of the sensor.
- *  If you want to use any other sensor variant, just comment the active line
- *  and uncomment the desired sensor type.
- */
 // TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+
+
+/* for XMC 4700 boards */
+const uint8_t POWER_PIN = 8; // P1.10
+
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
+TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
 
 
 uint8_t count = 0;
@@ -31,7 +32,7 @@ void setup() {
     delay(3000);
 
     /** Definition of the power pin to power up the sensor. */
-    dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 0, 250000);
+    dut.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
     // dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 250000, 250000);
     dut.begin();
 
@@ -43,30 +44,6 @@ void setup() {
  *  the serial monitor
  */
 void loop() {
-    // double temp = 0.0;
-    // double valX = 0, valY = 0, valZ = 0;
-
-    // Serial.print(true == dut.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
-
-    // Serial.print("Temperature is: ");
-    // Serial.print(temp);
-    // Serial.println("°C");
-
-    // Serial.print(true == dut.getMagneticField(&valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
-
-    // Serial.print("Value X is: ");
-    // Serial.print(valX);
-    // Serial.println(" mT");
-    // Serial.print("Value Y is: ");
-    // Serial.print(valY);
-    // Serial.println(" mT");
-    // Serial.print("Value Z is: ");
-    // Serial.print(valZ);
-    // Serial.println(" mT");
-
-    // dut.printRegisters();
-    // Serial.print("\n");
-
     double t, x, y, z;
 
     dut.setSensitivity(TLx493D_FULL_RANGE_e);

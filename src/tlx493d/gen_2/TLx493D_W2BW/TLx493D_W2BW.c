@@ -358,7 +358,7 @@ bool TLx493D_W2BW_disableWakeUpMode(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh) {
-    return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor,
+    return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor, W2BW_CP_e,
                                                       W2BW_XL_MSBS_e, W2BW_XL_LSBS_e, W2BW_XH_MSBS_e, W2BW_XH_LSBS_e,
                                                       W2BW_YL_MSBS_e, W2BW_YL_LSBS_e, W2BW_YH_MSBS_e, W2BW_YH_LSBS_e,
                                                       W2BW_ZL_MSBS_e, W2BW_ZL_LSBS_e, W2BW_ZH_MSBS_e, W2BW_ZH_LSBS_e,
@@ -369,7 +369,7 @@ bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
 // thesholds im mT, to be converted to proper format
 bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor,
                                       double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
-    return tlx493d_gen_2_setWakeUpThresholds(sensor,
+    return tlx493d_gen_2_setWakeUpThresholds(sensor, W2BW_CP_e,
                                              W2BW_XL_MSBS_e, W2BW_XL_LSBS_e, W2BW_XH_MSBS_e, W2BW_XH_LSBS_e,
                                              W2BW_YL_MSBS_e, W2BW_YL_LSBS_e, W2BW_YH_MSBS_e, W2BW_YH_LSBS_e,
                                              W2BW_ZL_MSBS_e, W2BW_ZL_LSBS_e, W2BW_ZH_MSBS_e, W2BW_ZH_LSBS_e,
@@ -414,7 +414,7 @@ bool TLx493D_W2BW_hasValidConfigurationParity(const TLx493D_t *sensor) {
 }
 
 
-bool TLx493D_W2BW_hasValidWakeUpParityconst (TLx493D_t *sensor) {
+bool TLx493D_W2BW_hasValidWakeUpParity(const TLx493D_t *sensor) {
     tlx493d_warnFeatureNotAvailableForSensorType(sensor, "hasValidWakeUpParity");
     return false;
 }

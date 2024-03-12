@@ -59,13 +59,13 @@ bool tlx493d_gen_2_disableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t cp
 
 bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsBF, int16_t threshold12Bits);
 
-bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
+bool tlx493d_gen_2_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, uint8_t cpBF,
                                                 uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                                 uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                                 uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,
                                                 int16_t xlTh, int16_t xhTh, int16_t ylTh, int16_t yhTh, int16_t zlTh, int16_t zhTh);
 
-bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor,
+bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor, uint8_t cpBF,
                                        uint8_t xlMSBBF, uint8_t xlLSBBF, uint8_t xhMSBBF, uint8_t xhLSBBF,
                                        uint8_t ylMSBBF, uint8_t ylLSBBF, uint8_t yhMSBBF, uint8_t yhLSBBF,
                                        uint8_t zlMSBBF, uint8_t zlLSBBF, uint8_t zhMSBBF, uint8_t zhLSBBF,

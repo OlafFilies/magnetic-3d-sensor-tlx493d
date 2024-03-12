@@ -34,7 +34,7 @@ namespace ifx {
                  * and addressPins.
                  * @brief Default constructor with no parameters.
                  */
-                Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0}, addressPins{false, 0, 0, 0, 0, 0, 0} {
+                Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0, 0}, addressPins{false, 0, 0, 0, 0, 0, 0, 0} {
                 }
 
 
@@ -73,18 +73,14 @@ namespace ifx {
                             initPin(p);
                         }
 
-                        enablePower(false);
-
-                        // if( isEnablePower ) {
-                        //     enablePower(true);
-                        // }
+                        reset();
                     }
 
                     if( isEnableExtendedAddress ) {
                         enableAddress(false);
 
                         for(auto &p : addressPins){
-                            setPinDirection(p, INPUT);
+                            setPinDirectionToTristate(p);
                         }
                     }
                 }
@@ -121,16 +117,17 @@ namespace ifx {
                  * @brief The `setPowerPin` function is setter function to route pin parameters from the main code into the datastructures/variables of this class.
                  * 
                  * @param[in] pinNumber Arduino pin number of the GPIO to be used as 3V3 POWER pin for the sensor.
-                 * @param[in] pinDirection Direction of the Arduino pin to be used as the 3V3 POWER pin.
+                 * @param[in] pinDriveDirection Direction of the Arduino pin to be used as the 3V3 POWER pin.
+                 * @param[in] pinTristateDirection Direction of the Arduino pin when in tristate.
                  * @param[in] pinEnableValue Value of the pin in enabled state.
                  * @param[in] pinDisableValue Value of the pin in disabled state.
                  * @param[in] delayAfterEnable delay in ms after the pin is enabled. Needed to meet settling time constraints.  
                  * @param[in] delayAfterDisable delay in ms after the pin is disabled. Needed to meet settling time constraints.
                  */
-                void setPowerPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setPowerPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                  uint8_t pinEnableValue, uint8_t pinDisableValue,
                                  uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    powerPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
+                    powerPins[0] = { true, pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
                 }
 
                 /**
@@ -149,10 +146,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable delay in ms after the pin is enabled. Needed to meet settling time constraints.
                  * @param[in] delayAfterDisable delay in ms after the pin is disabled. Needed to meet settling time constraints.
                  */
-                void setSelectPin(uint8_t pinNumber, uint8_t pinDirection,
+                void setSelectPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
                                   uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    selectPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
+                    selectPins[0] = { true, pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
                 }
 
                 /**
@@ -172,9 +169,10 @@ namespace ifx {
                  * @param[in] delayAfterEnable delay in ms after the pin is enabled. Needed to meet settling time constraints.
                  * @param[in] delayAfterDisable delay in ms after the pin is disabled. Needed to meet settling time constraints.
                  */
-                void setAddressPin(uint8_t pinNumber, uint8_t pinDirection, uint8_t pinEnableValue, uint8_t pinDisableValue,
+                void setAddressPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
+                                   uint8_t pinEnableValue, uint8_t pinDisableValue,
                                    uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    addressPins[0] = { true, pinNumber, pinDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
+                    addressPins[0] = { true, pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable };
                 }
 
                 /**
@@ -233,7 +231,9 @@ namespace ifx {
                     /*@{*/
                     bool     isSet;             /**< the state of the pin, to be activated at `init` or not. */
                     uint8_t  pinNumber;         /**< the Arduino pin number of the pin. */
-                    uint8_t  direction;         /**< the direction for the Arduino pin. */
+
+                    uint8_t  driveDirection;    /**< the direction for the Arduino pin when actively driving. */
+                    uint8_t  tristateDirection; /**< the direction for the Arduino pin when in tristate. */
                     
                     uint8_t  enableValue;       /**< the value of the pin to be enabled or set by the `init` function. */
                     uint8_t  disableValue;      /**< the value of the pin when the pin is disabled. */
@@ -263,14 +263,20 @@ namespace ifx {
                  */ 
                 void initPin(const pinCtrl &p) {
                     if( p.isSet ) {
-                        pinMode(p.pinNumber, p.direction);
+                        pinMode(p.pinNumber, p.driveDirection);
                     }
                 }
 
-                void setPinDirection(pinCtrl &p, uint8_t direction) {
+                void setPinDirectionToDrive(pinCtrl &p) {
                     if( p.isSet ) {
-                        p.direction = direction;
-                        pinMode(p.pinNumber, direction);
+                        pinMode(p.pinNumber, p.driveDirection);
+                    }
+                }
+
+
+                void setPinDirectionToTristate(pinCtrl &p) {
+                    if( p.isSet ) {
+                        pinMode(p.pinNumber, p.tristateDirection);
                     }
                 }
 

@@ -32,9 +32,12 @@ void setup() {
  *  the serial monitor
  */
 void loop() {
-    double temp = 0.0;
-    double valX = 0, valY = 0, valZ = 0;
     Serial.println("loop ...");
+
+    double temp = 0.0;
+    double valX = 0;
+    double valY = 0;
+    double valZ = 0;
 
     Serial.print(true == tlx493d_getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
 
@@ -54,7 +57,7 @@ void loop() {
     Serial.print(valZ);
     Serial.println(" mT");
 
-    tlx493d_printRegisters(dut.getSensor());
+    tlx493d_printRegisters(&dut);
     Serial.print("\n");
 
     delay(1000);

@@ -76,15 +76,15 @@ bool tlx493d_common_readRegisters(TLx493D_t *sensor) {
     // if( ! isOk ) {
         tlx493d_logPrintln("tlx493d_common_readRegisters   isOk = %d", isOk);
 
-        // tlx493d_logPrintln("hasValidData = %d", sensor->functions->hasValidData(sensor));
-        // tlx493d_logPrintln("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
-        // tlx493d_logPrintln("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
+        tlx493d_logPrintln("hasValidData = %d", sensor->functions->hasValidData(sensor));
+        tlx493d_logPrintln("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
+        tlx493d_logPrintln("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
 
         // tlx493d_logPrintln("isInTestMode = %d", sensor->functions->isInTestMode(sensor));
 
-        // tlx493d_logPrintln("isFunctional = %d", sensor->functions->isFunctional(sensor));
-        // tlx493d_logPrintln("hasValidFuseParity = %d", sensor->functions->hasValidFuseParity(sensor));
-        // tlx493d_logPrintln("hasValidConfigurationParity = %d", sensor->functions->hasValidConfigurationParity(sensor));
+        tlx493d_logPrintln("isFunctional = %d", sensor->functions->isFunctional(sensor));
+        tlx493d_logPrintln("hasValidFuseParity = %d", sensor->functions->hasValidFuseParity(sensor));
+        tlx493d_logPrintln("hasValidConfigurationParity = %d", sensor->functions->hasValidConfigurationParity(sensor));
 
         tlx493d_printRegisters(sensor);
         // tlx493d_logFlush();
@@ -106,22 +106,22 @@ bool tlx493d_common_readRegistersAndCheck(TLx493D_t *sensor) {
         bool isOk  = tlx493d_transfer(sensor, NULL, 0, sensor->regMap, sensor->regMapSize);
         isOk &= tlx493d_hasNotOnly0xFFInRegmap(sensor);
 
-        // tlx493d_logPrintln("isOk = %d", isOk);
+        tlx493d_logPrintln("isOk = %d", isOk);
 
-        // tlx493d_logPrintln("hasValidData = %d", sensor->functions->hasValidData(sensor));
-        // tlx493d_logPrintln("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
-        // tlx493d_logPrintln("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
+        tlx493d_logPrintln("hasValidData = %d", sensor->functions->hasValidData(sensor));
+        tlx493d_logPrintln("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
+        tlx493d_logPrintln("hasValidTBit = %d", sensor->functions->hasValidTBit(sensor));
 
         // tlx493d_logPrintln("isInTestMode = %d", sensor->functions->isInTestMode(sensor));
 
-        // tlx493d_logPrintln("isFunctional = %d", sensor->functions->isFunctional(sensor));
-        // tlx493d_logPrintln("hasValidFuseParity = %d", sensor->functions->hasValidFuseParity(sensor));
-        // tlx493d_logPrintln("hasValidConfigurationParity = %d", sensor->functions->hasValidConfigurationParity(sensor));
+        tlx493d_logPrintln("isFunctional = %d", sensor->functions->isFunctional(sensor));
+        tlx493d_logPrintln("hasValidFuseParity = %d", sensor->functions->hasValidFuseParity(sensor));
+        tlx493d_logPrintln("hasValidConfigurationParity = %d", sensor->functions->hasValidConfigurationParity(sensor));
 
         // sensor->functions->printRegisters(sensor);
 
         if( ! (isOk && sensor->functions->hasValidData(sensor) && sensor->functions->isFunctional(sensor)) ) {
-            tlx493d_logPrintln("tlx493d_common_readRegistersAndCheck    --------   isOk = %d", isOk);
+            // tlx493d_logPrintln("tlx493d_common_readRegistersAndCheck    --------   isOk = %d", isOk);
 
             // tlx493d_logPrintln("hasValidData = %d", sensor->functions->hasValidData(sensor));
             // tlx493d_logPrintln("hasValidBusParity = %d", sensor->functions->hasValidBusParity(sensor));
