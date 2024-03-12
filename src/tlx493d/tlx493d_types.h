@@ -9,7 +9,6 @@
 // project c includes
 #include "pal.h"
 
-
 #ifdef __cplusplus
 
 extern "C" {

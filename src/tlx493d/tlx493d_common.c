@@ -263,7 +263,6 @@ void tlx493d_common_setIICAddress(TLx493D_t *sensor, uint8_t addr) {
 //                                                            double mT, int16_t *rawMF) {
 // }
 
-
 void tlx493d_warnFeatureNotAvailableForSensorType(TLx493D_t *sensor, const char *featureName) {
     warn("Feature '%s' not available for sensor type '%s' !", featureName, tlx493d_common_getTypeAsString(sensor));
 }

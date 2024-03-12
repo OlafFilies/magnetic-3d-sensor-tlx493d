@@ -311,7 +311,7 @@ bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {
     ret &= TLx493D_A1B6_enableParityTest(sensor);
 
     // set to MASTERCONTROLLEDMODE to start measurement
-    TLx493D_A1B6_setPowerMode(sensor, MASTERCONTROLLEDMODE);
+    TLx493D_A1B6_setPowerMode(sensor, TLx493D_MASTER_CONTROLLED_MODE_e);
 
     // calculate parity
     TLx493D_A1B6_calculateConfigurationParity(sensor);
