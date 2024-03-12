@@ -31,8 +31,8 @@ bool intTriggered = false;
 
 
 void setup() {
-    delay(3000);
     Serial.begin(115200);
+    delay(3000);
 
     /** Definition of the interrupt pin and attaching of a callback-function to it. 
      *  In the attachInterrupt function we can also define when the service routine should
@@ -61,7 +61,6 @@ void setup() {
      */
     Serial.print("isWakeUpEnabled : ");
     Serial.println(dut.isWakeUpEnabled() ? "enabled" : "not enabled");
-    delay(100);
     Serial.print("setup done.\n");
 }
 

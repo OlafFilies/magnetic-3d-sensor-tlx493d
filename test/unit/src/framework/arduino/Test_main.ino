@@ -2,7 +2,7 @@
 #include "Test_includes.hpp"
 
 
-const uint8_t POWER_PIN = LED2;
+// const uint8_t POWER_PIN = LED2;
 
 
 extern "C" {
@@ -123,10 +123,10 @@ void setup() {
     delay(3000);
 
     // required for S2Go
-    pinMode(POWER_PIN, OUTPUT);
-    digitalWrite(POWER_PIN, HIGH);
+    // pinMode(POWER_PIN, OUTPUT);
+    // digitalWrite(POWER_PIN, HIGH);
+    // delayMicroseconds(50);
 
-    delay(50);
     Serial.print("setup done.\n");
 }
 

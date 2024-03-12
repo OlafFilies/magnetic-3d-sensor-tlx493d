@@ -445,7 +445,7 @@ bool tlx493d_softwareReset(TLx493D_t *sensor);
  * 
  * @return The function `tlx493d_getTypeAsString` returns a pointer to a constant character string.
  */
-const char *tlx493d_getTypeAsString(TLx493D_t *sensor);
+const char *tlx493d_getTypeAsString(const TLx493D_t *sensor);
 
 /**
  * @brief The function `tlx493d_calculateRawMagneticFieldAtTemperature` calculates the raw magnetic field at a

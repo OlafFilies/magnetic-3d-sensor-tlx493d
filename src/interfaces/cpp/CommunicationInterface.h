@@ -36,7 +36,7 @@ namespace ifx {
 #endif
 
 
-void deinitCommunication(TLx493D_t *sensor);
+void deinitCommunication(TLx493D_t *sensor, bool executeDeinit);
 
 
 #ifdef __cplusplus
