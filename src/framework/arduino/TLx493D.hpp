@@ -202,13 +202,6 @@ namespace ifx {
                     setDefaultConfig();
                 }
 
-                void reset() {
-                    sensor.functions->setResetValues(&sensor);
-                    bsc.reset();
-                    initCommunication(&sensor, busWrapper, iicAddress); // includes call to busWrapper.init();
-                    setDefaultConfig();
-                }
-
                 /**
                  * @brief The function `enableSelect` enables the defined select pin.
                  * 
@@ -403,13 +396,6 @@ namespace ifx {
                     bsc.reset();
                     // initCommunication(&sensor, busWrapper, true);
                     initCommunication(&sensor, bus, true);
-                    setDefaultConfig();
-                }
-
-                void reset() {
-                    sensor.functions->setResetValues(&sensor);
-                    bsc.reset();
-                    // initCommunication(&sensor, busWrapper); // includes call to busWrapper.init();
                     setDefaultConfig();
                 }
 

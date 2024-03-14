@@ -485,5 +485,5 @@ double TLx493D_P3I8_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 
 
 void TLx493D_P3I8_printRegisters(const TLx493D_t *sensor) {
-    tlx493d_logPrintRegisters(sensor, TLX493D_P3I8_REGISTER_HEADLINE); 
+    logPrintRegisters(sensor, TLX493D_P3I8_REGISTER_HEADLINE); 
 }

@@ -133,8 +133,6 @@ bool TLx493D_A1B6_hasValidPDBit(const TLx493D_t *sensor);
 
 void TLx493D_A1B6_printRegisters(const TLx493D_t *sensor);
 
-void TLx493D_A1B6_printRegisters(TLx493D_t *sensor);
-
 
 #ifdef __cplusplus
 

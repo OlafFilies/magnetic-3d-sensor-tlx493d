@@ -270,7 +270,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeDefaultConfigFunctionality)
 TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeIICAddressFunctionality)
 {
     // tlx493d_printRegisters(&dut);
-    // tlx493d_logPrint("addr : %x", dut.comLibIFParams.i2c_params.address << 1);
+    // logPrint("addr : %x", dut.comLibIFParams.i2c_params.address << 1);
 
     TEST_ASSERT_TRUE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A3_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut) );

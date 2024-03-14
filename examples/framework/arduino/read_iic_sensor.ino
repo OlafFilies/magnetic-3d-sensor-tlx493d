@@ -6,9 +6,9 @@ using namespace ifx::tlx493d;
 
 
 /* For XMC 1100 boards. */
-// const uint8_t POWER_PIN = LED2;
+const uint8_t POWER_PIN = LED2;
 
-// TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -16,15 +16,12 @@ using namespace ifx::tlx493d;
 
 
 /* for XMC 4700 boards */
-const uint8_t POWER_PIN = 8; // P1.10
+// const uint8_t POWER_PIN = 8; // P1.10
 
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
-
-
-uint8_t count = 0;
+// TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
 
 
 uint8_t count = 0;
@@ -94,6 +91,7 @@ void loop() {
     if( ++count == 2 ) {
         Serial.println("\nBefore reset -------------------------------------------------------------------------------------------------------");
         // reset does not work for W2BW : either drive strength too low or delay to stabilize critical.
+        // reset also causes issues with A1B6.
         dut.reset();
         Serial.println("\nAfter reset -------------------------------------------------------------------------------------------------------");
         count = 0;

@@ -43,7 +43,7 @@ namespace ifx {
         static void setReadAddressIIC(TLx493D_t *sensor, uint8_t address) {
             (void) sensor;
             (void) address;
-            tlx493d_logWarn("Function 'setReadAddressIIC' not supported !");
+            logWarn("Function 'setReadAddressIIC' not supported !");
         }
 
 

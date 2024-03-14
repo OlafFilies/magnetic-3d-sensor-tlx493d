@@ -112,8 +112,6 @@ double TLx493D_A2B6_getSensitivityScaleFactor(const TLx493D_t *sensor);
 
 void TLx493D_A2B6_printRegisters(const TLx493D_t *sensor);
 
-void TLx493D_A2B6_printRegisters(TLx493D_t *sensor);
-
 
 #ifdef __cplusplus
 
