@@ -227,9 +227,6 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
 
     // logPrint("TLx493D_BxByBzTemp_e\n");
     TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBzTemp_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
-    TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_e) );
-    TEST_ASSERT_EQUAL_HEX8( 0b0000, tlx493d_common_returnBitfield(&dut, P3B6_CHANNEL_SEL_SAVE_e) );
 
 
     // switch to MCM

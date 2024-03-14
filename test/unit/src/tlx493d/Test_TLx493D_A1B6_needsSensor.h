@@ -227,6 +227,7 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     //RUN_TEST_CASE(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckEnabled);
     TLx493D_A1B6_needsSensor_suiteTearDown();
 
+
     TLx493D_A1B6_atReset_suiteSetup();
 
     // This test is commented out since we dont check measurement bitfields (BX,BY,BZ,TEMP) at reset.
@@ -235,6 +236,7 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     // RUN_TEST_CASE(TLx493D_A1B6_atReset, regMapatReset_nonMeasurementBitfields);
 
     TLx493D_A1B6_atReset_suiteTearDown();
+
 
     TLx493D_A1B6_extendedAddresses_suiteSetup();
 

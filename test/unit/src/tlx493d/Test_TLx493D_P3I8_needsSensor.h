@@ -240,7 +240,7 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
 
 
     // switch to MCM
-    // tlx493d_printCM mode\n");
+    // logPrint("MCM mode\n");
     TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_MASTER_CONTROLLED_MODE_e) );
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, P3I8_MODE_SEL_e) );
