@@ -686,5 +686,5 @@ bool TLx493D_A1B6_hasValidPDBit(const TLx493D_t *sensor) {
 
 
 void TLx493D_A1B6_printRegisters(const TLx493D_t *sensor) {
-    tlx493d_logPrintRegisters(sensor, TLX493D_A1B6_REGISTER_HEADLINE); 
+    logPrintRegisters(sensor, TLX493D_A1B6_REGISTER_HEADLINE); 
 }

@@ -170,31 +170,6 @@ bool TLx493D_P2B6_deinit(TLx493D_t *sensor) {
 
 
 bool TLx493D_P2B6_readRegisters(TLx493D_t *sensor) {
-//     bool isOk = false;
-
-//     do {
-//         isOk = tlx493d_common_readRegisters(sensor);
-
-// tlx493d_logPrintln("isOk = %d", isOk);
-
-// tlx493d_logPrintln("hasValidData = %d", TLx493D_P2B6_hasValidData(sensor));
-// tlx493d_logPrintln("hasValidBusParity = %d", TLx493D_P2B6_hasValidBusParity(sensor));
-// tlx493d_logPrintln("hasValidTBit = %d", TLx493D_P2B6_hasValidTBit(sensor));
-// tlx493d_logPrintln("hasValidPD0Bit = %d", tlx493d_common_returnBitfield(sensor, P2B6_PD0_e) == 1);
-// tlx493d_logPrintln("hasValidPD3Bit = %d", tlx493d_common_returnBitfield(sensor, P2B6_PD3_e) == 1);
-
-// tlx493d_logPrintln("isFunctional = %d", TLx493D_P2B6_isFunctional(sensor));
-// tlx493d_logPrintln("hasValidFuseParity = %d", TLx493D_P2B6_hasValidFuseParity(sensor));
-// tlx493d_logPrintln("hasValidConfigurationParity = %d", TLx493D_P2B6_hasValidConfigurationParity(sensor));
-
-//     } while( ! (TLx493D_P2B6_hasValidData(sensor) && isOk) );
-//     // } while( ! (isOk && TLx493D_P2B6_hasValidData(sensor) && TLx493D_P2B6_isFunctional(sensor)) );
-
-// tlx493d_logPrintln("hier !!!");
-
-//     // while( ! (TLx493D_P2B6_hasValidTBit(sensor) && tlx493d_common_readRegisters(sensor)) ) ;
-//     return true;
-
     return tlx493d_common_readRegisters(sensor);
 }
 
@@ -473,5 +448,5 @@ double TLx493D_P2B6_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 
 
 void TLx493D_P2B6_printRegisters(const TLx493D_t *sensor) {
-    tlx493d_logPrintRegisters(sensor, TLX493D_P2B6_REGISTER_HEADLINE); 
+    logPrintRegisters(sensor, TLX493D_P2B6_REGISTER_HEADLINE); 
 }

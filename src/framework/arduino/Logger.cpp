@@ -38,13 +38,13 @@ namespace ifx {
 
 
 extern "C" {
-    void tlx493d_logPrintRegisters(const TLx493D_t *sensor, const char *headLine = NULL) {
+    void logPrintRegisters(const TLx493D_t *sensor, const char *headLine = NULL) {
         Serial.println();
         Serial.println(headLine);
         // Serial.println();
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
-            tlx493d_logPrint("    0x%02X", sensor->regMap[i]);
+            logPrint("    0x%02X", sensor->regMap[i]);
             // Serial.print("  0x");
             // Serial.print(sensor->regMap[i], HEX);
         }
@@ -53,12 +53,12 @@ extern "C" {
     }
 
 
-    void tlx493d_logPrintDouble(double d) {
+    void logPrintDouble(double d) {
         Serial.print(d);
     }
 
 
-    void tlx493d_logPrint(const char *format, ...) {
+    void logPrint(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
         ifx::tlx493d::logMessage("", format, ap);
@@ -66,7 +66,7 @@ extern "C" {
     }
 
 
-    void tlx493d_logPrintln(const char *format, ...) {
+    void logPrintln(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -76,7 +76,7 @@ extern "C" {
     }
 
 
-    void tlx493d_logInfo(const char *format, ...) {
+    void logInfo(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -86,7 +86,7 @@ extern "C" {
     }
 
 
-    void tlx493d_logWarn(const char *format, ...) {
+    void logWarn(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -96,7 +96,7 @@ extern "C" {
     }
 
 
-    void tlx493d_logError(const char *format, ...) {
+    void logError(const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
@@ -106,7 +106,7 @@ extern "C" {
     }
 
 
-    void tlx493d_logFlush() {
+    void logFlush() {
         // USE WITH CAUTION ! DEVICE MAY HANGUP !
         Serial.flush();
         // Serial.println();

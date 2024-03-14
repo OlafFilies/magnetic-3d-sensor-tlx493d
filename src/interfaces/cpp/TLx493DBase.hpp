@@ -406,18 +406,19 @@ namespace ifx {
                     return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
                 }
 
-                //TODO(jensb): - Rework - new parameter temp
+
                 /**
                  * @brief The function `setWakeUpThresholds` sets the wake-up thresholds for the TLx493D sensor in mT.
                  * It sets the lower and upper threshold for each of three axis in mT. If one of these thresholds is exceeded the sensor
                  * will trigger an interrupt. It will continue to trigger interrupts as long as the threshold is exceeded.
                  * 
-                 * @param[in] xl_th The lower threshold value for the magnetic field in x-axis.
-                 * @param[in] xh_th The upper threshold value for the magnetic field in x-axis.
-                 * @param[in] yl_th The lower threshold value for the magnetic field in y-axis.
-                 * @param[in] yh_th The upper threshold value for the magnetic field in y-axis.
-                 * @param[in] zl_th The lower threshold value for the magnetic field in z-axis.
-                 * @param[in] zh_th The upper threshold value for the magnetic field in z-axis.
+                 * @param[in] temperature The temperature to be used for derating the field values.
+                 * @param[in] xl_th       The lower threshold value for the magnetic field in x-axis.
+                 * @param[in] xh_th       The upper threshold value for the magnetic field in x-axis.
+                 * @param[in] yl_th       The lower threshold value for the magnetic field in y-axis.
+                 * @param[in] yh_th       The upper threshold value for the magnetic field in y-axis.
+                 * @param[in] zl_th       The lower threshold value for the magnetic field in z-axis.
+                 * @param[in] zh_th       The upper threshold value for the magnetic field in z-axis.
                  * 
                  * @return The function `setWakeUpThresholds` is returning a boolean value.
                  * @retval 0 - Error

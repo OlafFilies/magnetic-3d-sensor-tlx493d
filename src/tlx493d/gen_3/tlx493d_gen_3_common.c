@@ -315,7 +315,7 @@ bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wuc
     bool b = true;
 
     if( sensor->functions->isInTestMode(sensor) ) {
-        tlx493d_logInfo("Sensor %s was in test mode, changed to normal mode in order to enable wake up !", tlx493d_common_getTypeAsString(sensor));
+        logInfo("Sensor %s was in test mode, changed to normal mode in order to enable wake up !", tlx493d_common_getTypeAsString(sensor));
         b &= sensor->functions->setMeasurement(sensor, TLx493D_BxByBzTemp_e);
     }
 
@@ -325,7 +325,7 @@ bool tlx493d_gen_3_enableWakeUpMode(TLx493D_t *sensor, uint8_t wuBF, uint8_t wuc
     b &= sensor->functions->readRegisters(sensor);
 
     if( ! sensor->functions->hasValidWakeUpParity(sensor) ) {
-        tlx493d_logError("Wake up parity is not correct, cannot enter wake up mode for sensor %s !", tlx493d_common_getTypeAsString(sensor));
+        logError("Wake up parity is not correct, cannot enter wake up mode for sensor %s !", tlx493d_common_getTypeAsString(sensor));
         return false;
     }
 
@@ -438,12 +438,12 @@ bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor, uint8_t wuBF, uint8_t 
 
     sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, tr, sens, xLow,  yLow,  zLow,  &xlTh, &ylTh, &zlTh);
     sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, tr, sens, xHigh, yHigh, zHigh, &xhTh, &yhTh, &zhTh);
-// tlx493d_logPrint("sens = %d\n", sens);
-// tlx493d_logPrintDouble(temperature);
-// tlx493d_logPrint("\nt = %d\n", tr);
-// tlx493d_logPrint("xl = %d   xh = %d\n", xlTh, xhTh);
-// tlx493d_logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
-// tlx493d_logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
+// logPrint("sens = %d\n", sens);
+// logPrintDouble(temperature);
+// logPrint("\nt = %d\n", tr);
+// logPrint("xl = %d   xh = %d\n", xlTh, xhTh);
+// logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
+// logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
 
     return tlx493d_gen_3_setWakeUpThresholdsAsInteger(sensor, wuBF, wucpBF, wupBF,
                                                       xlMSBBF, xlLSBBF, xhMSBBF, xhLSBBF,

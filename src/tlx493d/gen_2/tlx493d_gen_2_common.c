@@ -416,7 +416,7 @@ bool tlx493d_gen_2_setThreshold(TLx493D_t *sensor, uint8_t msbsBF, uint8_t lsbsB
     uint8_t lower = ((uint8_t) (thresh11Bits & (lsbs->mask >> lsbs->offset)));
     uint8_t upper = ((uint8_t) ((thresh11Bits >> lsbs->numBits) & (msbs->mask >> msbs->offset)));
 
-    // tlx493d_logPrint("threshold12Bits = %#X / %d   thresh11Bits = %#X / %d  upper = %#X / %d  lower = %#X / %d\n",
+    // logPrint("threshold12Bits = %#X / %d   thresh11Bits = %#X / %d  upper = %#X / %d  lower = %#X / %d\n",
     //       threshold12Bits, threshold12Bits, thresh11Bits, thresh11Bits, upper, upper, lower, lower);
 
     tlx493d_common_setBitfield(sensor, msbsBF, upper);
@@ -471,12 +471,12 @@ bool tlx493d_gen_2_setWakeUpThresholds(TLx493D_t *sensor, uint8_t cpBF,
 
     sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, tr, sens, xLow,  yLow,  zLow,  &xlTh, &ylTh, &zlTh);
     sensor->functions->calculateRawMagneticFieldAtTemperature(sensor, tr, sens, xHigh, yHigh, zHigh, &xhTh, &yhTh, &zhTh);
-// tlx493d_logPrint("sens = %d\n", sens);
-// tlx493d_logPrintDouble(temperature);
-// tlx493d_logPrint("\nt = %d\n", tr);
-// tlx493d_logPrint("xl = %d   xh = %d\n", xlTh, xhTh);
-// tlx493d_logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
-// tlx493d_logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
+// logPrint("sens = %d\n", sens);
+// logPrintDouble(temperature);
+// logPrint("\nt = %d\n", tr);
+// logPrint("xl = %d   xh = %d\n", xlTh, xhTh);
+// logPrint("yl = %d   yh = %d\n", ylTh, yhTh);
+// logPrint("zl = %d   zh = %d\n", zlTh, zhTh);
 
     return tlx493d_gen_2_setWakeUpThresholdsAsInteger(sensor, cpBF,
                                                       xlMSBBF, xlLSBBF, xhMSBBF, xhLSBBF,
@@ -633,7 +633,7 @@ double tlx493d_gen_2_getSensitivityScaleFactor(const TLx493D_t *sensor, TLx493D_
         case TLx493D_HAS_X4_e : {
                                     bool x2IsNotSet = tlx493d_common_returnBitfield(sensor, x2BF) == 0U;
                                     bool x4IsNotSet = tlx493d_common_returnBitfield(sensor, x4BF) == 0U;
-                                    // tlx493d_logPrint("x4 : %d\n", x4IsNotSet ? 0 : 1);
+                                    // logPrint("x4 : %d\n", x4IsNotSet ? 0 : 1);
                                     return (x2IsNotSet ? 1.0 : (x4IsNotSet ? 2.0 : 4.0));
         }
     

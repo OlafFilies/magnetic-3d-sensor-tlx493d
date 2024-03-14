@@ -270,7 +270,7 @@ bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
                   return false;
     }
 
-// tlx493d_logPrint("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
+// logPrint("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
     tlx493d_common_setBitfield(sensor, W2BW_X4_READWRITE_e, extraShortVal);
     return tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X2_e, W2BW_CP_e, shortVal) ? tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X4_e, W2BW_CP_e, extraShortVal)
                                                                                       : false;
@@ -474,5 +474,5 @@ double TLx493D_W2BW_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 
 
 void TLx493D_W2BW_printRegisters(const TLx493D_t *sensor) {
-    tlx493d_logPrintRegisters(sensor, TLX493D_W2BW_REGISTER_HEADLINE); 
+    logPrintRegisters(sensor, TLX493D_W2BW_REGISTER_HEADLINE); 
 }

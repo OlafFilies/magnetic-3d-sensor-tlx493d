@@ -321,8 +321,6 @@ typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(const TLx493D_t *, TLx493D_II
 
 typedef void (*TLx493D_PrintRegistersFuncPtr)(const TLx493D_t *);
 
-typedef void (*TLx493D_PrintRegistersFuncPtr)(TLx493D_t *);
-
 
 // Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
 typedef struct TLx493D_CommonFunctions_t {

@@ -404,19 +404,19 @@ bool tlx493d_disableWakeUpMode(TLx493D_t *sensor);
 bool tlx493d_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th,
                                           int16_t zl_th, int16_t zh_th);
 
-// TODO(jensb): Rework - new parameter temp
 /**
  * @brief The function `tlx493d_setWakeUpThresholds` sets the wake-up thresholds for the TLx493D sensor in mT.
  * It sets the lower and upper threshold for each of three axis in mT. If one of these thresholds is exceeded the sensor
  * will trigger an interrupt. It will continue to trigger interrupts as long as the threshold is exceeded.
  * 
- * @param[in,out]   sensor  A pointer to the TLx493D_t structure, which represents the sensor device.
- * @param[in]       xLow    The lower threshold value for the magnetic field in x-axis.
- * @param[in]       xHigh   The upper threshold value for the magnetic field in x-axis.
- * @param[in]       yLow    The lower threshold value for the magnetic field in y-axis.
- * @param[in]       yHigh   The upper threshold value for the magnetic field in y-axis.
- * @param[in]       zLow    The lower threshold value for the magnetic field in z-axis.
- * @param[in]       zHigh   The upper threshold value for the magnetic field in z-axis.
+ * @param[in,out]   sensor       A pointer to the TLx493D_t structure, which represents the sensor device.
+ * @param[in]       temperature  The temperature to be used for derating the field values.
+ * @param[in]       xLow         The lower threshold value for the magnetic field in x-axis.
+ * @param[in]       xHigh        The upper threshold value for the magnetic field in x-axis.
+ * @param[in]       yLow         The lower threshold value for the magnetic field in y-axis.
+ * @param[in]       yHigh        The upper threshold value for the magnetic field in y-axis.
+ * @param[in]       zLow         The lower threshold value for the magnetic field in z-axis.
+ * @param[in]       zHigh        The upper threshold value for the magnetic field in z-axis.
  * 
  * @return The function `tlx493d_setWakeUpThresholds` is returning a boolean value.
  * @retval 0 - Error
