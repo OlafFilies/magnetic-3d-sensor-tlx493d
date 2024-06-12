@@ -1,19 +1,16 @@
-// std includes
-
-// Arduino includes
-
-// project cpp includes
+/** Project CPP includes. */ 
 #include "TLx493D_inc.hpp"
 
 
 using namespace ifx::tlx493d;
 
 
+/** Defining the power and address pin for the sensor. */
 const uint8_t POWER_PIN       = 8;
 const uint8_t SDA_ADDRESS_PIN = 7 ;
 
 
-// address 0x3E when SDA/ADDR held low at power up
+/** Address 0x3E when SDA/ADDR held low at power up. */
 TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A4_e); //0x3E
 
 
@@ -21,16 +18,16 @@ void setup() {
     Serial.begin(115200);
     delay(3000);
 
-    // explicit power pin needed to power up board after the addrPin is pulled down
+    /** Explicit power pin needed to power up board after the addrPin is pulled down. */
     dut.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 50, 50);
-    // set pin used to drive SDA/ADDR pin before power up
-    // This pin is then isolated from the I2C bus by switching it high-Z before I2C init
+    /** Set pin used to drive SDA/ADDR pin before power up.
+      * This pin is then isolated from the I2C bus by switching it high-Z before I2C init. */
     dut.setAddrPin(SDA_ADDRESS_PIN, OUTPUT, INPUT, LOW, HIGH, 1, 1);
     
-    // Set the sensor constructor to activate extended address switching pin
+    /** Set the sensor constructor to activate extended address switching pin. */
     dut.begin(true, false, true);
 
-    // Options to set the other remaining addresses when SDA low at power-up.
+    /* Options to set the other remaining addresses when SDA low at power-up. */
     // dut.setIICAddress(TLx493D_IIC_ADDR_A5_e); // 0x36
     // dut.setIICAddress(TLx493D_IIC_ADDR_A6_e); // 0x1E
     // dut.setIICAddress(TLx493D_IIC_ADDR_A7_e); // 0x16
@@ -38,7 +35,9 @@ void setup() {
     Serial.print("setup done.\n");
 }
 
-
+/** In the loop we're reading out the temperature value as well as the magnetic values in X, Y, Z-direction 
+ *  of the sensors. After that they're all printed to the serial output.
+ */
 void loop() {
     double temp = 0.0;
     double valX = 0, valY = 0, valZ = 0;

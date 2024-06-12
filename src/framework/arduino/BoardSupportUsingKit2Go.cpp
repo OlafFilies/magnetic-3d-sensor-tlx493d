@@ -1,16 +1,11 @@
-// std includes
+/** std includes. */
 #include <cstddef>
 #include <cstdlib>
 
-// project c includes
-// common to all sensors
+/** project c includes. */
 #include "tlx493d_types.h"
 
-// common to same generation of sensors
-
-// sensor specific includes
-
-// project cpp includes
+/** project cpp includes. */
 #include "types.hpp"
 #include "BoardSupportUsingKit2Go.hpp"
 

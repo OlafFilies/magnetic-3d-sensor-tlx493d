@@ -1,19 +1,15 @@
-// std includes
+/** std includes. */
 #include <cstdbool>
 #include <new>
 
-// Arduino includes
+/** Arduino includes. */
 #include "types.hpp"
 
-// project c includes
-// common to all sensors
+/** project c includes. */
 #include "tlx493d_types.h"
 
-// common to same generation of sensors
 
-// sensor specific includes
-
-// project cpp includes
+/** project cpp includes. */
 #include "IICUsingTwoWire.hpp"
 #include "SPIUsingSPIClass.hpp"
 

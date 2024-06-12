@@ -1,13 +1,14 @@
-/** Project CPP includes */
+/** Project CPP includes. */
 #include "TLx493D_inc.hpp"
 
 
 using namespace ifx::tlx493d;
 
 
-/* For XMC 1100 boards. */
+/* Definition of the power pin for XMC 1100 boards. */
 const uint8_t POWER_PIN = LED2;
 
+/** Declaration of the sensor object. */
 TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -15,7 +16,7 @@ TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
-/* for XMC 4700 boards */
+/** Definition of the power pin for XMC 4700 boards */
 // const uint8_t POWER_PIN = 8; // P1.10
 
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -23,7 +24,7 @@ TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
 
-
+/** Definition of a counter variable. */
 uint8_t count = 0;
 
 

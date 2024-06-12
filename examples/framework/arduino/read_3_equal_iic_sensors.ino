@@ -1,4 +1,4 @@
-/** Project CPP includes */ 
+/** Project CPP includes. */ 
 #include "TLx493D_inc.hpp"
 
 
@@ -37,20 +37,15 @@ void setup() {
      *  required anymore, since the other two have a new address.
      */
     dut1.begin();
-    // delay(500);
     dut1.setIICAddress(TLx493D_IIC_ADDR_A2_e);
-    // delay(500);
     dut2.begin();
-    // delay(500);
     dut2.setIICAddress(TLx493D_IIC_ADDR_A1_e);
-    // delay(500);
     dut3.begin();
-    // delay(500);
 
     Serial.print("setup done.\n");
 }
 
-/** In the loop we're reading out the temperature values as well as the magnetic values in X, Y, Z-direction 
+/** In the loop we're reading out the temperature value as well as the magnetic values in X, Y, Z-direction 
  *  of all three sensors. After that they're all printed to the serial output.
  */
 void loop() {

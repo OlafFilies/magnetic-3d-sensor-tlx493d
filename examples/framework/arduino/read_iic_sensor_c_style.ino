@@ -1,10 +1,12 @@
-/** Project CPP includes */
+/** Project CPP includes. */
 #include "TLx493D_inc.hpp"
 
 
+/** Definition of the power pin. */
 const uint8_t POWER_PIN = LED2;
 
 
+/** Declaration of the sensor. */
 TLx493D_t dut;
 
 
@@ -12,7 +14,7 @@ void setup() {
     Serial.begin(115200);
     delay(3000);
 
-    /** Setting the defined power up pin as input and enabling it */
+    /** Setting the defined power up pin as input and enabling it. */
     pinMode(POWER_PIN, OUTPUT);
     digitalWrite(POWER_PIN, HIGH);
 
@@ -29,7 +31,7 @@ void setup() {
 
 /** In the loop we continuously reading the temperature value as well as the
  *  magnetic values in X, Y, Z-direction of the sensor and printing them to
- *  the serial monitor
+ *  the serial monitor.
  */
 void loop() {
     Serial.println("loop ...");

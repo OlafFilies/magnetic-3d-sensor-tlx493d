@@ -1,11 +1,7 @@
 #ifndef TLX493D_LOGGER_H
 #define TLX493D_LOGGER_H
 
-
-// std includes
-// #include <stdarg.h>
-
-
+/** std includes. */
 #ifdef __cplusplus
 
 #include <cstdarg>
@@ -49,7 +45,6 @@ void logPrint(const char *format, ...);
  * @brief The function `logPrintln` is used to print out a formatted string - without prefix - to the serial output plus a trailing linefeed.
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 
- * @param[in] ... Actual string, which should be printed to the serial output. 
 */
 void logPrintln(const char *format, ...);
 

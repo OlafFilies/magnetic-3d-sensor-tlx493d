@@ -30,20 +30,22 @@ namespace ifx {
             public:
             
                 /**
-                 * Create a new Kit2GoBoardSupport object with initialised datastructures of type PinCtrl to hold parameters for powerPins, selectPins
+                 * Create a new Kit2GoBoardSupport object with initialised data structures of type PinCtrl to hold parameters for powerPins, selectPins
                  * and addressPins.
                  * @brief Default constructor with no parameters.
                  */
                 Kit2GoBoardSupport() : powerPins{false, 0, 0, 0, 0, 0, 0, 0}, selectPins{false, 0, 0, 0, 0, 0, 0, 0}, addressPins{false, 0, 0, 0, 0, 0, 0, 0} {
                 }
 
-
+                /**
+                 * @brief Destructor of the Kit2GoBoardSupport class.
+                */
                 ~Kit2GoBoardSupport() {
                 }
 
 
                 /**
-                 * @brief The function `init` sets/resets the board pin modes and/or values based on the values of the datastructures set in the main code.  
+                 * @brief The function `init` sets/resets the board pin modes and/or values based on the values of the data structures set in the main code.  
                  * 
                  * @param[in] enablePower Whether to power up the board using this class. In this case the board 3V3 is routed through a GPIO of the host MCU.
                  * @param[in] enableSelect Whether SPI slaves SELECT lines need to be controlled using this class. A particular slave is selected by pulling its 
@@ -99,7 +101,7 @@ namespace ifx {
                 }
 
                 /**
-                 * @brief The `deinit` function sets all the pins to their disableValue.
+                 * @brief The `deinit` function sets all the pins to their disable value.
                  */
                 void deinit() {
                     enablePower(false);
@@ -114,7 +116,7 @@ namespace ifx {
                 }
 
                 /**
-                 * @brief The `setPowerPin` function is setter function to route pin parameters from the main code into the datastructures/variables of this class.
+                 * @brief The `setPowerPin` function is setter function to route pin parameters from the main code into the data structures/variables of this class.
                  * 
                  * @param[in] pinNumber Arduino pin number of the GPIO to be used as 3V3 POWER pin for the sensor.
                  * @param[in] pinDriveDirection Direction of the Arduino pin to be used as the 3V3 POWER pin.
@@ -160,7 +162,7 @@ namespace ifx {
                 }
 
                 /**
-                 * @brief The `setAddressPin` function is setter function to route pin parameters from the main code into the datastructures/variables of this class.
+                 * @brief The `setAddressPin` function is setter function to route pin parameters from the main code into the data structures/variables of this class.
                  * 
                  * @param[in] pinNumber Arduino pin number of the GPIO to be used as the ADDR pin for the sensor used as SPI slave.
                  * @param[in] pinDirection Direction of the Arduino pin to be used as the ADDR pin for the sensor used as SPI slave.
@@ -267,13 +269,22 @@ namespace ifx {
                     }
                 }
 
+                /**
+                 * @brief The `setPinDirectionToDrive` function sets the direction of the pin to drive mode.
+                 * 
+                 * @param[in] p Structure of type `pinCtrl`.
+                */
                 void setPinDirectionToDrive(pinCtrl &p) {
                     if( p.isSet ) {
                         pinMode(p.pinNumber, p.driveDirection);
                     }
                 }
 
-
+                /**
+                 * @brief The `setPinDirectionToTristate` function sets the direction of the pin to tristate mode.
+                 * 
+                 * @param[in] p Structure of type `pinCtrl`.
+                */
                 void setPinDirectionToTristate(pinCtrl &p) {
                     if( p.isSet ) {
                         pinMode(p.pinNumber, p.tristateDirection);

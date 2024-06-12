@@ -2,11 +2,11 @@
 #define TLX493D_TYPES_H
 
 
-// std includes
+/** std includes */ 
 #include <stdbool.h>
 #include <stdint.h>
 
-// project c includes
+/** project c includes */
 #include "pal.h"
 
 #ifdef __cplusplus
@@ -16,12 +16,9 @@ extern "C" {
 #endif
 
 
-// typedef struct TLx493D_t  TLx493D_t;
-
-
-/*
-  List of all supported sensor devices.
-*/
+/**
+ * @brief The enumeration `TLx493D_SupportedSensorType_t` defines all the supported sensor types of the library.
+ */
 typedef enum {
                TLx493D_A1B6_e = 0,
                TLx493D_A2B6_e,
@@ -33,25 +30,29 @@ typedef enum {
 } TLx493D_SupportedSensorType_t;
 
 
-/*
-  List of all supported communication interfaces.
-*/
+/**
+ * @brief The enumeration `TLx493D_SupportedComLibraryInterfaceType_t` defines the supported communication interfaces of
+ * of the different sensors.
+ */
 typedef enum {
                TLx493D_I2C_e = 0,
                TLx493D_SPI_e,
-              //  TLx493D_I2C_OR_SPI_e,
 } TLx493D_SupportedComLibraryInterfaceType_t;
 
 
-/*
-  List of supported register access modes.
-*/
+/**
+ * @brief The enumeration `TLx493D_RegisterAccessModeType_t` defines the access modes of the different registers inside the sensors.
+ */
 typedef enum { TLx493D_READ_MODE_e = 0, 
                TLx493D_WRITE_MODE_e,
                TLx493D_READ_WRITE_MODE_e,
 } TLx493D_RegisterAccessModeType_t;
 
 
+/**
+ * @brief The enumeration `TLx493D_IICAddressType_t` defines the possible I2C addresses of the different sensors. They're used to
+ * establish a connection to the sensor.
+ */
 typedef enum {
     TLx493D_IIC_ADDR_A0_e = 0,
     TLx493D_IIC_ADDR_A1_e,
@@ -64,6 +65,10 @@ typedef enum {
 } TLx493D_IICAddressType_t;
 
 
+/**
+ * @brief The enumeration `TLx493D_MeasurementType_t` defines the different measurement modes of the sensors. You have to make sure
+ * that you are using a mode which is available for your used sensor family (1st Gen, 2nd Gen, etc.).
+ */
 typedef enum {
     // 1st and 2nd generation
     TLx493D_BxByBz_e = 0,
@@ -81,6 +86,10 @@ typedef enum {
 } TLx493D_MeasurementType_t;
 
 
+/**
+ * @brief The enumeration `TLx493D_TriggerType_t` defines the different trigger modes for the sensors. You have to make sure that
+ * you are using a mode which is available for your used sensor family (1st Gen, 2nd Gen, etc.).
+ */
 typedef enum {
                // 1st and 2nd gen.
                TLx493D_NO_ADC_ON_READ_e = 0,
@@ -94,9 +103,10 @@ typedef enum {
 } TLx493D_TriggerType_t;
 
 
-/*
-  List of supported ranges.
-*/
+/**
+ * @brief The enumeration `TLx493D_SensitivityType_t` defines the different range settings for the sensors. You have to make sure that
+ * you're using a mode which is available for your used sensor family (1st Gen, 2nd Gen, etc.).
+ */
 typedef enum {
                TLx493D_FULL_RANGE_e = 0, 
                TLx493D_SHORT_RANGE_e,
@@ -104,9 +114,11 @@ typedef enum {
 } TLx493D_SensitivityType_t;
 
 
-/*
-  List of supported ranges.
-*/
+/**
+ * @brief The enumeration `TLx493D_AvailableSensitivityType_t` defines the different bits which define the range of the used sensor.
+ * They are different depending on the used sensor type. The `TLx493D_SensitivityType_t` depends on the available `TLx493D_AvailableSensitivityType_t`.
+ 
+ */
 typedef enum {
                TLx493D_HAS_X1_e = 0, 
                TLx493D_HAS_X2_e, 
@@ -114,13 +126,10 @@ typedef enum {
 } TLx493D_AvailableSensitivityType_t;
 
 
-// typedef enum {
-//                TLx493D_LOW_POWER_MODE_e = 0,
-//                TLx493D_MASTER_CONTROLLED_MODE_e,
-//                TLx493D_FAST_MODE_e,
-// } TLx493D_PowerModeType_t;
-
-
+/**
+ * @brief The enumeration `TLx493D_PowerModeType_t` defines the different power modes of the sensors. The available ones are depending
+ * on the sensor variant that you are using.
+ */
 typedef enum {
                TLx493D_POWER_DOWN_MODE_e = 0,
                TLx493D_FAST_MODE_e,
@@ -130,6 +139,10 @@ typedef enum {
 } TLx493D_PowerModeType_t;
 
 
+/**
+ * @brief The enumeration `TLx493D_UpdateRateType_t` defines the different update rates of the sensors. Depending on which sensor variant you're
+ * using you can choose different update rates.
+ */
 typedef enum {
                // Generation 2
                TLx493D_UPDATE_RATE_FAST_e = 0,
@@ -151,9 +164,9 @@ typedef enum {
 } TLx493D_UpdateRateType_t;
 
 
-/*
-  Structure to store name, access mode, address, mask and offset of registers.
-*/
+/**
+ * @brief The structure `TLx493D_Register_t` is used to store name, access mode, address, mask and offset of registers.
+ */
 typedef struct TLx493D_Register_t {
     // uint8_t                           name;
     TLx493D_RegisterAccessModeType_t  accessMode;
@@ -163,22 +176,32 @@ typedef struct TLx493D_Register_t {
     uint8_t                           numBits;
 } TLx493D_Register_t;
 
-
+/** Definition of function pointers for the communication and the transfer of data. */
 typedef bool (*TLx493D_OneParamsFuncPtr)(TLx493D_t *sensor);
 typedef void (*TLx493D_SetReadAddressFuncPtr)(TLx493D_t *sensor, uint8_t address);
 typedef bool (*TLx493D_TransferFuncPtr)(TLx493D_t *sensor, uint8_t *tx_buffer, uint8_t tx_len, uint8_t *rx_buffer, uint8_t rx_len);
 
 
+/**
+ * @brief The structure `TLx493D_SPIParameters_t` stores the parameter of the SPI interface.
+ */
 typedef struct TLx493D_SPIParameters_t {
     uint8_t dummy;
 } TLx493D_SPIParameters_t;
 
 
+/**
+ * @brief The structure `TLx493D_I2CParameters_t` stores the parameter of the I2C interface.
+ */
 typedef struct TLx493D_I2CParameters_t {
     uint8_t address;
 } TLx493D_I2CParameters_t;
 
 
+/**
+ * @brief The structure `TLx493D_ComLibraryFunctions_t` stores the function pointers which are
+ * needed for the initialization and the transfer of data, for each communication interface.
+ */
 typedef struct TLx493D_ComLibraryFunctions_t {
     union {
         TLx493D_OneParamsFuncPtr  spi_init;
@@ -202,18 +225,30 @@ typedef struct TLx493D_ComLibraryFunctions_t {
 } TLx493D_ComLibraryFunctions_t;
 
 
+/**
+ * @brief The structure `TLx493D_ComLibraryParameters_t` is used to store the necessary parameters
+ * for both interface (I2C, SPI).
+ */
 typedef union TLx493D_ComLibraryParameters_t {
     TLx493D_SPIParameters_t  spi_params;
     TLx493D_I2CParameters_t  iic_params;
 } TLx493D_ComLibraryParameters_t;
 
 
+/**
+ * @brief The structure `TLx493D_ComLibraryObject_t` is used to store both communication interface objects.
+ */
 typedef union TLx493D_ComLibraryObject_t {
     TLx493D_SPIObject_t  *spi_obj;
     TLx493D_I2CObject_t  *iic_obj;
 } TLx493D_ComLibraryObject_t;
 
 
+/**
+ * @brief The structure `TLx493D_CommunicationInterface_t` contains all the important parameters to properly use the
+ * communication interface. It uses the previously defined structures `TLx493D_ComLibraryFunctions_t`, `TLx493D_ComLibraryParameters_t`
+ * and `TLx493D_ComLibraryObject_t`.
+ */
 typedef struct TLx493D_CommunicationInterface_t {
     TLx493D_ComLibraryFunctions_t   *comLibFuncs;
     TLx493D_ComLibraryParameters_t   comLibParams;
@@ -221,11 +256,16 @@ typedef struct TLx493D_CommunicationInterface_t {
 } TLx493D_CommunicationInterface_t;
 
 
+/**
+ * @brief The union `TLx493D_BoardSupportObject_t` defines the board support object, which is used for
+ * Kits2Go.
+ */
 typedef union TLx493D_BoardSupportObject_t {
     TLx493D_Kit2GoBoardSupportObject_t  *k2go_obj;
 } TLx493D_BoardSupportObject_t;
 
 
+// TODO: Is this needed?
 typedef struct TLx493D_BoardSupportInterface_t {
     // TLx493D_BoardSupportFunctions_t   *boardSupportFuncs;
     // TLx493D_BoardSupportParameters_t   boardSupportParams;
@@ -233,7 +273,7 @@ typedef struct TLx493D_BoardSupportInterface_t {
 } TLx493D_BoardSupportInterface_t;
 
 
-// Functions common to all sensors
+/** Following are the functions which are common to all the sensors. */
 typedef bool (*TLx493D_InitFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_DeinitFuncPtr)(TLx493D_t *);
 
@@ -259,13 +299,13 @@ typedef void (*TLx493D_CalculateMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *,
 typedef bool (*TLx493D_GetMagneticFieldAndTemperatureFuncPtr)(TLx493D_t *, double *, double *, double *, double *);
 
 
-// functions related to the "Config" register
+/** Following are the functions related to the "Config" register. */
 typedef bool (*TLx493D_SetMeasurementFuncPtr)(TLx493D_t *, TLx493D_MeasurementType_t);
 typedef bool (*TLx493D_SetTriggerFuncPtr)(TLx493D_t *, TLx493D_TriggerType_t);
 typedef bool (*TLx493D_SetSetSensitivityFuncPtr)(TLx493D_t *, TLx493D_SensitivityType_t);
 
 
-// functions related to the "Mod1" and "Mod2" registers
+/** Following are the functions related to the "Mod1" and "Mod2" registers. */
 typedef bool (*TLx493D_SetDefaultConfigFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_SetIICAddressFuncPtr)(TLx493D_t *, TLx493D_IICAddressType_t);
 typedef bool (*TLx493D_Enable1ByteReadModeFuncPtr)(TLx493D_t *);
@@ -279,13 +319,12 @@ typedef bool (*TLx493D_DisableCollisionAvoidanceFuncPtr)(TLx493D_t *);
 typedef bool (*TLx493D_SetPowerModeFuncPtr)(TLx493D_t *, TLx493D_PowerModeType_t);
 typedef bool (*TLx493D_SetUpdateRateFuncPtr)(TLx493D_t *, TLx493D_UpdateRateType_t);
 
-// functions related to the "Diag" register
+/** Following are the functions related to the "Diag" register. */
 typedef bool (*TLx493D_HasValidDataFuncPtr)(const TLx493D_t *);
 typedef bool (*TLx493D_IsFunctionalFuncPtr)(const TLx493D_t *);
 
 
-// functions available only to a subset of sensors with wake-up functionality
-// functions related to the "WU" register
+/** Following are the functions related to the "WU" register. These are only available to a subset of sensors with wake-up functionality */
 typedef bool (*TLx493D_HasWakeUpFuncPtr)(const TLx493D_t *);
 typedef bool (*TLx493D_IsWakeUpEnabledFuncPtr)(const TLx493D_t *);
 typedef bool (*TLx493D_EnableWakeUpModeFuncPtr)(TLx493D_t *);
@@ -296,7 +335,7 @@ typedef bool (*TLx493D_SetWakeUpThresholdsFuncPtr)(TLx493D_t *, double, double, 
 typedef bool (*TLx493D_SoftwareResetFuncPtr)(TLx493D_t *);
 
 
-// functions used internally and not accessible through the common interface
+/** Following are the functions used internally and not accessible through the common interface. */
 typedef uint8_t (*TLx493D_CalculateFuseParityFuncPtr)(const TLx493D_t *);
 typedef uint8_t (*TLx493D_CalculateBusParityFuncPtr)(const TLx493D_t *);
 typedef uint8_t (*TLx493D_CalculateConfigParityFuncPtr)(TLx493D_t *);
@@ -322,7 +361,7 @@ typedef uint8_t (*TLx493D_SelectIICAddressFuncPtr)(const TLx493D_t *, TLx493D_II
 typedef void (*TLx493D_PrintRegistersFuncPtr)(const TLx493D_t *);
 
 
-// Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface.
+/** Functions used to refer to sensor specific functions by a common name. These functions are not part of the common user C/C++ interface. */
 typedef struct TLx493D_CommonFunctions_t {
     TLx493D_InitFuncPtr                         init;
     TLx493D_DeinitFuncPtr                       deinit;
@@ -348,13 +387,13 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_CalculateMagneticFieldAndTemperatureFuncPtr  calculateMagneticFieldAndTemperature;
     TLx493D_GetMagneticFieldAndTemperatureFuncPtr        getMagneticFieldAndTemperature;
 
-    // functions related to the "Config" register
-    TLx493D_SetMeasurementFuncPtr             setMeasurement;
+    /** Functions related to the "Config" register. */
+    TLx493D_SetMeasurementFuncPtr               setMeasurement;
     TLx493D_SetTriggerFuncPtr                   setTrigger;
     TLx493D_SetSetSensitivityFuncPtr            setSensitivity;
 
     
-    // functions related to the "Mod1" and "Mod2" registers
+    /** Functions related to the "Mod1" and "Mod2" registers. */
     TLx493D_SetDefaultConfigFuncPtr             setDefaultConfig;
     TLx493D_SetIICAddressFuncPtr                setIICAddress;
     TLx493D_Enable1ByteReadModeFuncPtr          enable1ByteReadMode;
@@ -368,13 +407,12 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_SetPowerModeFuncPtr                 setPowerMode;
     TLx493D_SetUpdateRateFuncPtr                setUpdateRate;
 
-    // functions related to the "Diag" register
+    /** Functions related to the "Diag" register. */
     TLx493D_HasValidDataFuncPtr                 hasValidData;
     TLx493D_IsFunctionalFuncPtr                 isFunctional;
 
 
-    // functions available only to a subset of sensors with wake-up functionality
-    // functions related to the "WU" register
+    /** Functions available only to a subset of sensors with wake-up functionality. The functions are related to the WU register. */
     TLx493D_HasWakeUpFuncPtr                    hasWakeUp;
     TLx493D_IsWakeUpEnabledFuncPtr              isWakeUpEnabled;
     TLx493D_EnableWakeUpModeFuncPtr             enableWakeUpMode;
@@ -386,7 +424,7 @@ typedef struct TLx493D_CommonFunctions_t {
     TLx493D_SoftwareResetFuncPtr                softwareReset;
     
 
-    // functions used internally and not accessible through the common interface
+    /** Functions used internally and not accessible through the common interface. */
     TLx493D_CalculateFuseParityFuncPtr          calculateFuseParity;
     TLx493D_CalculateBusParityFuncPtr           calculateBusParity;
     TLx493D_CalculateConfigParityFuncPtr        calculateConfigurationParity;
@@ -412,9 +450,9 @@ typedef struct TLx493D_CommonFunctions_t {
 } TLx493D_CommonFunctions_t;
 
 
-/*
-  Structure to store all relevant infos for a particular sensor.
-*/
+/**
+ * @brief The structure `TLx493D_t` stores all relevant information for a particular sensor.
+ */
 typedef struct TLx493D_t {
     uint8_t                         *regMap;
     TLx493D_Register_t              *regDef;

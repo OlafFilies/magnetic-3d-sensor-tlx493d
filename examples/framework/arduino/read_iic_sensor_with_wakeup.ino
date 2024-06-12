@@ -1,4 +1,4 @@
-/** Project CPP includes */
+/** Project CPP includes. */
 #include "TLx493D_inc.hpp"
 
 
@@ -24,9 +24,10 @@ const int16_t UPPER_THRESHOLD_Z = THRESHOLD;
  */
 const uint8_t INTERRUPT_PIN = 9;
 
-
+/** Declaration of the sensor object. */
 TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
+/** Definition of an interrupt flag. */
 bool intTriggered = false;
 
 

@@ -24,6 +24,7 @@ namespace ifx {
          * @brief Specialization of the template class `TLx493D` for the IIC interface
          * 
          * @tparam BoardSupport A helper class, which takes care of needed power pins as well user defined pins.
+         * @tparam TwoWireWrapper A wrapper for the I2C-class.
          * @tparam sensorType   Specific sensor type of the used sensor.
          */
         template<typename BoardSupport, TLx493D_SupportedSensorType_t sensorType>
@@ -35,7 +36,10 @@ namespace ifx {
                 // typedef ifx::tlx493d::TwoWireWrapper                    BusWrapperType;
                 typedef typename ifx::tlx493d::TwoWireWrapper::BusType  BusType;
 
-        
+
+                /**
+                 * @brief 
+                */
                 explicit TLx493D(BusType &busObj, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), bus(busObj), iicAddress(iicAdr) {
                 // explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
                     (void) tlx493d_init(&sensor, sensorType);
@@ -390,6 +394,10 @@ namespace ifx {
                     bsc.enablePower(false);
                 }
 
+                /**
+                 * @brief The function `reset` set the sensor's registers to its reset values and resets the
+                 * communication interface. After that the register maps will be set to its default values.
+                 */
                 void reset() {
                     deinitCommunication(&sensor, false);
                     sensor.functions->setResetValues(&sensor);
@@ -418,9 +426,9 @@ namespace ifx {
 
             private:
 
-                BoardSupportType  bsc;          /**< BoardSupportClass */
-                // BusWrapperType    busWrapper;   /**< BusWrapperClass */
-                BusType           bus;  /**< Bus Class */
+                BoardSupportType  bsc;              /**< BoardSupportClass */
+                // BusWrapperType    busWrapper;    /**< BusWrapperClass */
+                BusType           bus;              /**< Bus Class */
 
         };
     }

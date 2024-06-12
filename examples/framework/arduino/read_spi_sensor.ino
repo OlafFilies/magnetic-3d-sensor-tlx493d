@@ -1,16 +1,17 @@
-/** Project CPP includes */
+/** Project CPP includes. */
 #include "TLx493D_inc.hpp"
 
 
 using namespace ifx::tlx493d;
 
-
+/** Definition of the power and chip select pin. */
 const uint8_t POWER_PIN       = LED2;
 const uint8_t CHIP_SELECT_PIN = 3;
 
-
+/** Declaration of the sensor object. */
 TLx493D_P3I8 dut(SPI);
 
+/** Definition of a counter. */
 uint8_t count = 0;
 
 
@@ -18,8 +19,8 @@ void setup() {
     Serial.begin(115200);
     delay(3000);
 
-    /** Setting the power up pin of the Kit2GO as well as the chip select pin for the SPI 
-     *  For this we're using the functions of the Board Support Class
+    /** Setting the power up pin of the Kit2GO as well as the chip select pin for the SPI. 
+     *  For this we're using the functions of the Board Support Class.
      */
     // dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
     dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, INPUT, LOW, HIGH, 50, 50);
@@ -28,7 +29,7 @@ void setup() {
     Serial.print("setup done.\n");
 }
 
-/** In the loop we're reading out the temperature value (in °C) as well as the magnetic fields values in X, Y, Z-direction (in mT)
+/** In the loop we're reading out the temperature value (in °C) as well as the magnetic fields values in X, Y, Z-direction (in mT).
  *  We're also reading out the raw temperature value (in LSB).
  */
 void loop() {
@@ -36,7 +37,7 @@ void loop() {
     double valX = 0, valY = 0, valZ = 0;
     int16_t tempRaw = 0;
 
-    /** Note that you don't have to toggle any chip select signal, this is done in the background within the transfer function */
+    /** Note that you don't have to toggle any chip select signal, this is done in the background within the transfer function. */
     Serial.print(true == dut.getTemperature(&temp) ? "getTemperature ok\n" : "getTemperature error\n");
 
     Serial.print("Temperature is: ");
