@@ -25,16 +25,9 @@ TEST_GROUP(TLx493D_P3I8_needsSensor);
 TEST_GROUP(TLx493D_P3I8_needsSensorInternal);
 
 
-// static double  x, y, z, t;
-
-
 // Setup method called before every individual test defined for this test group
 static TEST_SETUP(TLx493D_P3I8_needsSensorInternal)
 {
-    // x = 0.0;
-    // y = 0.0;
-    // z = 0.0;
-    // t = 0.0;
 }
 
 
@@ -200,15 +193,6 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkConfigMeasurementFunctionality)
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
-
-
-    // Supported
-    // logPrint("Test mode start ...\n");
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_BxByBz_e) );
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
-    // logPrint("Test mode end.\n");
 
 
     // logPrint("TLx493D_BxTemp_e\n");
@@ -400,19 +384,19 @@ TEST_IFX(TLx493D_P3I8_needsSensorInternal, checkModeUpdateRateFunctionality)
 
     // Supported
     TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_125_HZ_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b01, tlx493d_common_returnBitfield(&dut, P3I8_F_UPDATE_SEL_e) );
 
     TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_31_HZ_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b10, tlx493d_common_returnBitfield(&dut, P3I8_F_UPDATE_SEL_e) );
 
     TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_16_HZ_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b11, tlx493d_common_returnBitfield(&dut, P3I8_F_UPDATE_SEL_e) );
 
     TEST_ASSERT_TRUE( dut.functions->setUpdateRate(&dut, TLx493D_UPDATE_RATE_1000_HZ_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0b00, tlx493d_common_returnBitfield(&dut, P3I8_F_UPDATE_SEL_e) );
 
 

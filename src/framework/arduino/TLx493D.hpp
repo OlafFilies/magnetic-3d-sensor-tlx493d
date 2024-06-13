@@ -2,20 +2,24 @@
 #define TLX493D_HPP
 
 
-// std includes
+/** std includes. */
 #include <cstdbool>
 #include <cstdint>
+// #include <stdbool.h>
+// #include <stdint.h>
 
-// project cpp includes
+/** project cpp includes. */
 #include "types.hpp"
 #include "BoardSupportUsingKit2Go.hpp"
 #include "IICUsingTwoWire.hpp"
 #include "SPIUsingSPIClass.hpp"
 #include "TLx493DBase.hpp"
 
-// project c includes
+/** project c includes. */
 #include "tlx493d_types.h"
 #include "tlx493d.h"
+#include "CommunicationInterface.h"
+#include "Logger.h"
 
 
 namespace ifx {
@@ -32,17 +36,21 @@ namespace ifx {
 
             public:
 
-                typedef BoardSupport                                    BoardSupportType;
-                // typedef ifx::tlx493d::TwoWireWrapper                    BusWrapperType;
-                typedef typename ifx::tlx493d::TwoWireWrapper::BusType  BusType;
+                using BoardSupportType = BoardSupport;
+                using BusWrapperType   = TwoWireWrapper;
+                using BusType          = typename BusWrapperType::BusType;
 
+                // typedef BoardSupport                                    BoardSupportType;
+                // typedef TwoWireWrapper                                  BusWrapperType;
+                // typedef typename BusWrapperType::BusType                BusType;
+                // // typedef typename ifx::tlx493d::TwoWireWrapper::BusType  BusType;
 
+        
                 /**
-                 * @brief 
+                 * @brief Class constructor.
                 */
-                explicit TLx493D(BusType &busObj, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), bus(busObj), iicAddress(iicAdr) {
-                // explicit TLx493D(BusType &bus, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : bsc(), busWrapper(bus), iicAddress(iicAdr) {
-                    (void) tlx493d_init(&sensor, sensorType);
+                explicit TLx493D(BusType &busObj, TLx493D_IICAddressType_t iicAdr = TLx493D_IIC_ADDR_A0_e) : busWrapper(busObj), iicAddress(iicAdr) {
+                    // (void) tlx493d_init(&sensor, sensorType);
                 }
 
                 /**
@@ -61,13 +69,14 @@ namespace ifx {
                  * or keep them off at initialization. 
                  * @param[in] enableSelect          Tells the BoardSupportClass, whether it should turn the select pins on
                  * or keep them off at initialization.
-                 * @param[in] enableExtendedAdress    Enable or disable the extended address feature of the sensor.
+                 * @param[in] enableExtendedAdress  Enable or disable the extended address feature of the sensor.
+                 * @param[in] executeInit           Whether to execute the bus objects init method upon initializing the communication. True - by default.
                  */
-                void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false) {
+                void init(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false, bool executeInit = true) {
+                    (void) tlx493d_init(&sensor, sensorType);
                     (void) initBoardSupport(&sensor, bsc);
                     bsc.init(enablePower, enableSelect, enableExtendedAdress);
-                    initCommunication(&sensor, bus, iicAddress, false);
-                    // initCommunication(&sensor, busWrapper, iicAddress, false);
+                    initCommunication(&sensor, busWrapper, iicAddress, executeInit);
                     setDefaultConfig();
                 }
 
@@ -79,20 +88,23 @@ namespace ifx {
                  * or keep them off at initialization. True - by default.
                  * @param[in] enableSelect          Tells the BoardSupportClass, whether it should turn the select pins on
                  * or keep them off at initialization. False - by default.
-                 * @param[in] enableExtendedAdress    Enable or disable the extended address feature of the sensor.
+                 * @param[in] enableExtendedAdress  Enable or disable the extended address feature of the sensor.
                  * False - by default.
+                 * @param[in] executeInit           Whether to execute the bus objects init method upon initializing the communication. True - by default.
                  */
-                void begin(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false) {
-                    init(enablePower, enableSelect, enableExtendedAdress);
+                void begin(bool enablePower = true, bool enableSelect = false, bool enableExtendedAdress = false, bool executeInit = true) {
+                    init(enablePower, enableSelect, enableExtendedAdress, executeInit);
                 }
 
                 /**
                  * @brief The function `deinit` de-initializes the sensor and its peripherals.
                  * It de-initializes the communication interface, the BoardSupportClass as well as
                  * all allocated memory (free the memory to be precise).
+                 * 
+                 * @param[in] executeDeinit  Whether to execute the bus objects deinit method upon deinitializing the communication.
                  */
-                void deinit() {
-                    deinitCommunication(&sensor, false);
+                void deinit(bool executeDeinit = false) {
+                    deinitCommunication(&sensor, executeDeinit);
                     bsc.deinit();
                     (void) tlx493d_deinit(&sensor);
                 }
@@ -101,9 +113,10 @@ namespace ifx {
                  * @brief The function `end` calls the `deinit` function.
                  * For details take a look at the `deinit` function.
                  * 
+                 * @param[in] executeDeinit  Whether to execute the bus objects deinit method upon deinitializing the communication.
                  */
-                void end() {
-                    deinit();
+                void end(bool executeDeinit = false) {
+                    deinit(executeDeinit);
                 }
 
                 /**
@@ -170,7 +183,7 @@ namespace ifx {
                 void setAddressPin(uint8_t pinNumber, uint8_t pinDriveDirection, uint8_t pinTristateDirection,
                                    uint8_t pinEnableValue, uint8_t pinDisableValue,
                                    uint32_t delayAfterEnable = 0, uint32_t delayAfterDisable = 0) {
-                    bsc.setAdressPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
+                    bsc.setAddressPin(pinNumber, pinDriveDirection, pinTristateDirection, pinEnableValue, pinDisableValue, delayAfterEnable, delayAfterDisable);
                 }
 
                 /**
@@ -197,12 +210,18 @@ namespace ifx {
                     bsc.enablePower(false);
                 }
 
-                void reset() {
-                    deinitCommunication(&sensor, true);
+                /**
+                 * @brief The function `reset` set the sensor's registers to its reset values and resets the
+                 * communication interface. After that the register maps will be set to its default values.
+                 * 
+                 * @param[in] executeInit    Whether to execute the bus objects init method upon initializing the communication.
+                 * @param[in] executeDeinit  Whether to execute the bus objects deinit method upon deinitializing the communication.
+                 */
+                void reset(bool executeInit = false, bool executeDeinit = false) {
+                    deinitCommunication(&sensor, executeDeinit);//false);
                     sensor.functions->setResetValues(&sensor);
                     bsc.reset();
-                    initCommunication(&sensor, bus, iicAddress, true);
-                    // initCommunication(&sensor, busWrapper, iicAddress, true);
+                    initCommunication(&sensor, busWrapper, iicAddress, executeInit);//true);
                     setDefaultConfig();
                 }
 
@@ -246,12 +265,11 @@ namespace ifx {
                  * 
                  * @param[in] bus Bus type of the chose sensor board.
                  */
-                TLx493D(BusType &bus);
+                explicit TLx493D(BusType &bus);
 
 
                 BoardSupportType          bsc;          /**< BoardSupportClass */
-                // BusWrapperType            busWrapper;   /**< BusWrapperClass */
-                BusType                   bus;  /**< Bus Class */
+                BusWrapperType            busWrapper;   /**< BusWrapperClass */
                 TLx493D_IICAddressType_t  iicAddress;   /**< I2C-Address of the sensor */
         };
 
@@ -267,14 +285,17 @@ namespace ifx {
 
             public:
 
-                typedef BoardSupport                                     BoardSupportType;
-                // typedef ifx::tlx493d::SPIClassWrapper                    BusWrapperType;
-                typedef typename ifx::tlx493d::SPIClassWrapper::BusType  BusType;
+                using BoardSupportType = BoardSupport;
+                using BusWrapperType   = SPIClassWrapper;
+                using BusType          = typename BusWrapperType::BusType;
+
+                // typedef BoardSupport                                     BoardSupportType;
+                // typedef SPIClassWrapper                                  BusWrapperType;
+                // typedef typename SPIClassWrapper::BusType  BusType;
+                // // typedef typename SPIClassWrapper::BusType  BusType;
 
         
-                explicit TLx493D(BusType &busObj) : bsc(), bus(busObj) {
-                // explicit TLx493D(BusType &bus) : bsc(), busWrapper(bus) {
-                    (void) tlx493d_init(&sensor, sensorType);
+                explicit TLx493D(BusType &busObj) : bsc(), busWrapper(busObj) {
                 }
 
                 /**
@@ -291,10 +312,10 @@ namespace ifx {
                  *
                  */
                 void init(bool enablePower = false, bool enableSelect = true) {
+                    (void) tlx493d_init(&sensor, sensorType);
                     (void) initBoardSupport(&sensor, bsc);
                     bsc.init(enablePower, enableSelect, false);
-                    // initCommunication(&sensor, busWrapper, true);
-                    initCommunication(&sensor, bus, true);
+                    initCommunication(&sensor, busWrapper, true);
                     setDefaultConfig();
                 }
 
@@ -402,8 +423,7 @@ namespace ifx {
                     deinitCommunication(&sensor, false);
                     sensor.functions->setResetValues(&sensor);
                     bsc.reset();
-                    // initCommunication(&sensor, busWrapper, true);
-                    initCommunication(&sensor, bus, true);
+                    initCommunication(&sensor, busWrapper, true);
                     setDefaultConfig();
                 }
 
@@ -426,9 +446,8 @@ namespace ifx {
 
             private:
 
-                BoardSupportType  bsc;              /**< BoardSupportClass */
-                // BusWrapperType    busWrapper;    /**< BusWrapperClass */
-                BusType           bus;              /**< Bus Class */
+                BoardSupportType  bsc;          /**< BoardSupportClass */
+                BusWrapperType    busWrapper;   /**< BusWrapperClass */
 
         };
     }

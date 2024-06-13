@@ -3,7 +3,6 @@
 
 
 // Arduino includes
-#include <SPI.h>
 #include <Arduino.h>
 
 // project cpp includes

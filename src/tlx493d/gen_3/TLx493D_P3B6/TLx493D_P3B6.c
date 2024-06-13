@@ -1,22 +1,21 @@
-// std includes
+/** std includes. */
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-// project c includes
+/** project c includes. */
+#include "CommunicationInterface.h"
 #include "Logger.h"
 
-// common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
 
-// common to same generation of sensors
 #include "tlx493d_gen_3_common_defines.h"
 #include "tlx493d_gen_3_common.h"
 
-// sensor specific includes
+/** sensor specicifc includes. */
 #include "TLx493D_P3B6_defines.h"
 #include "TLx493D_P3B6_enums.h"
 #include "TLx493D_P3B6.h"
@@ -105,12 +104,12 @@ static TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
     .calculateMagneticFieldAndTemperature = TLx493D_P3B6_calculateMagneticFieldAndTemperature,
     .getMagneticFieldAndTemperature = TLx493D_P3B6_getMagneticFieldAndTemperature,
 
-    // functions related to the "Config" register
+    /** functions related to the "Config" register. */
     .setMeasurement                 = TLx493D_P3B6_setMeasurement,
     .setTrigger                     = TLx493D_P3B6_setTrigger,
     .setSensitivity                 = TLx493D_P3B6_setSensitivity,
 
-    // functions related to the "Mod1" and "Mod2" registers
+    /** functions related to the "Mod1" and "Mod2" registers. */
     .setDefaultConfig               = TLx493D_P3B6_setDefaultConfig,
     .setIICAddress                  = TLx493D_P3B6_setIICAddress,
     .enable1ByteReadMode            = TLx493D_P3B6_enable1ByteReadMode,
@@ -124,12 +123,11 @@ static TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
     .setPowerMode                   = TLx493D_P3B6_setPowerMode,
     .setUpdateRate                  = TLx493D_P3B6_setUpdateRate,
 
-    // functions related to the "Diag" register
+    /** functions related to the "Diag" register. */
     .hasValidData                   = TLx493D_P3B6_hasValidData,
     .isFunctional                   = TLx493D_P3B6_isFunctional,
 
-    // functions available only to a subset of sensors with wake-up functionality
-    // functions related to the "WU" register
+    /** functions available only to a subset of sensors with wake-up functionality related to the "WU" register. */
     .hasWakeUp                      = TLx493D_P3B6_hasWakeUp,
     .isWakeUpEnabled                = TLx493D_P3B6_isWakeUpEnabled,
     .enableWakeUpMode               = TLx493D_P3B6_enableWakeUpMode,
@@ -142,7 +140,7 @@ static TLx493D_CommonFunctions_t TLx493D_P3B6_commonFunctions = {
 
     .printRegisters                 = TLx493D_P3B6_printRegisters,
 
-    // functions used internally and not accessible through the common interface
+    /** functions used internally and not accessible through the common interface. */
     .calculateFuseParity            = TLx493D_P3B6_calculateFuseParity,
     .calculateBusParity             = TLx493D_P3B6_calculateBusParity,
     .calculateConfigurationParity   = TLx493D_P3B6_calculateConfigurationParity,
@@ -278,14 +276,8 @@ bool TLx493D_P3B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr
 }
 
 
-// bool TLx493D_P3B6_set1ByteReadMode(TLx493D_t *sensor, uint8_t pr) {
-//     return tlx493d_gen_3_set1ByteReadMode(sensor, P3B6_PROT_SEL_e, pr);
-// }
-
-
 bool TLx493D_P3B6_enable1ByteReadMode(TLx493D_t *sensor) {
     return tlx493d_gen_3_set1ByteReadMode(sensor, P3B6_PROT_SEL_e, 1);
-    //  return TLx493D_P3B6_set1ByteReadMode(sensor, 1);
 }
 
 
@@ -360,7 +352,7 @@ bool TLx493D_P3B6_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
 }
 
 
-// thesholds im mT, to be converted to proper format
+/** thesholds im mT, to be converted to proper format. */
 bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
                                       double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
     return tlx493d_gen_3_setWakeUpThresholds(sensor, P3B6_WU_EN_e, P3B6_WU_EN_CP_e, P3B6_WU_PAR_e,
@@ -442,10 +434,10 @@ bool TLx493D_P3B6_hasValidTBit(const TLx493D_t *sensor) {
 
 
 void TLx493D_P3B6_setResetValues(TLx493D_t *sensor) {
-    sensor->regMap[0x0A] = 0x62; // MOD1
-    sensor->regMap[0x0B] = 0x00; // MOD2
+    sensor->regMap[0x0A] = 0x62; /** MOD1 */
+    sensor->regMap[0x0B] = 0x00; /** MOD2 */
 
-    // for wake-up parity calculation
+    /** for wake-up parity calculation. */
     sensor->regMap[0x0C] = 0x7F;
     sensor->regMap[0x0D] = 0x80;
     sensor->regMap[0x0E] = 0x7F;
@@ -455,7 +447,7 @@ void TLx493D_P3B6_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x12] = 0xCC;
     sensor->regMap[0x13] = 0x2C;
 
-    // P3B6_CHANNEL_SEL_SAVE_e
+    /** P3B6_CHANNEL_SEL_SAVE_e */
     sensor->regMap[0x1B] = 0x00;
 }
 

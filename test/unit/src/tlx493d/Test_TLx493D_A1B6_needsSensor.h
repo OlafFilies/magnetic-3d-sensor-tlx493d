@@ -214,35 +214,28 @@ TEST_GROUP_RUNNER(TLx493D_A1B6_needsSensor)
     RUN_TEST_CASE(TLx493D_A1B6_TempDisable, TempDisable);
     RUN_TEST_CASE(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckDisabled);
     
-    
     // run common functions tests
     RUN_TEST_GROUP(SensorsCommonFunctions);
 
     // run gen 1 common functions tests
     RUN_TEST_GROUP(SensorsCommon);
-    
 
     // This test is run at the end since the sensor cannot recover from a wrong parity error without hard reset
     // So tests will fail in the loop second time onwards. First time everything will pass. 
     //RUN_TEST_CASE(TLx493D_A1B6_ParityCheck, SetWrongParity_ParityCheckEnabled);
+
     TLx493D_A1B6_needsSensor_suiteTearDown();
 
 
-    TLx493D_A1B6_atReset_suiteSetup();
-
     // This test is commented out since we dont check measurement bitfields (BX,BY,BZ,TEMP) at reset.
-    // //RUN_TEST_CASE(TLx493D_A1B6_atReset, regMapatReset_MeasurementBitfields);
-// TODO: make it work
+    // TLx493D_A1B6_atReset_suiteSetup();
+    // RUN_TEST_CASE(TLx493D_A1B6_atReset, regMapatReset_MeasurementBitfields);
     // RUN_TEST_CASE(TLx493D_A1B6_atReset, regMapatReset_nonMeasurementBitfields);
+    // TLx493D_A1B6_atReset_suiteTearDown();
 
-    TLx493D_A1B6_atReset_suiteTearDown();
 
-
-    TLx493D_A1B6_extendedAddresses_suiteSetup();
-
-// TODO: make it work
+    // Only works with properly connected pins setting SDA to low at power-up ! Therefore commented out.
+    // TLx493D_A1B6_extendedAddresses_suiteSetup();
     // RUN_TEST_CASE(TLx493D_A1B6_extendedAddresses, check_initlialization_higher_address)
-
-    TLx493D_A1B6_extendedAddresses_suiteTearDown();
-
+    // TLx493D_A1B6_extendedAddresses_suiteTearDown();
 }

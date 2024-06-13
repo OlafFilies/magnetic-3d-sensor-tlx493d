@@ -1,21 +1,21 @@
+/** std includes. */
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-// project c includes
+/** project c includes. */
+#include "CommunicationInterface.h"
 #include "Logger.h"
 
-// common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
 
-// common to same generation of sensors
 #include "tlx493d_gen_3_common_defines.h"
 #include "tlx493d_gen_3_common.h"
 
-// sensor specific includes
+/** sensor specicifc includes. */
 #include "TLx493D_P3I8_defines.h"
 #include "TLx493D_P3I8_enums.h"
 #include "TLx493D_P3I8.h"
@@ -102,12 +102,12 @@ static TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
     .calculateMagneticFieldAndTemperature = TLx493D_P3I8_calculateMagneticFieldAndTemperature,
     .getMagneticFieldAndTemperature = TLx493D_P3I8_getMagneticFieldAndTemperature,
 
-    // functions related to the "Config" register
+    /** functions related to the "Config" register. */
     .setMeasurement                 = TLx493D_P3I8_setMeasurement,
     .setTrigger                     = TLx493D_P3I8_setTrigger,
     .setSensitivity                 = TLx493D_P3I8_setSensitivity,
 
-    // functions related to the "Mod1" and "Mod2" registers
+    /** functions related to the "Mod1" and "Mod2" registers. */
     .setDefaultConfig               = TLx493D_P3I8_setDefaultConfig,
     .setIICAddress                  = TLx493D_P3I8_setIICAddress,
     .enable1ByteReadMode            = TLx493D_P3I8_enable1ByteReadMode,
@@ -121,12 +121,11 @@ static TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
     .setPowerMode                   = TLx493D_P3I8_setPowerMode,
     .setUpdateRate                  = TLx493D_P3I8_setUpdateRate,
 
-    // functions related to the "Diag" register
+    /** functions related to the "Diag" register. */
     .hasValidData                   = TLx493D_P3I8_hasValidData,
     .isFunctional                   = TLx493D_P3I8_isFunctional,
 
-    // functions available only to a subset of sensors with wake-up functionality
-    // functions related to the "WU" register
+    /** functions available only to a subset of sensors with wake-up functionality related to the "WU" register. */
     .hasWakeUp                      = TLx493D_P3I8_hasWakeUp,
     .isWakeUpEnabled                = TLx493D_P3I8_isWakeUpEnabled,
     .enableWakeUpMode               = TLx493D_P3I8_enableWakeUpMode,
@@ -139,7 +138,7 @@ static TLx493D_CommonFunctions_t TLx493D_P3I8_commonFunctions = {
 
     .printRegisters                 = TLx493D_P3I8_printRegisters,
 
-    // functions used internally and not accessible through the common interface
+    /** functions used internally and not accessible through the common interface. */
     .calculateFuseParity            = TLx493D_P3I8_calculateFuseParity,
     .calculateBusParity             = TLx493D_P3I8_calculateBusParity,
     .calculateConfigurationParity   = TLx493D_P3I8_calculateConfigurationParity,
@@ -246,7 +245,7 @@ bool TLx493D_P3I8_getMagneticFieldAndTemperature(TLx493D_t *sensor, double *x, d
 
 
 bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t val) {
-    // Bug fix : start reading at address 0x04 for Bz_Temp measurement, otherwise registers will be shifted by 4 !
+    /** Bug fix : start reading at address 0x04 for Bz_Temp measurement, otherwise registers will be shifted by 4 ! */
     tlx493d_setReadAddress(sensor, (val == TLx493D_BzTemp_e) ? 0x04 : 0x00);
 
     return tlx493d_gen_3_setMeasurement(sensor, P3I8_CHANNEL_SEL_e, P3I8_CHANNEL_SEL_SAVE_e, val);
@@ -254,7 +253,7 @@ bool TLx493D_P3I8_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t va
 
 
 bool TLx493D_P3I8_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
-    // There is no stop condition for SPI interfaces, so ignore this mode !
+    /** There is no stop condition for SPI interfaces, so ignore this mode ! */
     return (val == TLx493D_ADC_ON_STOP_CONDITION_e) ? false
                                                     : tlx493d_gen_3_setTrigger(sensor, P3I8_TRIGGER_SEL_e, val);
 }
@@ -364,7 +363,7 @@ bool TLx493D_P3I8_setWakeUpThresholdsAsInteger(TLx493D_t *sensor,
 }
 
 
-// thesholds im mT, to be converted to proper format
+/** thesholds im mT, to be converted to proper format. */
 bool TLx493D_P3I8_setWakeUpThresholds(TLx493D_t *sensor, double temperature,
                                       double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
     return tlx493d_gen_3_setWakeUpThresholds(sensor, P3I8_WU_EN_e, P3I8_WU_EN_CP_e, P3I8_WU_PAR_e,
@@ -446,10 +445,10 @@ bool TLx493D_P3I8_hasValidTBit(const TLx493D_t *sensor) {
 
 
 void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
-    sensor->regMap[0x0A] = 0x62; // MOD1
-    sensor->regMap[0x0B] = 0x00; // MOD2
+    sensor->regMap[0x0A] = 0x62; /** MOD1 */
+    sensor->regMap[0x0B] = 0x00; /** MOD2 */
 
-    // for wake-up parity calculation
+    /** for wake-up parity calculation. */
     sensor->regMap[0x0C] = 0x7F;
     sensor->regMap[0x0D] = 0x80;
     sensor->regMap[0x0E] = 0x7F;
@@ -459,7 +458,7 @@ void TLx493D_P3I8_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x12] = 0xCC;
     sensor->regMap[0x13] = 0x2C;
 
-    // P3I8_CHANNEL_SEL_SAVE_e
+    /** P3I8_CHANNEL_SEL_SAVE_e */
     sensor->regMap[0x1B] = 0x00;
 }
 

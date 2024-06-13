@@ -4,15 +4,17 @@
 
 /** std includes. */
 #include <cstdbool>
+// #include <stdbool.h>
 
 /** Arduino includes. */
 #include <Arduino.h>
 
+/** project c includes. */
+#include "tlx493d_types.h"
+
 /** project cpp includes. */
 #include "TwoWireWrapper.hpp"
 
-/** project c includes. */
-#include "tlx493d_types.h"
 
 /**
  * @brief The function `initCommunication` initializes the communication interface of the sensor.
@@ -25,12 +27,13 @@
  * @param[in] executeInit A boolean flag which determines if the initialization is executed or not.
  * 
  * @return Returns a boolean to indicate if the function execution was successful or not.
- * @retval 0 Error.
- * @retval 1 Success.
+ * @retval false Error.
+ * @retval true Success.
 */
 namespace ifx {
     namespace tlx493d {
-        bool initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr, bool executeInit = false);
+        bool initCommunication(TLx493D_t *sensor, TwoWireWrapper &tw, TLx493D_IICAddressType_t iicAdr, bool executeInit);
+        bool initCommunication(TLx493D_t *sensor, TwoWire &tw, TLx493D_IICAddressType_t iicAdr, bool executeInit);
     }
 }
 

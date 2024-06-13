@@ -2,6 +2,7 @@
 #define TLX493D_GEN_3_COMMON_H
 
 
+/** project c includes. */
 #include "tlx493d_types.h"
 
 
@@ -63,7 +64,7 @@ bool tlx493d_gen_3_setWakeUpThresholds(TLx493D_t *sensor, uint8_t wuBF, uint8_t 
 bool tlx493d_gen_3_softwareReset(TLx493D_t *sensor, uint8_t resetBF);
 
 
-// utilities
+/** utilities. */
 bool tlx493d_gen_3_setWakeUpParity(TLx493D_t *sensor, uint8_t wuBF, uint8_t wupBF);
 uint8_t tlx493d_gen_3_calculateWakeUpParity(const TLx493D_t *sensor, uint8_t wuBF);
 
@@ -72,7 +73,7 @@ bool tlx493d_gen_3_hasValidWakeUpParity(const TLx493D_t *sensor, uint8_t wupBF);
 bool tlx493d_gen_3_isInTestMode(const TLx493D_t *sensor, uint8_t testBF);
 
 
-// bool tlx493d_gen_3_hasValidIICadr(TLx493D_t *sensor, uint8_t idBF, uint8_t iicAdrBF);
+/** bool tlx493d_gen_3_hasValidIICadr(TLx493D_t *sensor, uint8_t idBF, uint8_t iicAdrBF); */
 
 uint8_t tlx493d_gen_3_selectIICAddress(const TLx493D_t *sensor, TLx493D_IICAddressType_t addr);
 
@@ -94,4 +95,4 @@ TLx493D_SensitivityType_t tlx493d_gen_3_getSensitivityType(const TLx493D_t *sens
 #endif
 
 
-#endif // TLX493D_GEN_3_COMMON_H
+#endif /** TLX493D_GEN_3_COMMON_H */

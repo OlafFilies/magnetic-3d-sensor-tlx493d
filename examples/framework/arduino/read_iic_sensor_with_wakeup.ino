@@ -18,11 +18,17 @@ const int16_t UPPER_THRESHOLD_X = THRESHOLD;
 const int16_t UPPER_THRESHOLD_Y = THRESHOLD;
 const int16_t UPPER_THRESHOLD_Z = THRESHOLD;
 
+
 /** Definition of the interrupt pin, which will detected the triggered interrupt.
  *  Please be aware that you have to change the pin according to your setup.
  *  Here a XCM1100-XMC2GO is used as microcontroller.
  */
-const uint8_t INTERRUPT_PIN = 9;
+// const uint8_t INTERRUPT_PIN = 9;
+
+
+/** XMC4700-Relax-Kit */
+const uint8_t INTERRUPT_PIN = 2;
+
 
 /** Declaration of the sensor object. */
 TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -72,23 +78,23 @@ void setup() {
  */
 void loop() {
     if( intTriggered ) {
-    double temp1 = 0.0;
-    double valX1 = 0, valY1 = 0, valZ1 = 0;
+        double temp1 = 0.0;
+        double valX1 = 0, valY1 = 0, valZ1 = 0;
 
-    dut.printRegisters();
+        dut.printRegisters();
 
-    dut.getTemperature(&temp1); 
-    dut.getMagneticField(&valX1, &valY1, &valZ1);
- 
-    Serial.println("========================================");
-    Serial.print("Temperature of Sensor 1:\t");Serial.print(temp1);Serial.println(" °C");
-    Serial.print("Magnetic X-Value of Sensor 1:\t");Serial.print(valX1);Serial.println(" mT");
-    Serial.print("Magnetic Y-Value of Sensor 1:\t");Serial.print(valY1);Serial.println(" mT");
-    Serial.print("Magnetic Z-Value of Sensor 1:\t");Serial.print(valZ1);Serial.println(" mT");
+        dut.getTemperature(&temp1); 
+        dut.getMagneticField(&valX1, &valY1, &valZ1);
+    
+        Serial.println("========================================");
+        Serial.print("Temperature of Sensor 1:\t");Serial.print(temp1);Serial.println(" °C");
+        Serial.print("Magnetic X-Value of Sensor 1:\t");Serial.print(valX1);Serial.println(" mT");
+        Serial.print("Magnetic Y-Value of Sensor 1:\t");Serial.print(valY1);Serial.println(" mT");
+        Serial.print("Magnetic Z-Value of Sensor 1:\t");Serial.print(valZ1);Serial.println(" mT");
 
-    delay(2000);
+        delay(2000);
 
-    intTriggered = false;
+        intTriggered = false;
     }
 }
 

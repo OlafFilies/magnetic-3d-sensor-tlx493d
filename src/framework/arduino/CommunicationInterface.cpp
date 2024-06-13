@@ -1,17 +1,11 @@
 /** std includes. */
 #include <cstdbool>
-#include <new>
 
-/** Arduino includes. */
-#include "types.hpp"
+/** project cpp includes. */
+#include "CommunicationInterface.h"
 
 /** project c includes. */
 #include "tlx493d_types.h"
-
-
-/** project cpp includes. */
-#include "IICUsingTwoWire.hpp"
-#include "SPIUsingSPIClass.hpp"
 
 
 extern "C" bool tlx493d_transfer(TLx493D_t *sensor, uint8_t *txBuffer, uint8_t txLen, uint8_t *rxBuffer, uint8_t rxLen) {
@@ -42,9 +36,9 @@ namespace ifx {
                 }
 
                 if( sensor->comInterface.comLibObj.iic_obj != NULL ) {
-                    // if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
-                    //     delete sensor->comInterface.comLibObj.iic_obj->wire;
-                    // }
+                    if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
+                        delete sensor->comInterface.comLibObj.iic_obj->wire;
+                    }
 
                     free(sensor->comInterface.comLibObj.iic_obj);
                     sensor->comInterface.comLibObj.iic_obj = NULL;
@@ -53,14 +47,15 @@ namespace ifx {
             else if( sensor->comIFType == TLx493D_SPI_e ) {
                 if( sensor->comInterface.comLibFuncs != NULL ) {
                     if( executeDeinit ) {
-                       sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
+                        sensor->comInterface.comLibFuncs->deinit.spi_deinit(sensor);
                     }
                 }
 
                 if( sensor->comInterface.comLibObj.iic_obj != NULL ) {
-                    // if( sensor->comInterface.comLibObj.spi_obj->isToBeDeleted ) {
-                    //     delete sensor->comInterface.comLibObj.spi_obj->spi;
-                    // }
+
+                    if( sensor->comInterface.comLibObj.iic_obj->isToBeDeleted ) {
+                        delete sensor->comInterface.comLibObj.spi_obj->spi;
+                    }
 
                     free(sensor->comInterface.comLibObj.spi_obj);
                     sensor->comInterface.comLibObj.spi_obj = NULL;

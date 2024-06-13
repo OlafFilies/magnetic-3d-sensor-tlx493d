@@ -15,7 +15,6 @@ extern "C" {
 
     // Method invoked by Unity before a test suite is run 
     void TLx493D_A1B6_needsSensor_suiteSetup() {
-        // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_A1B6_init(&dut);
 
         bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
@@ -29,19 +28,14 @@ extern "C" {
     
     // Method invoked by Unity after a test suite is run 
     void TLx493D_A1B6_needsSensor_suiteTearDown() {
-        // TODO: deinitCommunication in conjunction with bsc.deinit causes issues !
         ifx::tlx493d::deinitCommunication(&dut, false);
-        // ifx::tlx493d::deinitCommunication(&dut, true);
         bsc.deinit();
-
-        // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
         dut.functions->deinit(&dut);
     }
 
 
     // Method invoked by Unity before a test suite is run 
     void TLx493D_A1B6_atReset_suiteSetup() {
-        // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_A1B6_init(&dut);
 
         bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
@@ -54,22 +48,16 @@ extern "C" {
     
     // Method invoked by Unity after a test suite is run 
     void TLx493D_A1B6_atReset_suiteTearDown() {
-        // TODO: deinitCommunication in conjunction with bsc.deinit causes issues !
         ifx::tlx493d::deinitCommunication(&dut, false);
-        // ifx::tlx493d::deinitCommunication(&dut, true);
         bsc.deinit();
-
-        // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
         dut.functions->deinit(&dut);
     }
 
-    // TODO: make it work !
+
     // Method invoked by Unity before a test suite is run 
     void TLx493D_A1B6_extendedAddresses_suiteSetup() {
-        // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         (void) TLx493D_A1B6_init(&dut);
 
-        // deinit in TEAR_DOWN will cut communication link, so if deinit is called communication must be reinitialized !
         logPrint("\nbsc object used to power on board; check if POWER PIN connected!\ncheck if ADDR pin is connected!\n");
         // power up the board using bsc
         bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
@@ -84,13 +72,8 @@ extern "C" {
 
     // Method invoked by Unity after a test suite is run 
     void TLx493D_A1B6_extendedAddresses_suiteTearDown() {
-        // TODO: deinitCommunication in conjunction with bsc.deinit causes issues !
         ifx::tlx493d::deinitCommunication(&dut, false);
-        // ifx::tlx493d::deinitCommunication(&dut, true);
         bsc.deinit();
-
-        // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
         dut.functions->deinit(&dut);
-        // (void) TLx493D_A1B6_deinit(&dut);
     }
 }

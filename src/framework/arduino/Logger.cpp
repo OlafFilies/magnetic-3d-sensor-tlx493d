@@ -1,52 +1,48 @@
-// std includes
+/** std includes. */
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
+// #include <stdarg.h>
+// #include <stdio.h>
+// #include <string.h>
 
-// Arduino includes
+/** Arduino includes. */
 #include <Arduino.h>
 
-
-// project cpp includes
-
-// project c includes
-#include "Logger.h"
+/** project c includes. */
 #include "tlx493d_types.h"
+#include "Logger.h"
 
 
-namespace ifx {
-    namespace tlx493d {
-        const uint16_t LOGGER_BUFFER_SIZE = 512U;
+const uint16_t LOGGER_BUFFER_SIZE = 512U;
 
-        static void logMessage(const char *prefix, const char *format, va_list vaList) {
-            char buffer[LOGGER_BUFFER_SIZE];
+static void logMessage(const char *prefix, const char *format, va_list vaList) {
+    char buffer[LOGGER_BUFFER_SIZE];
 
-            size_t prefixSize = strlen(prefix);
-            (void) memcpy(buffer, prefix, prefixSize);
-            int ret = vsprintf(buffer + prefixSize, format, vaList);
+    size_t prefixSize = strlen(prefix);
+    (void) memcpy(buffer, prefix, prefixSize);
+    int ret = vsprintf(buffer + prefixSize, format, vaList);
 
-            if( (ret + prefixSize) > LOGGER_BUFFER_SIZE ) {
-                Serial.print("FATAL : Buffer overflow (> ");
-                Serial.print(LOGGER_BUFFER_SIZE);
-                Serial.println(" characters) because message too long !\n");
-            }
-
-            Serial.print(buffer);
-        }
+    if( (ret + prefixSize) > LOGGER_BUFFER_SIZE ) {
+        Serial.print("FATAL : Buffer overflow (> ");
+        Serial.print(LOGGER_BUFFER_SIZE);
+        Serial.println(" characters) because message too long !\n");
     }
+
+    Serial.print(buffer);
 }
 
 
 extern "C" {
     void logPrintRegisters(const TLx493D_t *sensor, const char *headLine = NULL) {
         Serial.println();
-        Serial.println(headLine);
-        // Serial.println();
+
+        if( headLine != NULL ) {
+            Serial.println(headLine);
+        }
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
             logPrint("    0x%02X", sensor->regMap[i]);
-            // Serial.print("  0x");
-            // Serial.print(sensor->regMap[i], HEX);
         }
 
         Serial.println();
@@ -61,7 +57,7 @@ extern "C" {
     void logPrint(const char *format, ...) {
         va_list ap;
         va_start(ap, format);
-        ifx::tlx493d::logMessage("", format, ap);
+        logMessage("", format, ap);
         va_end(ap);
     }
 
@@ -70,7 +66,7 @@ extern "C" {
         Serial.println();
         va_list ap;
         va_start(ap, format);
-        ifx::tlx493d::logMessage("", format, ap);
+        logMessage("", format, ap);
         va_end(ap);
         Serial.println();
     }
@@ -80,7 +76,7 @@ extern "C" {
         Serial.println();
         va_list ap;
         va_start(ap, format);
-        ifx::tlx493d::logMessage("INFO : ", format, ap);
+        logMessage("INFO : ", format, ap);
         va_end(ap);
         Serial.println();
     }
@@ -90,7 +86,7 @@ extern "C" {
         Serial.println();
         va_list ap;
         va_start(ap, format);
-        ifx::tlx493d::logMessage("WARNING : ", format, ap);
+        logMessage("WARNING : ", format, ap);
         va_end(ap);
         Serial.println();
     }
@@ -100,15 +96,13 @@ extern "C" {
         Serial.println();
         va_list ap;
         va_start(ap, format);
-        ifx::tlx493d::logMessage("ERROR : ", format, ap);
+        logMessage("ERROR : ", format, ap);
         va_end(ap);
         Serial.println();
     }
 
 
     void logFlush() {
-        // USE WITH CAUTION ! DEVICE MAY HANGUP !
         Serial.flush();
-        // Serial.println();
     }
 }

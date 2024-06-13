@@ -108,8 +108,6 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_TRUE( dut.functions->getTemperature(&dut, &tsr0) );
     tlx493d_printRegisters(&dut);
 
-    // TEST_ASSERT_EQUAL_FLOAT( t, t0 );
-
     int16_t xsrr, ysrr, zsrr, tsrr;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &xsr, &ysr, &zsr, &tsr);
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xsrr, &ysrr, &zsrr, &tsrr);
@@ -263,7 +261,7 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkModeDefaultConfigFunctionality)
 
     TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[W2BW_CONFIG_REG_e] & 0xFE );
     TEST_ASSERT_EQUAL_HEX8( 0x94, dut.regMap[W2BW_MOD1_REG_e] ); // PR on, CA on
-    TEST_ASSERT_EQUAL_HEX8( 0x01, dut.regMap[W2BW_MOD2_REG_e] );
+    TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[W2BW_MOD2_REG_e] );
 }
 
 

@@ -1,20 +1,21 @@
 #ifndef TLX493D_LOGGER_H
 #define TLX493D_LOGGER_H
 
-/** std includes. */
+
 #ifdef __cplusplus
 
+/** std includes. */
 #include <cstdarg>
-
-using TLx493D_t = struct TLx493D_t;
 
 extern "C" {
 
 #else
 
+/** std includes. */
 #include <stdarg.h>
 
-typedef struct TLx493D_t  TLx493D_t;
+/** project c includes. */
+#include "tlx493d_types.h"
 
 #endif
 
@@ -23,8 +24,9 @@ typedef struct TLx493D_t  TLx493D_t;
  * @brief The function `logPrintRegisters` prints out all the internal registers of the
  * passed sensor object.
  * 
- * @param[in,out] sensor A pointer to a TLx493D_t structure, which represents the TLx493D sensor.
- */
+ * @param[in] sensor A pointer to a TLx493D_t structure, which represents the TLx493D sensor.
+ * @param[in] headLine A string with register names to be printed above the registers for easier reading.
+*/
 void logPrintRegisters(const TLx493D_t *sensor, const char *headLine);
 
 /**
@@ -89,4 +91,4 @@ void logFlush(void);
 #endif
 
 
-#endif // TLX493D_LOGGER_H
+#endif /** TLX493D_LOGGER_H */

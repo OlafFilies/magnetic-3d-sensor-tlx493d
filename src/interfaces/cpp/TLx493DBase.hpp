@@ -2,14 +2,11 @@
 #define TLX493D_BASE_HPP
 
 
-/** std includes */
-// #include <stdbool.h>
+/** std includes. */
 #include <cstdint>
+// #include <stdint.h>
 
-/** project cpp includes */
-#include "types.hpp"
-
-/** project c includes */
+/** project c includes. */
 #include "tlx493d_types.h"
 #include "tlx493d.h"
 
@@ -39,8 +36,8 @@ namespace ifx {
                  * values to the "internal" register map of the sensor object.
                  * 
                  * @return The function `readRegisters` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool readRegisters() {
                     return ::tlx493d_readRegisters(&sensor);
@@ -53,8 +50,8 @@ namespace ifx {
                  * @param[in,out] temperature A pointer to an int16_t variable where the raw temperature value will be stored.
                  *  
                  * @return The function `tlx493d_getRawTemperature` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool getRawTemperature(int16_t *temperature) {
                     return ::tlx493d_getRawTemperature(&sensor, temperature);
@@ -70,8 +67,8 @@ namespace ifx {
                  * @param[in,out] z A pointer to a variable where the raw magnetic field value along the z-axis will be stored.
                  *  
                  * @return The function `getRawMagneticField` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool getRawMagneticField(int16_t *x, int16_t *y, int16_t *z) {
                     return ::tlx493d_getRawMagneticField(&sensor, x, y, z);
@@ -88,8 +85,8 @@ namespace ifx {
                  * @param[in,out] temp  A pointer to a variable where the raw temperature value will be stored.
                  * 
                  * @return The function `getRawMagneticFieldAndTemperature` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool getRawMagneticFieldAndTemperature(int16_t *x, int16_t *y, int16_t *z, int16_t *temp) {
                     return ::tlx493d_getRawMagneticFieldAndTemperature(&sensor, x, y, z, temp);
@@ -103,8 +100,8 @@ namespace ifx {
                  * @param[in,out] temperature A pointer to a double variable where the temperature value will be stored in °C.
                  *  
                  * @return The function `getTemperature` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool getTemperature(double *temperature) {
                     return ::tlx493d_getTemperature(&sensor, temperature);
@@ -120,8 +117,8 @@ namespace ifx {
                  * @param[in,out] z A pointer to a variable where the magnetic field value in mT along the z-axis will be stored.
                  *  
                  * @return The function `getMagneticField` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool getMagneticField(double *x, double *y, double *z) {
                     return ::tlx493d_getMagneticField(&sensor, x, y, z);
@@ -139,8 +136,8 @@ namespace ifx {
                  * @param[in,out] temp  A pointer to a double variable where the temperature value in °C will be stored.
                  *  
                  * @return The function `getMagneticFieldAndTemperature` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool getMagneticFieldAndTemperature(double *x, double *y, double *z, double *temp) {
                     return ::tlx493d_getMagneticFieldAndTemperature(&sensor, x, y, z, temp);
@@ -158,8 +155,8 @@ namespace ifx {
                  * enum `TLx493D_MeasurementType_t` in the library file `tlx493d_types.h`.
                  *  
                  * @return The function `setMeasurement` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool setMeasurement(TLx493D_MeasurementType_t meas) {
                     return ::tlx493d_setMeasurement(&sensor, meas);
@@ -175,8 +172,8 @@ namespace ifx {
                  * `TLx493D_TriggerType_t` in the library file `tlx493d_types`.
                  *   
                  * @return The function `setTrigger` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool setTrigger(TLx493D_TriggerType_t bits) {
                     return ::tlx493d_setTrigger(&sensor, bits);
@@ -187,13 +184,13 @@ namespace ifx {
                  * It is writing to the corresponding bitfields in the registers of the sensor in order to set
                  * the desired measuring range.
                  * 
-                 * @param[in] range The `range` parameter is of type `TLx493D_SensitivityType_t`, which is an enumeration type
+                 * @param[in] range The `range` parameter is of type `TLx493D_SensitivityType_t, which is an enumeration type
                  * that represents the sensitivity range of the sensor. All available options can be found in the enum
                  * `TLx493D_SensitivityType_t` in the library file `tlx493d_types`.
                  *  
                  * @return The function `setSensitivity` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool setSensitivity(TLx493D_SensitivityType_t range) {
                     return ::tlx493d_setSensitivity(&sensor, range);
@@ -207,8 +204,8 @@ namespace ifx {
                  * the proper functionality of the sensor.
                  * 
                  * @return The function `setDefaultConfig` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool setDefaultConfig() {
                     return ::tlx493d_setDefaultConfig(&sensor);
@@ -224,8 +221,8 @@ namespace ifx {
                  * in the library file `tlx493d_types.h`.
                  *  
                  * @return The function `setIICAddress` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool setIICAddress(TLx493D_IICAddressType_t addr) {
                     return ::tlx493d_setIICAddress(&sensor, addr);
@@ -235,8 +232,8 @@ namespace ifx {
                  * @brief The function `enableCollisionAvoidance` enables collision avoidance for a TLx493D sensor.
                  * 
                  * @return The function `enableCollisionAvoidance` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool enableCollisionAvoidance() {
                     return ::tlx493d_enableCollisionAvoidance(&sensor);
@@ -246,8 +243,8 @@ namespace ifx {
                  * @brief The function `disableCollisionAvoidance` disables collision avoidance for a TLx493D sensor.
                  * 
                  * @return The function `disableCollisionAvoidance` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool disableCollisionAvoidance() {
                     return ::tlx493d_disableCollisionAvoidance(&sensor);
@@ -257,8 +254,8 @@ namespace ifx {
                  * @brief The function `enableInterrupt` enables interrupts for a TLx493D sensor.
                  * 
                  * @return The function `enableInterrupt` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool enableInterrupt() {
                     return ::tlx493d_enableInterrupt(&sensor);
@@ -268,8 +265,8 @@ namespace ifx {
                  * @brief The function `disableInterrupt` is used to disable interrupts for a TLx493D sensor.
                  * 
                  * @return The function `disableInterrupt` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool disableInterrupt() {
                     return ::tlx493d_disableInterrupt(&sensor);
@@ -285,8 +282,8 @@ namespace ifx {
                  * `TLx493D_PowerModeType_t` in the library file `tlx493d_types.h`.
                  * 
                  * @return The function `setPowerMode` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool setPowerMode(TLx493D_PowerModeType_t mode) {
                     return ::tlx493d_setPowerMode(&sensor, mode);
@@ -302,8 +299,8 @@ namespace ifx {
                  * in the library file ´tlx493d_types.h`.
                  *  
                  * @return The function `setUpdateRate` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool setUpdateRate(TLx493D_UpdateRateType_t bit) {
                     return ::tlx493d_setUpdateRate(&sensor, bit);
@@ -317,8 +314,8 @@ namespace ifx {
                  * data is valid or not.
                  * 
                  * @return The function `hasValidData` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool hasValidData() {
                     return ::tlx493d_hasValidData(&sensor);
@@ -330,8 +327,8 @@ namespace ifx {
                  * the sensor is still functional.  
                  * 
                  * @return The function `isFunctional` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.  
+                 * @retval false Error.
+                 * @retval true Function execution was successful.  
                  */
                 bool isFunctional() {
                     return ::tlx493d_isFunctional(&sensor);
@@ -344,8 +341,8 @@ namespace ifx {
                  * It simply checks the bitfield which indicates if the sensor has a wake-up functionality or not. 
                  * 
                  * @return The function `hasWakeUp` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.  
+                 * @retval false Error.
+                 * @retval true Function execution was successful.  
                  */
                 bool hasWakeUp() {
                     return ::tlx493d_hasWakeUp(&sensor);
@@ -356,8 +353,8 @@ namespace ifx {
                  * It checks the bitfield of the sensor which gives you the information if the wake-up is enabled or not.
                  * 
                  * @return The function `isWakeUpEnabled` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool isWakeUpEnabled() {
                     return ::tlx493d_isWakeUpEnabled(&sensor);
@@ -367,8 +364,8 @@ namespace ifx {
                  * @brief The function `enableWakeUpMode` enables the wake-up mode for the TLx493D sensor.
                  * 
                  * @return The function `enableWakeUpMode` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool enableWakeUpMode() {
                     return ::tlx493d_enableWakeUpMode(&sensor);
@@ -378,8 +375,8 @@ namespace ifx {
                  * @brief The function `disableWakeUpMode` disables the wake-up mode of a TLx493D sensor.
                  * 
                  * @return The function `disableWakeUpMode` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful.
+                 * @retval false Error.
+                 * @retval true Function execution was successful.
                  */
                 bool disableWakeUpMode() {
                     return ::tlx493d_disableWakeUpMode(&sensor);
@@ -399,8 +396,8 @@ namespace ifx {
                  * @param[in] zh_th The upper threshold value for the magnetic field in z-axis.
                  * 
                  * @return The function `setWakeUpThresholdsAsInteger` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool setWakeUpThresholdsAsInteger(int16_t xl_th, int16_t xh_th, int16_t yl_th, int16_t yh_th, int16_t zl_th, int16_t zh_th) {
                     return ::tlx493d_setWakeUpThresholdsAsInteger(&sensor, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
@@ -421,8 +418,8 @@ namespace ifx {
                  * @param[in] zh_th       The upper threshold value for the magnetic field in z-axis.
                  * 
                  * @return The function `setWakeUpThresholds` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool setWakeUpThresholds(double temperature, double xl_th, double xh_th, double yl_th, double yh_th, double zl_th, double zh_th) {
                     return ::tlx493d_setWakeUpThresholds(&sensor, temperature, xl_th, xh_th, yl_th, yh_th, zl_th, zh_th);
@@ -432,8 +429,8 @@ namespace ifx {
                  * @brief The function `softwareReset` performs a software reset on the TLx493D sensor.
                  * 
                  * @return The function `softwareReset` is returning a boolean value.
-                 * @retval 0 Error.
-                 * @retval 1 Function execution was successful. 
+                 * @retval false Error.
+                 * @retval true Function execution was successful. 
                  */
                 bool softwareReset() {
                     return ::tlx493d_softwareReset(&sensor);
@@ -477,6 +474,7 @@ namespace ifx {
                     ::tlx493d_calculateRawMagneticFieldAtTemperature(&sensor, rawTemp, sens, xInmT, yInmT, zInmT, x, y, z);
                 }
 
+
                 /**
                  * @brief The function `printRegisters` prints out the internal registers of the sensor object. It can be used
                  * to check certain values of the sensor register map.
@@ -511,8 +509,8 @@ namespace ifx {
                  * 
                  * @return A `TLx493D_SupportedComLibraryInterfaceType_t` enum which contains the communication
                  * interface type.
-                 * @retval TLx493D_I2C_e 0
-                 * @retval TLx493D_SPI_e 1
+                 * @retval TLx493D_I2C_e If the sensor communication interface is set to I2C.
+                 * @retval TLx493D_SPI_e If the sensor communication interface is set to SPI.
                  */
                 TLx493D_SupportedComLibraryInterfaceType_t getComLibIFType() {
                     return sensor.comIFType;
@@ -574,6 +572,7 @@ namespace ifx {
             private:
 
                 using BusType = typename BusWrapper::BusType;
+                // typedef typename BusWrapper::BusType BusType;
 
 
                 TLx493D();

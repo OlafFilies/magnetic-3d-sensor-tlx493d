@@ -117,6 +117,9 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     tlx493d_gen_2_convertTemperatureToRaw(&dut, tsr0, &tsrr3);
     dut.functions->calculateRawMagneticFieldAtTemperature(&dut, tsrr, TLx493D_SHORT_RANGE_e, xsr, ysr, zsr, &xsrr3, &ysrr3, &zsrr3);
 
+    // back to TLx493D_FULL_RANGE_e
+    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );
+
     TEST_ASSERT_EQUAL_FLOAT( tsr, tsr0 );
     TEST_ASSERT_EQUAL_INT16( tsrr, tsrr3 );
     TEST_ASSERT_EQUAL_INT16( xsrr, xsrr3 );
@@ -128,10 +131,6 @@ TEST_IFX(TLx493D_P2B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_FLOAT_WITHIN( 1, xsr, xfr );
     TEST_ASSERT_FLOAT_WITHIN( 1, ysr, yfr );
     TEST_ASSERT_FLOAT_WITHIN( 1, zsr, zfr );
-
-
-    // back to TLx493D_FULL_RANGE_e
-    TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_FULL_RANGE_e) );
 }
 
 

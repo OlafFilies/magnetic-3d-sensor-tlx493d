@@ -3,16 +3,23 @@
 
 
 /** std includes. */
+// #ifdef __AVR__
+
+// #include <stdbool.h>
+
+// #else
+
+/** std includes. */
 #include <cstdbool>
 
-/** Arduino includes. */
-#include <Arduino.h>
+// #endif
+
+/** project c includes. */
+#include "tlx493d_types.h"
 
 /** project cpp includes. */
 #include "Kit2GoBoardSupport.hpp"
 
-/** project c includes. */
-#include "tlx493d_types.h"
 
 /**
  * @brief The `initBoardSupport` function initializes the board support class. It can be used to define power, address and select pins
@@ -22,8 +29,8 @@
  * @param[in,out] bsc A pointer to a board support class instance.
  * 
  * @return The function `initBoardSupport` returns a bool value to indicate if the execution was successful.
- * @retval 0 Error.
- * @retval 1 Successful.
+ * @retval false Error.
+ * @retval true Successful.
  */
 namespace ifx {
     namespace tlx493d {

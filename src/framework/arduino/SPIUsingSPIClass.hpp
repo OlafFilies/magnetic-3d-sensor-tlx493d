@@ -2,18 +2,18 @@
 #define TLX493D_SPI_USING_SPICLASS_HPP
 
 
-// std includes
+/** std includes. */
 #include <cstdbool>
+// #include <stdbool.h>
 
-// Arduino includes
+/** Arduino includes. */
 #include <Arduino.h>
 
-// project cpp includes
-#include "SPIClassWrapper.hpp"
-
-// project c includes
-// common to all sensors
+/** project c includes. */
 #include "tlx493d_types.h"
+
+/** project cpp includes. */
+#include "SPIClassWrapper.hpp"
 
 
 namespace ifx {
@@ -30,10 +30,13 @@ namespace ifx {
          * @param[in,out] dataMode Determines the desired data mode for the SPI communication. The default values is \b SPI_MODE2.
          * 
          * @return A boolean value which indicates if the initialization was successful or not.
-         * @retval 0 Error.
-         * @retval 1 Success.
+         * @retval false Error.
+         * @retval true Success.
          */
-        bool initCommunication(TLx493D_t *sensor, SPIClass &spi, bool executeInit = false, uint32_t clockFreq = 200000, uint8_t bitOrder = MSBFIRST, uint8_t dataMode = SPI_MODE2);
+        bool initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi, bool executeInit = false,
+                               uint32_t clockFreq = 200000, uint8_t bitOrder = MSBFIRST, uint8_t dataMode = SPI_MODE2);
+        bool initCommunication(TLx493D_t *sensor, SPIClass &spi, bool executeInit = false,
+                               uint32_t clockFreq = 200000, uint8_t bitOrder = MSBFIRST, uint8_t dataMode = SPI_MODE2);
     }
 }
 

@@ -1,6 +1,8 @@
 ########################
 ### A1B6
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 iic flash monitor
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 iic_c_style flash monitor
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 iic_ext_addr flash monitor
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 A1B6_needsSensor monitor
 (make  -f Makefile.arduino.mk FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 A1B6_needsSensor monitor) 2>&1 | tee log
@@ -13,6 +15,7 @@ make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 mon
 ########################
 ### A2B6
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 iic flash monitor
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 iic_c_style flash monitor
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 A2B6_needsSensor monitor
 #
@@ -23,21 +26,25 @@ make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM16 monito
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic flash monitor
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 iic_c_style flash monitor
 #
-(make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 P2B6_needsSensor) 2>&1 | tee log
+(make  -f Makefile.arduino.mk FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 P2B6_needsSensor) 2>&1 | tee log
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 P2B6_needsSensor monitor
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM21 monitor
 
 
 ### W2B6
-make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM17 iic flash monitor
+(make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM17 iic compile) 2>&1 | tee log
+
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO     PORT=COM17 iic flash monitor
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO     PORT=COM17 iic_c_style flash monitor
 #
-make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM17 W2B6_needsSensor monitor
-(make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM17 W2B6_needsSensor) 2>&1 | tee log
+make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM17 W2B6_needsSensor monitor
+(make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM17 W2B6_needsSensor) 2>&1 | tee log
 #
-make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 W2B6_needsSensor monitor
+make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 W2B6_needsSensor monitor
 #
-make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 monitor
+make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic flash monitor
+make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 monitor
 
 
 ### W2BW
@@ -66,3 +73,9 @@ make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 spi fl
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 P3I8_needsSensor monitor
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 monitor
+
+
+
+
+### Arduino Uno
+make  -f Makefile.arduino.mk  FQBN=arduino:avr:uno PORT=COM16 iic flash monitor

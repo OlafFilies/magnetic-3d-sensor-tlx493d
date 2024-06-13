@@ -22,9 +22,6 @@ extern "C" {
         ifx::tlx493d::initBoardSupport(&dut, bsc);
         bsc.init();
 
-        // ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
-        // bsc.enablePower(true);
-
         ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e, true);
         dut.functions->setDefaultConfig(&dut);
     }

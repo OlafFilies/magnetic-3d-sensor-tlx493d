@@ -9,12 +9,17 @@ const uint8_t POWER_PIN = LED2;
 /** Declaration of the sensor. */
 TLx493D_t dut;
 
+uint8_t count = 0;
+TLx493D_SupportedSensorType_t sensorType = TLx493D_A2B6_e;
+
 
 void setup() {
     Serial.begin(115200);
     delay(3000);
 
-    /** Setting the defined power up pin as input and enabling it. */
+    tlx493d_init(&dut, sensorType);
+
+    /** Setting the defined power up pin as output and set to VDD / high value. */
     pinMode(POWER_PIN, OUTPUT);
     digitalWrite(POWER_PIN, HIGH);
 
@@ -22,8 +27,7 @@ void setup() {
      *  After that the default configuration of the sensor is set. This means
      *  1-Byte read mode and interrupt disabled.
      */
-    tlx493d_init(&dut, TLx493D_P2B6_e);
-    ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e);
+    ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e, true);
     tlx493d_setDefaultConfig(&dut);
 
     Serial.println("setup done.");
@@ -63,4 +67,31 @@ void loop() {
     Serial.print("\n");
 
     delay(1000);
+
+    Serial.print("count : ");
+    Serial.println(count);
+
+    if( ++count == 5 ) {
+        Serial.println("\nBefore reset -------------------------------------------------------------------------------------------------------");
+
+        // If reset fails for A1B6 and W2BW : check drive strength of power pin !
+        ifx::tlx493d::deinitCommunication(&dut, sensorType != TLx493D_A1B6_e);
+        dut.functions->deinit(&dut);
+
+        Serial.println("\npower low --------");
+        digitalWrite(POWER_PIN, LOW);
+        delayMicroseconds(250000);
+
+        tlx493d_init(&dut, sensorType);
+
+        Serial.println("\npower high --------");
+        digitalWrite(POWER_PIN, HIGH);
+        delayMicroseconds(0);
+
+        ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e, true);
+        tlx493d_setDefaultConfig(&dut);
+
+        Serial.println("\nAfter reset -------------------------------------------------------------------------------------------------------");
+        count = 0;
+    }
 }
