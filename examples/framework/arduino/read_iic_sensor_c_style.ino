@@ -3,7 +3,7 @@
 
 
 /** Definition of the power pin. */
-const uint8_t POWER_PIN = LED2;
+const uint8_t POWER_PIN = 15; // XMC : LED2
 
 
 /** Declaration of the sensor. */

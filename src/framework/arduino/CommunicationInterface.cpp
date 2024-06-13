@@ -1,5 +1,14 @@
 /** std includes. */
-#include <cstdbool>
+#ifdef __AVR__
+
+    #include <stdbool.h>
+
+#else
+
+    #include <cstdbool>
+
+#endif
+
 
 /** project cpp includes. */
 #include "CommunicationInterface.h"

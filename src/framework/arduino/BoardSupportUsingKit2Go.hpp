@@ -3,16 +3,16 @@
 
 
 /** std includes. */
-// #ifdef __AVR__
+#ifdef __AVR__
 
-// #include <stdbool.h>
+    #include <stdbool.h>
 
-// #else
+#else
 
-/** std includes. */
-#include <cstdbool>
+    #include <cstdbool>
 
-// #endif
+#endif
+
 
 /** project c includes. */
 #include "tlx493d_types.h"

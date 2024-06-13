@@ -78,4 +78,4 @@ make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO PORT=COM22 monito
 
 
 ### Arduino Uno
-make  -f Makefile.arduino.mk  FQBN=arduino:avr:uno PORT=COM16 iic flash monitor
+make  -f Makefile.arduino.mk  FQBN=arduino:avr:uno PORT=COM16 iic compile

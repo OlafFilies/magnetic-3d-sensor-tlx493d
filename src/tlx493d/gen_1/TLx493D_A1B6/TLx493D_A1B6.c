@@ -18,6 +18,9 @@
 #include "TLx493D_A1B6.h"
 
 
+#ifdef USE_TLx493D_A1B6      
+
+
 /** register enums. */
 typedef enum {
     TLx493D_A1B6_Temp_ENABLE_default,
@@ -692,3 +695,6 @@ bool TLx493D_A1B6_hasValidPDBit(const TLx493D_t *sensor) {
 void TLx493D_A1B6_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_A1B6_REGISTER_HEADLINE); 
 }
+
+
+#endif

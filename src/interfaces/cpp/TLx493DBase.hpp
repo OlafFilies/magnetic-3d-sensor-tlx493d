@@ -3,8 +3,16 @@
 
 
 /** std includes. */
-#include <cstdint>
-// #include <stdint.h>
+#ifdef __AVR__
+
+    #include <stdint.h>
+
+#else
+
+    #include <cstdint>
+
+#endif
+
 
 /** project c includes. */
 #include "tlx493d_types.h"

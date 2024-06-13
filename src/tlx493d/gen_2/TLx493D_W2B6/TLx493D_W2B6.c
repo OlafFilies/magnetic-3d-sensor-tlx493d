@@ -21,6 +21,9 @@
 #include "TLx493D_W2B6.h"
 
 
+#ifdef USE_TLx493D_W2B6      
+
+
 static TLx493D_Register_t TLx493D_W2B6_regDef[] = {
     { /* W2B6_BX_MSBS_e, */    TLx493D_READ_MODE_e,        0x00, 0xFF, 0, 8 },
     { /* W2B6_BY_MSBS_e, */    TLx493D_READ_MODE_e,        0x01, 0xFF, 0, 8 },
@@ -441,3 +444,6 @@ double TLx493D_W2B6_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 void TLx493D_W2B6_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_W2B6_REGISTER_HEADLINE); 
 }
+
+
+#endif

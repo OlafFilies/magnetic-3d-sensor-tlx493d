@@ -3,10 +3,18 @@
 
 
 /** std includes. */
-#include <cstdbool>
-#include <cstdint>
-// #include <stdbool.h>
-// #include <stdint.h>
+#ifdef __AVR__
+
+    #include <stdbool.h>
+    #include <stdint.h>
+
+#else
+
+    #include <cstdbool>
+    #include <cstdint>
+
+#endif
+
 
 /** project cpp includes. */
 #include "types.hpp"

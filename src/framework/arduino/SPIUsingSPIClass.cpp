@@ -1,11 +1,23 @@
 /** std includes. */
-#include <cstddef>
-#include <cstdlib>
-// #include <stddef.h>
-// #include <stdlib.h>
+#ifdef __AVR__
+
+    #include <stddef.h>
+    #include <stdlib.h>
+
+#else
+
+    // #include <malloc.h>
+    #include <cstddef>
+    #include <cstdlib>
+
+#endif
+
 
 /** project c includes. */
 #include "tlx493d_types.h"
+
+/** TODO: fix XMCLib SPISettings incompatibilities ! P3I8 will not work for any other platform other than XMCLib ! */
+#include "tlx493d_common_defines.h"
 
 /** project cpp includes. */
 #include "types.hpp"
@@ -14,24 +26,25 @@
 
 namespace ifx {
     namespace tlx493d {
-        static uint8_t     spiReadAddress = 0x00;
-        static SPISettings settings;
+        static uint8_t   spiReadAddress = 0x00;
 
 
-        // static void initModeSPI(TLx493D_t *sensor) {
-        //     sensor->comInterface.comLibObj.spi_obj->spi->getBus().setDataMode(SPI_MODE2);
-        //     sensor->comInterface.comLibObj.spi_obj->spi->getBus().setClockDivider(SPI_CLOCK_DIV8);
-        //     sensor->comInterface.comLibObj.spi_obj->spi->getBus().setBitOrder(MSBFIRST);
-        // }
+#ifdef USE_TLx493D_P3I8      
+
+        static uint32_t  clockFreq = 200000;
+        static uint8_t   bitOrder  = MSBFIRST;
+        static uint8_t   dataMode  = SPI_MODE2;
+
+#endif
 
 
         static bool initSPI(TLx493D_t *sensor) {
-            sensor->comInterface.comLibObj.spi_obj->spi->init(settings);
-            // initModeSPI(sensor);
 
-            // sensor->comInterface.comLibObj.spi_obj->spi.getBus().setDataMode(SPI_MODE2);
-            // sensor->comInterface.comLibObj.spi_obj->spi.getBus().setClockDivider(SPI_CLOCK_DIV8);
-            // sensor->comInterface.comLibObj.spi_obj->spi.getBus().setBitOrder(MSBFIRST);
+#ifdef USE_TLx493D_P3I8      
+
+            sensor->comInterface.comLibObj.spi_obj->spi->init(SPISettings(clockFreq, bitOrder, dataMode));
+
+#endif
 
             return true;
         }
@@ -74,7 +87,7 @@ namespace ifx {
 
 
         bool initCommunication(TLx493D_t *sensor, SPIClassWrapper &spi, bool executeInit,
-                               uint32_t clockFreq, uint8_t bitOrder, uint8_t dataMode) {
+                               uint32_t pClockFreq, uint8_t pBitOrder, uint8_t pDataMode) {
             sensor->comInterface.comLibObj.spi_obj                = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
             sensor->comInterface.comLibObj.spi_obj->spi           = &spi;
             sensor->comInterface.comLibObj.spi_obj->isToBeDeleted = false;
@@ -82,9 +95,15 @@ namespace ifx {
             sensor->comInterface.comLibFuncs                      = &comLibFuncs_spi;
 
             if( executeInit ) {
-                settings.clockFreq = clockFreq;
-                settings.bitOrder  = bitOrder;
-                settings.dataMode  = dataMode;
+
+#ifdef USE_TLx493D_P3I8      
+
+                clockFreq = pClockFreq;
+                bitOrder  = pBitOrder;
+                dataMode  = pDataMode;
+
+#endif
+
                 sensor->comInterface.comLibFuncs->init.spi_init(sensor);
             }
 
@@ -92,7 +111,7 @@ namespace ifx {
         }
 
 
-        bool initCommunication(TLx493D_t *sensor, SPIClass &spi, bool executeInit, uint32_t clockFreq, uint8_t bitOrder, uint8_t dataMode) {
+        bool initCommunication(TLx493D_t *sensor, SPIClass &spi, bool executeInit, uint32_t pClockFreq, uint8_t pBitOrder, uint8_t pDataMode) {
             sensor->comInterface.comLibObj.spi_obj                = (TLx493D_SPIObject_t *) malloc(sizeof(TLx493D_SPIObject_t));
             sensor->comInterface.comLibObj.spi_obj->spi           = new SPIClassWrapper(spi);
             sensor->comInterface.comLibObj.spi_obj->isToBeDeleted = true;
@@ -100,12 +119,16 @@ namespace ifx {
             sensor->comInterface.comLibFuncs                      = &comLibFuncs_spi;
 
             if( executeInit ) {
-                settings.clockFreq = clockFreq;
-                settings.bitOrder  = bitOrder;
-                settings.dataMode  = dataMode;
+
+#ifdef USE_TLx493D_P3I8      
+
+                clockFreq = pClockFreq;
+                bitOrder  = pBitOrder;
+                dataMode  = pDataMode;
+
+#endif
 
                 sensor->comInterface.comLibFuncs->init.spi_init(sensor);
-                // initModeSPI(sensor);
             }
 
             return true;

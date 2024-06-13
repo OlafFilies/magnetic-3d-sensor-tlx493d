@@ -1,10 +1,18 @@
 /** std includes. */
-#include <cstdarg>
-#include <cstdio>
-#include <cstring>
-// #include <stdarg.h>
-// #include <stdio.h>
-// #include <string.h>
+#ifdef __AVR__
+
+    #include <stdarg.h>
+    #include <stdio.h>
+    #include <string.h>
+
+#else
+
+    #include <cstdarg>
+    #include <cstdio>
+    #include <cstring>
+
+#endif
+
 
 /** Arduino includes. */
 #include <Arduino.h>

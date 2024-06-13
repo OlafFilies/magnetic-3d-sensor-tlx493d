@@ -6,7 +6,6 @@ using namespace ifx::tlx493d;
 
 
 /** Definition of the power and chip select pin. */
-const uint8_t POWER_PIN       = LED2;
 const uint8_t CHIP_SELECT_PIN = 3;
 
 /** Declaration of the sensor object. */

@@ -3,8 +3,16 @@
 
 
 /** std includes. */
-#include <cstdbool>
-// #include <stdbool.h>
+#ifdef __AVR__
+
+    #include <stdbool.h>
+
+#else
+
+    #include <cstdbool>
+
+#endif
+
 
 /** Arduino includes. */
 #include <Arduino.h>

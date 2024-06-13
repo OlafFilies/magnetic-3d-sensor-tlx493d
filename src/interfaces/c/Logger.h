@@ -4,8 +4,18 @@
 
 #ifdef __cplusplus
 
+
 /** std includes. */
-#include <cstdarg>
+#ifdef __AVR__
+
+    #include <stdarg.h>
+
+#else
+
+    #include <cstdarg>
+
+#endif
+
 
 extern "C" {
 
