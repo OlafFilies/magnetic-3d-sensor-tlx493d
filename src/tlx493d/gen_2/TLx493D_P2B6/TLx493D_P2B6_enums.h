@@ -67,4 +67,4 @@ typedef enum {
 } TLx493D_P2B6_SpecialRegisters_te;
 
 
-#endif // TLX493D_P2B6_ENUMS_H
+#endif /** TLX493D_P2B6_ENUMS_H */

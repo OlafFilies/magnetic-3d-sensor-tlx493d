@@ -25,16 +25,9 @@ TEST_GROUP(TLx493D_P3B6_needsSensor);
 TEST_GROUP(TLx493D_P3B6_needsSensorInternal);
 
 
-// static double  x, y, z, t;
-
-
 // Setup method called before every individual test defined for this test group
 static TEST_SETUP(TLx493D_P3B6_needsSensorInternal)
 {
-    // x = 0.0;
-    // y = 0.0;
-    // z = 0.0;
-    // t = 0.0;
 }
 
 
@@ -196,12 +189,6 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigMeasurementFunctionality)
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
     TEST_ASSERT_FALSE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
-
-
-    // Supported
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_VHall_Bias_e) );
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_Spintest_e) );
-    // TEST_ASSERT_TRUE( dut.functions->setMeasurement(&dut, TLx493D_SAT_test_e) );
 
 
     // logPrint("TLx493D_BxTemp_e\n");

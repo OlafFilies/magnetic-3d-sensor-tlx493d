@@ -3,7 +3,6 @@
 
 // test includes
 #include "Test_includes.h"
-// #include "Test_utils.h"
 
 #include "TLx493D_A2B6_defines.h"
 #include "TLx493D_A2B6_enums.h"

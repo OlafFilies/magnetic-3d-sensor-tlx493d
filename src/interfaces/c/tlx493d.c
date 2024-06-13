@@ -1,19 +1,17 @@
-// std includes
+/** std includes. */
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-// project c includes
+/** project c includes. */
 #include "tlx493d.h"
-
-// common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
 
-// sensor specific includes
+/** sensor specific includes. */
 #include "TLx493D_A1B6.h"
 #include "TLx493D_A2B6.h"
 #include "TLx493D_P2B6.h"
@@ -22,29 +20,52 @@
 #include "TLx493D_P3B6.h"
 #include "TLx493D_P3I8.h"
 
-// functions common to all sensors
+
+/** functions common to all sensors. */
 bool tlx493d_init(TLx493D_t *sensor, TLx493D_SupportedSensorType_t sensorType) {
    switch(sensorType) {
+
+#ifdef USE_TLx493D_A1B6      
       case TLx493D_A1B6_e : return TLx493D_A1B6_init(sensor);
                             break;                              
+#endif
 
+
+#ifdef USE_TLx493D_A2B6      
       case TLx493D_A2B6_e : return TLx493D_A2B6_init(sensor);
                             break;
+#endif
 
+
+#ifdef USE_TLx493D_P2B6      
       case TLx493D_P2B6_e : return TLx493D_P2B6_init(sensor);
                             break;
+#endif
 
+
+#ifdef USE_TLx493D_W2B6      
       case TLx493D_W2B6_e : return TLx493D_W2B6_init(sensor);
                             break;
+#endif
 
+
+#ifdef USE_TLx493D_W2BW      
       case TLx493D_W2BW_e : return TLx493D_W2BW_init(sensor);
                             break;
+#endif
 
+
+#ifdef USE_TLx493D_P3B6      
       case TLx493D_P3B6_e : return TLx493D_P3B6_init(sensor);
                             break;
+#endif
 
+
+#ifdef USE_TLx493D_P3I8      
       case TLx493D_P3I8_e : return TLx493D_P3I8_init(sensor);
                             break;
+#endif
+
 
       default : return false;
    }

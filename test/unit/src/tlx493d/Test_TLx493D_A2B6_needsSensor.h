@@ -107,8 +107,6 @@ TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkGetMagneticFieldAndTemperature)
     TEST_ASSERT_TRUE( dut.functions->getTemperature(&dut, &tsr0) );
     tlx493d_printRegisters(&dut);
 
-    // TEST_ASSERT_EQUAL_FLOAT( t, t0 );
-
     int16_t xsrr, ysrr, zsrr, tsrr;
     dut.functions->calculateMagneticFieldAndTemperature(&dut, &xsr, &ysr, &zsr, &tsr);
     dut.functions->calculateRawMagneticFieldAndTemperature(&dut, &xsrr, &ysrr, &zsrr, &tsrr);
@@ -250,7 +248,7 @@ TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkConfigSensitivityFunctionality)
 // Check if setDefaultConfig worked properly and data can be read and expected values are set.
 TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkModeDefaultConfigFunctionality)
 {
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     tlx493d_printRegisters(&dut);
 
     TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[A2B6_CONFIG_REG_e] & 0xFE ); // all defaults
@@ -261,26 +259,23 @@ TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkModeDefaultConfigFunctionality)
 
 TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkModeIICAddressFunctionality)
 {
-    // tlx493d_printRegisters(&dut);
-    // tlx493d_logPrint("addr : %x", dut.comLibIFParams.i2c_params.address << 1);
-
     TEST_ASSERT_TRUE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A3_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x03, tlx493d_common_returnBitfield(&dut, A2B6_IICADR_e) );
     TEST_ASSERT_TRUE( TLx493D_A2B6_hasValidIICadr(&dut) );
 
     TEST_ASSERT_TRUE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A2_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x02, tlx493d_common_returnBitfield(&dut, A2B6_IICADR_e) );
     TEST_ASSERT_TRUE( TLx493D_A2B6_hasValidIICadr(&dut) );
 
     TEST_ASSERT_TRUE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A1_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, A2B6_IICADR_e) );
     TEST_ASSERT_TRUE( TLx493D_A2B6_hasValidIICadr(&dut) );
 
     TEST_ASSERT_TRUE( dut.functions->setIICAddress(&dut, TLx493D_IIC_ADDR_A0_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, A2B6_IICADR_e) );
     TEST_ASSERT_TRUE( TLx493D_A2B6_hasValidIICadr(&dut) );
 }
@@ -397,4 +392,3 @@ TEST_GROUP_RUNNER(TLx493D_A2B6_needsSensor)
 
     TLx493D_A2B6_needsSensor_suiteTearDown();
 }
-

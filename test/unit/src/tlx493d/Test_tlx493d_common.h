@@ -20,17 +20,12 @@ TEST_GROUP(SensorsCommon);
 // Setup method called before every individual test defined for this test group
 static TEST_SETUP(SensorsCommon)
 {
-    // 'main' initializes at startup, so either init everything or nothing at all, otherwise communication will be lost !
-    // dut.functions->init(&dut);
-    // memset(dut.regMap, 0, dut.regMapSize);
 }
 
 
 // Tear down method called before every individual test defined for this test group
 static TEST_TEAR_DOWN(SensorsCommon)
 {
-    // If deinitializing here make sure to reinit in 'TEST_SETUP' or communication will be lost !
-    // dut.functions->deinit(&dut);
 }
 
 

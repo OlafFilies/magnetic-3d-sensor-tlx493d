@@ -1,12 +1,12 @@
 // std includes
-#include <stdbool.h>
 
 // Arduino includes
-#include <SPI.h>
 #include <Arduino.h>
 
 
+// project c includes
 #include "unity_ifx.h"
+
 
 extern "C" {  
     // Method used by Unity to output a single character 

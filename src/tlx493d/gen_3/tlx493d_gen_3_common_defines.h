@@ -28,28 +28,27 @@
 #define GEN_3_L3z	2.61297188837947e-11L
 
 #define GEN_3_FULL_RANGE_FIELD_SENSITIVITY         30.5
-// #define GEN_3_SHORT_RANGE_FIELD_SENSITIVITY        61.0
-// #define GEN_3_EXTRA_SHORT_RANGE_FIELD_SENSITIVITY  122.0
+/** #define GEN_3_SHORT_RANGE_FIELD_SENSITIVITY        61.0 */
+/** #define GEN_3_EXTRA_SHORT_RANGE_FIELD_SENSITIVITY  122.0 */
 
-// #define GEN_3_TEMP_MULT                 15.2
 #define GEN_3_TEMP_SENSITIVITY          15.2
 #define GEN_3_TEMP_OFFSET               4200.0
 #define GEN_3_TEMP_REF                  25.0
 
-// IIC address
-// A0
+/** IIC address. */
+/** A0 */
 #define GEN_3_STD_IIC_ADDR_WRITE_A0     0xBA
 #define GEN_3_STD_IIC_ADDR_READ_A0      0xBB
 
-// A1
+/** A1 */
 #define GEN_3_STD_IIC_ADDR_WRITE_A1     0x26
 #define GEN_3_STD_IIC_ADDR_READ_A1      0x27
 
-// A2
+/** A2 */
 #define GEN_3_STD_IIC_ADDR_WRITE_A2     0x52
 #define GEN_3_STD_IIC_ADDR_READ_A2      0x53
 
-// A3
+/** A3 */
 #define GEN_3_STD_IIC_ADDR_WRITE_A3     0x8C
 #define GEN_3_STD_IIC_ADDR_READ_A3      0x8D
 
@@ -57,4 +56,4 @@
 #define GEN_3_REG_MAP_SIZE              27
 
 
-#endif // TLX493D_GEN_3_CONFIG_COMMON_H
+#endif /** TLX493D_GEN_3_CONFIG_COMMON_H */

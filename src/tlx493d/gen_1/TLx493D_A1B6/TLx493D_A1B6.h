@@ -2,17 +2,12 @@
 #define TLx493D_A1B6_H
 
 
-// std includes
+/** std includes. */
 #include <stdbool.h>
 #include <stdint.h>
 
-// project c includes
-// common to all sensors
+/** project c includes. */
 #include "tlx493d_types.h"
-
-// common to same generation of sensors
-
-// sensor specicifc includes
 
 
 #ifdef __cplusplus
@@ -27,6 +22,7 @@ typedef enum {
     TLx493D_A1B6_LOW_POWER_PERIOD_12MS
 } TLx493D_A1B6_Reg_LOW_POWER_PERIOD_t;
 
+
 typedef struct{
 	uint8_t FAST;
 	uint8_t LOW_POWER;
@@ -35,7 +31,7 @@ typedef struct{
 } TLx493D_A1B6_PowerModeCombinations_t;
 
 
-// common functions
+/** common functions. */
 bool TLx493D_A1B6_init(TLx493D_t *sensor);
 bool TLx493D_A1B6_deinit(TLx493D_t *sensor);
 
@@ -95,7 +91,7 @@ bool TLx493D_A1B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature, dou
 
 bool TLx493D_A1B6_softwareReset(TLx493D_t *sensor);
 
-// utilities
+/** utilities. */
 uint8_t TLx493D_A1B6_calculateFuseParity(const TLx493D_t *sensor);
 uint8_t TLx493D_A1B6_calculateBusParity(const TLx493D_t *sensor);
 uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor);
@@ -142,4 +138,4 @@ void TLx493D_A1B6_printRegisters(const TLx493D_t *sensor);
 #endif
 
 
-#endif // TLx493D_A1B6_H
+#endif /** TLx493D_A1B6_H */

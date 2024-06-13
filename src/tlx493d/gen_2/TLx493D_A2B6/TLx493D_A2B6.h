@@ -2,17 +2,12 @@
 #define TLX493D_A2B6_H
 
 
-// std includes
+/** std includes. */
 #include <stdbool.h>
 #include <stdint.h>
 
-// project c includes
-// common to all sensors
+/** project c includes. */
 #include "tlx493d_types.h"
-
-// common to same generation of sensors
-
-// sensor specific includes
 
 
 #ifdef __cplusplus
@@ -22,7 +17,7 @@ extern "C" {
 #endif
 
 
-// common functions
+/** common functions. */
 bool TLx493D_A2B6_init(TLx493D_t *sensor);
 bool TLx493D_A2B6_deinit(TLx493D_t *sensor);
 
@@ -55,7 +50,7 @@ bool TLx493D_A2B6_setDefaultConfig(TLx493D_t *sensor);
 bool TLx493D_A2B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t address);
 
 bool TLx493D_A2B6_enable1ByteReadMode(TLx493D_t *sensor);
-// bool TLx493D_A2B6_disable1ByteReadMode(TLx493D_t *sensor);
+/** bool TLx493D_A2B6_disable1ByteReadMode(TLx493D_t *sensor); */
 
 bool TLx493D_A2B6_enableCollisionAvoidance(TLx493D_t *sensor);
 bool TLx493D_A2B6_disableCollisionAvoidance(TLx493D_t *sensor);
@@ -80,11 +75,11 @@ bool TLx493D_A2B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature, dou
 bool TLx493D_A2B6_softwareReset(TLx493D_t *sensor);
 
 
-// utilities
-// bool TLx493D_A2B6_setTC0MagneticTemperatureCompensation(const TLx493D_t *sensor);
-// bool TLx493D_A2B6_setTC1MagneticTemperatureCompensation(const TLx493D_t *sensor);
-// bool TLx493D_A2B6_setTC2MagneticTemperatureCompensation(const TLx493D_t *sensor);
-// bool TLx493D_A2B6_setTC3MagneticTemperatureCompensation(const TLx493D_t *sensor);
+/** utilities. */
+/** bool TLx493D_A2B6_setTC0MagneticTemperatureCompensation(const TLx493D_t *sensor); */
+/** bool TLx493D_A2B6_setTC1MagneticTemperatureCompensation(const TLx493D_t *sensor); */
+/** bool TLx493D_A2B6_setTC2MagneticTemperatureCompensation(const TLx493D_t *sensor); */
+/** bool TLx493D_A2B6_setTC3MagneticTemperatureCompensation(const TLx493D_t *sensor); */
 
 uint8_t TLx493D_A2B6_calculateFuseParity(const TLx493D_t *sensor);
 uint8_t TLx493D_A2B6_calculateBusParity(const TLx493D_t *sensor);

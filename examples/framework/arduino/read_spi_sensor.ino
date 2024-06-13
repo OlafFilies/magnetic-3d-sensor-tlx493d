@@ -4,8 +4,8 @@
 
 using namespace ifx::tlx493d;
 
+
 /** Definition of the power and chip select pin. */
-const uint8_t POWER_PIN       = LED2;
 const uint8_t CHIP_SELECT_PIN = 3;
 
 /** Declaration of the sensor object. */
@@ -19,10 +19,9 @@ void setup() {
     Serial.begin(115200);
     delay(3000);
 
-    /** Setting the power up pin of the Kit2GO as well as the chip select pin for the SPI. 
-     *  For this we're using the functions of the Board Support Class.
+    /** Setting the chip select pin for the SPI board using the functions of the Board Support Class.
+     * Power supply is constantly on and cannot be changed for the current experimental board.
      */
-    // dut.setPowerPin(POWER_PIN, OUTPUT, HIGH, LOW, 50, 50);
     dut.setSelectPin(CHIP_SELECT_PIN, OUTPUT, INPUT, LOW, HIGH, 50, 50);
     dut.begin();
 
@@ -73,9 +72,8 @@ void loop() {
     if( ++count == 10 ) {
         Serial.println("Before reset -------------------------------------------------------------------------------------------------------");
 
-        // The current experimental board does not support power down as the chip VDD is hard wired !
-        // dut.reset();
-
+        /* The current experimental board does not support power down as the chip VDD is hard wired ! Therefore use the software reset.
+         * Therefore dut.reset() is not meanigful here, use the software reset instead. **/
         dut.softwareReset();
 
         Serial.println("After reset -------------------------------------------------------------------------------------------------------");

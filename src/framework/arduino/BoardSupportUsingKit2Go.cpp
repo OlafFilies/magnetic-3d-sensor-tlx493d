@@ -1,6 +1,17 @@
 /** std includes. */
-#include <cstddef>
-#include <cstdlib>
+#ifdef __AVR__
+
+    #include <stddef.h>
+    #include <stdlib.h>
+
+#else
+
+    // #include <malloc.h>
+    #include <cstddef>
+    #include <cstdlib>
+
+#endif
+
 
 /** project c includes. */
 #include "tlx493d_types.h"

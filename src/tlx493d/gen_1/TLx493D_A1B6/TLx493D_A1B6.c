@@ -1,57 +1,65 @@
-// std includes
+/** std includes. */
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-// project c includes
+/** project c includes. */
+#include "CommunicationInterface.h"
 #include "Logger.h"
-
-// common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
 
-// common to same generation of sensors
-
-// sensor specicifc includes
+/** sensor specicifc includes. */
 #include "TLx493D_A1B6_defines.h"
 #include "TLx493D_A1B6_enums.h"
 #include "TLx493D_A1B6.h"
 
-//register enums
+
+#ifdef USE_TLx493D_A1B6      
+
+
+/** register enums. */
 typedef enum {
     TLx493D_A1B6_Temp_ENABLE_default,
     TLx493D_A1B6_Temp_DISABLE
 } TLx493D_A1B6_Reg_Temp_NEN;
+
 
 typedef enum {
     TLx493D_A1B6_ODD_PARITY,
     TLx493D_A1B6_EVEN_PARITY
 } TLx493D_A1B6_Reg_PARITY;
 
+
 typedef enum {
     TLx493D_A1B6_INT_ENABLE_default,
     TLx493D_A1B6_INT_DISABLE
 } TLx493D_A1B6_Reg_INT;
+
 
 typedef enum {
     TLx493D_A1B6_FAST_MODE_DISABLE_default,
     TLx493D_A1B6_FAST_MODE_ENABLE
 } TLx493D_A1B6_Reg_FAST_MODE_NEN;
 
+
 typedef enum {
     TLx493D_A1B6_LOW_POWER_MODE_DISABLE_default,
     TLx493D_A1B6_LOW_POWER_MODE_ENABLE
 } TLx493D_A1B6_Reg_LOW_POWER_MODE_NEN;
+
 
 typedef enum {
     TLx493D_A1B6_PARITY_TEST_DISABLE,
     TLx493D_A1B6_PARITY_TEST_ENABLE_default
 } TLx493D_A1B6_Reg_PARITY_TEST_NEN;
 
+
 static TLx493D_Register_t TLx493D_A1B6_regDef[] = {
-    // Read registers
+    /** Read registers. */
     { /* A1B6_BX_MSB_e, */        TLx493D_READ_MODE_e,     0x00, 0xFF, 0, 8 },
     { /* A1B6_BY_MSB_e, */        TLx493D_READ_MODE_e,     0x01, 0xFF, 0, 8 },
     { /* A1B6_BZ_MSB_e, */        TLx493D_READ_MODE_e,     0x02, 0xFF, 0, 8 },
@@ -68,7 +76,7 @@ static TLx493D_Register_t TLx493D_A1B6_regDef[] = {
     { /* A1B6_R_RES_1_e, */       TLx493D_READ_MODE_e,     0x07, 0x18, 3, 2 },
     { /* A1B6_R_RES_2_e, */       TLx493D_READ_MODE_e,     0x08, 0xFF, 0, 8 },
     { /* A1B6_R_RES_3_e, */       TLx493D_READ_MODE_e,     0x09, 0x1F, 0, 5 },
-    // Write Registers
+    /** Write Registers. */
     { /* A1B6_W_RES_0_e, */       TLx493D_WRITE_MODE_e,    0x00, 0xFF, 0, 8 },
     { /* A1B6_P_e, */             TLx493D_WRITE_MODE_e,    0x01, 0x80, 7, 1 },
     { /* A1B6_IICADR_e, */        TLx493D_WRITE_MODE_e,    0x01, 0x60, 5, 2 },
@@ -83,12 +91,12 @@ static TLx493D_Register_t TLx493D_A1B6_regDef[] = {
     { /* A1B6_W_RES_3_e, */       TLx493D_WRITE_MODE_e,    0x03, 0x1F, 0, 5 },
 };
 
-TLx493D_A1B6_PowerModeCombinations_t TLx493D_A1B6_PowerModeCombinations[] = {
-    { 0, 0, 0, 1000 },		    // POWERDOWNMODE
-	{ 1, 0, 0, 0    },			// FASTMODE
-	{ 0, 1, 1, 10   },		    // LOWPOWERMODE
-	{ 0, 1, 0, 100  },		    // ULTRALOWPOWERMODE
-	{ 1, 1, 1, 10   },			// MASTERCONTROLLEDMODE
+static TLx493D_A1B6_PowerModeCombinations_t TLx493D_A1B6_PowerModeCombinations[] = {
+    { 0, 0, 0, 1000 },		    /** POWERDOWNMODE */
+	{ 1, 0, 0, 0    },			/** FASTMODE */
+	{ 0, 1, 1, 10   },		    /** LOWPOWERMODE */
+	{ 0, 1, 0, 100  },		    /** ULTRALOWPOWERMODE */
+	{ 1, 1, 1, 10   },			/** MASTERCONTROLLEDMODE */
 };
 
 
@@ -117,12 +125,12 @@ static TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
     .calculateMagneticFieldAndTemperature = TLx493D_A1B6_calculateMagneticFieldAndTemperature,
     .getMagneticFieldAndTemperature = TLx493D_A1B6_getMagneticFieldAndTemperature,
 
-    // functions related to the "Config" register
+    /** functions related to the "Config" register. */
     .setMeasurement                 = TLx493D_A1B6_setMeasurement,
     .setTrigger                     = TLx493D_A1B6_setTrigger,
     .setSensitivity                 = TLx493D_A1B6_setSensitivity,
     
-    // functions related to the "Mod" register
+    /** functions related to the "Mod" register. */
     .setDefaultConfig               = TLx493D_A1B6_setDefaultConfig,
     .setIICAddress                  = TLx493D_A1B6_setIICAddress,
     .enable1ByteReadMode            = TLx493D_A1B6_enable1ByteReadMode,
@@ -136,12 +144,11 @@ static TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
     .setPowerMode                   = TLx493D_A1B6_setPowerMode,
     .setUpdateRate                  = TLx493D_A1B6_setUpdateRate,
 
-    // functions related to the "Diag" register
+    /** functions related to the "Diag" register. */
     .hasValidData                   = TLx493D_A1B6_hasValidData,
     .isFunctional                   = TLx493D_A1B6_isFunctional,
 
-    // functions available only to a subset of sensors with wake-up functionality
-    // functions related to the "WU" register
+    /** functions available only to a subset of sensors with wake-up functionality related to the "WU" register. */
     .hasWakeUp                      = TLx493D_A1B6_hasWakeUp,
     .isWakeUpEnabled                = TLx493D_A1B6_isWakeUpEnabled,
     .enableWakeUpMode               = TLx493D_A1B6_enableWakeUpMode,
@@ -154,7 +161,7 @@ static TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 
     .printRegisters                 = TLx493D_A1B6_printRegisters,
 
-    // functions used internally and not accessible through the common interface
+    /** functions used internally and not accessible through the common interface. */
     .calculateFuseParity            = TLx493D_A1B6_calculateFuseParity,
     .calculateBusParity             = TLx493D_A1B6_calculateBusParity,
     .calculateConfigurationParity   = TLx493D_A1B6_calculateConfigurationParity,
@@ -178,7 +185,7 @@ static TLx493D_CommonFunctions_t TLx493D_A1B6_commonFunctions = {
 };
 
 
-// note: make sure that the init function is called at reset to make sure the write default values are in sync.
+/** note: make sure that the init function is called at reset to make sure the write default values are in sync. */
 bool TLx493D_A1B6_init(TLx493D_t *sensor) {
     return tlx493d_common_init(sensor, GEN_1_REG_MAP_SIZE, TLx493D_A1B6_regDef, &TLx493D_A1B6_commonFunctions, TLx493D_A1B6_e, TLx493D_I2C_e);
 }
@@ -285,7 +292,7 @@ bool TLx493D_A1B6_setMeasurement(TLx493D_t *sensor, TLx493D_MeasurementType_t va
     return TLx493D_A1B6_transferWriteRegisters(sensor);
 }
 
-//  // This option depends on PR and MODE.
+ /** This option depends on PR and MODE. */
 bool TLx493D_A1B6_setTrigger(TLx493D_t *sensor, TLx493D_TriggerType_t val) {
     (void) val;
 
@@ -304,36 +311,36 @@ bool TLx493D_A1B6_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 bool TLx493D_A1B6_setDefaultConfig(TLx493D_t *sensor) {  
     bool ret = true;
-    // read READ register values
+    /** read READ register values. */
     ret = TLx493D_A1B6_readRegisters(sensor);
     
-    // set WRITE register values to 0x00
+    /** set WRITE register values to 0x00. */
     memset(sensor->regMap + GEN_1_WRITE_REGISTERS_OFFSET, 0, GEN_1_WRITE_REGISTERS_MAX_COUNT);
 
-    // set WRITE reserved register values from READ reserved register values
+    /** set WRITE reserved register values from READ reserved register values. */
     TLx493D_A1B6_setReservedRegisterValues(sensor);
 
-    // enable parity test and write to registers 
+    /** enable parity test and write to registers. */
     ret &= TLx493D_A1B6_enableParityTest(sensor);
 
-    // set to MASTERCONTROLLEDMODE to start measurement
+    /** set to MASTERCONTROLLEDMODE to start measurement. */
     TLx493D_A1B6_setPowerMode(sensor, TLx493D_MASTER_CONTROLLED_MODE_e);
 
-    // calculate parity
+    /** calculate parity. */
     TLx493D_A1B6_calculateConfigurationParity(sensor);
 
-    // write out register map to registers
+    /** write out register map to registers. */
     ret &= TLx493D_A1B6_transferWriteRegisters(sensor);
 
-    // update register map
+    /** update register map. */
     ret &= TLx493D_A1B6_readRegisters(sensor);
 
     return ret;  
 }
 
-// Addresses for Gen 1 
-// (A0-A3 - for SDA/ADDR high at power-up)
-// (A4-A7 - for SDA/ADDR low at power-up)
+/** Addresses for generation 1. */
+/** (A0-A3 - for SDA/ADDR high at power-up). */
+/** (A4-A7 - for SDA/ADDR low at power-up). */
 bool TLx493D_A1B6_setIICAddress(TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     uint8_t bitfieldValue = 0;
     uint8_t deviceAddress = 0;
@@ -519,19 +526,19 @@ uint8_t TLx493D_A1B6_calculateBusParity(const TLx493D_t *sensor) {
 }
 
 
-// parity is calculated for all the WRITE register, including the parity bit
+/** parity is calculated for all the WRITE register, including the parity bit. */
 uint8_t TLx493D_A1B6_calculateConfigurationParity(TLx493D_t *sensor) {
     uint8_t result = 0x00;
 
-    //set parity as EVEN first
+    /**set parity as EVEN first. */
     TLx493D_A1B6_setBitfield(sensor, A1B6_P_e, TLx493D_A1B6_EVEN_PARITY); 
 
-    // calculate bitwise XOR for all WRITE registers
+    /** calculate bitwise XOR for all WRITE registers. */
     for (uint8_t addr = 0x00; addr<GEN_1_WRITE_REGISTERS_MAX_COUNT; addr++) {
         result ^= sensor->regMap[addr+GEN_1_WRITE_REGISTERS_OFFSET];
     }
 
-    // then set calculated parity
+    /** then set calculated parity. */
     TLx493D_A1B6_setBitfield(sensor, A1B6_P_e, tlx493d_common_calculateParity(result));
 
     return 1;
@@ -591,9 +598,9 @@ void TLx493D_A1B6_setReservedRegisterValues(TLx493D_t *sensor) {
     TLx493D_A1B6_setBitfield(sensor, A1B6_W_RES_3_e, TLx493D_A1B6_returnBitfield(sensor, A1B6_R_RES_3_e));
 }
 
-// Addresses for Gen 1 
-// (A0-A3 - for SDA/ADDR high at power-up)
-// (A4-A7 - for SDA/ADDR low at power-up)
+/** Addresses for generation 1. */
+/** (A0-A3 - for SDA/ADDR high at power-up). */
+/** (A4-A7 - for SDA/ADDR low at power-up). */
 
 uint8_t TLx493D_A1B6_selectIICAddress(const TLx493D_t *sensor, TLx493D_IICAddressType_t addr) {
     switch(addr) {
@@ -624,9 +631,9 @@ void TLx493D_A1B6_calculateRawMagneticFieldAtTemperature(const TLx493D_t *sensor
     (void) rawTemp;
     (void) sens;
 
-    *x = xInmT / GEN_1_MAG_FIELD_MULT;
-    *y = yInmT / GEN_1_MAG_FIELD_MULT;
-    *z = zInmT / GEN_1_MAG_FIELD_MULT;
+    *x = (int16_t) lround(xInmT / GEN_1_MAG_FIELD_MULT);
+    *y = (int16_t) lround(yInmT / GEN_1_MAG_FIELD_MULT);
+    *z = (int16_t) lround(zInmT / GEN_1_MAG_FIELD_MULT);
 }
 
 
@@ -688,3 +695,6 @@ bool TLx493D_A1B6_hasValidPDBit(const TLx493D_t *sensor) {
 void TLx493D_A1B6_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_A1B6_REGISTER_HEADLINE); 
 }
+
+
+#endif

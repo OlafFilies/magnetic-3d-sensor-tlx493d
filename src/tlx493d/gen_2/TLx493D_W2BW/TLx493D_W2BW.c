@@ -1,25 +1,27 @@
-// std includes
+/** std includes. */
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-// project c includes
+/** project c includes. */
+#include "CommunicationInterface.h"
 #include "Logger.h"
 
-// common to all sensors
 #include "tlx493d_types.h"
 #include "tlx493d_common_defines.h"
 #include "tlx493d_common.h"
 
-// common to same generation of sensors
 #include "tlx493d_gen_2_common_defines.h"
 #include "tlx493d_gen_2_common.h"
 
-// sensor specific includes
+/** sensor specicifc includes. */
 #include "TLx493D_W2BW_defines.h"
 #include "TLx493D_W2BW_enums.h"
 #include "TLx493D_W2BW.h"
+
+
+#ifdef USE_TLx493D_W2BW      
 
 
 static TLx493D_Register_t TLx493D_W2BW_regDef[] = {
@@ -100,12 +102,12 @@ static TLx493D_CommonFunctions_t TLx493D_W2BW_commonFunctions = {
     .calculateMagneticFieldAndTemperature = TLx493D_W2BW_calculateMagneticFieldAndTemperature,
     .getMagneticFieldAndTemperature = TLx493D_W2BW_getMagneticFieldAndTemperature,
 
-    // functions related to the "Config" register
+    /** functions related to the "Config" register. */
     .setMeasurement                 = TLx493D_W2BW_setMeasurement,
     .setTrigger                     = TLx493D_W2BW_setTrigger,
     .setSensitivity                 = TLx493D_W2BW_setSensitivity,
 
-    // functions related to the "Mod1" and "Mod2" registers
+    /** functions related to the "Mod1" and "Mod2" registers. */
     .setDefaultConfig               = TLx493D_W2BW_setDefaultConfig,
     .setIICAddress                  = TLx493D_W2BW_setIICAddress,
     .enable1ByteReadMode            = TLx493D_W2BW_enable1ByteReadMode,
@@ -119,12 +121,11 @@ static TLx493D_CommonFunctions_t TLx493D_W2BW_commonFunctions = {
     .setPowerMode                   = TLx493D_W2BW_setPowerMode,
     .setUpdateRate                  = TLx493D_W2BW_setUpdateRate,
 
-    // functions related to the "Diag" register
+    /** functions related to the "Diag" register. */
     .hasValidData                   = TLx493D_W2BW_hasValidData,
     .isFunctional                   = TLx493D_W2BW_isFunctional,
 
-    // functions available only to a subset of sensors with wake-up functionality
-    // functions related to the "WU" register
+    /** functions available only to a subset of sensors with wake-up functionality related to the "WU" register. */
     .hasWakeUp                      = TLx493D_W2BW_hasWakeUp,
     .isWakeUpEnabled                = TLx493D_W2BW_isWakeUpEnabled,
     .enableWakeUpMode               = TLx493D_W2BW_enableWakeUpMode,
@@ -137,11 +138,10 @@ static TLx493D_CommonFunctions_t TLx493D_W2BW_commonFunctions = {
 
     .printRegisters                 = TLx493D_W2BW_printRegisters,
 
-    // functions used internally and not accessible through the common interface
+    /** functions used internally and not accessible through the common interface. */
     .calculateFuseParity            = TLx493D_W2BW_calculateFuseParity,
     .calculateBusParity             = TLx493D_W2BW_calculateBusParity,
     .calculateConfigurationParity   = TLx493D_W2BW_calculateConfigurationParity,
-    // .calculateConfigurationParity   = TLx493D_W2BW_calculateConfigurationParityBit,
 
     .hasValidFuseParity             = TLx493D_W2BW_hasValidFuseParity,
     .hasValidBusParity              = TLx493D_W2BW_hasValidBusParity,
@@ -161,9 +161,11 @@ static TLx493D_CommonFunctions_t TLx493D_W2BW_commonFunctions = {
     .getSensitivityScaleFactor      = TLx493D_W2BW_getSensitivityScaleFactor,
 };
 
+
 bool TLx493D_W2BW_init(TLx493D_t *sensor) {
     return tlx493d_common_init(sensor, GEN_2_REG_MAP_SIZE, TLx493D_W2BW_regDef, &TLx493D_W2BW_commonFunctions, TLx493D_W2BW_e, TLx493D_I2C_e);
 }
+
 
 bool TLx493D_W2BW_deinit(TLx493D_t *sensor) {
     return tlx493d_common_deinit(sensor);
@@ -171,6 +173,18 @@ bool TLx493D_W2BW_deinit(TLx493D_t *sensor) {
 
 
 bool TLx493D_W2BW_readRegisters(TLx493D_t *sensor) {
+/*
+    logInfo("sizeof(regMap)                      : %d", sizeof(uint8_t));
+    logInfo("sizeof(regMap * GEN_2_REG_MAP_SIZE) : %d", sizeof(uint8_t) * GEN_2_REG_MAP_SIZE);
+    logInfo("sizeof(regDef)                      : %d", sizeof(TLx493D_W2BW_regDef));
+    logInfo("sizeof(functions)                   : %d", sizeof(TLx493D_W2BW_commonFunctions));
+    logInfo("sizeof(comInterface)                : %d", sizeof(TLx493D_CommunicationInterface_t));
+    logInfo("sizeof(boardSupportInterface)       : %d", sizeof(TLx493D_BoardSupportInterface_t));
+    logInfo("sizeof(regMapSize)                  : %d", sizeof(uint8_t));
+    logInfo("sizeof(sensorType)                  : %d", sizeof(TLx493D_SupportedSensorType_t));
+    logInfo("sizeof(comIFType)                   : %d", sizeof(TLx493D_SupportedComLibraryInterfaceType_t));
+*/
+
     return tlx493d_common_readRegisters(sensor);
 }
 
@@ -270,7 +284,7 @@ bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
                   return false;
     }
 
-// logPrint("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal);
+/* logPrint("\nsetSensitivity    short : %d    xtra_short : %d\n", shortVal, extraShortVal); */
     tlx493d_common_setBitfield(sensor, W2BW_X4_READWRITE_e, extraShortVal);
     return tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X2_e, W2BW_CP_e, shortVal) ? tlx493d_gen_2_setOneConfigBitfield(sensor, W2BW_X4_e, W2BW_CP_e, extraShortVal)
                                                                                       : false;
@@ -279,7 +293,7 @@ bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 bool TLx493D_W2BW_setDefaultConfig(TLx493D_t *sensor) {
     return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e);
-    // return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CONFIG_REG_e, W2BW_MOD1_REG_e, W2BW_MOD2_REG_e, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e);
+    /** return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CONFIG_REG_e, W2BW_MOD1_REG_e, W2BW_MOD2_REG_e, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e); */
 }
 
 
@@ -313,7 +327,7 @@ bool TLx493D_W2BW_disableInterrupt(TLx493D_t *sensor) {
 }
 
 
-bool TLx493D_W2BW_setPowerMode(TLx493D_t *sensor, uint8_t mode) {
+bool TLx493D_W2BW_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) {
     return tlx493d_gen_2_setPowerMode(sensor, W2BW_MODE_e, W2BW_FP_e, mode);
 }
 
@@ -366,7 +380,7 @@ bool TLx493D_W2BW_setWakeUpThresholdsAsInteger(TLx493D_t *sensor, int16_t xlTh, 
 }
 
 
-// thesholds im mT, to be converted to proper format
+/** thesholds im mT, to be converted to proper format */
 bool TLx493D_W2BW_setWakeUpThresholds(TLx493D_t *sensor,
                                       double temperature, double xLow, double xHigh, double yLow, double yHigh, double zLow, double zHigh) {
     return tlx493d_gen_2_setWakeUpThresholds(sensor, W2BW_CP_e,
@@ -446,12 +460,12 @@ void TLx493D_W2BW_setResetValues(TLx493D_t *sensor) {
     sensor->regMap[0x0D] = 0x38;
     sensor->regMap[0x0E] = 0x38;
     sensor->regMap[0x0F] = 0x38;  
-    sensor->regMap[0x10] = 0x01; // CONFIG
-    sensor->regMap[0x11] = 0x80; // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
-    sensor->regMap[0x13] = 0x00; // MOD2
-    sensor->regMap[0x14] = 0x00; // CONFIG2
+    sensor->regMap[0x10] = 0x01; /** CONFIG */
+    sensor->regMap[0x11] = 0x80; /** MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0 */
+    sensor->regMap[0x13] = 0x00; /** MOD2 */
+    sensor->regMap[0x14] = 0x00; /** CONFIG2 */
 
-    // W2BW_X4_READWRITE_e
+    /** W2BW_X4_READWRITE_e */
     sensor->regMap[0x17] = 0x00;
 }
 
@@ -476,3 +490,6 @@ double TLx493D_W2BW_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 void TLx493D_W2BW_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_W2BW_REGISTER_HEADLINE); 
 }
+
+
+#endif

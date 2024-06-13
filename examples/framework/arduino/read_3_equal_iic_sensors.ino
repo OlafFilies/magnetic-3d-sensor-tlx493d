@@ -10,7 +10,6 @@ TLx493D_W2B6 dut1(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2B6 dut2(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2B6 dut3(Wire, TLx493D_IIC_ADDR_A0_e);
 
-// TODO(Jens): pull power pin defs out as const uint8_t ...
 
 void setup() {
     Serial.begin(115200);
@@ -22,9 +21,6 @@ void setup() {
      *  Board Support Class and its functions. The power up pins are
      *  enabled during the SensorClassObject.begin() call. See below. 
     */
-    // dut1.setPowerPin(8, OUTPUT, HIGH, LOW, 50, 50);
-    // dut2.setPowerPin(9, OUTPUT, HIGH, LOW, 50, 50);
-    // dut3.setPowerPin(10, OUTPUT, HIGH, LOW, 50, 50);
     dut1.setPowerPin(8, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
     dut2.setPowerPin(9, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
     dut3.setPowerPin(10, OUTPUT, INPUT, HIGH, LOW, 0, 250000);

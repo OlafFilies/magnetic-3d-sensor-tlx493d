@@ -221,7 +221,7 @@
 #define UNITY_OUTPUT_CHAR(a)                   putCharacter(a)
 #define UNITY_OUTPUT_CHAR_HEADER_DECLARATION   putCharacter(char c)
 #define UNITY_OUTPUT_FLUSH()                   flushCharacter()
-#define UNITY_OUTPUT_FLUSH_HEADER_DECLARATION  flushCharacter()
+#define UNITY_OUTPUT_FLUSH_HEADER_DECLARATION  flushCharacter(void)
 
 /* #define UNITY_OUTPUT_CHAR(a)                    RS232_putc(a) */
 /* #define UNITY_OUTPUT_CHAR_HEADER_DECLARATION    RS232_putc(int) */

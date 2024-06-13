@@ -1,17 +1,13 @@
 #ifndef TLX493D_P3B6_H
 #define TLX493D_P3B6_H
 
-// std includes
+
+/** std includes. */
 #include <stdbool.h>
 #include <stdint.h>
 
-// project c includes
-// common to all sensors
+/** project c includes. */
 #include "tlx493d_types.h"
-
-// common to same generation of sensors
-
-// sensor specific includes
 
 
 #ifdef __cplusplus
@@ -21,6 +17,7 @@ extern "C" {
 #endif
 
 
+/** common functions. */
 bool TLx493D_P3B6_init(TLx493D_t *sensor);
 bool TLx493D_P3B6_deinit(TLx493D_t *sensor);
 
@@ -75,7 +72,7 @@ bool TLx493D_P3B6_setWakeUpThresholds(TLx493D_t *sensor, double temperature, dou
 bool TLx493D_P3B6_softwareReset(TLx493D_t *sensor);
 
 
-// utilities
+/** utilities. */
 bool tlx493d_P3B6_setWakeUpParity(TLx493D_t *sensor);
 
 uint8_t TLx493D_P3B6_calculateFuseParity(const TLx493D_t *sensor);
@@ -112,4 +109,4 @@ void TLx493D_P3B6_printRegisters(const TLx493D_t *sensor);
 #endif
 
 
-#endif // TLX493D_P3B6_H
+#endif /** TLX493D_P3B6_H */
