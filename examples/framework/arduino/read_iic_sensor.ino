@@ -6,23 +6,31 @@ using namespace ifx::tlx493d;
 
 
 /* Definition of the power pin and sensor objects for XMC 1100 boards. */
-const uint8_t POWER_PIN = 15; // XMC : LED2
+const uint8_t POWER_PIN = 15; // XMC1100 : LED2
 
 // TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
-TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
 /** Definition of the power pin and sensor objects for XMC 4700 boards */
 // const uint8_t POWER_PIN = 8; // XMC : P1.10
 
+// TLx493D_A2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A1_e);
+
+
+/** Definition of the power pin and sensor objects for Arduino Uno boards */
+/** Care must be taken to level shift down to 3.3V as the sensor boards expect only 3.3V ! */
+// const uint8_t POWER_PIN = 7;
+
+// TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
 /** Definition of a counter variable. */
@@ -94,7 +102,7 @@ void loop() {
         Serial.println("\nBefore reset -------------------------------------------------------------------------------------------------------");
 
         /** Reset does not work for W2BW : either drive strength too low or delay to stabilize critical. */
-        dut.reset(true, dut.getSensorType() != TLx493D_A1B6_e);
+        dut.reset(true);
 
         Serial.println("\nAfter reset -------------------------------------------------------------------------------------------------------");
         count = 0;

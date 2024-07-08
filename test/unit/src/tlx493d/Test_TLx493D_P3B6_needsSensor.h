@@ -64,7 +64,7 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkSupportedFunctionality)
     TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     // tlx493d_printRegisters(&dut);
  
-    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) ); // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) ); // fails sometimes with readRegisters()
 
     TEST_ASSERT_TRUE( dut.functions->isFunctional(&dut) );
     TEST_ASSERT_TRUE( dut.functions->hasValidFuseParity(&dut) );
@@ -331,7 +331,6 @@ TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkConfigSensitivityFunctionality)
 // Check if setDefaultConfig worked properly and data can be read and expected values are set.
 TEST_IFX(TLx493D_P3B6_needsSensorInternal, checkModeDefaultConfigFunctionality)
 {
-    // TEST_ASSERT_TRUE( dut.functions->setDefaultConfig(&dut));
     TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
 
     TEST_ASSERT_EQUAL_HEX8( 0x42, dut.regMap[P3B6_MOD1_REG_e] );

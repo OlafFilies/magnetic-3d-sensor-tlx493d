@@ -55,10 +55,10 @@ TEST_IFX(TLx493D_W2B6_internal, checkUnsupportedFunctionality)
  */
 TEST_IFX(TLx493D_W2B6_internal, checkSupportedFunctionality)
 {
-    TEST_ASSERT( dut.functions->init(&dut) == true );
-    TEST_ASSERT( dut.functions->deinit(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->init(&dut) );
+    TEST_ASSERT_TRUE( dut.functions->deinit(&dut) );
 
-    TEST_ASSERT( dut.functions->hasWakeUp(&dut) == true );
+    TEST_ASSERT_TRUE( dut.functions->hasWakeUp(&dut) );
 }
 
 

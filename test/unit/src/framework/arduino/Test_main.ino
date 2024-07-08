@@ -43,6 +43,20 @@ extern "C" {
 #endif
 
 
+// TLx493D_A2BW
+#ifdef TEST_TLx493D_A2BW
+
+    RUN_TEST_GROUP(TLx493D_A2BW);
+
+#endif
+
+#ifdef TEST_TLx493D_A2BW_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLx493D_A2BW_needsSensor);
+
+#endif
+
+
 // TLx493D_P2B6
 #ifdef TEST_TLx493D_P2B6
 

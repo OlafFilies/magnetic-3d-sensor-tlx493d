@@ -15,6 +15,7 @@ extern "C" {
 typedef enum {
                TLx493D_A1B6_e = 0,
                TLx493D_A2B6_e,
+               TLx493D_A2BW_e,
                TLx493D_P2B6_e,
                TLx493D_W2B6_e,
                TLx493D_W2BW_e,

@@ -8,6 +8,7 @@ $(info PORT : $(PORT))
 
 TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_A2B6_NEEDS_SENSOR \
+				   -DTEST_TLx493D_A2BW_NEEDS_SENSOR \
 				   -DTEST_TLx493D_P2B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_W2B6_NEEDS_SENSOR \
 				   -DTEST_TLx493D_W2BW_NEEDS_SENSOR \
@@ -17,6 +18,7 @@ TESTS_NEEDS_SENSOR=-DTEST_TLx493D_A1B6_NEEDS_SENSOR \
 
 TESTS_NO_SENSOR=-DTEST_TLx493D_A1B6 \
 				-DTEST_TLx493D_A2B6 \
+				-DTEST_TLx493D_A2BW \
 				-DTEST_TLx493D_P2B6 \
 				-DTEST_TLx493D_W2B6 \
 			 	-DTEST_TLx493D_W2BW \
@@ -30,6 +32,9 @@ A1B6: TESTS=-DTEST_TLx493D_A1B6
 
 A2B6_needsSensor: TESTS=-DTEST_TLx493D_A2B6 -DTEST_TLx493D_A2B6_NEEDS_SENSOR
 A2B6: TESTS=-DTEST_TLx493D_A2B6
+
+A2BW_needsSensor: TESTS=-DTEST_TLx493D_A2BW -DTEST_TLx493D_A2BW_NEEDS_SENSOR
+A2BW: TESTS=-DTEST_TLx493D_A2BW
 
 P2B6_needsSensor: TESTS=-DTEST_TLx493D_P2B6 -DTEST_TLx493D_P2B6_NEEDS_SENSOR
 P2B6: TESTS=-DTEST_TLx493D_P2B6
@@ -48,6 +53,7 @@ P3I8: TESTS=-DTEST_TLx493D_P3I8
 
 A1B6_needsSensor A1B6 \
 A2B6_needsSensor A2B6 \
+A2BW_needsSensor A2BW \
 P2B6_needsSensor P2B6 \
 W2B6_needsSensor W2B6 \
 W2BW_needsSensor W2BW \
@@ -123,6 +129,9 @@ else
 	                        --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
 							--build-property compiler.cpp.extra_flags="$(TESTS)" \
 			        build
+
+# 	                        --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
+					
 endif
 
 
@@ -133,7 +142,7 @@ else
 # switch to -std=c23 whenever XMCLib is conforming; currently neither c99 nor c11 work !
 # CAUTION : only use '=' when assigning values to vars, not '+='
 	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) \
-							--build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\" -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -fanalyzer -std=c20" \
+							--build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\" -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -fanalyzer " \
 							--build-property compiler.cpp.extra_flags="$(TESTS) -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -std=c++20 -fanalyzer " \
 							--build-property compiler.ar.cmd=arm-none-eabi-gcc-ar \
 							--build-property compiler.libraries.ldflags=-lstdc++ \
@@ -141,6 +150,7 @@ else
 							--build-property compiler.usb.path="-isystem{runtime.platform.path}/cores/usblib -isystem{runtime.platform.path}/cores/usblib/Common -isystem{runtime.platform.path}/cores/usblib/Class -isystem{runtime.platform.path}/cores/usblib/Class/Common -isystem{runtime.platform.path}/cores/usblib/Class/Device -isystem{runtime.platform.path}/cores/usblib/Core -isystem{runtime.platform.path}/cores/usblib/Core/XMC4000" \
 					build
 
+#							--build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\" -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -fanalyzer -std=c20" \
 #                           --build-property compiler.path="/mnt/c/Users/bargfred/arm-gnu-toolchain-13.2.Rel1-mingw-w64-i686-arm-none-eabi/bin/"
 #                           --build-property compiler.path="/home/jensb/gcc/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin/"
 endif

@@ -30,6 +30,21 @@ extern "C" {
 #endif
 
 
+#ifdef __AVR__
+
+    #define logInfo(...)    ((void) 0)
+    #define logWarn(...)    ((void) 0)
+    #define logError(...)   ((void) 0)
+
+#else
+
+    #define logInfo(...)    logPrintln("INFO : ", __VA_ARGS__)
+    #define logWarn(...)    logPrintln("WARN : ", __VA_ARGS__)
+    #define logError(...)   logPrintln("ERROR : ", __VA_ARGS__)
+
+#endif
+
+
 /**
  * @brief The function `logPrintRegisters` prints out all the internal registers of the
  * passed sensor object.
@@ -58,34 +73,7 @@ void logPrint(const char *format, ...);
  * 
  * @param[in] format Actual string, which should be printed to the serial output. 
 */
-void logPrintln(const char *format, ...);
-
-/**
- * @brief The function `logInfo` is used to print out an info message to the user.
- * It uses the prefix "INFO : " to directly indicate the origin of the message.
- * It also allows to pass a variable number of arguments to the function (...).
- * 
- * @param[in] format Actual string, which should be printed to the serial output. 
- */
-void logInfo(const char *format, ...);
-
-/**
- * @brief The function `logWarn` is used to print out a warning message to the user.
- * It uses the prefix "WARNING : " to directly indicate the origin of the message. 
- * It also allows to pass a variable number of arguments to the function (...).
- * 
- * @param[in] format Actual string, which should be printed to the serial output. 
- */
-void logWarn(const char *format, ...);
-
-/**
- * @brief The function `logError` is used to print out an error message to the user.
- * It uses the prefix "ERROR : " to directly indicate the origin of the message. 
- * It also allows to pass a variable number of arguments to the function (...).
- * 
- * @param[in] format Actual string, which should be printed to the serial output.   
- */
-void logError(const char *format, ...);
+void logPrintln(const char *prefix, const char *format, ...);
 
 /**
  * @brief The function `flush` is used to send a new line character to ther serial output.
