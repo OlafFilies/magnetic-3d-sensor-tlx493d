@@ -48,7 +48,7 @@ void loop() {
     tlx493d_getMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
     tlx493d_printRegisters(&dut);
 
-    Serial.print("Temperature is: ");
+    Serial.print("\nTemperature is: ");
     Serial.print(t);
     Serial.println("°C");
 

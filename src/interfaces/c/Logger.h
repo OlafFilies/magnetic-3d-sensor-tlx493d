@@ -30,11 +30,13 @@ extern "C" {
 #endif
 
 
-#ifdef __AVR__
+#if defined(__AVR__) && !defined(ARDUINO_UNOR4_MINIMA) && !defined(ARDUINO_AVR_MEGA2560)
 
     #define logInfo(...)    ((void) 0)
     #define logWarn(...)    ((void) 0)
     #define logError(...)   ((void) 0)
+
+    // #warning "C Preprocessor got here!"
 
 #else
 

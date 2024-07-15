@@ -9,6 +9,8 @@ make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 A1B
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 A1B6_needsSensor monitor
 #
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic flash monitor
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic_ext_addr flash monitor
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 monitor
 
 
@@ -50,6 +52,10 @@ make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO     PORT=COM28 ii
 #
 make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM28 W2B6_needsSensor monitor
 (make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM28 W2B6_needsSensor) 2>&1 | tee log
+#
+make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 W2B6_needsSensor monitor
+make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic flash monitor
+
 
 
 # old sensor => defect
@@ -70,6 +76,9 @@ make  -f Makefile.arduino.mk   FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 mo
 ### W2BW
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic flash monitor
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 iic_with_wakeup flash monitor
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 3iic_equal flash monitor
+
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 3iic flash monitor
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC4700_Relax_Kit PORT=COM18 W2BW_needsSensor monitor
 #
@@ -107,3 +116,5 @@ make  -f Makefile.arduino.mk  FQBN=arduino:renesas_uno:minima PORT=COM27 iic com
 make  -f Makefile.arduino.mk  FQBN=arduino:renesas_uno:minima PORT=COM27 iic flash monitor
 
 make  -f Makefile.arduino.mk  FQBN=arduino:renesas_uno:minima PORT=COM27 iic_c_style flash monitor
+
+make  -f Makefile.arduino.mk  FQBN=arduino:renesas_uno:minima PORT=COM27 W2BW_needsSensor monitor

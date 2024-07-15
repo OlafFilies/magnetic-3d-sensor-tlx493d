@@ -5,7 +5,7 @@
 using namespace ifx::tlx493d;
 
 
-/* Definition of the power pin and sensor objects for XMC 1100 boards. */
+/* Definition of the power pin and sensor objects for Kit2Go XMC1100 boards. */
 const uint8_t POWER_PIN = 15; // XMC1100 : LED2
 
 // TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -15,8 +15,10 @@ const uint8_t POWER_PIN = 15; // XMC1100 : LED2
 TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
-/** Definition of the power pin and sensor objects for XMC 4700 boards */
+/** Definition of the power pin and sensor objects for S2Go with XMC4700 Relax Lite board. */
 // const uint8_t POWER_PIN = 8; // XMC : P1.10
+
+// TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
@@ -28,9 +30,11 @@ TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 /** Definition of the power pin and sensor objects for Arduino Uno boards */
 /** Care must be taken to level shift down to 3.3V as the sensor boards expect only 3.3V ! */
+/** Therefore disabled for here. */
 // const uint8_t POWER_PIN = 7;
 
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
 /** Definition of a counter variable. */
@@ -42,6 +46,7 @@ void setup() {
     delay(3000);
 
     /** Definition of the power pin to power up the sensor. */
+    /** Set delay after power-on to 50 for A1B6 Kit2Go sensor. */
     dut.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
     dut.begin();
 
@@ -60,7 +65,7 @@ void loop() {
     dut.getMagneticFieldAndTemperature(&x, &y, &z, &t);
     dut.printRegisters();
 
-    Serial.print("Temperature is: ");
+    Serial.print("\nTemperature is: ");
     Serial.print(t);
     Serial.println("°C");
 
@@ -78,7 +83,7 @@ void loop() {
     dut.getMagneticFieldAndTemperature(&x, &y, &z, &t);
     dut.printRegisters();
 
-    Serial.print("Temperature is: ");
+    Serial.print("\nTemperature is: ");
     Serial.print(t);
     Serial.println("°C");
 

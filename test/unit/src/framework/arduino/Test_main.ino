@@ -2,10 +2,6 @@
 #include "Test_includes.hpp"
 
 
-// #define POWER_PIN LED2 // 15
-const uint8_t POWER_PIN = LED2;
-
-
 extern "C" {
     /***
       * Uses flags / defines to determine which groups of tests should be added to this test such that multiple tests can be executed in a single run.

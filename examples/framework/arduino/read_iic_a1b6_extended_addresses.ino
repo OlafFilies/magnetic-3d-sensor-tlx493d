@@ -6,8 +6,8 @@ using namespace ifx::tlx493d;
 
 
 /** Use XMC1100 Boot Kit or XMC4700 Relax Kit for this test and connect to power and I2C SDA, respectively. */
-const uint8_t POWER_PIN       = 8;
-const uint8_t SDA_ADDRESS_PIN = 7 ;
+const uint8_t POWER_PIN       = 8; // XMC : P1.10
+const uint8_t SDA_ADDRESS_PIN = 7; // XMC : P1.9
 
 
 /** Device at address 0x3E. */
@@ -19,13 +19,13 @@ void setup() {
     delay(3000);
 
     /** Explicit power pin needed to power up board after the addressPin is pulled down. */
-    dut.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+    dut.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 50, 250000);
     /** Set pin used to drive SDA/ADDR pin before power up.
       * This pin is then isolated from the I2C bus by switching it high-Z before I2C init. */
     dut.setAddressPin(SDA_ADDRESS_PIN, OUTPUT, INPUT, LOW, HIGH, 1000, 1000);
     
     /** Set the sensor constructor to activate extended address switching pin. */
-    dut.begin(true, false, true);
+    dut.begin(true, false, true, true);
 
     /* Options to set the other remaining addresses when SDA low at power-up. */
     // dut.setIICAddress(TLx493D_IIC_ADDR_A5_e); // 0x36

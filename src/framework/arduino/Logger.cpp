@@ -47,14 +47,13 @@ extern "C" {
         Serial.println();
 
 
-#ifndef __AVR__
+#if defined(ARDUINO_ARM_XMC) || (defined(__AVR__) && (defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_AVR_MEGA2560)))
 
         if( headLine != NULL ) {
             Serial.println(headLine);
         }
 
 #endif
-
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
             logPrint("    0x%02X", sensor->regMap[i]);

@@ -1,7 +1,8 @@
 #include "Test_includes.hpp"
 
 
-const uint8_t POWER_PIN   = LED2;
+const static uint8_t POWER_PIN = 15; // LED2
+// const uint8_t POWER_PIN   = 8; // P1.10
 const uint8_t ADDRESS_PIN = 7;
 
 static ifx::tlx493d::Kit2GoBoardSupport bsc;
@@ -17,7 +18,7 @@ extern "C" {
     void TLx493D_A1B6_needsSensor_suiteSetup() {
         (void) TLx493D_A1B6_init(&dut);
 
-        bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+        bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 50, 250000);
         ifx::tlx493d::initBoardSupport(&dut, bsc);
         bsc.init();
 
@@ -38,7 +39,7 @@ extern "C" {
     void TLx493D_A1B6_atReset_suiteSetup() {
         (void) TLx493D_A1B6_init(&dut);
 
-        bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+        bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 50, 250000);
         ifx::tlx493d::initBoardSupport(&dut, bsc);
         bsc.init();
 
@@ -60,7 +61,7 @@ extern "C" {
 
         logPrint("\nbsc object used to power on board; check if POWER PIN connected!\ncheck if ADDR pin is connected!\n");
         // power up the board using bsc
-        bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+        bsc.setPowerPin(POWER_PIN, OUTPUT, INPUT, HIGH, LOW, 50, 250000);
         bsc.setAddressPin(ADDRESS_PIN, OUTPUT, INPUT, HIGH, LOW, 1000, 1000);
         ifx::tlx493d::initBoardSupport(&dut, bsc);
         bsc.init(true, false, true);

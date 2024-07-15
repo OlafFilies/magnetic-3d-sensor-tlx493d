@@ -15,8 +15,6 @@
 /** project c includes. */
 #include "tlx493d_types.h"
 
-/** TODO: fix XMCLib SPISettings incompatibilities ! P3I8 will not work for any other platform other than XMCLib ! */
-#include "tlx493d_common_defines.h"
 
 /** project cpp includes. */
 #include "types.hpp"
@@ -27,19 +25,15 @@ namespace ifx {
     namespace tlx493d {
         static uint8_t   spiReadAddress = 0x00;
 
-
-#ifdef USE_TLx493D_P3I8      
-
         static uint32_t  clockFreq = 200000;
         static uint8_t   bitOrder  = MSBFIRST;
         static uint8_t   dataMode  = SPI_MODE2;
 
-#endif
-
 
         static bool initSPI(TLx493D_t *sensor) {
 
-#ifdef USE_TLx493D_P3I8      
+/** TODO: Fix XMCLib SPISettings incompatibilities ! P3I8 will not work for any other platform other than XMCLib ! */
+#ifdef ARDUINO_ARM_XMC      
 
             sensor->comInterface.comLibObj.spi_obj->spi->init(SPISettings(clockFreq, bitOrder, dataMode));
 
@@ -94,14 +88,9 @@ namespace ifx {
             sensor->comInterface.comLibFuncs                      = &comLibFuncs_spi;
 
             if( executeInit ) {
-
-#ifdef USE_TLx493D_P3I8      
-
                 clockFreq = pClockFreq;
                 bitOrder  = pBitOrder;
                 dataMode  = pDataMode;
-
-#endif
 
                 sensor->comInterface.comLibFuncs->init.spi_init(sensor);
             }
@@ -118,14 +107,9 @@ namespace ifx {
             sensor->comInterface.comLibFuncs                      = &comLibFuncs_spi;
 
             if( executeInit ) {
-
-#ifdef USE_TLx493D_P3I8      
-
                 clockFreq = pClockFreq;
                 bitOrder  = pBitOrder;
                 dataMode  = pDataMode;
-
-#endif
 
                 sensor->comInterface.comLibFuncs->init.spi_init(sensor);
             }
