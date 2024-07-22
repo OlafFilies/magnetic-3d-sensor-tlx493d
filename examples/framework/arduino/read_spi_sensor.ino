@@ -72,9 +72,10 @@ void loop() {
     if( ++count == 10 ) {
         Serial.println("Before reset -------------------------------------------------------------------------------------------------------");
 
-        /* The current experimental board does not support power down as the chip VDD is hard wired ! Therefore use the software reset.
-         * Therefore dut.reset() is not meanigful here, use the software reset instead. **/
-        dut.softwareReset();
+        /* The current experimental board does not support power down as the chip VDD is hard wired ! Therefore either use the software reset
+         * directly or use dut.reset() to execute a software reset. **/
+        dut.reset();
+        // dut.softwareReset();
 
         Serial.println("After reset -------------------------------------------------------------------------------------------------------");
         count = 0;

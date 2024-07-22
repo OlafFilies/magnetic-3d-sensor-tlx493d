@@ -21,9 +21,6 @@
 #include "TLx493D_P3B6.h"
 
 
-#ifdef USE_TLx493D_P3B6      
-
-
 static TLx493D_Register_t TLx493D_P3B6_regDef[] = {
     { /* P3B6_BX_MSBS_e, */       TLx493D_READ_MODE_e,        0x00, 0xFF, 0, 8 },
     { /* P3B6_IIC_ADR_CP_e, */    TLx493D_READ_MODE_e,        0x01, 0xC0, 6, 2 },
@@ -476,6 +473,3 @@ double TLx493D_P3B6_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 void TLx493D_P3B6_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_P3B6_REGISTER_HEADLINE); 
 }
-
-
-#endif

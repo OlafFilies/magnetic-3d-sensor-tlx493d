@@ -3,32 +3,37 @@
 
 
 /** Definition of the power pin. */
-const uint8_t POWER_PIN = 15; // XMC : LED2
+const uint8_t POWER_PIN = 15; // XMC1100 : LED2
 
 
 /** Declaration of the sensor. */
 TLx493D_t dut;
 
 uint8_t count = 0;
-TLx493D_SupportedSensorType_t sensorType = TLx493D_A2B6_e;
+TLx493D_SupportedSensorType_t sensorType = TLx493D_W2B6_e;
 
 
 void setup() {
     Serial.begin(115200);
     delay(3000);
 
-    tlx493d_init(&dut, sensorType);
+    Serial.println(true ==  tlx493d_init(&dut, sensorType) ? "" : "tlx493d_init error");
 
     /** Setting the defined power up pin as output and set to VDD / high value. */
     pinMode(POWER_PIN, OUTPUT);
+
+    digitalWrite(POWER_PIN, LOW);
+    delayMicroseconds(250000UL);
+
     digitalWrite(POWER_PIN, HIGH);
+    delayMicroseconds(0);
 
     /** Initialization of the sensor and the communication interface.
      *  After that the default configuration of the sensor is set. This means
      *  1-Byte read mode and interrupt disabled.
      */
-    ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e, true);
-    tlx493d_setDefaultConfig(&dut);
+    Serial.println(true ==  ifx::tlx493d::initCommunication(&dut, Wire, TLx493D_IIC_ADDR_A0_e, true) ? "" : "initCommunication error");
+    Serial.println(true ==  tlx493d_setDefaultConfig(&dut) ? "" : "tlx493d_setDefaultConfig error");
 
     Serial.println("setup done.");
 }
@@ -38,33 +43,24 @@ void setup() {
  *  the serial monitor.
  */
 void loop() {
-    Serial.println("loop ...");
+    double t, x, y, z;
 
-    double temp = 0.0;
-    double valX = 0;
-    double valY = 0;
-    double valZ = 0;
+    tlx493d_getMagneticFieldAndTemperature(&dut, &x, &y, &z, &t);
+    tlx493d_printRegisters(&dut);
 
-    Serial.print(true == tlx493d_getTemperature(&dut, &temp) ? "getTemperature ok\n" : "getTemperature error\n");
-
-    Serial.print("Temperature is: ");
-    Serial.print(temp);
+    Serial.print("\nTemperature is: ");
+    Serial.print(t);
     Serial.println("°C");
 
-    Serial.print(true == tlx493d_getMagneticField(&dut, &valX, &valY, &valZ) ? "getMagneticField ok\n" : "getMagneticField error\n");
-
     Serial.print("Value X is: ");
-    Serial.print(valX);
+    Serial.print(x);
     Serial.println(" mT");
     Serial.print("Value Y is: ");
-    Serial.print(valY);
+    Serial.print(y);
     Serial.println(" mT");
     Serial.print("Value Z is: ");
-    Serial.print(valZ);
+    Serial.print(z);
     Serial.println(" mT");
-
-    tlx493d_printRegisters(&dut);
-    Serial.print("\n");
 
     delay(1000);
 
@@ -78,13 +74,11 @@ void loop() {
         ifx::tlx493d::deinitCommunication(&dut, sensorType != TLx493D_A1B6_e);
         dut.functions->deinit(&dut);
 
-        Serial.println("\npower low --------");
         digitalWrite(POWER_PIN, LOW);
-        delayMicroseconds(250000);
+        delayMicroseconds(250000UL);
 
         tlx493d_init(&dut, sensorType);
 
-        Serial.println("\npower high --------");
         digitalWrite(POWER_PIN, HIGH);
         delayMicroseconds(0);
 

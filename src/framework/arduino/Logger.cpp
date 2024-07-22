@@ -24,6 +24,7 @@
 
 const uint16_t LOGGER_BUFFER_SIZE = 512U;
 
+
 static void logMessage(const char *prefix, const char *format, va_list vaList) {
     char buffer[LOGGER_BUFFER_SIZE];
 
@@ -45,9 +46,14 @@ extern "C" {
     void logPrintRegisters(const TLx493D_t *sensor, const char *headLine = NULL) {
         Serial.println();
 
+
+#if defined(ARDUINO_ARM_XMC) || (defined(__AVR__) && (defined(ARDUINO_UNOR4_MINIMA) || defined(ARDUINO_AVR_MEGA2560)))
+
         if( headLine != NULL ) {
             Serial.println(headLine);
         }
+
+#endif
 
         for(uint8_t i = 0; i < sensor->regMapSize; ++i) {
             logPrint("    0x%02X", sensor->regMap[i]);
@@ -70,41 +76,11 @@ extern "C" {
     }
 
 
-    void logPrintln(const char *format, ...) {
+    void logPrintln(const char *prefix, const char *format, ...) {
         Serial.println();
         va_list ap;
         va_start(ap, format);
-        logMessage("", format, ap);
-        va_end(ap);
-        Serial.println();
-    }
-
-
-    void logInfo(const char *format, ...) {
-        Serial.println();
-        va_list ap;
-        va_start(ap, format);
-        logMessage("INFO : ", format, ap);
-        va_end(ap);
-        Serial.println();
-    }
-
-
-    void logWarn(const char *format, ...) {
-        Serial.println();
-        va_list ap;
-        va_start(ap, format);
-        logMessage("WARNING : ", format, ap);
-        va_end(ap);
-        Serial.println();
-    }
-
-
-    void logError(const char *format, ...) {
-        Serial.println();
-        va_list ap;
-        va_start(ap, format);
-        logMessage("ERROR : ", format, ap);
+        logMessage(prefix, format, ap);
         va_end(ap);
         Serial.println();
     }

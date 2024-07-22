@@ -4,13 +4,13 @@
 // test includes
 #include "Test_includes.h"
 
-#include "TLx493D_W2BW_defines.h"
-#include "TLx493D_W2BW_enums.h"
-#include "TLx493D_W2BW.h"
+#include "TLx493D_A2BW_defines.h"
+#include "TLx493D_A2BW_enums.h"
+#include "TLx493D_A2BW.h"
 
 
-void TLx493D_W2BW_suiteSetUp(void);
-void TLx493D_W2BW_suiteTearDown(void);
+void TLx493D_A2BW_suiteSetUp(void);
+void TLx493D_A2BW_suiteTearDown(void);
 
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
@@ -23,28 +23,42 @@ static TLx493D_t dut;
 
 
 // define test group name
-TEST_GROUP(TLx493D_W2BW);
-TEST_GROUP(TLx493D_W2BW_internal);
+// define test group name
+TEST_GROUP(TLx493D_A2BW);
+TEST_GROUP(TLx493D_A2BW_internal);
 
 
 // Setup method called before every individual test defined for this test group
-static TEST_SETUP(TLx493D_W2BW_internal)
+static TEST_SETUP(TLx493D_A2BW_internal)
 {
-    TLx493D_W2BW_init(&dut);
+    TLx493D_A2BW_init(&dut);
 
     memset(dut.regMap, 0, dut.regMapSize);
 }
 
 
 // Tear down method called before every individual test defined for this test group
-static TEST_TEAR_DOWN(TLx493D_W2BW_internal)
+static TEST_TEAR_DOWN(TLx493D_A2BW_internal)
 {
     dut.functions->deinit(&dut);
 }
 
 
-TEST_IFX(TLx493D_W2BW_internal, checkUnsupportedFunctionality)
+TEST_IFX(TLx493D_A2BW_internal, checkUnsupportedFunctionality)
 {
+    static double  xl, xh, yl, yh, zl, zh, t;
+    static int16_t xl_i, xh_i, yl_i, yh_i, zl_i, zh_i;
+
+
+    TEST_ASSERT_FALSE( dut.functions->hasWakeUp(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->isWakeUpEnabled(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->enableWakeUpMode(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->disableWakeUpMode(&dut) );
+
+    TEST_ASSERT_FALSE( dut.functions->setWakeUpThresholdsAsInteger(&dut, xh_i, xl_i, yh_i, yl_i, zh_i, zl_i) );
+    TEST_ASSERT_FALSE( dut.functions->setWakeUpThresholds(&dut, t, xh, xl, yh, yl, zh, zl) );
+
+
     TEST_ASSERT_FALSE( dut.functions->softwareReset(&dut) );
 }
 
@@ -53,16 +67,16 @@ TEST_IFX(TLx493D_W2BW_internal, checkUnsupportedFunctionality)
  * Define tests for supported common functionality.
  * Requires that the registers have been read once, in setDefaultConfig.
  */
-TEST_IFX(TLx493D_W2BW_internal, checkSupportedFunctionality)
+TEST_IFX(TLx493D_A2BW_internal, checkSupportedFunctionality)
 {
     TEST_ASSERT_TRUE( dut.functions->init(&dut) );
     TEST_ASSERT_TRUE( dut.functions->deinit(&dut) );
 
-    TEST_ASSERT_TRUE( dut.functions->hasWakeUp(&dut) );
+    TEST_ASSERT_FALSE( dut.functions->hasWakeUp(&dut) );
 }
 
 
-TEST_IFX(TLx493D_W2BW_internal, checkResetValues)
+TEST_IFX(TLx493D_A2BW_internal, checkResetValues)
 {
     for(uint8_t i = 0; i < dut.regMapSize; ++i) {
         TEST_ASSERT_EQUAL_HEX8( 0, dut.regMap[i] );
@@ -70,15 +84,6 @@ TEST_IFX(TLx493D_W2BW_internal, checkResetValues)
 
     dut.functions->setResetValues(&dut);
 
-    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x07] );
-    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x08] );
-    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x09] );
-    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x0A] );
-    TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x0B] );
-    TEST_ASSERT_EQUAL_HEX8( 0x7F, dut.regMap[0x0C] );
-    TEST_ASSERT_EQUAL_HEX8( 0x38, dut.regMap[0x0D] );
-    TEST_ASSERT_EQUAL_HEX8( 0x38, dut.regMap[0x0E] );
-    TEST_ASSERT_EQUAL_HEX8( 0x38, dut.regMap[0x0F] );  
     TEST_ASSERT_EQUAL_HEX8( 0x01, dut.regMap[0x10] ); // CONFIG
     TEST_ASSERT_EQUAL_HEX8( 0x80, dut.regMap[0x11] ); // MOD1 : A0 : 0x80, A1 : 0x20, A2 : 0x40, A3 : 0xE0
     TEST_ASSERT_EQUAL_HEX8( 0x00, dut.regMap[0x13] ); // MOD2
@@ -86,7 +91,7 @@ TEST_IFX(TLx493D_W2BW_internal, checkResetValues)
 }
 
 
-TEST_IFX(TLx493D_W2BW_internal, checkCalculateMagneticFieldAndTemperature)
+TEST_IFX(TLx493D_A2BW_internal, checkCalculateMagneticFieldAndTemperature)
 {
     double temperature = 0.0;
     dut.functions->calculateTemperature(&dut, &temperature);
@@ -111,25 +116,25 @@ TEST_IFX(TLx493D_W2BW_internal, checkCalculateMagneticFieldAndTemperature)
 
 
 // Bundle all tests to be executed for this test group
-static TEST_GROUP_RUNNER(TLx493D_W2BW_internal)
+static TEST_GROUP_RUNNER(TLx493D_A2BW_internal)
 {
-    RUN_TEST_CASE(TLx493D_W2BW_internal, checkUnsupportedFunctionality);
-    RUN_TEST_CASE(TLx493D_W2BW_internal, checkSupportedFunctionality);
+    RUN_TEST_CASE(TLx493D_A2BW_internal, checkUnsupportedFunctionality);
+    RUN_TEST_CASE(TLx493D_A2BW_internal, checkSupportedFunctionality);
 
-    RUN_TEST_CASE(TLx493D_W2BW_internal, checkResetValues);
-    RUN_TEST_CASE(TLx493D_W2BW_internal, checkCalculateMagneticFieldAndTemperature);
+    RUN_TEST_CASE(TLx493D_A2BW_internal, checkResetValues);
+    RUN_TEST_CASE(TLx493D_A2BW_internal, checkCalculateMagneticFieldAndTemperature);
 }
 
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(TLx493D_W2BW)
+TEST_GROUP_RUNNER(TLx493D_A2BW)
 {
-    TLx493D_W2BW_suiteSetUp();
+    TLx493D_A2BW_suiteSetUp();
 
-    RUN_TEST_GROUP(TLx493D_W2BW_internal);
+    RUN_TEST_GROUP(TLx493D_A2BW_internal);
 
 
-#ifndef TEST_TLx493D_W2BW_NEEDS_SENSOR
+#ifndef TEST_TLx493D_A2BW_NEEDS_SENSOR
 
     // run gen 2 common functions tests
     RUN_TEST_GROUP(SensorsGen2Common);
@@ -138,5 +143,5 @@ TEST_GROUP_RUNNER(TLx493D_W2BW)
 #endif
 
 
-    TLx493D_W2BW_suiteTearDown();
+    TLx493D_A2BW_suiteTearDown();
 }

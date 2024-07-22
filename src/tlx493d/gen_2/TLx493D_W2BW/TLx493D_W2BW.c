@@ -21,9 +21,6 @@
 #include "TLx493D_W2BW.h"
 
 
-#ifdef USE_TLx493D_W2BW      
-
-
 static TLx493D_Register_t TLx493D_W2BW_regDef[] = {
     { /* W2BW_BX_MSBS_e, */    TLx493D_READ_MODE_e,         0x00,   0xFF,   0,  8 },
     { /* W2BW_BY_MSBS_e, */    TLx493D_READ_MODE_e,         0x01,   0xFF,   0,  8 },
@@ -293,7 +290,10 @@ bool TLx493D_W2BW_setSensitivity(TLx493D_t *sensor, TLx493D_SensitivityType_t va
 
 bool TLx493D_W2BW_setDefaultConfig(TLx493D_t *sensor) {
     return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e);
+<<<<<<< HEAD
+=======
     /** return tlx493d_gen_2_setDefaultConfig(sensor, W2BW_CONFIG_REG_e, W2BW_MOD1_REG_e, W2BW_MOD2_REG_e, W2BW_CP_e, W2BW_CA_e, W2BW_INT_e); */
+>>>>>>> 8843b9e1b6409697bac03d9a51405e33036ba293
 }
 
 
@@ -490,6 +490,3 @@ double TLx493D_W2BW_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 void TLx493D_W2BW_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_W2BW_REGISTER_HEADLINE); 
 }
-
-
-#endif

@@ -5,14 +5,16 @@
 using namespace ifx::tlx493d;
 
 
-/** Declaration of three sensor objects. One of the second generation
- *  and two of the third generation. The two sensors of the third generation
- *  have different default addresses.
+/** Declaration of three different sensor objects, 2 sensors of the second generation
+ *  and 1 of the 3rd generation. 
+ *  The 3rd generation sensor has a fixed address A0. Although A0 for the 3rd
+ *  generation maps to a different IIC address than for the second generation,
+ *  addresses for the 2nd generation sensors are changed to A1/A2 for demonstration purposes. 
 */
-TLx493D_W2BW dut1(Wire, TLx493D_IIC_ADDR_A0_e);
 
-TLx493D_P3B6 dut2(Wire, TLx493D_IIC_ADDR_A1_e);
-TLx493D_P3B6 dut3(Wire, TLx493D_IIC_ADDR_A2_e);
+TLx493D_P3B6 dut1(Wire, TLx493D_IIC_ADDR_A0_e);
+TLx493D_W2BW dut2(Wire, TLx493D_IIC_ADDR_A0_e);
+TLx493D_W2B6 dut3(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
 void setup() {
@@ -20,16 +22,23 @@ void setup() {
     delay(3000);
 
     /** The second generation is critical with respect to interrupts, so you have
-     *  to make sure to initialize this sensor first. Otherwise it will trigger an
-     *  interrupt on the interrupt line (default config of the sensor) which will
-     *  mess up the sensor's communication interface. 
+     *  to make sure to initialize these sensors first by powering them up one by one
+     *  and disabling interrupts in the sensor's begin() method.
+     *  Otherwise an interrupt may be triggered on the IIC SCL line stalling the sensor's
+     *  communication interface. 
      */
-    dut1.setPowerPin(8, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+    dut2.setPowerPin(8, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+    dut3.setPowerPin(9, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
 
+    /** Initialize sensor 1 (address cannot be changed). */
     dut1.begin();
+
     dut2.begin();
+    dut2.setIICAddress(TLx493D_IIC_ADDR_A1_e);
+
     dut3.begin();
-    
+    dut3.setIICAddress(TLx493D_IIC_ADDR_A2_e);
+
     Serial.print("setup done.\n");
 }
 

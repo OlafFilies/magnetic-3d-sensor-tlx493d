@@ -19,26 +19,29 @@ void setup() {
      *  Here we're using three GPIOs to power up the sensors, one
      *  after the other. This is done by defining the pins with the
      *  Board Support Class and its functions. The power up pins are
-     *  enabled during the SensorClassObject.begin() call. See below. 
+     *  enabled during the begin() call to the sensor object as done below. 
     */
-    dut1.setPowerPin(8, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
-    dut2.setPowerPin(9, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
-    dut3.setPowerPin(10, OUTPUT, INPUT, HIGH, LOW, 0, 250000);
+    dut1.setPowerPin(8, OUTPUT, INPUT, HIGH, LOW, 0, 250000);  // XMC4700 Relax P1.10
+    dut2.setPowerPin(9, OUTPUT, INPUT, HIGH, LOW, 0, 250000);  // XMC4700 Relax XMC P1.11
+    dut3.setPowerPin(10, OUTPUT, INPUT, HIGH, LOW, 0, 250000); // XMC4700 Relax XMC P3.10
 
-    /** Here we're enabling one sensor after the other. This procedure 
-     *  is necessary, otherwise it can happen that the initialization of the
-     *  sensors fails. In between we change the I2C-Address of the sensor
-     *  that was just enabled. This has to be done, because the default 
-     *  addresses of the senors are identical. For the last sensor this is not 
-     *  required anymore, since the other two have a new address.
+    /** Here we're enabling one sensor after another. This procedure 
+     *  is necessary in order to avoid an interrupt to occur on the SCL line before
+     *  interrupts are disabled in the sensor's begin() method. Additionally, the IIC address
+     *  is changed from the default A0 to a distinct one for each sensor.
      */
-    dut1.begin();
+    dut1.begin(true, false, false, true);
     dut1.setIICAddress(TLx493D_IIC_ADDR_A2_e);
+    dut1.printRegisters();
+
     dut2.begin();
     dut2.setIICAddress(TLx493D_IIC_ADDR_A1_e);
-    dut3.begin();
+    dut2.printRegisters();
 
-    Serial.print("setup done.\n");
+    dut3.begin();
+    dut3.printRegisters();
+
+    Serial.println("setup done.\n");
 }
 
 /** In the loop we're reading out the temperature value as well as the magnetic values in X, Y, Z-direction 
@@ -48,13 +51,12 @@ void loop() {
     double temp1 = 0.0, temp2 = 0.0, temp3 = 0.0;
     double valX1 = 0, valY1 = 0, valZ1 = 0, valX2 = 0, valY2 = 0, valZ2 = 0, valX3 = 0, valY3 = 0, valZ3 = 0;
 
-    dut1.getTemperature(&temp1); 
-    dut2.getTemperature(&temp2); 
-    dut3.getTemperature(&temp3); 
-
-    dut1.getMagneticField(&valX1, &valY1, &valZ1);
-    dut2.getMagneticField(&valX2, &valY2, &valZ2);
-    dut3.getMagneticField(&valX3, &valY3, &valZ3);
+    dut1.getMagneticFieldAndTemperature(&valX1, &valY1, &valZ1, &temp1);
+    dut1.printRegisters();
+    dut2.getMagneticFieldAndTemperature(&valX2, &valY2, &valZ2, &temp2);
+    dut2.printRegisters();
+    dut3.getMagneticFieldAndTemperature(&valX3, &valY3, &valZ3, &temp3);
+    dut3.printRegisters();
 
     Serial.println("========================================");
     Serial.print("Temperature of Sensor 1:\t");Serial.print(temp1);Serial.println(" °C");

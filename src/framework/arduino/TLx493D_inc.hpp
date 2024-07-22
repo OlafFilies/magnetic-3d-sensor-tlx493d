@@ -23,6 +23,7 @@
 #include "TLx493D_A1B6.h"
 
 #include "TLx493D_A2B6.h"
+#include "TLx493D_A2BW.h"
 #include "TLx493D_P2B6.h"
 #include "TLx493D_W2B6.h"
 #include "TLx493D_W2BW.h"
