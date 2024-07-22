@@ -150,8 +150,12 @@ bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t cpBF, uint8_t caB
     tlx493d_common_setBitfield(sensor, intBF, 1);
 
     if( sensor->functions->enable1ByteReadMode(sensor) ) {
-        (void) sensor->functions->readRegistersAndCheck(sensor);
+        // // (void) sensor->functions->readRegistersAndCheck(sensor);
         // (void) sensor->functions->readRegisters(sensor);
+
+        if( ! sensor->functions->readRegisters(sensor) ) {
+            logError("readRegisters failed !");
+        }
 
         if( (tlx493d_common_returnBitfield(sensor, cpBF) == 0x01U) && !sensor->functions->hasValidConfigurationParity(sensor) ) {
             tlx493d_common_setBitfield(sensor, cpBF, 0x00U);

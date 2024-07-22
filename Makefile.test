@@ -3,6 +3,9 @@
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 iic flash monitor
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 iic_c_style flash monitor
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 iic_ext_addr flash monitor
+
+make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM30 iic_ext_addr flash monitor
+
 #
 make  -f Makefile.arduino.mk  FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 A1B6_needsSensor monitor
 (make  -f Makefile.arduino.mk FQBN=Infineon:xmc:XMC1100_XMC2GO    PORT=COM23 A1B6_needsSensor monitor) 2>&1 | tee log
