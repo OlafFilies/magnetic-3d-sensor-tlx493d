@@ -6,22 +6,22 @@ using namespace ifx::tlx493d;
 
 
 /* Definition of the power pin and sensor objects for Kit2Go XMC1100 boards. */
-// const uint8_t POWER_PIN = 15; // XMC1100 : LED2
+const uint8_t POWER_PIN = 15; // XMC1100 : LED2
 
 // TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
-// TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+TLx493D_P2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 
 /** Definition of the power pin and sensor objects for S2Go with XMC4700 Relax Lite board. */
-const uint8_t POWER_PIN = 8; // XMC : P1.10
+// const uint8_t POWER_PIN = 8; // XMC : P1.10
 
 // TLx493D_A1B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_A2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
-TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
+// TLx493D_W2B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
 // TLx493D_W2BW dut(Wire, TLx493D_IIC_ADDR_A0_e);
 
 // TLx493D_P3B6 dut(Wire, TLx493D_IIC_ADDR_A0_e);
