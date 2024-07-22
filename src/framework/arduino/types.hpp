@@ -9,9 +9,6 @@
 
 namespace ifx {
     namespace tlx493d {
-        /** Definiton of the specific sensor constructors. This makes instantiation of the sensors easier for the user,
-         *  since they can use a "regular" constructor call, instead of using the template notation. 
-         */
         using TLx493D_A1B6 = TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A1B6_e>;
         using TLx493D_A2B6 = TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A2B6_e>;
         using TLx493D_A2BW = TLx493D<Kit2GoBoardSupport, TwoWireWrapper, TLx493D_A2BW_e>;

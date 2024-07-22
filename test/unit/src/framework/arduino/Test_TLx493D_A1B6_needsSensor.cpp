@@ -1,7 +1,7 @@
 #include "Test_includes.hpp"
 
 
-const static uint8_t POWER_PIN = 15; // LED2
+const static uint8_t POWER_PIN = 15; // XMC1100 : LED2
 // const uint8_t POWER_PIN   = 8; // P1.10
 const uint8_t ADDRESS_PIN = 7;
 

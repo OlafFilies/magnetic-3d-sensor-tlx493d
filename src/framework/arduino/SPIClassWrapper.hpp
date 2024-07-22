@@ -19,6 +19,7 @@ namespace ifx {
 
                 /** Sets the bus type to SPI. */
                 using BusType = SPIClass;
+                // typedef SPIClass BusType;
 
                 static constexpr uint8_t TLX493D_SPI_READ_BIT_ON      = 0x80;
                 // static constexpr uint8_t TLX493D_SPI_READ_BIT_OFF     = 0x00;
