@@ -5,7 +5,15 @@
 using namespace ifx::tlx493d;
 
 
-/** Declaration of three sensor objects with the same default address (A0). */
+/** Declaration of three sensor objects with the same default address (A0).
+ * 
+ *  ATTENTION
+ *  All Kit2Go/S2Go boards have pull-up resistors attached to the IIC SCL and SDA lines.
+ *  In case of sensors dut2 and dut3 these resistors actually pull-down the SCL/SDA lines while
+ *  the sensors are NOT powered. Therefore the pull-up resistors of dut2 and dut3 have to be removed
+ *  for this example to work. Otherwise not even dut1 can be initialized properly. Alternatively,
+ *  pull-up resistors for all devices are removed and external pull-ups are added to SCL/SDA.
+ */
 TLx493D_W2B6 dut1(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2B6 dut2(Wire, TLx493D_IIC_ADDR_A0_e);
 TLx493D_W2B6 dut3(Wire, TLx493D_IIC_ADDR_A0_e);
