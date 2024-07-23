@@ -1,7 +1,7 @@
 FQBN  ?=
 PORT  ?=
 TESTS ?=
-UNITY_PATH ?=
+#UNITY_PATH ?=
 
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))

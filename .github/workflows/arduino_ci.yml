@@ -96,6 +96,7 @@ jobs:
         mkdir -p $TMPDIR
         cd /opt/runner_support/
         export REPO="$(basename "$GITHUB_REPOSITORY")"
+        export UNITY_PATH=/opt/runner_support/Unity
 
         TYPE=${{ matrix.example }}
         KEYNUM=`cat ./repo2fqbn.yaml | shyaml get-length ${REPO}.${TYPE}`
@@ -143,7 +144,7 @@ jobs:
                 cd $HOME/Arduino/libraries/$REPO
                 mkdir -p ./build
 
-                make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${FQBN} PORT=${PORT} ${SENSOR}_needsSensor flash
+                make -f Makefile.arduino.mk FQBN=${FQBN} PORT=${PORT} ${SENSOR}_needsSensor flash
 
               else
                 echo "No"
