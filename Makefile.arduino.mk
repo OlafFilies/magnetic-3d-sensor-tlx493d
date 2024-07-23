@@ -114,14 +114,14 @@ unity: arduino
 # find test/unit/src -name '*.[hc]*' -a \! -path '*mtb*' -exec \cp {} build \;
 #	
 # cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
-ifeq ($(UNITY_PATH),)
-	$(error "Must set variable UNITY_PATH in order to be able to find UNITY files !")
-else
+# ifeq ($(UNITY_PATH),)
+# 	$(error "Must set variable UNITY_PATH in order to be able to find UNITY files !")
+# else
 #	find ${UNITY_PATH} -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
 	cp -r ${UNITY_PATH}/*.[hc] build
 	find test/unit/src -name '*.[hc]*' -a \! -path '*mtb*' -exec \cp {} build \;
 	cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
-endif
+# endif
 
 
 compile:
