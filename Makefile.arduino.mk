@@ -1,6 +1,7 @@
 FQBN  ?=
 PORT  ?=
 TESTS ?=
+UNITY_PATH ?=
 
 $(info FQBN : $(FQBN))
 $(info PORT : $(PORT))
@@ -111,12 +112,15 @@ iic_with_wakeup: arduino
 unity: arduino
 # find ../../unity/Unity-master -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
 # find test/unit/src -name '*.[hc]*' -a \! -path '*mtb*' -exec \cp {} build \;
+#	cp -r ${UNITY_PATH}/*.[hc] build
 # cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
-	cp -r ${UNITY_PATH}/*.[hc] build
+ifeq ($(UNITY_PATH),)
+	$(error "Must set variable UNITY_PATH in order to be able to find UNITY files !")
+else
+	find ${UNITY_PATH} -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
 	find test/unit/src -name '*.[hc]*' -a \! -path '*mtb*' -exec \cp {} build \;
 	cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
-
-
+endif
 
 
 compile:
