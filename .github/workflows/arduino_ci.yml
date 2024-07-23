@@ -1,0 +1,181 @@
+name: Arduino CI
+
+# on which event should we start push, pull request or schedule dispatches
+on:
+  - push
+  - pull_request
+  # push:
+  #   branches: [master main]
+  # pull_request:
+  #   branches: [master main]
+
+# This template runs multiple workflows
+jobs:
+
+  #############################################################################
+  # This action sets common variables for the flow and
+  # identifies the examples to compile
+  setup:
+
+    # we run this on self hosted runner, use labels to be more specific
+    # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
+
+    steps:
+      # checkout the latest github action code
+      - name: Checkout actions
+        uses: actions/checkout@v4
+
+      # checkout the latest arduino-cli compiler
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@master
+
+      # Fetch
+      - id: set-matrix
+        run: |
+          cd /opt/runner_support/
+          export REPO="$(basename "$GITHUB_REPOSITORY")"
+
+          declare -a TYPES=($(cat ./repo2fqbn.yaml | shyaml keys ${REPO}))
+          export ty=`jq --compact-output --null-input '$ARGS.positional' --args -- "${TYPES[@]}"`
+          echo "types=${ty}"  >> $GITHUB_OUTPUT
+
+          echo "Repo name extracted: " $REPO
+          echo "TYPES name extracted: " ${TYPES[@]}
+
+    outputs:
+      types: ${{ steps.set-matrix.outputs.types }}
+
+
+  # The build job compiles the sample code for different boards
+  make:
+
+    # wait on first setup run before starting main function
+    needs: setup
+
+    # we run this on self hosted runner, use labels to be more specific
+    # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
+
+    # which combination of sample code and boards should run
+    # for this example of 2 sample codes and 3 boards a total of 2x3=6 runners have to work.
+    # if we have only 4 runner then these 4 are started and the last 2 are waiting until they can start
+    strategy:
+
+      matrix:
+        # List of all examples in the lib to compile
+        example: ${{ fromJson(needs.setup.outputs.types) }}
+
+    # These are the steps which should run for each combination of fqbn and example code
+    steps:
+
+      # checkout the latest github action code
+    - name: Checkout actions
+      uses: actions/checkout@v4
+
+      # checkout the latest arduino-cli compiler
+    - name: Setup Arduino CLI
+      uses: arduino/setup-arduino-cli@master
+
+      # Flashes the compiled HEX file onto the selected MCU
+      # REPO: the name of the repository which is also the link name
+      # HEXNAME: the board depended name of the HEX files
+      # SERIAL_NUM: the unique serial number of the hardware board according the board2port.yaml
+      # DEVICE: the flashing device according the board2port.yaml
+      # PORT: real PORT name of the attached hardware based on the SERIAL_NUM
+      # use the python based XMC flasher
+    - name: Flash
+      run: |
+        export TMPDIR=$HOME/tmp
+        mkdir -p $TMPDIR
+        cd /opt/runner_support/
+        export REPO="$(basename "$GITHUB_REPOSITORY")"
+
+        TYPE=${{ matrix.example }}
+        KEYNUM=`cat ./repo2fqbn.yaml | shyaml get-length ${REPO}.${TYPE}`
+
+        echo "Repo name extracted: " $REPO
+        echo "Board type name:     " $TYPE
+        echo "Key Index Number:    " $KEYNUM
+
+        for ((i = 0 ; i < $KEYNUM ; i++ ));
+        do
+          HEXNAME=`cat ./repo2fqbn.yaml | shyaml get-value ${REPO}.${TYPE}.$i`
+          FQBN=`tr '.' ':' <<<"${HEXNAME}"`
+          INDEX=`cat ./board2port.yaml | shyaml get-length  ${HEXNAME}.${REPO}.${TYPE}.port_serial`
+
+          echo "Key/Index Number:    " $i "/" $INDEX
+          echo "Build HEX name:      " $HEXNAME
+          echo "FQBN:                " $FQBN
+
+          for ((a = 0 ; a < $INDEX ; a++ ));
+          do
+            SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.port_serial.$a`
+            DEVICE=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.device.$a`
+            PORT=`./find_usb.sh $SERIAL_NUM`
+            SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
+            readarray -d ":" -t arr <<< $FQBN
+            PLATFORM="${arr[0],,}:${arr[1],,}"
+
+            echo "Index                " $a
+            echo "Port Serial Num:     " $SERIAL_NUM
+            echo "Flash device:        " $DEVICE
+            echo "Port found:          " $PORT
+            echo "Sensor name          " $SENSOR
+            echo "Platform:            " $PLATFORM
+
+            if [ "${PORT}" ]; then
+
+                mkdir -p ~/.arduino15/packages/
+                ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+                mkdir -p "$HOME/Arduino/libraries"
+                ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/$REPO
+
+                arduino-cli core update-index
+                arduino-cli core install "${PLATFORM}"
+
+                cd $HOME/Arduino/libraries/$REPO
+                mkdir -p ./build
+
+                make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${FQBN} PORT=${PORT} ${SENSOR}_needsSensor flash
+
+              else
+                echo "No"
+              fi
+          done
+        done
+
+
+    # Monitoring the serial output from the attached and flashed hardware and collecting
+    # ERROR, Warning and statistical data for reporting
+    - name: Monitor
+      run: |
+          cd /opt/runner_support/
+          export REPO="$(basename "$GITHUB_REPOSITORY")"
+
+          TYPE=${{ matrix.example }}
+          KEYNUM=`cat ./repo2fqbn.yaml | shyaml get-length ${REPO}.${TYPE}`
+          for ((i = 0 ; i < $KEYNUM ; i++ ));
+          do
+            HEXNAME=`cat ./repo2fqbn.yaml | shyaml get-value ${REPO}.${TYPE}.$i`
+            FQBN=`tr '.' ':' <<<"${HEXNAME}"`
+            INDEX=`cat ./board2port.yaml | shyaml get-length  ${HEXNAME}.${REPO}.${TYPE}.port_serial`
+            for ((a = 0 ; a < $INDEX ; a++ ));
+            do
+              SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.port_serial.$a`
+              DEVICE=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.device.$a`
+              PORT=`./find_usb.sh $SERIAL_NUM`
+              if [ "${PORT}" ]; then
+                /opt/runner_support/py_console.py --port $PORT --baud 115200
+              else
+                echo "No"
+              fi
+            done
+          done
+
