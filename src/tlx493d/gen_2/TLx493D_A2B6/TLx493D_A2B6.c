@@ -21,9 +21,6 @@
 #include "TLx493D_A2B6.h"
 
 
-#ifdef USE_TLx493D_A2B6      
-
-
 static TLx493D_Register_t TLx493D_A2B6_regDef[] = {
     { /* A2B6_BX_MSBS_e, */   TLx493D_READ_MODE_e,        0x00, 0xFF, 0, 8 },
     { /* A2B6_BY_MSBS_e, */   TLx493D_READ_MODE_e,        0x01, 0xFF, 0, 8 },
@@ -276,7 +273,6 @@ bool TLx493D_A2B6_setTC3MagneticTemperatureCompensation(TLx493D_t *sensor) {
 
 bool TLx493D_A2B6_setDefaultConfig(TLx493D_t *sensor) {
     return tlx493d_gen_2_setDefaultConfig(sensor, A2B6_CP_e, A2B6_CA_e, A2B6_INT_e);
-    /** return tlx493d_gen_2_setDefaultConfig(sensor, A2B6_CONFIG_REG_e, A2B6_MOD1_REG_e, A2B6_MOD2_REG_e, A2B6_CP_e, A2B6_CA_e, A2B6_INT_e); */
 }
 
 
@@ -321,30 +317,7 @@ bool TLx493D_A2B6_setPowerMode(TLx493D_t *sensor, TLx493D_PowerModeType_t mode) 
 
 
 bool TLx493D_A2B6_setUpdateRate(TLx493D_t *sensor, TLx493D_UpdateRateType_t val) {
-    uint8_t mod1 = A2B6_MOD1_REG_e;
-    uint8_t rate = 0;
-
-    switch(val) {
-        case TLx493D_UPDATE_RATE_FAST_e : rate = 0;
-                                  break;
-
-        case TLx493D_UPDATE_RATE_SLOW_e : rate = 1;
-                                  break;
-
-        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
-                  return false;
-    }
-
-    tlx493d_common_setBitfield(sensor, A2B6_PRD_e, rate);
-    tlx493d_common_setBitfield(sensor, A2B6_FP_e, tlx493d_gen_2_calculateFuseParity(sensor, A2B6_FP_e, A2B6_PRD_e));
-
-    uint8_t buf[4] = { mod1,
-                       sensor->regMap[mod1],     /** MOD1 register */
-                       sensor->regMap[mod1 + 1], /** reserved register must have been read once in setDefaultConfig to get factory settings ! */
-                       sensor->regMap[mod1 + 2]  /** MOD2 register */
-                     };
-
-    return tlx493d_transfer(sensor, buf, sizeof(buf), NULL, 0);
+    return tlx493d_gen_2_setUpdateRateFastSlow(sensor, A2B6_FP_e, A2B6_PRD_e, val);
 }
 
 
@@ -517,6 +490,3 @@ double TLx493D_A2B6_getSensitivityScaleFactor(const TLx493D_t *sensor) {
 void TLx493D_A2B6_printRegisters(const TLx493D_t *sensor) {
     logPrintRegisters(sensor, TLX493D_A2B6_REGISTER_HEADLINE); 
 }
-
-
-#endif

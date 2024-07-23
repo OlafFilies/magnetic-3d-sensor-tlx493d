@@ -56,9 +56,9 @@ TEST_IFX(TLx493D_W2BW_needsSensorInternal, checkSupportedFunctionality)
     TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut) );
     // tlx493d_printRegisters(&dut);
  
-    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) );      // fails sometimes
-    TEST_ASSERT_TRUE( dut.functions->hasValidBusParity(&dut) ); // fails sometimes
-    TEST_ASSERT_TRUE( dut.functions->hasValidTBit(&dut) );      // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) );      // fails sometimes with readRegisters()
+    TEST_ASSERT_TRUE( dut.functions->hasValidBusParity(&dut) ); // fails sometimes with readRegisters()
+    TEST_ASSERT_TRUE( dut.functions->hasValidTBit(&dut) );      // fails sometimes with readRegisters()
 
     TEST_ASSERT_TRUE( dut.functions->isFunctional(&dut) );
     TEST_ASSERT_TRUE( dut.functions->hasValidFuseParity(&dut) );

@@ -580,7 +580,6 @@ namespace ifx {
             private:
 
                 using BusType = typename BusWrapper::BusType;
-                // typedef typename BusWrapper::BusType BusType;
 
 
                 TLx493D();

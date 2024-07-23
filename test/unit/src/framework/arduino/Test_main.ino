@@ -2,10 +2,6 @@
 #include "Test_includes.hpp"
 
 
-// #define POWER_PIN LED2 // 15
-const uint8_t POWER_PIN = LED2;
-
-
 extern "C" {
     /***
       * Uses flags / defines to determine which groups of tests should be added to this test such that multiple tests can be executed in a single run.
@@ -39,6 +35,20 @@ extern "C" {
 #ifdef TEST_TLx493D_A2B6_NEEDS_SENSOR
 
     RUN_TEST_GROUP(TLx493D_A2B6_needsSensor);
+
+#endif
+
+
+// TLx493D_A2BW
+#ifdef TEST_TLx493D_A2BW
+
+    RUN_TEST_GROUP(TLx493D_A2BW);
+
+#endif
+
+#ifdef TEST_TLx493D_A2BW_NEEDS_SENSOR
+
+    RUN_TEST_GROUP(TLx493D_A2BW_needsSensor);
 
 #endif
 

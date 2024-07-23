@@ -150,7 +150,12 @@ bool tlx493d_gen_2_setDefaultConfig(TLx493D_t *sensor, uint8_t cpBF, uint8_t caB
     tlx493d_common_setBitfield(sensor, intBF, 1);
 
     if( sensor->functions->enable1ByteReadMode(sensor) ) {
-        sensor->functions->readRegisters(sensor);
+        // // (void) sensor->functions->readRegistersAndCheck(sensor);
+        // (void) sensor->functions->readRegisters(sensor);
+
+        if( ! sensor->functions->readRegisters(sensor) ) {
+            logError("readRegisters failed !");
+        }
 
         if( (tlx493d_common_returnBitfield(sensor, cpBF) == 0x01U) && !sensor->functions->hasValidConfigurationParity(sensor) ) {
             tlx493d_common_setBitfield(sensor, cpBF, 0x00U);
@@ -262,6 +267,34 @@ bool tlx493d_gen_2_setPowerMode(TLx493D_t *sensor, uint8_t modeBF, uint8_t fpBF,
 }
 
 
+bool tlx493d_gen_2_setUpdateRateFastSlow(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_t val) {
+    uint8_t mod1 = sensor->regDef[fpBF].address;
+    uint8_t rate = 0;
+
+    switch(val) {
+        case TLx493D_UPDATE_RATE_FAST_e : rate = 0b0;
+                                    break;
+
+        case TLx493D_UPDATE_RATE_SLOW_e : rate = 0b1;
+                                   break;
+
+        default : tlx493d_errorSelectionNotSupportedForSensorType(sensor, val, "TLx493D_UpdateRateType_t");
+                  return false;
+    }
+
+    tlx493d_common_setBitfield(sensor, prdBF, rate);
+    tlx493d_common_setBitfield(sensor, fpBF, sensor->functions->calculateFuseParity(sensor));
+
+    uint8_t buf[4] = { mod1,
+                       sensor->regMap[mod1],
+                       sensor->regMap[mod1 + 1U], /** reserved register must have been read once in setDefaultConfig to get factory settings ! */
+                       sensor->regMap[mod1 + 2U]
+                     };
+
+    return tlx493d_transfer(sensor, buf, sizeof(buf), NULL, 0);
+}
+
+
 bool tlx493d_gen_2_setUpdateRate(TLx493D_t *sensor, uint8_t fpBF, uint8_t prdBF, TLx493D_UpdateRateType_t val) {
     uint8_t mod1 = sensor->regDef[fpBF].address;
     uint8_t rate = 0;
@@ -320,12 +353,6 @@ bool tlx493d_gen_2_isFunctional(const TLx493D_t *sensor) {
     return sensor->functions->hasValidFuseParity(sensor) && sensor->functions->hasValidConfigurationParity(sensor);
 }
 
-
-/**
-TLx493D_Register_t *type = &sensor->regDef[typeBF];
-    return ((sensor->regMap[type->address] & type->mask) >> type->offset) != 0b11;
-}
-*/
 
 bool tlx493d_gen_2_isWakeUpEnabled(const TLx493D_t *sensor, uint8_t waBF) {
     return tlx493d_common_returnBitfield(sensor, waBF) != 0U;

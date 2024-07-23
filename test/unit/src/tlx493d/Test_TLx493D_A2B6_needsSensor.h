@@ -55,9 +55,9 @@ TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkSupportedFunctionality)
     TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut) );
     // tlx493d_printRegisters(&dut);
  
-    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) );      // fails sometimes
-    TEST_ASSERT_TRUE( dut.functions->hasValidBusParity(&dut) ); // fails sometimes
-    TEST_ASSERT_TRUE( dut.functions->hasValidTBit(&dut) );      // fails sometimes
+    TEST_ASSERT_TRUE( dut.functions->hasValidData(&dut) );      // fails sometimes with readRegisters()
+    TEST_ASSERT_TRUE( dut.functions->hasValidBusParity(&dut) ); // fails sometimes with readRegisters()
+    TEST_ASSERT_TRUE( dut.functions->hasValidTBit(&dut) );      // fails sometimes with readRegisters()
 
     TEST_ASSERT_TRUE( dut.functions->isFunctional(&dut) );
     TEST_ASSERT_TRUE( dut.functions->hasValidFuseParity(&dut) );
@@ -182,7 +182,7 @@ TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkConfigTriggerFunctionality)
 {
     // switch to LPM
     TEST_ASSERT_TRUE( dut.functions->setPowerMode(&dut, TLx493D_LOW_POWER_MODE_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x00, tlx493d_common_returnBitfield(&dut, A2B6_MODE_e) );
 
     // Low-power mode only supports this trigger
@@ -229,7 +229,7 @@ TEST_IFX(TLx493D_A2B6_needsSensorInternal, checkConfigSensitivityFunctionality)
 
     // supported
     TEST_ASSERT_TRUE( dut.functions->setSensitivity(&dut, TLx493D_SHORT_RANGE_e) );
-    TEST_ASSERT_TRUE( dut.functions->readRegisters(&dut));
+    TEST_ASSERT_TRUE( dut.functions->readRegistersAndCheck(&dut));
     TEST_ASSERT_EQUAL_HEX8( 0x01, tlx493d_common_returnBitfield(&dut, A2B6_X2_e) );
 
     sf = dut.functions->getSensitivityScaleFactor(&dut);
