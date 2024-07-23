@@ -9,7 +9,7 @@ on:
   # pull_request:
   #   branches: [master main]
 
-# This template runes multiple workflows
+# This template runs multiple workflows
 jobs:
 
   #############################################################################
@@ -33,7 +33,7 @@ jobs:
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@master
 
-      # Fetch 
+      # Fetch
       - id: set-matrix
         run: |
           cd /opt/runner_support/
@@ -43,6 +43,7 @@ jobs:
           export ty=`jq --compact-output --null-input '$ARGS.positional' --args -- "${TYPES[@]}"`
           echo "types=${ty}"  >> $GITHUB_OUTPUT
 
+          echo "Repo name extracted: " $REPO
           echo "TYPES name extracted: " ${TYPES[@]}
 
     outputs:
@@ -93,61 +94,65 @@ jobs:
       run: |
         export TMPDIR=$HOME/tmp
         mkdir -p $TMPDIR
-
         cd /opt/runner_support/
         export REPO="$(basename "$GITHUB_REPOSITORY")"
-        export UNITY_PATH=/opt/runner_support/Unity
 
         TYPE=${{ matrix.example }}
-        declare -a KEYNUM=($(cat ./repo2fqbn.yaml | shyaml get-values ${REPO}.${TYPE}.keynum))
-
-        HEXNAME=$(cat ./repo2fqbn.yaml | shyaml get-values ${REPO}.${TYPE}.fqbn)
+        KEYNUM=`cat ./repo2fqbn.yaml | shyaml get-length ${REPO}.${TYPE}`
 
         echo "Repo name extracted: " $REPO
         echo "Board type name:     " $TYPE
-        echo "Key Index Number:    " ${KEYNUM[@]}
+        echo "Key Index Number:    " $KEYNUM
 
-        for i in "${KEYNUM[@]}"
+        for ((i = 0 ; i < $KEYNUM ; i++ ));
         do
-          HEXNAME=$(cat ./repo2fqbn.yaml | shyaml get-value ${REPO}.${TYPE}.fqbn.$i)
-          SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.port_serial.$i`
-          DEVICE=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.device.$i`
+          HEXNAME=`cat ./repo2fqbn.yaml | shyaml get-value ${REPO}.${TYPE}.$i`
           FQBN=`tr '.' ':' <<<"${HEXNAME}"`
-          PORT=`./find_usb.sh $SERIAL_NUM`
-          SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
-          readarray -d ":" -t arr <<< $FQBN
-          PLATFORM="${arr[0],,}:${arr[1],,}"
+          INDEX=`cat ./board2port.yaml | shyaml get-length  ${HEXNAME}.${REPO}.${TYPE}.port_serial`
 
-          echo "Index                " $i
+          echo "Key/Index Number:    " $i "/" $INDEX
           echo "Build HEX name:      " $HEXNAME
-          echo "FQBN:                " ${FQBN}
-          echo "Sensor name          " $SENSOR
-          echo "Port Serial Num:     " $SERIAL_NUM
-          echo "Port found:          " $PORT
-          echo "Flash device:        " $DEVICE
-          echo "Platform:            " $PLATFORM
+          echo "FQBN:                " $FQBN
 
-          if [ "${PORT}" ]; then
+          for ((a = 0 ; a < $INDEX ; a++ ));
+          do
+            SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.port_serial.$a`
+            DEVICE=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.device.$a`
+            PORT=`./find_usb.sh $SERIAL_NUM`
+            SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
+            readarray -d ":" -t arr <<< $FQBN
+            PLATFORM="${arr[0],,}:${arr[1],,}"
 
-            mkdir -p ~/.arduino15/packages/
-            ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
-            mkdir -p "$HOME/Arduino/libraries"
-            ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/$REPO
+            echo "Index                " $a
+            echo "Port Serial Num:     " $SERIAL_NUM
+            echo "Flash device:        " $DEVICE
+            echo "Port found:          " $PORT
+            echo "Sensor name          " $SENSOR
+            echo "Platform:            " $PLATFORM
 
-            arduino-cli core update-index
-            arduino-cli core install "${PLATFORM}"
-  
-            cd $HOME/Arduino/libraries/$REPO
-            mkdir -p ./build
-  
-            make -f Makefile.arduino.mk FQBN=${FQBN} PORT=${PORT} ${SENSOR}_needsSensor flash
-          else
-            echo "No"
-          fi
+            if [ "${PORT}" ]; then
+
+                mkdir -p ~/.arduino15/packages/
+                ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+                mkdir -p "$HOME/Arduino/libraries"
+                ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/$REPO
+
+                arduino-cli core update-index
+                arduino-cli core install "${PLATFORM}"
+
+                cd $HOME/Arduino/libraries/$REPO
+                mkdir -p ./build
+
+                make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${FQBN} PORT=${PORT} ${SENSOR}_needsSensor flash
+
+              else
+                echo "No"
+              fi
+          done
         done
 
 
-    # Monitoring the serial output from the attached and flashed hardware, and collecting
+    # Monitoring the serial output from the attached and flashed hardware and collecting
     # ERROR, Warning and statistical data for reporting
     - name: Monitor
       run: |
@@ -155,21 +160,22 @@ jobs:
           export REPO="$(basename "$GITHUB_REPOSITORY")"
 
           TYPE=${{ matrix.example }}
-          HEXNAME=$(cat ./repo2fqbn.yaml | shyaml get-values ${REPO}.${TYPE}.fqbn)
-          FQBN=`tr '.' ':' <<<"${HEXNAME}"`
-          declare -a KEYNUM=($(cat ./repo2fqbn.yaml | shyaml get-values ${REPO}.${TYPE}.keynum))
-
-          for i in "${KEYNUM[@]}"
+          KEYNUM=`cat ./repo2fqbn.yaml | shyaml get-length ${REPO}.${TYPE}`
+          for ((i = 0 ; i < $KEYNUM ; i++ ));
           do
-            SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.port_serial.$i`
-            DEVICE=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.device.$i`
-            PORT=`./find_usb.sh $SERIAL_NUM`
-
-            if [ "${PORT}" ]; then
-              /opt/runner_support/py_console.py --port $PORT --baud 115200
-            else
-              echo "No"
-            fi
+            HEXNAME=`cat ./repo2fqbn.yaml | shyaml get-value ${REPO}.${TYPE}.$i`
+            FQBN=`tr '.' ':' <<<"${HEXNAME}"`
+            INDEX=`cat ./board2port.yaml | shyaml get-length  ${HEXNAME}.${REPO}.${TYPE}.port_serial`
+            for ((a = 0 ; a < $INDEX ; a++ ));
+            do
+              SERIAL_NUM=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.port_serial.$a`
+              DEVICE=`cat ./board2port.yaml | shyaml get-value ${HEXNAME}.${REPO}.${TYPE}.device.$a`
+              PORT=`./find_usb.sh $SERIAL_NUM`
+              if [ "${PORT}" ]; then
+                /opt/runner_support/py_console.py --port $PORT --baud 115200
+              else
+                echo "No"
+              fi
+            done
           done
-
 
