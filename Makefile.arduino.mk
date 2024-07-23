@@ -112,7 +112,7 @@ unity: arduino
 # find ../../unity/Unity-master -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
 # find test/unit/src -name '*.[hc]*' -a \! -path '*mtb*' -exec \cp {} build \;
 # cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
-	cp -r ${UNITYPATH}/*.[hc] build
+	cp -r ${UNITY_PATH}/*.[hc] build
 	find test/unit/src -name '*.[hc]*' -a \! -path '*mtb*' -exec \cp {} build \;
 	cp test/unit/src/framework/arduino/Test_main.ino build/build.ino
 
