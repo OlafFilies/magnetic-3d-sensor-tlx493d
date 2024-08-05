@@ -175,10 +175,7 @@ jobs:
             done
           done
 
-      # checkout the latest github action code
-    - name: Download binaries
-      uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v4
       with:
-        name: ${HEXNAME}.${REPO}.${TYPE} artifacts
-        path: $HOME/Arduino/libraries/$REPO/build/build
+        name: Download binaries
 
