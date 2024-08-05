@@ -181,7 +181,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Upload for 
-        path: Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}
+        path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}/*
         if-no-files-found: ignore
 
 
