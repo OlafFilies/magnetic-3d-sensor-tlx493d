@@ -175,7 +175,10 @@ jobs:
             done
           done
 
-    - uses: actions/download-artifact@v4
+    - uses: actions/upload-artifact@v4
       with:
         name: Download binaries
+        path: Arduino/libraries/**/build/build
+        if-no-files-found: ignore
+
 
