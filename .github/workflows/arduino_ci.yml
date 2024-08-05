@@ -75,10 +75,6 @@ jobs:
     # These are the steps which should run for each combination of fqbn and example code
     steps:
 
-      # checkout the latest github action code
-    - name: Checkout actions
-      uses: actions/checkout@v4
-
     - name: Download binaries
       uses: actions/download-artifact@v4
 
@@ -181,4 +177,12 @@ jobs:
               fi
             done
           done
+
+      # checkout the latest github action code
+    - name: Checkout actions
+      uses: actions/checkout@v4
+      with:
+        name: ${HEXNAME}.${REPO}.${TYPE} artifacts
+        path: $HOME/Arduino/libraries/$REPO/build/build
+
 
