@@ -127,6 +127,7 @@ jobs:
             echo "Port found:          " $PORT
             echo "Sensor name          " $SENSOR
             echo "Platform:            " $PLATFORM
+            echo "sensor=$SENSOR" >> $GITHUB_ENV
 
             if [ "${PORT}" ]; then
 
@@ -180,7 +181,7 @@ jobs:
     - name: Upload binaries 
       uses: actions/upload-artifact@v4
       with:
-        name: Upload for 
+        name: ${{ env.sensor }}
         path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}/*
         if-no-files-found: ignore
 
