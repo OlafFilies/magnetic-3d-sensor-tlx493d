@@ -79,6 +79,9 @@ jobs:
     - name: Checkout actions
       uses: actions/checkout@v4
 
+    - name: Download binaries
+      uses: actions/download-artifact@v4
+
       # checkout the latest arduino-cli compiler
     - name: Setup Arduino CLI
       uses: arduino/setup-arduino-cli@master
