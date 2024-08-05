@@ -110,7 +110,7 @@ jobs:
           echo "Key/Index Number:    " $i "/" $INDEX
           echo "Build HEX name:      " $HEXNAME
           echo "FQBN:                " $FQBN
-          echo "fqbn=$FQBN" >> $GITHUB_ENV
+          echo "hexname=$HEXNAME" >> $GITHUB_ENV
 
           for ((a = 0 ; a < $INDEX ; a++ ));
           do
@@ -181,7 +181,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Upload for 
-        path: Arduino/libraries/${{ env.repo }}/build/build/${{ env.fqbn }}
+        path: Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}
         if-no-files-found: ignore
 
 
