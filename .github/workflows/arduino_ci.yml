@@ -75,9 +75,6 @@ jobs:
     # These are the steps which should run for each combination of fqbn and example code
     steps:
 
-    - name: Download binaries
-      uses: actions/download-artifact@v4
-
       # checkout the latest arduino-cli compiler
     - name: Setup Arduino CLI
       uses: arduino/setup-arduino-cli@master
@@ -179,10 +176,9 @@ jobs:
           done
 
       # checkout the latest github action code
-    - name: Checkout actions
-      uses: actions/checkout@v4
+    - name: Download binaries
+      uses: actions/download-artifact@v4
       with:
         name: ${HEXNAME}.${REPO}.${TYPE} artifacts
         path: $HOME/Arduino/libraries/$REPO/build/build
-
 
