@@ -133,6 +133,7 @@ else
 	arduino-cli.exe compile --clean --log --warnings all --fqbn $(FQBN) \
 	                        --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
 							--build-property compiler.cpp.extra_flags="$(TESTS)" \
+							--export-binaries \
 			        build
 
 # 	                        --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
