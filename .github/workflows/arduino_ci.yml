@@ -47,14 +47,15 @@ jobs:
 
 
           # typeset=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq ".\"${REPO}\"" --compact-output )
-          typeset=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq "." --compact-output )
-          echo "typeset=${typeset}"
+          reposet=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq ".\"${REPO}\"" --compact-output )
+          echo "reposet=${reposet}"  >> $GITHUB_OUTPUT
+          echo "reposet=${reposet}"
 
           #./py_checkusb.py --switch repo --namelist $REPO --onoff on
 
     outputs:
       types: ${{ steps.set-matrix.outputs.types }}
-      serials: ${{ steps.set-matrix.outputs.serials }}
+      repos: ${{ steps.set-matrix.outputs.reposet }}
 
 
   # The build job compiles the sample code for different boards
