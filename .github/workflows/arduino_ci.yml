@@ -42,7 +42,7 @@ jobs:
           serials=$(echo $(./py_checkusb.py --repo ${REPO} --list serial --json) | jq ".\"${REPO}\"" --compact-output )
           echo "serials=${serials}"  >> $GITHUB_OUTPUT
 
-          ./py_checkusb.py --switch repo --namelist $REPO --onoff on
+          #./py_checkusb.py --switch repo --namelist $REPO --onoff on
 
     # set the output variables for use in the next job
     outputs:
@@ -83,8 +83,8 @@ jobs:
           PROJECT=${{ needs.setup.outputs.project }}
           SERIALID=${{ matrix.serials }}
           PORT=`./find_usb.sh $SERIALID`
-          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]")
-          FQBN=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]")
+          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]"
+          FQBN=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]"
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
 
           echo "repo=$REPO" >> $GITHUB_ENV
