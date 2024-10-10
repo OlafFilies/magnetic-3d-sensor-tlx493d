@@ -42,7 +42,7 @@ jobs:
           serials=$(echo $(./py_checkusb.py --repo ${REPO} --list serial --json) | jq ".\"${REPO}\"" --compact-output )
           echo "serials=${serials}"  >> $GITHUB_OUTPUT
 
-          #./py_checkusb.py --switch repo --namelist $REPO --onoff on
+          ./py_checkusb.py --switch repo --namelist $REPO --onoff on
 
     # set the output variables for use in the next job
     outputs:
@@ -110,22 +110,22 @@ jobs:
         # DEVICE: the flashing device according the board2port.yaml
         # PORT: real PORT name of the attached hardware based on the SERIALID
         # use the python based XMC flasher
-      # - name: Flash
-      #   run: |
-      #     export TMPDIR=$HOME/tmp
-      #     mkdir -p $TMPDIR
+      - name: Flash
+        run: |
+          export TMPDIR=$HOME/tmp
+          mkdir -p $TMPDIR
 
-      #     if [ "${{ env.port }}" ]; then
-      #       mkdir -p ~/.arduino15/packages/
-      #       ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
-      #       mkdir -p "$HOME/Arduino/libraries"
-      #       ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
-      #       cd $HOME/Arduino/libraries/${{ env.repo }}
-      #       mkdir -p ./build
-      #       make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
-      #     else
-      #       echo "No port found"
-      #     fi
+          if [ "${{ env.port }}" ]; then
+            mkdir -p ~/.arduino15/packages/
+            ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+            mkdir -p "$HOME/Arduino/libraries"
+            ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
+            cd $HOME/Arduino/libraries/${{ env.repo }}
+            mkdir -p ./build
+            make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
+          else
+            echo "No port found"
+          fi
 
       # # Monitoring the serial output from the attached and flashed hardware and collecting
       # # ERROR, Warning and statistical data for reporting
@@ -137,6 +137,13 @@ jobs:
       #     else
       #       echo "No port found"
       #     fi
+
+      # HIL switch off
+      - name: HIL switch off
+        run: |
+          cd /opt/runner_support/
+          ./py_checkusb.py --switch repo --namelist ${{ env.repo }} --onoff off
+
 
       # # Upload the compiled HEX files to the GitHub server
       # - name: Upload binaries 
