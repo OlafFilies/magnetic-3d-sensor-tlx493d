@@ -38,28 +38,18 @@ jobs:
         run: |
           cd /opt/runner_support/
           REPO="$(basename "$GITHUB_REPOSITORY")"
-          echo "repo=$REPO" >> $GITHUB_OUTPUT
 
           types=$(echo $(./py_checkusb.py --repo ${REPO} --list type --json) | jq ".\"${REPO}\"" --compact-output )
           echo "types=${types}"  >> $GITHUB_OUTPUT
-          serials=$(echo $(./py_checkusb.py --repo ${REPO} --list serial --json) | jq ".\"${REPO}\"" --compact-output )
-          echo "serials=${serials}"  >> $GITHUB_OUTPUT
-
-
-          # typeset=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq ".\"${REPO}\"" --compact-output )
-          reposet=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq ".\"${REPO}\"" --compact-output )
-          echo "reposet=${reposet}"  >> $GITHUB_OUTPUT
-          echo "reposet=${reposet}"
 
           #./py_checkusb.py --switch repo --namelist $REPO --onoff on
 
     outputs:
       types: ${{ steps.set-matrix.outputs.types }}
-      repos: ${{ steps.set-matrix.outputs.reposet }}
 
 
   # The build job compiles the sample code for different boards
-  make:
+  type:
 
     # wait on first setup run before starting main function
     needs: setup
@@ -71,17 +61,49 @@ jobs:
       - X64
       - Linux
 
-  #   # which combination of sample code and boards should run
-  #   # for this example of 2 sample codes and 3 boards a total of 2x3=6 runners have to work.
-  #   # if we have only 4 runner then these 4 are started and the last 2 are waiting until they can start
-  #   strategy:
+    # which combination of sample code and boards should run
+    # for this example of 2 sample codes and 3 boards a total of 2x3=6 runners have to work.
+    # if we have only 4 runner then these 4 are started and the last 2 are waiting until they can start
+    strategy:
 
-  #     matrix:
-  #       # List of all examples in the lib to compile
-  #       example: ${{ fromJson(needs.setup.outputs.types) }}
+      matrix: ${{ fromJson(needs.setup.outputs.types) }}
 
-  #       # # List of all boards to compile for
-  #       # serials: ${{ fromJson(needs.setup.outputs.serials) }}
+    steps:
+      - id: set-matrix
+        run: |
+          cd /opt/runner_support/
+
+          serials=$(echo $(./py_checkusb.py --type ${{ matrix }} --list serial --json) | jq ".\"${{ matrix }}\"" --compact-output )
+          echo "serials=${serials}"  >> $GITHUB_OUTPUT
+
+          echo "types=${{ matrix }}" 
+          echo "serials=${serials}"
+
+    outputs:
+      serials: ${{ steps.set-matrix.outputs.serials }}
+
+
+  # The build job compiles the sample code for different boards
+  make:
+
+    # wait on first setup run before starting main function
+    needs: [setup, type]
+
+    # we run this on self hosted runner, use labels to be more specific
+    # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
+
+    # which combination of sample code and boards should run
+    # for this example of 2 sample codes and 3 boards a total of 2x3=6 runners have to work.
+    # if we have only 4 runner then these 4 are started and the last 2 are waiting until they can start
+    strategy:
+
+      # List of all serials in the lib to compile
+      matrix: ${{ fromJSON(needs.type.outputs.serials) }}
+
 
     # These are the steps which should run for each combination of fqbn and example code
     steps:
@@ -89,6 +111,9 @@ jobs:
         run: |
           cd /opt/runner_support/
           declare -a devicelist
+
+          echo "serials=${{ matrix }}"
+          echo "types=${{ needs.type.outputs.types }}"
 
   #         REPO="$(basename "$GITHUB_REPOSITORY")"
   #         PROJECT=${{ needs.setup.outputs.project }}
