@@ -91,6 +91,7 @@ jobs:
           echo "port=$PORT" >> $GITHUB_ENV
           echo "type=$TYPE" >> $GITHUB_ENV
           echo "fqbn=$FQBN" >> $GITHUB_ENV
+          echo "device=$DEVICE" >> $GITHUB_ENV
           echo "sensor=$SENSOR" >> $GITHUB_ENV
 
           echo "Repository name:     " $REPO
@@ -98,6 +99,7 @@ jobs:
           echo "Port found:          " $PORT
           echo "Device Type:         " $TYPE
           echo "FQBN:                " $FQBN
+          echo "Device:              " $DEVICE
           echo "Sensor name:         " $SENSOR
 
         # checkout the latest arduino-cli compiler
@@ -144,15 +146,15 @@ jobs:
       - name: HIL switch off
         run: |
           cd /opt/runner_support/
-          ./py_checkusb.py --switch serial --namelist ${{ env.serial }} --onoff off
+          ./py_checkusb.py --switch serial --namelist ${{ env.serials }} --onoff off
 
 
       # Upload the compiled HEX files to the GitHub server
       - name: Upload binaries 
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.sensor }}_${{ env.serial }}
-          path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}/*
+          name: ${{ env.sensor }}_${{ env.serials }}
+          path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/*
           if-no-files-found: ignore
 
 
