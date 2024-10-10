@@ -142,13 +142,6 @@ jobs:
             echo "No port found"
           fi
 
-      # HIL switch off
-      - name: HIL switch off
-        run: |
-          cd /opt/runner_support/
-          ./py_checkusb.py --switch serial --namelist ${{ env.serials }} --onoff off
-
-
       # Upload the compiled HEX files to the GitHub server
       - name: Upload binaries 
         uses: actions/upload-artifact@v4
@@ -158,3 +151,23 @@ jobs:
           if-no-files-found: ignore
 
 
+  #############################################################################
+  # Switch off the HIL after all tests are done
+  post:
+
+    # wait on first setup run before starting main function
+    needs: [setup, make]
+
+    # we run this on self hosted runner, use labels to be more specific
+    # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
+
+    steps:
+      - name: Switch off HIL
+        run: |
+          cd /opt/runner_support/
+          REPO="$(basename "$GITHUB_REPOSITORY")"
+          ./py_checkusb.py --switch repo --namelist $REPO --onoff off
