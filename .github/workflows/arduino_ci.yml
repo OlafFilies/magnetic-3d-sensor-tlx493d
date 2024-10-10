@@ -46,29 +46,29 @@ jobs:
           echo "serials=${serials}"  >> $GITHUB_OUTPUT
 
 
-#          typeset=$(echo $(./py_checkusb.py --serial ${TYPE} --json) | jq ".\"${TYPE}\"" --compact-output )
+          # typeset=$(echo $(./py_checkusb.py --serial ${TYPE} --json) | jq ".\"${TYPE}\"" --compact-output )
           typeset=$(echo $(./py_checkusb.py --serial ${TYPE} --json) | jq "." --compact-output )
           echo "typeset=${typeset}"
 
-          #          ./py_checkusb.py --switch repo --namelist $REPO --onoff on
+          #./py_checkusb.py --switch repo --namelist $REPO --onoff on
 
     outputs:
       types: ${{ steps.set-matrix.outputs.types }}
       serials: ${{ steps.set-matrix.outputs.serials }}
 
 
-  # # The build job compiles the sample code for different boards
-  # make:
+  # The build job compiles the sample code for different boards
+  make:
 
-  #   # wait on first setup run before starting main function
-  #   needs: setup
+    # wait on first setup run before starting main function
+    needs: setup
 
-  #   # we run this on self hosted runner, use labels to be more specific
-  #   # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
-  #   runs-on:
-  #     - self-hosted
-  #     - X64
-  #     - Linux
+    # we run this on self hosted runner, use labels to be more specific
+    # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
 
   #   # which combination of sample code and boards should run
   #   # for this example of 2 sample codes and 3 boards a total of 2x3=6 runners have to work.
@@ -82,12 +82,12 @@ jobs:
   #       # # List of all boards to compile for
   #       # serials: ${{ fromJson(needs.setup.outputs.serials) }}
 
-  #   # These are the steps which should run for each combination of fqbn and example code
-  #   steps:
-  #     - name: Environment
-  #       run: |
-  #         cd /opt/runner_support/
-  #         declare -a devicelist
+    # These are the steps which should run for each combination of fqbn and example code
+    steps:
+      - name: Environment
+        run: |
+          cd /opt/runner_support/
+          declare -a devicelist
 
   #         REPO="$(basename "$GITHUB_REPOSITORY")"
   #         PROJECT=${{ needs.setup.outputs.project }}
