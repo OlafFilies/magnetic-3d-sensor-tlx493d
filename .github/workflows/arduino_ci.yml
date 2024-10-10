@@ -144,7 +144,7 @@ jobs:
       - name: HIL switch off
         run: |
           cd /opt/runner_support/
-          ./py_checkusb.py --switch repo --namelist ${{ env.repo }} --onoff off
+          ./py_checkusb.py --switch serial --namelist ${{ env.serial }} --onoff off
 
 
       # Upload the compiled HEX files to the GitHub server
