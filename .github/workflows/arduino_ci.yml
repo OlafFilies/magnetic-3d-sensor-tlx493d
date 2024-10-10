@@ -83,8 +83,8 @@ jobs:
           PROJECT=${{ needs.setup.outputs.project }}
           SERIALID=${{ matrix.serials }}
           PORT=`./find_usb.sh $SERIALID`
-          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"" --compact-output )
-          FQBN=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"" --compact-output )
+          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]")
+          FQBN=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]")
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
 
           echo "repo=$REPO" >> $GITHUB_ENV
@@ -114,40 +114,40 @@ jobs:
         # DEVICE: the flashing device according the board2port.yaml
         # PORT: real PORT name of the attached hardware based on the SERIALID
         # use the python based XMC flasher
-      - name: Flash
-        run: |
-          export TMPDIR=$HOME/tmp
-          mkdir -p $TMPDIR
+      # - name: Flash
+      #   run: |
+      #     export TMPDIR=$HOME/tmp
+      #     mkdir -p $TMPDIR
 
-          if [ "${{ env.port }}" ]; then
-            mkdir -p ~/.arduino15/packages/
-            ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
-            mkdir -p "$HOME/Arduino/libraries"
-            ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
-            cd $HOME/Arduino/libraries/${{ env.repo }}
-            mkdir -p ./build
-            make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
-          else
-            echo "No port found"
-          fi
+      #     if [ "${{ env.port }}" ]; then
+      #       mkdir -p ~/.arduino15/packages/
+      #       ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+      #       mkdir -p "$HOME/Arduino/libraries"
+      #       ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
+      #       cd $HOME/Arduino/libraries/${{ env.repo }}
+      #       mkdir -p ./build
+      #       make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
+      #     else
+      #       echo "No port found"
+      #     fi
 
-      # Monitoring the serial output from the attached and flashed hardware and collecting
-      # ERROR, Warning and statistical data for reporting
-      - name: Monitor
-        run: |
-          cd /opt/runner_support/
-          if [ "${{ env.port }}" ]; then
-            #./py_console.py --port ${{ env.port }} --baud 115200
-          else
-            echo "No port found"
-          fi
+      # # Monitoring the serial output from the attached and flashed hardware and collecting
+      # # ERROR, Warning and statistical data for reporting
+      # - name: Monitor
+      #   run: |
+      #     cd /opt/runner_support/
+      #     if [ "${{ env.port }}" ]; then
+      #       #./py_console.py --port ${{ env.port }} --baud 115200
+      #     else
+      #       echo "No port found"
+      #     fi
 
-      # Upload the compiled HEX files to the GitHub server
-      - name: Upload binaries 
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.sensor }}_${{ env.serial }}
-          path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}/*
-          if-no-files-found: ignore
+      # # Upload the compiled HEX files to the GitHub server
+      # - name: Upload binaries 
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.sensor }}_${{ env.serial }}
+      #     path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.hexname }}/*
+      #     if-no-files-found: ignore
 
 
