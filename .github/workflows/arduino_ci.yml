@@ -82,12 +82,12 @@ jobs:
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
           PORT=`./find_usb.sh $SERIALID`
-          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]"
-          FQBN= $( $(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"" --compact-output )  | jq -r ".[0]")
+          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\" |.[1]" --compact-output )
+          FQBN= $(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\" |.[1]" --compact-output )
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
 
           echo "repo=$REPO" >> $GITHUB_ENV
-          echo "project=$PROJECT" >> $GITHUB_ENV
+          echo "project=$PROJECTNAME" >> $GITHUB_ENV
           echo "serials=${{ matrix.serials }}" >> $GITHUB_ENV
           echo "port=$PORT" >> $GITHUB_ENV
           echo "type=$TYPE" >> $GITHUB_ENV
@@ -95,7 +95,7 @@ jobs:
           echo "sensor=$SENSOR" >> $GITHUB_ENV
 
           echo "Repository name:     " $REPO
-          echo "Project name:        " $PROJECT
+          echo "Project name:        " $PROJECTNAME
           echo "Device Serial ID:    " $SERIALID
           echo "Port found:          " $PORT
           echo "Device Type:         " $TYPE
