@@ -70,7 +70,7 @@ jobs:
 
       # List of all serials in the lib to compile
       matrix: 
-        serials: ${{ fromJSON(needs.type.outputs.serials) }}
+        serials: ${{ fromJSON(needs.setup.outputs.serials) }}
 
     # These are the steps which should run for each combination of fqbn and example code
     steps:
