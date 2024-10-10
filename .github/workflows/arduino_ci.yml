@@ -42,7 +42,7 @@ jobs:
           serials=$(echo $(./py_checkusb.py --repo ${REPO} --list serial --json) | jq ".\"${REPO}\"" --compact-output )
           echo "serials=${serials}"  >> $GITHUB_OUTPUT
 
-          #./py_checkusb.py --switch repo --namelist $REPO --onoff on
+          ./py_checkusb.py --switch repo --namelist $REPO --onoff on
 
     # set the output variables for use in the next job
     outputs:
