@@ -46,8 +46,8 @@ jobs:
           echo "serials=${serials}"  >> $GITHUB_OUTPUT
 
 
-          # typeset=$(echo $(./py_checkusb.py --serial ${TYPE} --json) | jq ".\"${TYPE}\"" --compact-output )
-          typeset=$(echo $(./py_checkusb.py --serial ${TYPE} --json) | jq "." --compact-output )
+          # typeset=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq ".\"${REPO}\"" --compact-output )
+          typeset=$(echo $(./py_checkusb.py --repo ${REPO} --json) | jq "." --compact-output )
           echo "typeset=${typeset}"
 
           #./py_checkusb.py --switch repo --namelist $REPO --onoff on
