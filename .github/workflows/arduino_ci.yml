@@ -54,7 +54,7 @@ jobs:
   make:
 
     # wait on first setup run before starting main function
-    needs: setup
+    needs: [setup]
 
     # we run this on self hosted runner, use labels to be more specific
     # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
@@ -124,7 +124,7 @@ jobs:
             ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
             mkdir -p "$HOME/Arduino/libraries"
             ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
-            cd $HOME/Arduino/libraries/$REPO
+            cd $HOME/Arduino/libraries/${{ env.repo }}
             mkdir -p ./build
             make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
           else
