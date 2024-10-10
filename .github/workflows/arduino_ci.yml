@@ -46,7 +46,7 @@ jobs:
 
     # set the output variables for use in the next job
     outputs:
-      types: ${{ steps.set-matrix.outputs.serials }}
+      serials: ${{ steps.set-matrix.outputs.serials }}
 
 
   #############################################################################
