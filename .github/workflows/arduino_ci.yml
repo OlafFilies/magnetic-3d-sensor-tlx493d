@@ -66,17 +66,18 @@ jobs:
     # if we have only 4 runner then these 4 are started and the last 2 are waiting until they can start
     strategy:
 
-      matrix: ${{ fromJson(needs.setup.outputs.types) }}
+      matrix: 
+        type: ${{ fromJson(needs.setup.outputs.types) }}
 
     steps:
       - id: set-matrix
         run: |
           cd /opt/runner_support/
 
-          serials=$(echo $(./py_checkusb.py --type ${{ matrix }} --list serial --json) | jq ".\"${{ matrix }}\"" --compact-output )
+          serials=$(echo $(./py_checkusb.py --type ${{ matrix.type }} --list serial --json) | jq ".\"${{ matrix.type }}\"" --compact-output )
           echo "serials=${serials}"  >> $GITHUB_OUTPUT
 
-          echo "types=${{ matrix }}" 
+          echo "types=${{ matrix.type }}" 
           echo "serials=${serials}"
 
     outputs:
@@ -102,7 +103,8 @@ jobs:
     strategy:
 
       # List of all serials in the lib to compile
-      matrix: ${{ fromJSON(needs.type.outputs.serials) }}
+      matrix: 
+        serials: ${{ fromJSON(needs.type.outputs.serials) }}
 
 
     # These are the steps which should run for each combination of fqbn and example code
@@ -112,7 +114,7 @@ jobs:
           cd /opt/runner_support/
           declare -a devicelist
 
-          echo "serials=${{ matrix }}"
+          echo "serials=${{ matrix.serials }}"
           echo "types=${{ needs.type.outputs.types }}"
 
   #         REPO="$(basename "$GITHUB_REPOSITORY")"
