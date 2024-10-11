@@ -80,7 +80,7 @@ jobs:
 
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
-          PORT=$(./py_checkusb.py --serial ${SERIALID} --list comport --json) | jq ".\"${SERIALID}\"" -r --compact-output
+          PORT=$(./py_checkusb.py --serial ${SERIALID} --list comport --json | jq ".\"${SERIALID}\"" -r --compact-output)
           TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
