@@ -81,10 +81,10 @@ jobs:
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
           # PORT=$(echo $(./py_checkusb.py --serial ${SERIALID} --list comport) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
-          # TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
-          # DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
-          # SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
-          # FQBN=`tr '.' ':' <<<"${DEVICE}"`
+          TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
+          DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
+          SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
+          FQBN=`tr '.' ':' <<<"${DEVICE}"`
 
           # echo "repo=$REPO" >> $GITHUB_ENV
           # echo "serials=${{ matrix.serials }}" >> $GITHUB_ENV
@@ -97,10 +97,10 @@ jobs:
           echo "Repository name:     " $REPO
           echo "Device Serial ID:    " $SERIALID
           # echo "Port found:          " $PORT
-          # echo "Device Type:         " $TYPE
-          # echo "FQBN:                " $FQBN
-          # echo "Device:              " $DEVICE
-          # echo "Sensor name:         " $SENSOR
+          echo "Device Type:         " $TYPE
+          echo "FQBN:                " $FQBN
+          echo "Device:              " $DEVICE
+          echo "Sensor name:         " $SENSOR
 
   #       # checkout the latest arduino-cli compiler
   #     - name: Setup Arduino CLI
