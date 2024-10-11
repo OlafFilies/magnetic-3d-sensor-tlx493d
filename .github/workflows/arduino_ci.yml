@@ -134,10 +134,9 @@ jobs:
       # ERROR, Warning and statistical data for reporting
       - name: Monitor
         run: |
-          cd /opt/runner_support/
           if [ "${{ env.port }}" ]; then
             echo "need to monitor"
-            ./py_console.py --port ${{ env.port }} --baud 115200 --report ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
+            /opt/runner_support/py_console.py --port ${{ env.port }} --baud 115200 --report ${HOME}/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
           else
             echo "No port found"
           fi
