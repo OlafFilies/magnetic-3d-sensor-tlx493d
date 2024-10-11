@@ -78,8 +78,8 @@ jobs:
         run: |
           cd /opt/runner_support/
 
-          # REPO="$(basename "$GITHUB_REPOSITORY")"
-          # SERIALID=${{ matrix.serials }}
+          REPO="$(basename "$GITHUB_REPOSITORY")"
+          SERIALID=${{ matrix.serials }}
           # PORT=$(echo $(./py_checkusb.py --serial ${SERIALID} --list comport) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           # TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           # DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
@@ -94,8 +94,8 @@ jobs:
           # echo "device=$DEVICE" >> $GITHUB_ENV
           # echo "sensor=$SENSOR" >> $GITHUB_ENV
 
-          # echo "Repository name:     " $REPO
-          # echo "Device Serial ID:    " $SERIALID
+          echo "Repository name:     " $REPO
+          echo "Device Serial ID:    " $SERIALID
           # echo "Port found:          " $PORT
           # echo "Device Type:         " $TYPE
           # echo "FQBN:                " $FQBN
