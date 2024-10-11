@@ -80,94 +80,94 @@ jobs:
 
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
-          # PORT=$(echo $(./py_checkusb.py --serial ${SERIALID} --list comport) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
+          PORT=$(echo $(./py_checkusb.py --serial ${SERIALID} --list comport --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
           FQBN=`tr '.' ':' <<<"${DEVICE}"`
 
-          # echo "repo=$REPO" >> $GITHUB_ENV
-          # echo "serials=${{ matrix.serials }}" >> $GITHUB_ENV
-          # echo "port=$PORT" >> $GITHUB_ENV
-          # echo "type=$TYPE" >> $GITHUB_ENV
-          # echo "fqbn=$FQBN" >> $GITHUB_ENV
-          # echo "device=$DEVICE" >> $GITHUB_ENV
-          # echo "sensor=$SENSOR" >> $GITHUB_ENV
+          echo "repo=$REPO" >> $GITHUB_ENV
+          echo "serials=${{ matrix.serials }}" >> $GITHUB_ENV
+          echo "port=$PORT" >> $GITHUB_ENV
+          echo "type=$TYPE" >> $GITHUB_ENV
+          echo "fqbn=$FQBN" >> $GITHUB_ENV
+          echo "device=$DEVICE" >> $GITHUB_ENV
+          echo "sensor=$SENSOR" >> $GITHUB_ENV
 
           echo "Repository name:     " $REPO
           echo "Device Serial ID:    " $SERIALID
-          # echo "Port found:          " $PORT
+          echo "Port found:          " $PORT
           echo "Device Type:         " $TYPE
           echo "FQBN:                " $FQBN
           echo "Device:              " $DEVICE
           echo "Sensor name:         " $SENSOR
 
-  #       # checkout the latest arduino-cli compiler
-  #     - name: Setup Arduino CLI
-  #       uses: arduino/setup-arduino-cli@master
+        # checkout the latest arduino-cli compiler
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@master
 
-  #       # Flashes the compiled HEX file onto the selected MCU
-  #       # REPO: the name of the repository which is also the link name
-  #       # HEXNAME: the board depended name of the HEX files
-  #       # SERIALID: the unique serial number of the hardware board according the board2port.yaml
-  #       # DEVICE: the flashing device according the board2port.yaml
-  #       # PORT: real PORT name of the attached hardware based on the SERIALID
-  #       # use the python based XMC flasher
-  #     - name: Flash
-  #       run: |
-  #         export TMPDIR=$HOME/tmp
-  #         mkdir -p $TMPDIR
+        # Flashes the compiled HEX file onto the selected MCU
+        # REPO: the name of the repository which is also the link name
+        # HEXNAME: the board depended name of the HEX files
+        # SERIALID: the unique serial number of the hardware board according the board2port.yaml
+        # DEVICE: the flashing device according the board2port.yaml
+        # PORT: real PORT name of the attached hardware based on the SERIALID
+        # use the python based XMC flasher
+      - name: Flash
+        run: |
+          export TMPDIR=$HOME/tmp
+          mkdir -p $TMPDIR
 
-  #         if [ "${{ env.port }}" ]; then
-  #           mkdir -p ~/.arduino15/packages/
-  #           ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
-  #           mkdir -p "$HOME/Arduino/libraries"
-  #           ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
-  #           cd $HOME/Arduino/libraries/${{ env.repo }}
-  #           mkdir -p ./build
-  #           make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
-  #         else
-  #           echo "No port found"
-  #         fi
+          if [ "${{ env.port }}" ]; then
+            mkdir -p ~/.arduino15/packages/
+            ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+            mkdir -p "$HOME/Arduino/libraries"
+            ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
+            cd $HOME/Arduino/libraries/${{ env.repo }}
+            mkdir -p ./build
+            make -f Makefile.arduino.mk UNITY_PATH=/opt/runner_support/Unity FQBN=${{ env.fqbn }} PORT=${{ env.port }} ${{ env.sensor }}_needsSensor flash
+          else
+            echo "No port found"
+          fi
 
-  #     # Monitoring the serial output from the attached and flashed hardware and collecting
-  #     # ERROR, Warning and statistical data for reporting
-  #     - name: Monitor
-  #       run: |
-  #         cd /opt/runner_support/
-  #         if [ "${{ env.port }}" ]; then
-  #           echo "need to monitor"
-  #           ./py_console.py --port ${{ env.port }} --baud 115200 --report ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
-  #         else
-  #           echo "No port found"
-  #         fi
+      # Monitoring the serial output from the attached and flashed hardware and collecting
+      # ERROR, Warning and statistical data for reporting
+      - name: Monitor
+        run: |
+          cd /opt/runner_support/
+          if [ "${{ env.port }}" ]; then
+            echo "need to monitor"
+            ./py_console.py --port ${{ env.port }} --baud 115200 --report ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
+          else
+            echo "No port found"
+          fi
 
-  #     # Upload the compiled HEX files to the GitHub server
-  #     - name: Upload binaries 
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ${{ env.sensor }}_${{ env.serials }}
-  #         path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/*
-  #         if-no-files-found: ignore
+      # Upload the compiled HEX files to the GitHub server
+      - name: Upload binaries 
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.sensor }}_${{ env.serials }}
+          path: ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/*
+          if-no-files-found: ignore
 
 
-  # #############################################################################
-  # # Switch off the HIL after all tests are done
-  # post:
+  #############################################################################
+  # Switch off the HIL after all tests are done
+  post:
 
-  #   # wait on first setup run before starting main function
-  #   needs: [setup, make]
+    # wait on first setup run before starting main function
+    needs: [setup, make]
 
-  #   # we run this on self hosted runner, use labels to be more specific
-  #   # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
-  #   runs-on:
-  #     - self-hosted
-  #     - X64
-  #     - Linux
+    # we run this on self hosted runner, use labels to be more specific
+    # add specific names if there are some, otherwise self-hosted, X64, Linux are the default ones
+    runs-on:
+      - self-hosted
+      - X64
+      - Linux
 
-  #   steps:
-  #     - name: Switch off HIL
-  #       run: |
-  #         cd /opt/runner_support/
-  #         REPO="$(basename "$GITHUB_REPOSITORY")"
-  #         ./py_checkusb.py --switch repo --namelist $REPO --onoff off
+    steps:
+      - name: Switch off HIL
+        run: |
+          cd /opt/runner_support/
+          REPO="$(basename "$GITHUB_REPOSITORY")"
+          ./py_checkusb.py --switch repo --namelist $REPO --onoff off
