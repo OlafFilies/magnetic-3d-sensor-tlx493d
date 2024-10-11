@@ -80,7 +80,7 @@ jobs:
 
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
-          PORT=$(./py_checkusb.py --serial ${SERIALID} --list comport --json | jq ".\"${SERIALID}\"" -r --compact-output)
+          PORT=`./find_usb.sh $SERIALID`
           TYPE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list type --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device --json) | jq ".\"${SERIALID}\"|.[0]" -r --compact-output)
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
@@ -118,7 +118,7 @@ jobs:
           export TMPDIR=$HOME/tmp
           mkdir -p $TMPDIR
 
-          if [-z "${{ env.port }}" ]; then
+          if [ "${{ env.port }}" ]; then
             mkdir -p ~/.arduino15/packages/
             ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
             mkdir -p "$HOME/Arduino/libraries"
@@ -134,7 +134,7 @@ jobs:
       # ERROR, Warning and statistical data for reporting
       - name: Monitor
         run: |
-          if [-z "${{ env.port }}" ]; then
+          if [ "${{ env.port }}" ]; then
             echo "need to monitor"
             /opt/runner_support/py_console.py --port ${{ env.port }} --baud 115200 --report ${HOME}/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
           else
