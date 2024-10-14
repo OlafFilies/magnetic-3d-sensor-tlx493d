@@ -91,7 +91,7 @@ jobs:
           echo "device=$DEVICE" >> $GITHUB_ENV
           echo "sensor=$SENSOR" >> $GITHUB_ENV
 
-          pport =$(./py_checkusb.py --serial ${SERIALID} --list comport --json | jq ".\"${SERIALID}\"" -r)
+          pport =$(echo $(./py_checkusb.py --serial ${SERIALID} --list comport --json) | jq ".\"${SERIALID}\"" -r)
           echo "test:                " $pport
 
           echo "Repository name:     " $REPO
