@@ -78,8 +78,8 @@ jobs:
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
           PORT=`./find_usb.sh $SERIALID`
-          TYPE  =echo $(./py_checkusb.py --serial ${SERIALID} --list type    --json | jq ".\"${SERIALID}\"|.[0]" -r)
-          DEVICE=$(./py_checkusb.py --serial ${SERIALID} --list device  --json | jq ".\"${SERIALID}\"|.[0]" -r)
+          TYPE  =$(echo $(./py_checkusb.py --serial ${SERIALID} --list type    --json) | jq ".\"${SERIALID}\"|.[0]" -r)
+          DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device  --json) | jq ".\"${SERIALID}\"|.[0]" -r)
           SENSOR=$(echo $TYPE | tr "_" "\n" | tail -1)
           FQBN=`tr '.' ':' <<<"${DEVICE}"`
 
