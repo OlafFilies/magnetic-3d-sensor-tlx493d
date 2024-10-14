@@ -1,13 +1,10 @@
+# This is the main workflow file for the Arduino CI
 name: Arduino CI
 
 # on which event should we start push, pull request or schedule dispatches
 on:
   - push
   - pull_request
-  # push:
-  #   branches: [master main]
-  # pull_request:
-  #   branches: [master main]
 
 # This template runs multiple workflows
 jobs:
