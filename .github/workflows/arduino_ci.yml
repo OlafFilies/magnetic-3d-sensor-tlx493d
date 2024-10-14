@@ -60,6 +60,9 @@ jobs:
       - X64
       - Linux
 
+    # do not stop if a single job fails
+    continue-on-error: true
+
     # which combination of sample code and boards should run
     # for this example of 2 sample codes and 3 boards a total of 2x3=6 runners have to work.
     # if we have only 4 runner then these 4 are started and the last 2 are waiting until they can start
@@ -152,6 +155,8 @@ jobs:
   # Switch off the HIL after all tests are done
   post:
 
+    # we run this no matter if before fails
+    if: always()
     # wait on first setup run before starting main function
     needs: [setup, make]
 
