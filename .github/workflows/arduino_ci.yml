@@ -80,7 +80,6 @@ jobs:
 
           REPO="$(basename "$GITHUB_REPOSITORY")"
           SERIALID=${{ matrix.serials }}
-          #PORT=`./find_usb.sh $SERIALID`
           PORT=$(  echo $(./py_checkusb.py --serial ${SERIALID} --list comport --json) | jq ".\"${SERIALID}\"" -r)
           TYPE=$(  echo $(./py_checkusb.py --serial ${SERIALID} --list type    --json) | jq ".\"${SERIALID}\"|.[0]" -r)
           DEVICE=$(echo $(./py_checkusb.py --serial ${SERIALID} --list device  --json) | jq ".\"${SERIALID}\"|.[0]" -r)
@@ -137,7 +136,7 @@ jobs:
         run: |
           if [ "${{ env.port }}" ]; then
             echo "need to monitor"
-            /opt/runner_support/py_console.py --port ${{ env.port }} --baud 115200 --report ${HOME}/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
+            timeout 1m /opt/runner_support/py_console.py --port ${{ env.port }} --baud 115200 --report ${HOME}/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
           else
             echo "No port found"
           fi
