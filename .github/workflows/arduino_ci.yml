@@ -118,7 +118,7 @@ jobs:
           export TMPDIR=$HOME/tmp
           mkdir -p $TMPDIR
 
-          if [ "${{ env.port }}" ]; then
+          if [-z "${{ env.port }}" ]; then
             mkdir -p ~/.arduino15/packages/
             ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
             mkdir -p "$HOME/Arduino/libraries"
@@ -134,7 +134,7 @@ jobs:
       # ERROR, Warning and statistical data for reporting
       - name: Monitor
         run: |
-          if [ "${{ env.port }}" ]; then
+          if [ -z "${{ env.port }}" ]; then
             echo "need to monitor"
             timeout 1m /opt/runner_support/py_console.py --port ${{ env.port }} --baud 115200 --report ${HOME}/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
           else
