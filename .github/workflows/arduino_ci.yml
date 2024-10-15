@@ -118,7 +118,7 @@ jobs:
           export TMPDIR=$HOME/tmp
           mkdir -p $TMPDIR
 
-          if [-z "${{ env.port }}" ]; then
+          if [ -z "${{ env.port }}" ]; then
             mkdir -p ~/.arduino15/packages/
             ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
             mkdir -p "$HOME/Arduino/libraries"
