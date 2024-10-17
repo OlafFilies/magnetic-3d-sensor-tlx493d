@@ -31,7 +31,7 @@ jobs:
         uses: arduino/setup-arduino-cli@master
 
       # Fetch
-      - id: set-matrix
+      - id: startup 
         run: |
           cd /opt/runner_support/
           REPO="$(basename "$GITHUB_REPOSITORY")"
@@ -43,7 +43,7 @@ jobs:
 
     # set the output variables for use in the next job
     outputs:
-      serials: ${{ steps.set-matrix.outputs.serials }}
+      serials: ${{ steps.startup.outputs.serials }}
 
 
   #############################################################################
@@ -74,6 +74,10 @@ jobs:
 
     # These are the steps which should run for each combination of fqbn and example code
     steps:
+      # checkout the latest arduino-cli compiler
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@master
+
       - name: Environment
         run: |
           cd /opt/runner_support/
@@ -87,7 +91,7 @@ jobs:
           FQBN=`tr '.' ':' <<<"${DEVICE}"`
 
           echo "repo=$REPO" >> $GITHUB_ENV
-          echo "serials=${{ matrix.serials }}" >> $GITHUB_ENV
+          echo "serials=$SERIALID" >> $GITHUB_ENV
           echo "port=$PORT" >> $GITHUB_ENV
           echo "type=$TYPE" >> $GITHUB_ENV
           echo "fqbn=$FQBN" >> $GITHUB_ENV
@@ -102,17 +106,13 @@ jobs:
           echo "Device:              " $DEVICE
           echo "Sensor name:         " $SENSOR
 
-        # checkout the latest arduino-cli compiler
-      - name: Setup Arduino CLI
-        uses: arduino/setup-arduino-cli@master
-
-        # Flashes the compiled HEX file onto the selected MCU
-        # REPO: the name of the repository which is also the link name
-        # HEXNAME: the board depended name of the HEX files
-        # SERIALID: the unique serial number of the hardware board according the board2port.yaml
-        # DEVICE: the flashing device according the board2port.yaml
-        # PORT: real PORT name of the attached hardware based on the SERIALID
-        # use the python based XMC flasher
+      # Flashes the compiled HEX file onto the selected MCU
+      # REPO: the name of the repository which is also the link name
+      # HEXNAME: the board depended name of the HEX files
+      # SERIALID: the unique serial number of the hardware board according the board2port.yaml
+      # DEVICE: the flashing device according the board2port.yaml
+      # PORT: real PORT name of the attached hardware based on the SERIALID
+      # use the python based XMC flasher
       - name: Flash
         run: |
           export TMPDIR=$HOME/tmp
@@ -142,7 +142,7 @@ jobs:
           fi
 
       # Upload the compiled HEX files to the GitHub server
-      - name: Upload binaries 
+      - name: Artefact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.sensor }}_${{ env.serials }}
