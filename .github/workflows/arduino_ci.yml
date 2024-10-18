@@ -120,7 +120,7 @@ jobs:
 
           if [ "${{ env.port }}" != 'null' ]; then
             mkdir -p ~/.arduino15/packages/
-            ln -sfn /opt/XMC-for-Arduino ~/.arduino15/packages/Infineon
+            ln -sfn /opt/XMC-for-Arduino $HOME/.arduino15/packages/Infineon
             mkdir -p "$HOME/Arduino/libraries"
             ln -sf $GITHUB_WORKSPACE/ $HOME/Arduino/libraries/${{ env.repo }}
             cd $HOME/Arduino/libraries/${{ env.repo }}
@@ -136,7 +136,10 @@ jobs:
         run: |
           if [ "${{ env.port }}" != 'null' ]; then
             echo "need to monitor"
-            timeout 1m /opt/runner_support/py_console.py --port ${{ env.port }} --baud 115200 --report ${HOME}/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
+            timeout 1m /opt/runner_support/py_console.py \
+                    --port ${{ env.port }} \
+                    --baud 115200 \
+                    --report ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
           else
             echo "No port found"
           fi
