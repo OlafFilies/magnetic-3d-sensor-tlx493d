@@ -139,7 +139,7 @@ jobs:
             timeout 1m /opt/runner_support/py_console.py \
                     --port ${{ env.port }} \
                     --baud 115200 \
-                    --report ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.txt
+                    --report ~/Arduino/libraries/${{ env.repo }}/build/build/${{ env.device }}/report.json
           else
             echo "No port found"
           fi
